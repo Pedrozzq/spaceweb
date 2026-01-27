@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPACE WEB – Expandindo o Universo Digital</title>
+    
+    <!-- Google Fonts: Space Grotesk -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0B0E14;
+            color: #E5E7EB;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* --- ANIMAÇÕES DE NÚCLEO --- */
+        @keyframes alive-pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(234, 88, 12, 0.3));
+            }
+            50% { 
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 40px rgba(234, 88, 12, 0.6));
+            }
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* --- SISTEMA DE ANIMAÇÃO AO SCROLL (BURACO NEGRO / GALÁXIA) --- */
+        .reveal-blackhole {
+            opacity: 0;
+            filter: blur(20px);
+            transform: scale(0.8) rotate(-5deg);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-blackhole.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1) rotate(0deg);
+        }
+
+        .reveal-galaxy {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal-galaxy.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- PRELOADER & LOGO MIGRATION --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #0B0E14;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease-in-out, visibility 1s;
+        }
+
+        .logo-container-hero {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            transition: all 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            gap: 1.5rem;
+        }
+
+        .logo-img {
+            width: 240px; 
+            height: auto;
+            animation: alive-pulse 3s infinite ease-in-out, floating 4s infinite ease-in-out;
+            transition: all 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .logo-title-brand {
+            font-weight: 900;
+            color: white;
+            letter-spacing: 0.8em;
+            text-indent: 0.8em;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            transition: all 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+            white-space: nowrap;
+        }
+
+        body.loaded #preloader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        body.loaded .logo-container-hero {
+            position: absolute;
+            top: 2.5rem;
+            left: 2.5rem;
+            transform: translate(0, 0);
+            flex-direction: row; 
+            gap: 1rem;
+        }
+
+        body.loaded .logo-img {
+            width: 50px; 
+            animation: alive-pulse 5s infinite ease-in-out;
+        }
+
+        body.loaded .logo-title-brand {
+            font-size: 0.85rem;
+            letter-spacing: 0.4em;
+            text-indent: 0.4em;
+            opacity: 0.9;
+        }
+
+        #site-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.5s ease 0.8s, transform 1.5s ease 0.8s;
+        }
+
+        body.loaded #site-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ELEMENTOS VISUAIS --- */
+        .text-gradient {
+            background: linear-gradient(to right, #fb923c, #ea580c, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .btn-animate-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-animate-border::before {
+            content: '';
+            position: absolute;
+            inset: -150%;
+            background: conic-gradient(from 0deg, transparent, transparent, #ea580c, transparent);
+            animation: spin-border 4s linear infinite;
+        }
+
+        @keyframes spin-border {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .project-button, .solution-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-button:hover, .solution-card:hover {
+            border-color: rgba(234, 88, 12, 0.4);
+            background: rgba(234, 88, 12, 0.03);
+            transform: translateY(-8px);
+        }
+
+        .italic-serif {
+            font-family: serif;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            body.loaded .logo-container-hero {
+                top: 1.5rem;
+                left: 1.5rem;
+            }
+            .logo-img { width: 180px; }
+            body.loaded .logo-img { width: 40px; }
+            body.loaded .logo-title-brand { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Preloader -->
+    <div id="preloader"></div>
+    
+    <!-- Identidade Visual -->
+    <div class="logo-container-hero" id="hero-logo-wrapper">
+        <img src="https://i.imgur.com/9z3OxpR.png" alt="Logotipo Space Web" class="logo-img">
+        <h1 class="logo-title-brand">SPACE <span class="text-orange-500">WEB</span></h1>
+    </div>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Conteúdo Principal -->
+    <main class="relative z-10" id="site-content">
+        
+        <!-- SECÇÃO 01: HERO -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center px-8 py-20">
+            <div class="container mx-auto">
+                <div class="mb-8 h-[40px]"></div>
+
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                    <div class="max-w-3xl reveal-galaxy">
+                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-2 border-orange-500 text-orange-400 text-[9px] font-bold mb-6 uppercase tracking-[0.4em]">
+                            <i data-lucide="zap" class="w-3 h-3"></i> Fronteira com Saturno
+                        </div>
+                        
+                        <h1 class="text-4xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-[0.9] uppercase">
+                            ELEVE A SUA <br />
+                            <span class="text-gradient">MARCA AO ÁPICE.</span>
+                        </h1>
+                        
+                        <p class="text-lg md:text-2xl text-slate-400 max-w-lg leading-relaxed border-l border-orange-500/30 pl-6 italic-serif font-light">
+                            Focados em autoridade, escala e estética premium para o seu posicionamento no mercado digital.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-5 w-full lg:w-[350px] lg:mt-24 reveal-galaxy" style="transition-delay: 200ms;">
+                        <a href="https://wa.me/SEUNUMERO" target="_blank" class="relative group p-[2px] btn-animate-border shadow-2xl shadow-orange-900/20">
+                            <div class="relative bg-white px-8 py-6 flex items-center justify-between gap-4 z-10 hover:bg-orange-600 transition-colors duration-500">
+                                <div class="flex items-center gap-4">
+                                    <svg class="w-5 h-5 fill-slate-950 group-hover:fill-white transition-colors duration-300" viewBox="0 0 24 24">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .01 5.403.006 12.039c0 2.12.54 4.19 1.566 6.02L0 24l6.102-1.6c1.774.96 3.788 1.47 5.846 1.47h.005c6.634 0 12.038-5.404 12.042-12.04c0-3.212-1.25-6.232-3.522-8.508z"/>
+                                    </svg>
+                                    <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Entrar em contato</span>
+                                </div>
+                                <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950 group-hover:text-white transition-all"></i>
+                            </div>
+                        </a>
+
+                        <a href="#portfolio" class="group border border-white/10 px-8 py-6 hover:bg-white transition-all duration-500 text-center">
+                            <span class="text-white group-hover:text-slate-950 font-bold uppercase tracking-[0.3em] text-[10px]">Ver Portfólio</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECÇÃO 02: PROJETOS -->
+        <section id="portfolio" class="py-32 px-8 border-t border-white/5 bg-black/20 overflow-hidden">
+            <div class="container mx-auto">
+                <div class="text-left mb-20 reveal-galaxy">
+                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Portfólio</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-2">Arquivo de <span class="text-gradient">Projetos.</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Cards de Projetos (Exemplos) -->
+                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole">
+                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden">
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">01</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 01</h3>
+                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Institucional</p>
+                            </div>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 100ms;">
+                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden">
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">02</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 02</h3>
+                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Landing Page</p>
+                            </div>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 200ms;">
+                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden">
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">03</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 03</h3>
+                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">SaaS Interface</p>
+                            </div>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 300ms;">
+                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden">
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">04</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 04</h3>
+                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Brand Experience</p>
+                            </div>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 400ms;">
+                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden">
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">05</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 05</h3>
+                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Portal Digital</p>
+                            </div>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 500ms;">
+                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden">
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">06</span>
+                        </div>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 06</h3>
+                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">High Performance LP</p>
+                            </div>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECÇÃO 03: SOLUÇÕES ESTELARES (Grid em Quadrados) -->
+        <section id="solutions" class="py-32 px-8 border-t border-white/5 bg-black/40 overflow-hidden">
+            <div class="container mx-auto">
+                <div class="text-center mb-20 reveal-galaxy">
+                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Soluções Estelares</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-2">Arquitetura de <span class="text-gradient">Órbita.</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10">
+                    <!-- Quadrado 01: Sites -->
+                    <div class="solution-card aspect-square p-12 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0;">
+                        <div class="w-12 h-12 bg-orange-500/10 flex items-center justify-center rounded-sm">
+                            <i data-lucide="monitor" class="w-6 h-6 text-orange-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white text-2xl font-black uppercase tracking-tighter mb-4">Sites</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed font-light">
+                                Criação de sites personalizados que atraem clientes, transmitindo profissionalismo e sofisticação.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Quadrado 02: Landing Pages -->
+                    <div class="solution-card aspect-square p-12 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; transition-delay: 200ms;">
+                        <div class="w-12 h-12 bg-orange-500/10 flex items-center justify-center rounded-sm">
+                            <i data-lucide="target" class="w-6 h-6 text-orange-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white text-2xl font-black uppercase tracking-tighter mb-4">Landing Pages</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed font-light">
+                                Landing pages otimizadas para conversão, projetadas para atrair e engajar seu público-alvo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Quadrado 03: Otimizações -->
+                    <div class="solution-card aspect-square p-12 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; transition-delay: 400ms;">
+                        <div class="w-12 h-12 bg-orange-500/10 flex items-center justify-center rounded-sm">
+                            <i data-lucide="zap" class="w-6 h-6 text-orange-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white text-2xl font-black uppercase tracking-tighter mb-4">Otimizações</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed font-light">
+                                Otimização completa para carregamento rápido, segurança e melhor desempenho SEO.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-20 border-t border-white/5 px-8 bg-slate-950/50">
+            <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+                <div class="flex items-center gap-3">
+                    <img src="https://i.imgur.com/9z3OxpR.png" alt="Logo" class="w-6 h-6 opacity-60">
+                    <span class="text-white/40 font-black tracking-[0.4em] text-[10px]">SPACE <span class="text-orange-500">WEB</span></span>
+                </div>
+                
+                <div class="flex gap-8">
+                    <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors tracking-widest uppercase text-[10px] font-bold">Instagram</a>
+                    <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors tracking-widest uppercase text-[10px] font-bold">LinkedIn</a>
+                </div>
+            </div>
+            <div class="container mx-auto mt-24 pt-8 border-t border-white/5 text-[8px] text-slate-800 tracking-[0.5em] uppercase font-bold text-center">
+                © 2026 Space Web Studios — Digital Frontier.
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Ciclo de Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+                initScrollReveal();
+            }, 1200);
+        });
+
+        // --- SISTEMA DE REVEAL AO SCROLL ---
+        function initScrollReveal() {
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-blackhole, .reveal-galaxy').forEach(el => observer.observe(el));
+        }
+
+        // --- MOTOR GRÁFICO 3D ---
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const count = 4500; // Aumentado para mais densidade galáctica
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
+
+        for(let i = 0; i < count; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 15;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 15;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
+            
+            const isOrange = Math.random() > 0.8;
+            colors[i * 3] = isOrange ? 0.95 : 0.3; 
+            colors[i * 3 + 1] = isOrange ? 0.4 : 0.3; 
+            colors[i * 3 + 2] = isOrange ? 0.05 : 0.6; // Mais toques de azul/roxo futurista
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const particlesMaterial = new THREE.PointsMaterial({ size: 0.012, vertexColors: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 5;
+
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5);
+            mouseY = (e.clientY / window.innerHeight - 0.5);
+        });
+
+        const animate = () => {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.0001;
+            const scrollY = window.scrollY;
+            
+            // Reação ao scroll (expansão galáctica)
+            particlesMesh.position.z = scrollY * 0.0005;
+            
+            particlesMesh.position.x += (mouseX * 0.15 - particlesMesh.position.x) * 0.05;
+            particlesMesh.position.y += (-mouseY * 0.15 - particlesMesh.position.y) * 0.05;
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
