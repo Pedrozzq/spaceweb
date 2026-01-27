@@ -24,58 +24,53 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background-color: #0B0E14;
+            background-color: #05070a;
             color: #E5E7EB;
             overflow-x: hidden;
             margin: 0;
+            cursor: default;
         }
 
-        /* --- ANIMAÇÕES --- */
+        /* --- ANIMAÇÕES AVANÇADAS --- */
         @keyframes alive-pulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(234, 88, 12, 0.3)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px rgba(234, 88, 12, 0.6)); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(234, 88, 12, 0.4)); }
+            50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(234, 88, 12, 0.7)); }
         }
 
         @keyframes text-reveal {
-            0% { letter-spacing: 0.5em; opacity: 0; filter: blur(10px); }
-            100% { letter-spacing: 0.2em; opacity: 1; filter: blur(0); }
+            0% { letter-spacing: 0.6em; opacity: 0; filter: blur(12px); transform: translateY(10px); }
+            100% { letter-spacing: 0.2em; opacity: 1; filter: blur(0); transform: translateY(0); }
         }
 
-        /* --- SISTEMA DE REVELAÇÃO --- */
-        .reveal-blackhole {
+        @keyframes shine-sweep {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+
+        /* --- SISTEMA DE REVELAÇÃO ORGÂNICA --- */
+        .reveal-node {
             opacity: 0;
-            filter: blur(20px);
-            transform: scale(0.8) rotate(-5deg);
-            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            filter: blur(15px);
+            transform: translateY(30px) scale(0.98);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .reveal-blackhole.active {
+        .reveal-node.active {
             opacity: 1;
             filter: blur(0);
-            transform: scale(1) rotate(0deg);
-        }
-
-        .reveal-galaxy {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .reveal-galaxy.active {
-            opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         /* --- HEADER & LOGO ANIMATION --- */
         #preloader {
             position: fixed;
             inset: 0;
-            background: #0B0E14;
+            background: #05070a;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 1s ease-in-out, visibility 1s;
+            transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), visibility 1.2s;
         }
 
         .logo-container-hero {
@@ -84,7 +79,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1001;
-            transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: all 1.8s cubic-bezier(0.85, 0, 0.15, 1);
             display: flex;
             flex-direction: column; 
             align-items: center;
@@ -94,10 +89,10 @@
         }
 
         .logo-img {
-            width: 240px; 
+            width: 220px; 
             height: auto;
-            animation: alive-pulse 3s infinite ease-in-out;
-            transition: width 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            animation: alive-pulse 4s infinite ease-in-out;
+            transition: width 1.8s cubic-bezier(0.85, 0, 0.15, 1);
         }
 
         .logo-title-brand {
@@ -105,9 +100,9 @@
             color: white;
             text-transform: uppercase;
             white-space: nowrap;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             opacity: 0;
-            transition: all 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: all 1.8s cubic-bezier(0.85, 0, 0.15, 1);
         }
 
         body.loaded #preloader {
@@ -116,9 +111,9 @@
         }
 
         body.loaded .logo-container-hero {
-            position: absolute; /* Não-fixo para sumir no scroll */
-            top: 2rem;
-            left: 2.5rem;
+            position: absolute;
+            top: 2.5rem;
+            left: 3rem;
             transform: translate(0, 0);
             flex-direction: row; 
             gap: 1.2rem;
@@ -126,48 +121,46 @@
         }
 
         body.loaded .logo-img {
-            width: 65px; 
+            width: 60px; 
         }
 
         body.loaded .logo-title-brand {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 1;
-            animation: text-reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            animation-delay: 0.8s;
+            animation: text-reveal 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation-delay: 0.6s;
         }
 
         .top-socials {
             opacity: 0;
-            transition: opacity 0.5s ease 2s;
+            transition: opacity 0.8s ease 1.8s;
             display: flex;
-            gap: 1rem;
-            margin-left: 0.5rem;
+            gap: 1.2rem;
+            margin-left: 1rem;
             padding-left: 1.5rem;
-            border-left: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid rgba(255,255,255,0.08);
         }
 
         body.loaded .top-socials { opacity: 1; }
 
         #site-content {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1.5s ease 1s, transform 1.5s ease 1s;
+            transition: opacity 2s ease 1s;
         }
 
         body.loaded #site-content {
             opacity: 1;
-            transform: translateY(0);
         }
 
-        /* --- VISUALS --- */
+        /* --- VISUALS & EFFECTS --- */
         .text-gradient {
-            background: linear-gradient(to right, #fb923c, #ea580c, #f59e0b);
+            background: linear-gradient(135deg, #fb923c, #f59e0b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .text-gradient-purple {
-            background: linear-gradient(to right, #a855f7, #7c3aed, #6366f1);
+            background: linear-gradient(135deg, #a855f7, #6366f1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -178,56 +171,57 @@
             width: 100%; height: 100%;
             z-index: 0;
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s ease;
         }
+        body.loaded #bg-canvas { opacity: 0.7; }
 
-        .btn-animate-border {
+        .btn-premium {
             position: relative;
             overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .btn-animate-border::before {
+        .btn-premium::after {
             content: '';
             position: absolute;
-            inset: -150%;
-            background: conic-gradient(from 0deg, transparent, transparent, #ea580c, transparent);
-            animation: spin-border 4s linear infinite;
+            top: 0; left: 0;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-150%) skewX(-15deg);
         }
 
-        .btn-animate-border-purple::before {
-            background: conic-gradient(from 0deg, transparent, transparent, #a855f7, transparent);
+        .btn-premium:hover::after {
+            animation: shine-sweep 0.8s ease-in-out;
         }
 
-        @keyframes spin-border {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .project-button, .solution-card, .academy-card {
-            background: rgba(255, 255, 255, 0.02);
+        .card-interactive {
+            background: rgba(255, 255, 255, 0.015);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
         }
 
-        .project-button:hover, .solution-card:hover {
-            border-color: rgba(234, 88, 12, 0.4);
+        .card-interactive:hover {
+            border-color: rgba(234, 88, 12, 0.3);
             background: rgba(234, 88, 12, 0.03);
-            transform: translateY(-8px);
-        }
-
-        .academy-card:hover {
-            border-color: rgba(168, 85, 247, 0.4);
-            background: rgba(168, 85, 247, 0.02);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5), 0 0 20px rgba(234, 88, 12, 0.05);
         }
 
         .italic-serif { font-family: serif; font-style: italic; }
 
+        .solution-icon-wrapper {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .card-interactive:hover .solution-icon-wrapper {
+            transform: scale(1.2) rotate(10deg);
+        }
+
         @media (max-width: 768px) {
-            body.loaded .logo-container-hero {
-                top: 1.5rem;
-                left: 1.5rem;
-            }
-            .logo-img { width: 160px; }
+            body.loaded .logo-container-hero { top: 1.5rem; left: 1.5rem; }
+            .logo-img { width: 140px; }
             body.loaded .logo-img { width: 45px; }
             body.loaded .logo-title-brand { font-size: 0.8rem; }
             .top-socials { display: none !important; }
@@ -245,7 +239,7 @@
         <div class="flex items-center">
             <h1 class="logo-title-brand">Saturno <span class="text-orange-500">Web</span></h1>
             <div class="top-socials">
-                <a href="https://www.instagram.com/spaceweb.br" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors">
+                <a href="https://www.instagram.com/spaceweb.br" target="_blank" class="text-slate-400 hover:text-orange-500 transition-colors">
                     <i data-lucide="instagram" class="w-4 h-4"></i>
                 </a>
             </div>
@@ -260,41 +254,39 @@
         <!-- SECÇÃO 01: HERO -->
         <section id="hero" class="min-h-screen flex flex-col justify-center px-8 py-20">
             <div class="container mx-auto">
-                <div class="mb-8 h-[60px]"></div>
+                <div class="mb-8 h-[80px]"></div>
 
-                <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-                    <div class="max-w-3xl reveal-galaxy">
-                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[9px] font-bold mb-6 uppercase tracking-[0.4em]">
-                            <i data-lucide="zap" class="w-3 h-3"></i> Fronteira com Saturno
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-16">
+                    <div class="max-w-3xl reveal-node">
+                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/5 border-l-2 border-orange-500 text-orange-400 text-[10px] font-bold mb-8 uppercase tracking-[0.5em]">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                            </span>
+                            Sistemas de Órbita Ativos
                         </div>
                         
-                        <h1 class="text-4xl md:text-7xl font-black text-white mb-6 tracking-tighter leading-[0.9] uppercase">
-                            ELEVE A SUA <br />
-                            <span class="text-gradient">MARCA AO ÁPICE.</span>
+                        <h1 class="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter leading-[0.85] uppercase">
+                            EXPANDA SUA <br />
+                            <span class="text-gradient">AUTORIDADE.</span>
                         </h1>
                         
-                        <p class="text-lg md:text-2xl text-slate-400 max-w-lg leading-relaxed border-l border-orange-500/30 pl-6 italic-serif font-light">
-                            Focados em autoridade, escala e estética premium para o seu posicionamento no mercado digital.
+                        <p class="text-xl md:text-3xl text-slate-500 max-w-lg leading-relaxed border-l border-white/5 pl-8 italic-serif font-light">
+                            Desenvolvemos ecossistemas digitais de elite que posicionam marcas no ápice do mercado.
                         </p>
                     </div>
 
-                    <div class="flex flex-col gap-6 w-full lg:w-[380px] lg:mt-32 reveal-galaxy" style="transition-delay: 200ms;">
-                        <a href="https://wa.link/hpoklw" target="_blank" class="relative group p-[2px] btn-animate-border shadow-2xl shadow-orange-900/20">
-                            <div class="relative bg-white px-8 py-6 flex items-center justify-between gap-4 z-10 hover:bg-orange-600 transition-colors duration-500">
-                                <div class="flex items-center gap-4">
-                                    <svg class="w-5 h-5 fill-slate-950 group-hover:fill-white transition-colors duration-300" viewBox="0 0 24 24">
-                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .01 5.403.006 12.039c0 2.12.54 4.19 1.566 6.02L0 24l6.102-1.6c1.774.96 3.788 1.47 5.846 1.47h.005c6.634 0 12.038-5.404 12.042-12.04c0-3.212-1.25-6.232-3.522-8.508z"/>
-                                    </svg>
-                                    <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Entrar em contato</span>
-                                </div>
-                                <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950 group-hover:text-white transition-all"></i>
+                    <div class="flex flex-col gap-6 w-full lg:w-[380px] lg:mt-32 reveal-node" style="transition-delay: 200ms;">
+                        <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium group p-8 bg-white flex items-center justify-between hover:bg-orange-500 transition-colors duration-500">
+                            <div class="flex items-center gap-4">
+                                <i data-lucide="message-square" class="w-5 h-5 text-slate-950 group-hover:text-white transition-colors"></i>
+                                <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Conectar via WhatsApp</span>
                             </div>
+                            <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950 group-hover:text-white group-hover:translate-x-2 transition-all"></i>
                         </a>
-                        <a href="#portfolio" class="relative group p-[2px] btn-animate-border">
-                            <div class="relative bg-slate-950/40 backdrop-blur-sm px-6 py-5 flex items-center justify-center gap-4 z-10 hover:bg-white transition-all duration-500">
-                                <span class="text-white group-hover:text-slate-950 font-bold uppercase tracking-[0.3em] text-[9px]">Ver Portfólio</span>
-                                <i data-lucide="layout" class="w-3.5 h-3.5 text-white group-hover:text-slate-950 transition-all"></i>
-                            </div>
+                        <a href="#portfolio" class="btn-premium group p-6 border border-white/5 flex items-center justify-center gap-4 hover:border-orange-500/30 transition-all">
+                            <span class="text-slate-500 group-hover:text-white text-[10px] font-bold uppercase tracking-[0.3em]">Explorar Portfólio</span>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-500 group-hover:text-white"></i>
                         </a>
                     </div>
                 </div>
@@ -302,162 +294,160 @@
         </section>
 
         <!-- SECÇÃO 02: PORTFÓLIO (6 PROJETOS) -->
-        <section id="portfolio" class="py-32 px-8 border-t border-white/5 bg-black/20 overflow-hidden">
+        <section id="portfolio" class="py-32 px-8 border-t border-white/5">
             <div class="container mx-auto">
-                <div class="text-left mb-20 reveal-galaxy">
-                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Portfólio</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-2">Arquivo de <span class="text-gradient">Projetos.</span></h2>
+                <div class="text-left mb-24 reveal-node">
+                    <span class="text-orange-500/50 font-bold uppercase tracking-[0.6em] text-[10px]">Case Study</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-4">Arquivo de <span class="text-gradient">Impacto.</span></h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Projeto 01: JP Joias -->
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
-                            <img src="https://i.imgur.com/TtIS08N.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" alt="JP Joias">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Projeto 01 -->
+                    <div class="card-interactive p-6 reveal-node" style="transition-delay: 100ms;">
+                        <div class="aspect-square bg-black/40 mb-8 overflow-hidden relative border border-white/5 group">
+                            <img src="https://i.imgur.com/TtIS08N.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="JP Joias">
+                            <div class="absolute inset-0 bg-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">JP Joias</h3>
-                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Joalheria</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">JP Joias</h3>
+                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">Luxo & Joalheria</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
                         </div>
                     </div>
                     
-                    <!-- Projeto 02: Panorama Mercados -->
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 100ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
-                            <img src="https://i.imgur.com/Tgx3UFQ.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" alt="Panorama Mercados">
+                    <!-- Projeto 02 -->
+                    <div class="card-interactive p-6 reveal-node" style="transition-delay: 200ms;">
+                        <div class="aspect-square bg-black/40 mb-8 overflow-hidden relative border border-white/5 group">
+                            <img src="https://i.imgur.com/Tgx3UFQ.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Panorama Mercados">
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Panorama Mercados</h3>
-                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Software</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">Panorama Mercados</h3>
+                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">SaaS & Software</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
                         </div>
                     </div>
 
-                    <!-- Projeto 03: Treki Turismo -->
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 200ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
-                            <img src="https://i.imgur.com/uAqZUZM.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" alt="Treki Turismo">
+                    <!-- Projeto 03 -->
+                    <div class="card-interactive p-6 reveal-node" style="transition-delay: 300ms;">
+                        <div class="aspect-square bg-black/40 mb-8 overflow-hidden relative border border-white/5 group">
+                            <img src="https://i.imgur.com/uAqZUZM.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Treki Turismo">
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Treki Turismo</h3>
-                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Empresa de Turismo</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">Treki Turismo</h3>
+                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">Travel & Experience</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
                         </div>
                     </div>
 
-                    <!-- Placeholders Projetos 04-06 -->
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 300ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">04</span>
+                    <!-- Placeholders -->
+                    <div class="card-interactive p-6 reveal-node" style="transition-delay: 400ms;">
+                        <div class="aspect-square bg-white/[0.02] mb-8 flex items-center justify-center border border-white/5 border-dashed group">
+                            <span class="text-white/5 font-black text-6xl group-hover:scale-110 group-hover:text-white/10 transition-all">04</span>
                         </div>
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 04</h3>
-                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Brand Experience</p>
-                            </div>
-                        </div>
+                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Próximo Lançamento</h3>
                     </div>
 
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 400ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">05</span>
+                    <div class="card-interactive p-6 reveal-node" style="transition-delay: 500ms;">
+                        <div class="aspect-square bg-white/[0.02] mb-8 flex items-center justify-center border border-white/5 border-dashed group">
+                            <span class="text-white/5 font-black text-6xl group-hover:scale-110 group-hover:text-white/10 transition-all">05</span>
                         </div>
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 05</h3>
-                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">Portal Digital</p>
-                            </div>
-                        </div>
+                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Arquitetura de Dados</h3>
                     </div>
 
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-blackhole" style="transition-delay: 500ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 transition-transform">06</span>
+                    <div class="card-interactive p-6 reveal-node" style="transition-delay: 600ms;">
+                        <div class="aspect-square bg-white/[0.02] mb-8 flex items-center justify-center border border-white/5 border-dashed group">
+                            <span class="text-white/5 font-black text-6xl group-hover:scale-110 group-hover:text-white/10 transition-all">06</span>
                         </div>
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Projeto 06</h3>
-                                <p class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.3em] mt-2">High Performance</p>
-                            </div>
-                        </div>
+                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Expansão Global</h3>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECÇÃO 03: ARQUITETURA DE ÓRBITA (SOLUÇÕES COMPLETAS) -->
-        <section id="solutions" class="py-32 px-8 border-t border-white/5 bg-black/40 overflow-hidden">
+        <!-- SECÇÃO 03: ARQUITETURA DE ÓRBITA -->
+        <section id="solutions" class="py-32 px-8 border-t border-white/5 bg-black/20">
             <div class="container mx-auto">
-                <div class="text-center mb-20 reveal-galaxy">
-                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Arquitetura de Órbita</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-2">Soluções <span class="text-gradient">Estelares.</span></h2>
+                <div class="text-center mb-24 reveal-node">
+                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Ecosystem Architecture</span>
+                    <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mt-4">Arquitetura de <span class="text-gradient">Órbita.</span></h2>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border border-white/10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5">
                     <!-- Sites -->
-                    <div class="solution-card p-8 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px;">
-                        <i data-lucide="monitor" class="w-6 h-6 text-orange-500 mb-6"></i>
+                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node">
+                        <div class="solution-icon-wrapper">
+                            <i data-lucide="layout" class="w-8 h-8 text-orange-500"></i>
+                        </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Sites</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Criação de sites personalizados que atraem clientes com sofisticação.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Sites Premium</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Estética de alto nível para marcas que buscam exclusividade.</p>
                         </div>
                     </div>
                     <!-- Dados -->
-                    <div class="solution-card p-8 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px; transition-delay: 100ms;">
-                        <i data-lucide="database" class="w-6 h-6 text-orange-500 mb-6"></i>
+                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 100ms;">
+                        <div class="solution-icon-wrapper">
+                            <i data-lucide="bar-chart-3" class="w-8 h-8 text-orange-500"></i>
+                        </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Dados</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Análise e estruturação de informações para tomadas de decisão ágeis.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Data Driven</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Decisões pautadas em métricas reais e inteligência analítica.</p>
                         </div>
                     </div>
                     <!-- Otimizações -->
-                    <div class="solution-card p-8 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px; transition-delay: 200ms;">
-                        <i data-lucide="zap" class="w-6 h-6 text-orange-500 mb-6"></i>
+                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 200ms;">
+                        <div class="solution-icon-wrapper">
+                            <i data-lucide="zap" class="w-8 h-8 text-orange-500"></i>
+                        </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Otimizações</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Performance máxima em SEO, velocidade e segurança de dados.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Performance</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Otimização máxima de velocidade e indexação global.</p>
                         </div>
                     </div>
                     <!-- Integrações -->
-                    <div class="solution-card p-8 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px; transition-delay: 300ms;">
-                        <i data-lucide="link" class="w-6 h-6 text-orange-500 mb-6"></i>
+                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 300ms;">
+                        <div class="solution-icon-wrapper">
+                            <i data-lucide="cpu" class="w-8 h-8 text-orange-500"></i>
+                        </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Integrações</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Conectamos seu ecossistema digital a ferramentas externas.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Sistemas</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Integração fluida de APIs e ecossistemas empresariais.</p>
                         </div>
                     </div>
-                    <!-- Landing Pages -->
-                    <div class="solution-card p-8 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px; transition-delay: 400ms;">
-                        <i data-lucide="target" class="w-6 h-6 text-orange-500 mb-6"></i>
+                    <!-- LP -->
+                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 400ms;">
+                        <div class="solution-icon-wrapper">
+                            <i data-lucide="target" class="w-8 h-8 text-orange-500"></i>
+                        </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Landing Pages</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Páginas de alta conversão focadas em resultados e leads qualificados.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Conversão</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Landing Pages desenhadas para converter tráfego em receita.</p>
                         </div>
                     </div>
                     <!-- E-commerce -->
-                    <div class="solution-card p-8 flex flex-col justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px; transition-delay: 500ms;">
-                        <i data-lucide="shopping-cart" class="w-6 h-6 text-orange-500 mb-6"></i>
+                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 500ms;">
+                        <div class="solution-icon-wrapper">
+                            <i data-lucide="shopping-bag" class="w-8 h-8 text-orange-500"></i>
+                        </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">E-commerce</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Lojas virtuais robustas e escaláveis com experiência de compra premium.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">E-commerce</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Escalabilidade para vendas diretas com UX impecável.</p>
                         </div>
                     </div>
-                    <!-- Integração Marketplace -->
-                    <div class="solution-card p-8 flex flex-col lg:col-span-2 justify-between reveal-blackhole" style="background: transparent; border-radius: 0; min-height: 250px; transition-delay: 600ms;">
-                        <div class="flex gap-4 mb-6">
-                            <i data-lucide="package" class="w-6 h-6 text-orange-500"></i>
-                            <i data-lucide="shopping-bag" class="w-6 h-6 text-orange-500"></i>
+                    <!-- Marketplaces -->
+                    <div class="card-interactive p-12 flex flex-col lg:col-span-2 justify-between min-h-[320px] reveal-node" style="transition-delay: 600ms;">
+                        <div class="flex gap-4">
+                            <i data-lucide="package" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="repeat" class="w-8 h-8 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Integração ML & Shopee</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed font-light">Sincronização total do seu inventário e vendas com os maiores marketplaces do país.</p>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">ML & Shopee Sync</h3>
+                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Gestão centralizada para os maiores marketplaces do mercado.</p>
                         </div>
                     </div>
                 </div>
@@ -465,29 +455,25 @@
         </section>
 
         <!-- SECÇÃO 04: SATURNO ACADEMY -->
-        <section id="academy" class="py-32 px-8 border-t border-white/5 bg-black/60 overflow-hidden">
+        <section id="academy" class="py-40 px-8">
             <div class="container mx-auto max-w-5xl">
-                <div class="academy-card p-12 md:p-20 relative overflow-hidden reveal-blackhole">
-                    <div class="absolute -top-24 -right-24 w-64 h-64 bg-purple-600/20 blur-[100px]"></div>
+                <div class="card-interactive p-16 md:p-24 relative overflow-hidden reveal-node">
+                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-purple-600/10 blur-[120px]"></div>
                     <div class="relative z-10 flex flex-col items-center text-center">
-                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-purple-500/10 border-l-4 border-purple-500 text-purple-400 text-[9px] font-bold mb-10 uppercase tracking-[0.4em]">
-                            <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> Saturno Academy
+                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-purple-500/10 border-l-4 border-purple-500 text-purple-400 text-[10px] font-bold mb-12 uppercase tracking-[0.5em]">
+                            <i data-lucide="graduation-cap" class="w-4 h-4"></i> Saturno Academy
                         </div>
-                        <h2 class="text-4xl md:text-6xl font-black text-white mb-8 tracking-tighter uppercase leading-none">
-                            Domine as <span class="text-gradient-purple">Órbitas Digitais.</span>
+                        <h2 class="text-5xl md:text-7xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
+                            DOMINE O <span class="text-gradient-purple">ESPAÇO DIGITAL.</span>
                         </h2>
-                        <div class="flex flex-col gap-6 items-center w-full">
-                            <a href="#" class="w-full max-w-[280px] relative group p-[2px] btn-animate-border btn-animate-border-purple shadow-2xl shadow-purple-900/20">
-                                <div class="relative bg-white px-6 py-3 flex items-center justify-center gap-3 z-10 hover:bg-purple-600 transition-colors">
-                                    <span class="text-slate-950 group-hover:text-white text-[10px] font-black uppercase tracking-[0.3em]">Quero Aprender</span>
-                                    <i data-lucide="orbit" class="w-3.5 h-3.5 text-slate-950 group-hover:text-white"></i>
-                                </div>
+                        <div class="flex flex-col md:flex-row gap-6 items-center w-full justify-center">
+                            <a href="#" class="btn-premium px-10 py-5 bg-white flex items-center gap-3 hover:bg-purple-600 transition-colors group">
+                                <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Formação Pro</span>
+                                <i data-lucide="orbit" class="w-4 h-4 text-slate-950 group-hover:text-white"></i>
                             </a>
-                            <a href="https://wa.link/hpoklw" target="_blank" class="w-full max-w-md relative group p-[2px] btn-animate-border shadow-2xl shadow-orange-900/20">
-                                <div class="relative bg-white px-10 py-5 flex items-center justify-center gap-4 z-10 hover:bg-orange-600 transition-colors">
-                                    <span class="text-slate-950 group-hover:text-white text-[10px] font-black uppercase tracking-[0.3em]">Quero contratar para minha empresa</span>
-                                    <i data-lucide="briefcase" class="w-4 h-4 text-slate-950 group-hover:text-white"></i>
-                                </div>
+                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium px-10 py-5 border border-white/10 flex items-center gap-3 hover:border-orange-500/50 group">
+                                <span class="text-white text-[11px] font-black uppercase tracking-[0.3em]">Consultoria Enterprise</span>
+                                <i data-lucide="briefcase" class="w-4 h-4 text-slate-500 group-hover:text-white"></i>
                             </a>
                         </div>
                     </div>
@@ -496,53 +482,47 @@
         </section>
 
         <!-- FOOTER INSTITUCIONAL -->
-        <footer class="py-24 border-t border-white/5 px-8 bg-slate-950/80 backdrop-blur-md">
+        <footer class="py-32 border-t border-white/5 px-8 bg-black/60">
             <div class="container mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-                    <!-- Branding & Missão -->
-                    <div class="flex flex-col items-start gap-4">
-                        <div class="flex items-center gap-3">
-                            <img src="https://i.imgur.com/9z3OxpR.png" alt="Logo" class="w-8 h-8 opacity-80">
-                            <span class="text-white font-black tracking-[0.1em] text-xs uppercase">Saturno <span class="text-orange-500">Web</span></span>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
+                    <div class="flex flex-col items-start gap-6">
+                        <div class="flex items-center gap-4">
+                            <img src="https://i.imgur.com/9z3OxpR.png" alt="Logo" class="w-10 h-10 opacity-80">
+                            <span class="text-white font-black tracking-[0.2em] text-sm uppercase">Saturno <span class="text-orange-500">Web</span></span>
                         </div>
-                        <p class="text-slate-500 text-[10px] mt-4 leading-relaxed uppercase tracking-widest">
-                            Elevando marcas ao ápice digital através de tecnologia de ponta e design focado em autoridade.
+                        <p class="text-slate-600 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
+                            Design de Alta Performance & Estratégia Digital de Elite.
                         </p>
                     </div>
 
-                    <!-- Empresa -->
-                    <div class="flex flex-col gap-5">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.4em] mb-2">Empresa</span>
+                    <div class="flex flex-col gap-6">
+                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Empresa</span>
                         <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Sobre Nós</a>
                         <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Nossa Missão</a>
                         <a href="#portfolio" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Portfólio</a>
                     </div>
 
-                    <!-- Carreira -->
-                    <div class="flex flex-col gap-5">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.4em] mb-2">Carreira</span>
+                    <div class="flex flex-col gap-6">
+                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Carreira</span>
                         <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Trabalhe Conosco</a>
                         <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Vagas Abertas</a>
-                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Nossa Cultura</a>
+                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Cultura</a>
                     </div>
 
-                    <!-- Suporte & Contato -->
-                    <div class="flex flex-col gap-5">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.4em] mb-2">Suporte</span>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Contato</a>
+                    <div class="flex flex-col gap-6">
+                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Suporte</span>
                         <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">WhatsApp</a>
                         <a href="https://www.instagram.com/spaceweb.br" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Instagram</a>
                     </div>
                 </div>
 
-                <!-- Copyright & Bottom Bar -->
-                <div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div class="text-[8px] text-slate-800 tracking-[0.5em] uppercase font-bold text-center md:text-left">
-                        © 2026 Saturno Web Studios — Expanda seus horizontes.
+                <div class="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div class="text-[9px] text-slate-800 tracking-[0.5em] uppercase font-bold text-center md:text-left">
+                        © 2026 Saturno Web Studios — High Orbit Digital Frontier.
                     </div>
-                    <div class="flex gap-8">
-                        <a href="#" class="text-slate-800 hover:text-slate-600 transition-colors text-[7px] uppercase font-bold tracking-widest">Privacidade</a>
-                        <a href="#" class="text-slate-800 hover:text-slate-600 transition-colors text-[7px] uppercase font-bold tracking-widest">Termos</a>
+                    <div class="flex gap-10">
+                        <a href="#" class="text-slate-800 hover:text-slate-600 transition-colors text-[8px] uppercase font-bold tracking-widest">Privacidade</a>
+                        <a href="#" class="text-slate-800 hover:text-slate-600 transition-colors text-[8px] uppercase font-bold tracking-widest">Termos</a>
                     </div>
                 </div>
             </div>
@@ -552,21 +532,24 @@
     <script>
         lucide.createIcons();
 
+        // Inicialização com Fade-in
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.body.classList.add('loaded');
                 initScrollReveal();
-            }, 1200);
+            }, 1000);
         });
 
+        // Intersection Observer otimizado
         function initScrollReveal() {
             const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
             }, observerOptions);
-            document.querySelectorAll('.reveal-blackhole, .reveal-galaxy').forEach(el => observer.observe(el));
+            document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
+        // MOTOR GRÁFICO 3D REATIVO
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -574,28 +557,33 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        const particlesGeometry = new THREE.BufferGeometry();
-        const count = 4000;
-        const positions = new Float32Array(count * 3);
-        const colors = new Float32Array(count * 3);
-
-        for(let i = 0; i < count; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 15;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 15;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 15;
-            const isOrange = Math.random() > 0.85;
-            if(isOrange) { colors[i * 3] = 0.95; colors[i * 3 + 1] = 0.4; colors[i * 3 + 2] = 0.05; }
-            else { colors[i * 3] = 0.3; colors[i * 3 + 1] = 0.3; colors[i * 3 + 2] = 0.4; }
+        // Partículas multicamadas
+        function createStars(count, size, opacity, colorBase) {
+            const geo = new THREE.BufferGeometry();
+            const pos = new Float32Array(count * 3);
+            const cols = new Float32Array(count * 3);
+            for(let i = 0; i < count; i++) {
+                pos[i*3] = (Math.random() - 0.5) * 18;
+                pos[i*3+1] = (Math.random() - 0.5) * 18;
+                pos[i*3+2] = (Math.random() - 0.5) * 15;
+                const c = colorBase === 'orange' ? [0.95, 0.4, 0.1] : [0.3, 0.4, 0.6];
+                cols[i*3] = c[0]; cols[i*3+1] = c[1]; cols[i*3+2] = c[2];
+            }
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+            const mat = new THREE.PointsMaterial({ size, vertexColors: true, transparent: true, opacity, blending: THREE.AdditiveBlending });
+            return new THREE.Points(geo, mat);
         }
 
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const particlesMaterial = new THREE.PointsMaterial({ size: 0.012, vertexColors: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
-        camera.position.z = 5;
+        const layer1 = createStars(2500, 0.008, 0.3, 'blue');
+        const layer2 = createStars(500, 0.015, 0.4, 'orange');
+        scene.add(layer1);
+        scene.add(layer2);
+
+        camera.position.z = 6;
 
         let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5);
             mouseY = (e.clientY / window.innerHeight - 0.5);
@@ -603,9 +591,23 @@
 
         const animate = () => {
             requestAnimationFrame(animate);
-            particlesMesh.rotation.y += 0.0001;
-            particlesMesh.position.x += (mouseX * 0.15 - particlesMesh.position.x) * 0.05;
-            particlesMesh.position.y += (-mouseY * 0.15 - particlesMesh.position.y) * 0.05;
+            
+            // Interpolação suave para movimento do mouse
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            layer1.rotation.y += 0.0002;
+            layer2.rotation.y -= 0.0001;
+
+            layer1.position.x = targetX * 0.8;
+            layer1.position.y = -targetY * 0.8;
+            layer2.position.x = targetX * 1.5;
+            layer2.position.y = -targetY * 1.5;
+
+            // Movimento baseado no scroll
+            const scrollY = window.scrollY;
+            camera.position.y = -scrollY * 0.0005;
+
             renderer.render(scene, camera);
         };
         animate();
@@ -614,6 +616,27 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Efeito de Parallax nos Cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card-interactive');
+            const x = e.clientX;
+            const y = e.clientY;
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = rect.left + rect.width / 2;
+                const cardY = rect.top + rect.height / 2;
+                const angleX = (y - cardY) / 60;
+                const angleY = (cardX - x) / 60;
+
+                if (Math.abs(angleX) < 15 && Math.abs(angleY) < 15) {
+                    card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px) scale(1.02)`;
+                } else {
+                    card.style.transform = ``;
+                }
+            });
         });
     </script>
 </body>
