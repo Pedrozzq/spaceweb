@@ -24,7 +24,7 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background-color: #05070a; /* Fundo levemente mais escuro para contraste */
+            background-color: #05070a; 
             color: #E5E7EB;
             overflow-x: hidden;
             margin: 0;
@@ -163,7 +163,7 @@
             opacity: 0;
             transition: opacity 4s ease;
         }
-        body.loaded #bg-canvas { opacity: 1; } /* Fundo totalmente visível */
+        body.loaded #bg-canvas { opacity: 1; }
 
         .btn-animate-border {
             position: relative;
@@ -258,15 +258,16 @@
                     </div>
 
                     <div class="flex flex-col gap-6 w-full lg:w-[380px] lg:mt-32 reveal-node" style="transition-delay: 200ms;">
-                        <a href="https://wa.link/hpoklw" target="_blank" class="relative group p-[2px] btn-animate-border shadow-2xl shadow-orange-900/20">
-                            <div class="relative bg-white px-8 py-6 flex items-center justify-between gap-4 z-10 hover:bg-orange-600 transition-colors duration-500">
+                        <!-- Botão Principal de Contato Melhorado -->
+                        <a href="https://wa.link/hpoklw" target="_blank" class="relative group p-[2px] btn-animate-border shadow-2xl shadow-orange-500/20">
+                            <div class="relative bg-gradient-to-r from-orange-600 to-amber-500 px-8 py-6 flex items-center justify-between gap-4 z-10 hover:brightness-110 transition-all duration-300">
                                 <div class="flex items-center gap-4">
-                                    <svg class="w-5 h-5 fill-slate-950 group-hover:fill-white transition-colors duration-300" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .01 5.403.006 12.039c0 2.12.54 4.19 1.566 6.02L0 24l6.102-1.6c1.774.96 3.788 1.47 5.846 1.47h.005c6.634 0 12.038-5.404 12.042-12.04c0-3.212-1.25-6.232-3.522-8.508z"/>
                                     </svg>
-                                    <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Entrar em contato</span>
+                                    <span class="text-white text-[11px] font-black uppercase tracking-[0.3em]">Entrar em contato</span>
                                 </div>
-                                <i data-lucide="arrow-right" class="w-5 h-5 text-slate-950 group-hover:text-white transition-all"></i>
+                                <i data-lucide="arrow-right" class="w-5 h-5 text-white group-hover:translate-x-1 transition-transform"></i>
                             </div>
                         </a>
                         <a href="#portfolio" class="relative group p-[2px] btn-animate-border">
@@ -280,16 +281,15 @@
             </div>
         </section>
 
-        <!-- SECÇÃO 02: PORTFÓLIO (6 PROJETOS) -->
+        <!-- SECÇÃO 02: PORTFÓLIO -->
         <section id="portfolio" class="py-32 px-8 border-t border-white/5">
             <div class="container mx-auto">
                 <div class="text-left mb-24 reveal-node">
                     <span class="text-orange-500/50 font-bold uppercase tracking-[0.6em] text-[10px]">NOSSOS TRABALHOS</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-4">Portfólio de <span class="text-gradient">Projetos</span></h2>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-4">Portfólio de <span class="text-gradient">Projetos.</span></h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <!-- Projeto 01 -->
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/TtIS08N.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="JP Joias">
@@ -303,7 +303,6 @@
                         </div>
                     </div>
                     
-                    <!-- Projeto 02 -->
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 100ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/Tgx3UFQ.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Panorama Mercados">
@@ -317,7 +316,6 @@
                         </div>
                     </div>
 
-                    <!-- Projeto 03 -->
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 200ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/uAqZUZM.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Treki Turismo">
@@ -331,24 +329,23 @@
                         </div>
                     </div>
 
-                    <!-- Placeholders -->
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 300ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-6xl group-hover:scale-110 group-hover:text-white/10 transition-all">04</span>
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 group-hover:text-white/10 transition-all">04</span>
                         </div>
                         <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Próximo Lançamento</h3>
                     </div>
 
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 400ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-6xl group-hover:scale-110 group-hover:text-white/10 transition-all">05</span>
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 group-hover:text-white/10 transition-all">05</span>
                         </div>
                         <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Arquitetura de Dados</h3>
                     </div>
 
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 500ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-6xl group-hover:scale-110 group-hover:text-white/10 transition-all">06</span>
+                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 group-hover:text-white/10 transition-all">06</span>
                         </div>
                         <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Expansão Global</h3>
                     </div>
@@ -421,7 +418,7 @@
             </div>
         </section>
 
-        <!-- SECÇÃO 04: SATURNO ACADEMY (COM CHAMADA PARA AÇÃO ATUALIZADA) -->
+        <!-- SECÇÃO 04: SATURNO ACADEMY -->
         <section id="academy" class="py-40 px-8">
             <div class="container mx-auto max-w-5xl">
                 <div class="relative group p-[3px] btn-animate-border-purple reveal-node">
@@ -441,10 +438,11 @@
                         </p>
                         
                         <div class="flex flex-col md:flex-row gap-6 items-center w-full justify-center">
-                            <a href="#" class="relative group p-[2px] btn-animate-border-purple">
-                                <div class="relative bg-white px-10 py-5 flex items-center justify-center gap-3 z-10 hover:bg-purple-600 transition-colors group">
-                                    <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Formação Pro</span>
-                                    <i data-lucide="orbit" class="w-4 h-4 text-slate-950 group-hover:text-white"></i>
+                            <!-- Botão Formação Pro Melhorado -->
+                            <a href="#" class="relative group p-[2px] btn-animate-border-purple shadow-2xl shadow-purple-500/20">
+                                <div class="relative bg-gradient-to-r from-purple-600 to-indigo-600 px-10 py-5 flex items-center justify-center gap-3 z-10 hover:brightness-110 transition-all duration-300">
+                                    <span class="text-white text-[11px] font-black uppercase tracking-[0.3em]">Formação Pro</span>
+                                    <i data-lucide="orbit" class="w-4 h-4 text-white"></i>
                                 </div>
                             </a>
                             <a href="https://wa.link/hpoklw" target="_blank" class="relative group p-[2px] btn-animate-border">
@@ -516,7 +514,6 @@
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
-        // MOTOR GRÁFICO 3D IMERSIVO
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -543,7 +540,7 @@
 
         const layer1 = createStars(3500, 0.008, 0.5, 'blue');
         const layer2 = createStars(800, 0.02, 0.6, 'orange');
-        const layer3 = createStars(150, 0.05, 0.3, 'white'); // Estrelas brilhantes próximas
+        const layer3 = createStars(150, 0.05, 0.3, 'white'); 
         scene.add(layer1);
         scene.add(layer2);
         scene.add(layer3);
@@ -561,18 +558,15 @@
             requestAnimationFrame(animate);
             targetX += (mouseX - targetX) * 0.03;
             targetY += (mouseY - targetY) * 0.03;
-            
             layer1.rotation.y += 0.0003;
             layer2.rotation.y -= 0.0002;
             layer3.rotation.y += 0.0001;
-
             layer1.position.x = targetX * 1;
             layer1.position.y = -targetY * 1;
             layer2.position.x = targetX * 2;
             layer2.position.y = -targetY * 2;
             layer3.position.x = targetX * 3.5;
             layer3.position.y = -targetY * 3.5;
-
             const scrollY = window.scrollY;
             camera.position.y = -scrollY * 0.0005;
             renderer.render(scene, camera);
