@@ -33,8 +33,8 @@
 
         /* --- ANIMAÇÕES ORIGINAIS --- */
         @keyframes alive-pulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(234, 88, 12, 0.4)); }
-            50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(234, 88, 12, 0.7)); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(234, 88, 12, 0.4)); } /* Laranja */
+            50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.6)); } /* Azul Celeste */
         }
 
         @keyframes spin-border {
@@ -136,7 +136,7 @@
         /* Título Escondido no Início (Só a imagem aparece) */
         .logo-title-brand {
             font-weight: 900;
-            color: white;
+            color: white; /* Fallback */
             text-transform: uppercase;
             white-space: nowrap;
             font-size: 2.2rem;
@@ -177,6 +177,11 @@
             
             /* Delay alto para garantir que o logo chegue ao topo antes de começar a escrever */
             animation-delay: 1.5s; 
+        }
+
+        /* Ajuste para aplicar o Shimmer dentro da animação de digitação */
+        body.loaded .logo-title-brand .text-shimmer {
+             animation: shimmer-text 8s linear infinite;
         }
 
         /* --- COMPONENTES UI --- */
@@ -324,8 +329,10 @@
     <div class="logo-container-hero" id="hero-logo-wrapper">
         <img src="https://i.imgur.com/9z3OxpR.png" alt="Logotipo Saturno Web" class="logo-img">
         <div class="flex items-center">
-            <!-- Texto com classe ajustada para efeito typewriter -->
-            <h1 class="logo-title-brand">Saturno <span class="text-orange-500">Web</span></h1>
+            <!-- Texto com classe ajustada para efeito typewriter e shimmer -->
+            <h1 class="logo-title-brand">
+                <span class="text-shimmer">Saturno Web</span>
+            </h1>
         </div>
     </div>
 
@@ -335,7 +342,8 @@
     <main class="relative z-10" id="site-content">
         
         <!-- SECÇÃO 01: HERO -->
-        <section id="hero" class="min-h-screen flex flex-col justify-center px-8 py-20 text-center items-center">
+        <!-- Alterado justify-center para justify-start e adicionado pt-40 para subir o conteúdo -->
+        <section id="hero" class="min-h-screen flex flex-col justify-start pt-40 px-8 text-center items-center">
             <div class="container mx-auto max-w-5xl">
                 <div class="mb-4 h-[20px]"></div> 
 
@@ -345,7 +353,8 @@
                             <i data-lucide="zap" class="w-3 h-3"></i> Fronteira com Saturno
                         </div>
                         
-                        <h1 class="text-3xl md:text-5xl font-black mb-8 tracking-tighter leading-tight uppercase max-w-4xl mx-auto drop-shadow-[0_0_15px_rgba(234,88,12,0.3)]">
+                        <!-- Fonte aumentada para text-4xl md:text-6xl -->
+                        <h1 class="text-4xl md:text-6xl font-black mb-8 tracking-tighter leading-tight uppercase max-w-5xl mx-auto drop-shadow-[0_0_15px_rgba(234,88,12,0.3)]">
                             <span class="text-shimmer">Criamos experiências digitais que encantam e convertem.</span>
                         </h1>
                         
