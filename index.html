@@ -152,7 +152,7 @@
             animation-delay: 1.5s; 
         }
 
-        /* --- ESTILOS ORIGINAIS (HERO E PORTFÓLIO) --- */
+        /* --- COMPONENTES UI --- */
         .btn-animate-border {
             position: relative;
             overflow: hidden;
@@ -232,6 +232,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        
+        .text-gradient-blue {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         #bg-canvas {
             position: fixed;
@@ -245,6 +251,29 @@
         body.loaded #bg-canvas { opacity: 1; }
 
         .italic-serif { font-family: serif; font-style: italic; }
+        
+        /* Steps Connector Line */
+        .step-line {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+            z-index: 0;
+        }
+        
+        @media (min-width: 1024px) {
+            .step-line {
+                width: 100%;
+                height: 2px;
+                top: 2.5rem;
+                left: 0;
+                transform: none;
+                background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+            }
+        }
 
         @media (max-width: 768px) {
             body.loaded .logo-container-hero { top: 1.5rem; left: 50%; transform: translateX(-50%); }
@@ -295,7 +324,7 @@
                         </h1>
                         
                         <p class="text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto leading-relaxed italic-serif font-light mb-8">
-                            Criamos experiências digitais que encantam e convertem.
+                            Focados em autoridade, escala e estética premium para o seu posicionamento no mercado digital.
                         </p>
                     </div>
 
@@ -326,12 +355,12 @@
         <section id="portfolio" class="py-32 px-8 border-t border-white/5">
             <div class="container mx-auto">
                 <div class="text-left mb-24 reveal-node">
-                    <span class="text-orange-500/50 font-bold uppercase tracking-[0.6em] text-[10px]">NOSSO TRABALHO</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-4">Portfólio de <span class="text-gradient">Projetos</span></h2>
+                    <span class="text-orange-500/50 font-bold uppercase tracking-[0.6em] text-[10px]">Case Study</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-4">Arquivo de <span class="text-gradient">Impacto.</span></h2>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node">
+                    <a href="https://www.jpjoiasbrasil.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/TtIS08N.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="JP Joias">
                         </div>
@@ -342,9 +371,9 @@
                             </div>
                             <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 100ms;">
+                    <a href="https://www.panoramamercados.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 100ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/Tgx3UFQ.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Panorama Mercados">
                         </div>
@@ -355,9 +384,9 @@
                             </div>
                             <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 200ms;">
+                    <a href="https://www.trekiturismo.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 200ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/uAqZUZM.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Treki Turismo">
                         </div>
@@ -368,7 +397,7 @@
                             </div>
                             <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
                         </div>
-                    </div>
+                    </a>
 
                     <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 300ms;">
                         <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
@@ -417,7 +446,7 @@
                             <i data-lucide="bar-chart-3" class="w-8 h-8 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Data Driven</h3>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Tráfego</h3>
                             <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Decisões pautadas em métricas reais e inteligência analítica.</p>
                         </div>
                     </div>
@@ -463,7 +492,7 @@
                             <i data-lucide="repeat" class="w-8 h-8 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">ML & Shopee Sync</h3>
+                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">MERCADO LIVRE E SHOPEE SYNC</h3>
                             <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Gestão centralizada para os maiores marketplaces do mercado.</p>
                         </div>
                     </div>
@@ -471,31 +500,63 @@
             </div>
         </section>
 
-        <!-- SECÇÃO 04: SATURNO ACADEMY -->
-        <section id="academy" class="py-40 px-8">
+        <!-- NOVA SECÇÃO: O CICLO DA ÓRBITA (METODOLOGIA) -->
+        <section id="methodology" class="py-32 px-8 border-t border-white/5 relative">
+            <div class="container mx-auto">
+                <div class="text-left mb-20 reveal-node">
+                    <span class="text-blue-500 font-bold uppercase tracking-[0.5em] text-[10px]">Workflow</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-4">O Ciclo da <span class="text-gradient-blue">Órbita.</span></h2>
+                </div>
+
+                <div class="relative grid grid-cols-1 lg:grid-cols-3 gap-12 mt-12">
+                    <!-- Linha conectora -->
+                    <div class="step-line"></div>
+
+                    <!-- Passo 01 -->
+                    <div class="relative z-10 bg-[#05070a] p-8 border border-white/5 reveal-node">
+                        <div class="w-12 h-12 bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mb-6 text-blue-400 font-black text-xl">01</div>
+                        <h3 class="text-white text-lg font-bold uppercase mb-3 tracking-wider">Diagnóstico</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">Análise profunda da sua presença digital atual, identificando gargalos de conversão e oportunidades inexploradas no seu nicho.</p>
+                    </div>
+
+                    <!-- Passo 02 -->
+                    <div class="relative z-10 bg-[#05070a] p-8 border border-white/5 reveal-node" style="transition-delay: 150ms;">
+                        <div class="w-12 h-12 bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-6 text-purple-400 font-black text-xl">02</div>
+                        <h3 class="text-white text-lg font-bold uppercase mb-3 tracking-wider">Construção</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">Desenvolvimento da arquitetura visual e técnica. Sites velozes, copy persuasiva e design alinhado com a psicologia do consumidor.</p>
+                    </div>
+
+                    <!-- Passo 03 -->
+                    <div class="relative z-10 bg-[#05070a] p-8 border border-white/5 reveal-node" style="transition-delay: 300ms;">
+                        <div class="w-12 h-12 bg-orange-500/10 border border-orange-500/30 flex items-center justify-center mb-6 text-orange-400 font-black text-xl">03</div>
+                        <h3 class="text-white text-lg font-bold uppercase mb-3 tracking-wider">Escala & ROI</h3>
+                        <p class="text-slate-500 text-sm leading-relaxed">Implementação de tráfego e otimização contínua. Transformamos visitantes em leads qualificados e clientes recorrentes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECÇÃO 04: MARKETING CORPORATIVO (Substituindo Academy) -->
+        <section id="marketing" class="py-40 px-8 border-t border-white/5">
             <div class="container mx-auto max-w-5xl">
                 <div class="card-interactive p-16 md:p-24 relative overflow-hidden reveal-node">
-                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-purple-600/10 blur-[120px]"></div>
+                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 blur-[120px]"></div>
                     <div class="relative z-10 flex flex-col items-center text-center">
-                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-purple-500/10 border-l-4 border-purple-500 text-purple-400 text-[10px] font-bold mb-12 uppercase tracking-[0.5em]">
-                            <i data-lucide="graduation-cap" class="w-4 h-4"></i> Saturno Academy
+                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-blue-500/10 border-l-4 border-blue-500 text-blue-400 text-[10px] font-bold mb-12 uppercase tracking-[0.5em]">
+                            <i data-lucide="trending-up" class="w-4 h-4"></i> Saturno Business Intelligence
                         </div>
                         <h2 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter uppercase leading-none">
-                            DOMINE O <span class="text-gradient-purple">ESPAÇO DIGITAL.</span>
+                            MARKETING <br/> <span class="text-gradient-blue">DE PRECISÃO.</span>
                         </h2>
 
-                        <p class="text-slate-400 text-lg md:text-xl mb-12 max-w-2xl font-light italic-serif">
-                            O segredo da escala e da autoridade revelado. Transforme sua presença online com as mesmas estratégias que elevam nossos clientes ao ápice.
+                        <p class="text-slate-400 text-lg md:text-xl mb-12 max-w-3xl font-light italic-serif">
+                            Estratégias de growth e branding alinhadas para empresas que buscam liderança de mercado. Unimos design de alta fidelidade com inteligência de dados para maximizar seu LTV e ROI. Sua empresa não precisa apenas de um site, ela precisa de um motor de vendas.
                         </p>
 
                         <div class="flex flex-col md:flex-row gap-6 items-center w-full justify-center">
-                            <a href="#" class="btn-premium px-10 py-5 bg-white flex items-center gap-3 hover:bg-purple-600 transition-colors group">
-                                <span class="text-slate-950 group-hover:text-white text-[11px] font-black uppercase tracking-[0.3em]">Formação Pro</span>
-                                <i data-lucide="orbit" class="w-4 h-4 text-slate-950 group-hover:text-white"></i>
-                            </a>
-                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium px-10 py-5 border border-white/10 flex items-center gap-3 hover:border-orange-500/50 group">
-                                <span class="text-white text-[11px] font-black uppercase tracking-[0.3em]">Consultoria Enterprise</span>
-                                <i data-lucide="briefcase" class="w-4 h-4 text-slate-500 group-hover:text-white"></i>
+                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium px-12 py-6 bg-white flex items-center gap-3 hover:bg-blue-600 transition-colors group">
+                                <span class="text-slate-950 group-hover:text-white text-xs font-black uppercase tracking-[0.3em]">Agendar Consultoria Estratégica</span>
+                                <i data-lucide="briefcase" class="w-4 h-4 text-slate-950 group-hover:text-white"></i>
                             </a>
                         </div>
                     </div>
@@ -513,7 +574,7 @@
                             <span class="text-white font-black tracking-[0.2em] text-sm uppercase">Saturno <span class="text-orange-500">Web</span></span>
                         </div>
                         <p class="text-slate-600 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                            Design de Alta Performance & Estratégia Digital de Elite.
+                            Design de Alta Performance & Estratégia Digital Corporativa.
                         </p>
                     </div>
                     <div class="flex flex-col gap-6">
@@ -522,17 +583,18 @@
                         <a href="#portfolio" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Portfólio</a>
                     </div>
                     <div class="flex flex-col gap-6">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Carreira</span>
-                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Trabalhe Conosco</a>
+                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Serviços</span>
+                        <a href="#methodology" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Consultoria</a>
+                        <a href="#solutions" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Desenvolvimento</a>
                     </div>
                     <div class="flex flex-col gap-6">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Suporte</span>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">WhatsApp</a>
+                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Contato</span>
+                        <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">WhatsApp Business</a>
                     </div>
                 </div>
                 <div class="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div class="text-[9px] text-slate-800 tracking-[0.5em] uppercase font-bold text-center md:text-left">
-                        © 2026 Saturno Web Studios — High Orbit Digital Frontier.
+                        © 2026 Saturno Web Studios — Corporate Digital Solutions.
                     </div>
                 </div>
             </div>
@@ -615,7 +677,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // PARALLAX
+        // PARALLAX APLICADO APENAS NAS SEÇÕES DE BAIXO
         document.addEventListener('mousemove', (e) => {
             const cards = document.querySelectorAll('.card-interactive');
             cards.forEach(card => {
@@ -635,4 +697,3 @@
     </script>
 </body>
 </html>
-
