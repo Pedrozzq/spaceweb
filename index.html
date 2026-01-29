@@ -37,23 +37,28 @@
             50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(234, 88, 12, 0.7)); }
         }
 
-        @keyframes text-reveal {
-            0% { letter-spacing: 0.6em; opacity: 0; filter: blur(12px); transform: translateY(10px); }
-            100% { letter-spacing: 0.2em; opacity: 1; filter: blur(0); transform: translateY(0); }
-        }
-
         @keyframes spin-border {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        /* --- ANIMAÇÕES PREMIUM --- */
         @keyframes shine-sweep {
             0% { transform: translateX(-100%) skewX(-15deg); }
             100% { transform: translateX(200%) skewX(-15deg); }
         }
 
-        /* --- SISTEMA DE REVELAÇÃO --- */
+        /* --- NOVA ANIMAÇÃO: DIGITAÇÃO (TYPEWRITER) --- */
+        @keyframes typing {
+            from { max-width: 0; }
+            to { max-width: 160px; } /* Largura suficiente para o texto */
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #f97316; } /* Cor Laranja */
+        }
+
+        /* --- SISTEMA DE REVELAÇÃO DE CONTEÚDO --- */
         .reveal-node {
             opacity: 0;
             filter: blur(15px);
@@ -67,7 +72,7 @@
             transform: translateY(0) scale(1);
         }
 
-        /* --- HEADER & LOGO --- */
+        /* --- HEADER & LOGO AJUSTADO --- */
         #preloader {
             position: fixed;
             inset: 0;
@@ -95,21 +100,27 @@
         }
 
         .logo-img {
-            width: 300px;
+            width: 220px; 
             height: auto;
             animation: alive-pulse 4s infinite ease-in-out;
             transition: width 1.8s cubic-bezier(0.85, 0, 0.15, 1);
         }
 
+        /* Título Escondido no Início (Só a imagem aparece) */
         .logo-title-brand {
             font-weight: 900;
             color: white;
             text-transform: uppercase;
             white-space: nowrap;
             font-size: 2.2rem;
+            
+            /* Inicialmente invisível e sem largura para o efeito typewriter */
             opacity: 0; 
-            visibility: hidden;
-            transition: all 1.8s cubic-bezier(0.85, 0, 0.15, 1);
+            max-width: 0;
+            overflow: hidden;
+            border-right: 3px solid transparent; /* Cursor invisível inicialmente */
+            
+            transition: opacity 0.5s ease; /* Transição suave de opacidade */
         }
 
         body.loaded #preloader { opacity: 0; visibility: hidden; }
@@ -117,23 +128,31 @@
         body.loaded .logo-container-hero {
             position: absolute;
             top: 2.5rem; 
-            left: 50%;
-            transform: translateX(-50%);
+            left: 50%; 
+            transform: translateX(-50%); 
             flex-direction: row; 
-            gap: 1.5rem;
+            gap: 1.2rem;
             pointer-events: auto;
         }
 
-        body.loaded .logo-img { width: 90px; }
+        body.loaded .logo-img { width: 60px; }
 
+        /* Ativação do Efeito de Digitação quando Carregado */
         body.loaded .logo-title-brand {
-            font-size: 1.5rem;
+            font-size: 1rem; 
             opacity: 1;
-            visibility: visible;
-            animation: text-reveal 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            animation-delay: 0.6s;
+            
+            /* Animação de Digitação */
+            border-right: 3px solid #f97316; /* Cor do cursor */
+            animation: 
+                typing 3.5s steps(40, end) forwards,
+                blink-caret 0.75s step-end infinite;
+            
+            /* Delay alto para garantir que o logo chegue ao topo antes de começar a escrever */
+            animation-delay: 1.5s; 
         }
 
+        /* --- ESTILOS ORIGINAIS (HERO E PORTFÓLIO) --- */
         .btn-animate-border {
             position: relative;
             overflow: hidden;
@@ -161,13 +180,13 @@
             box-shadow: 0 20px 40px -20px rgba(0,0,0,0.8);
         }
 
+        /* --- ESTILOS PREMIUM --- */
         .card-interactive {
             background: rgba(255, 255, 255, 0.015);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
-            will-change: transform;
         }
 
         .card-interactive:hover {
@@ -228,10 +247,15 @@
         .italic-serif { font-family: serif; font-style: italic; }
 
         @media (max-width: 768px) {
-            body.loaded .logo-container-hero { top: 1.5rem; }
-            .logo-img { width: 180px; }
-            body.loaded .logo-img { width: 60px; }
-            body.loaded .logo-title-brand { font-size: 1.1rem; }
+            body.loaded .logo-container-hero { top: 1.5rem; left: 50%; transform: translateX(-50%); }
+            .logo-img { width: 140px; }
+            body.loaded .logo-img { width: 45px; }
+            body.loaded .logo-title-brand { font-size: 0.8rem; }
+            /* Ajuste da largura da animação para mobile */
+            @keyframes typing {
+                from { max-width: 0; }
+                to { max-width: 130px; }
+            }
         }
     </style>
 </head>
@@ -244,6 +268,7 @@
     <div class="logo-container-hero" id="hero-logo-wrapper">
         <img src="https://i.imgur.com/9z3OxpR.png" alt="Logotipo Saturno Web" class="logo-img">
         <div class="flex items-center">
+            <!-- Texto com classe ajustada para efeito typewriter -->
             <h1 class="logo-title-brand">Saturno <span class="text-orange-500">Web</span></h1>
         </div>
     </div>
@@ -256,7 +281,7 @@
         <!-- SECÇÃO 01: HERO -->
         <section id="hero" class="min-h-screen flex flex-col justify-center px-8 py-20 text-center items-center">
             <div class="container mx-auto max-w-5xl">
-                <div class="mb-4 h-[20px]"></div>
+                <div class="mb-4 h-[20px]"></div> 
 
                 <div class="flex flex-col items-center gap-8">
                     <div class="max-w-4xl reveal-node">
@@ -270,7 +295,7 @@
                         </h1>
                         
                         <p class="text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto leading-relaxed italic-serif font-light mb-8">
-                             Criamos experiências digitais que encantam e convertem.
+                            Focados em autoridade, escala e estética premium para o seu posicionamento no mercado digital.
                         </p>
                     </div>
 
@@ -297,7 +322,7 @@
             </div>
         </section>
 
-        <!-- SECÇÃO 02: PORTFÓLIO (ARQUIVO DE IMPACTO) -->
+        <!-- SECÇÃO 02: PORTFÓLIO -->
         <section id="portfolio" class="py-32 px-8 border-t border-white/5">
             <div class="container mx-auto">
                 <div class="text-left mb-24 reveal-node">
@@ -369,7 +394,7 @@
             </div>
         </section>
 
-        <!-- SECÇÃO 03: ARQUITETURA DE ÓRBITA -->
+        <!-- SECÇÃO 03: ARQUITETURA -->
         <section id="solutions" class="py-32 px-8 border-t border-white/5 bg-black/20">
             <div class="container mx-auto">
                 <div class="text-center mb-24 reveal-node">
@@ -446,130 +471,6 @@
             </div>
         </section>
 
-        <!-- SECÇÃO: PLANOS DE ACELERAÇÃO (ATUALIZADA) -->
-        <section id="pricing" class="py-32 px-8 border-t border-white/5 relative bg-black/40">
-            <div class="container mx-auto">
-                <div class="text-center mb-24 reveal-node">
-                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Acceleration Tiers</span>
-                    <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mt-4">Planos de <span class="text-gradient">Aceleração.</span></h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Mercúrio Start -->
-                    <div class="card-interactive p-10 flex flex-col reveal-node" style="transition-delay: 0ms;">
-                        <div class="mb-10 flex justify-between items-start">
-                            <div>
-                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">☄️ ÓRBITA INICIAL</span>
-                                <h3 class="text-2xl font-black text-white mt-2">MERCÚRIO <span class="text-orange-500">START</span></h3>
-                                <p class="text-slate-500 text-[10px] mt-2 font-bold uppercase tracking-wider">Velocidade, presença e validação</p>
-                            </div>
-                            <i data-lucide="rocket" class="w-8 h-8 text-orange-500/50"></i>
-                        </div>
-                        <div class="mb-10">
-                            <span class="text-slate-500 text-[9px] uppercase tracking-widest font-black">Investimento único</span>
-                            <div class="text-5xl font-black text-white mt-2">R$ 1.800</div>
-                        </div>
-                        <ul class="flex-1 space-y-4 mb-10 border-t border-white/5 pt-8">
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Site Institucional ou Landing Page
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Design responsivo & performance
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Copy estratégica (Conversão)
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Tracking Básico (Pixel + GA4)
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Integração WhatsApp / Forms
-                            </li>
-                        </ul>
-                        <p class="text-[9px] text-slate-600 mb-8 italic uppercase tracking-widest font-bold">👉 Ideal para quem precisa entrar em órbita rápido.</p>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium py-4 bg-white/5 border border-white/10 text-center text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-orange-600 hover:border-orange-600 transition-all">Garantir Vaga</a>
-                    </div>
-
-                    <!-- Vênus Growth -->
-                    <div class="card-interactive p-10 flex flex-col border-orange-500/30 reveal-node bg-orange-500/[0.02]" style="transition-delay: 150ms;">
-                        <div class="absolute top-0 right-10 transform -translate-y-1/2 bg-orange-500 px-4 py-1 text-[9px] font-black text-black uppercase tracking-widest">Mais Procurado</div>
-                        <div class="mb-10 flex justify-between items-start">
-                            <div>
-                                <span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest">🌍 ÓRBITA DE CRESCIMENTO</span>
-                                <h3 class="text-2xl font-black text-white mt-2">VÊNUS <span class="text-orange-500">GROWTH</span></h3>
-                                <p class="text-slate-500 text-[10px] mt-2 font-bold uppercase tracking-wider">Estratégia, experiência e tráfego</p>
-                            </div>
-                            <i data-lucide="trending-up" class="w-8 h-8 text-orange-500"></i>
-                        </div>
-                        <div class="mb-10">
-                            <span class="text-slate-500 text-[9px] uppercase tracking-widest font-black">Investimento estratégico</span>
-                            <div class="text-5xl font-black text-white mt-2">R$ 4.000</div>
-                        </div>
-                        <ul class="flex-1 space-y-4 mb-10 border-t border-white/5 pt-8">
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Site Estratégico UX/UI High-End
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Arquitetura de Funil de Vendas
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> SEO On-Page Avançado
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Setup de Tráfego (Meta/Google)
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Integrações CRM & Automações
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Core Web Vitals Optimization
-                            </li>
-                        </ul>
-                        <p class="text-[9px] text-orange-500/70 mb-8 italic uppercase tracking-widest font-bold">👉 Para crescer com método, não no improviso.</p>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium py-4 bg-orange-600 text-center text-white text-[10px] font-black uppercase tracking-[0.3em] hover:brightness-110 shadow-lg shadow-orange-600/20 transition-all">Solicitar Proposta</a>
-                    </div>
-
-                    <!-- Saturno Prime -->
-                    <div class="card-interactive p-10 flex flex-col reveal-node" style="transition-delay: 300ms;">
-                        <div class="mb-10 flex justify-between items-start">
-                            <div>
-                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">🪐 ÓRBITA DE DOMÍNIO TOTAL</span>
-                                <h3 class="text-2xl font-black text-white mt-2">SATURNO <span class="text-orange-500">PRIME</span></h3>
-                                <p class="text-slate-500 text-[10px] mt-2 font-bold uppercase tracking-wider">Escala, Sistema e Tecnologia</p>
-                            </div>
-                            <i data-lucide="crown" class="w-8 h-8 text-orange-500/50"></i>
-                        </div>
-                        <div class="mb-10">
-                            <span class="text-slate-500 text-[9px] uppercase tracking-widest font-black">Investimento enterprise</span>
-                            <div class="text-5xl font-black text-white mt-2 text-gradient">R$ 10.000</div>
-                        </div>
-                        <ul class="flex-1 space-y-4 mb-10 border-t border-white/5 pt-8">
-                            <li class="flex items-start gap-3 text-slate-300 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="plus" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Tudo dos planos anteriores
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="cpu" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Sistema Web sob medida
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="layers" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Painel Administrativo Custom
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="settings" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Automação de Processos Internos
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Marketplace ou E-commerce Sync
-                            </li>
-                            <li class="flex items-start gap-3 text-slate-400 text-[10px] uppercase font-bold tracking-widest leading-relaxed">
-                                <i data-lucide="link-2" class="w-3.5 h-3.5 text-orange-500 shrink-0"></i> Integrações ERP / Gateways
-                            </li>
-                        </ul>
-                        <p class="text-[9px] text-slate-600 mb-8 italic uppercase tracking-widest font-bold">👉 Tecnologia duradoura para escala real.</p>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium py-4 bg-white text-center text-black text-[10px] font-black uppercase tracking-[0.3em] hover:bg-orange-500 hover:text-white transition-all">Falar com Estrategista</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- SECÇÃO 04: SATURNO ACADEMY -->
         <section id="academy" class="py-40 px-8">
             <div class="container mx-auto max-w-5xl">
@@ -615,16 +516,16 @@
                             Design de Alta Performance & Estratégia Digital de Elite.
                         </p>
                     </div>
-                    <div class="flex flex-col gap-6 text-center md:text-left">
+                    <div class="flex flex-col gap-6">
                         <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Empresa</span>
                         <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Sobre Nós</a>
                         <a href="#portfolio" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Portfólio</a>
                     </div>
-                    <div class="flex flex-col gap-6 text-center md:text-left">
+                    <div class="flex flex-col gap-6">
                         <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Carreira</span>
                         <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Trabalhe Conosco</a>
                     </div>
-                    <div class="flex flex-col gap-6 text-center md:text-left">
+                    <div class="flex flex-col gap-6">
                         <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Suporte</span>
                         <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">WhatsApp</a>
                     </div>
@@ -656,7 +557,7 @@
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
-        // MOTOR GRÁFICO 3D
+        // MOTOR GRÁFICO 3D (3 Camadas)
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -714,9 +615,9 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // PARALLAX 3D (TILT)
+        // PARALLAX
         document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.card-interactive, .project-button');
+            const cards = document.querySelectorAll('.card-interactive');
             cards.forEach(card => {
                 const rect = card.getBoundingClientRect();
                 const cardX = rect.left + rect.width / 2;
