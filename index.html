@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saturno Web</title>
     
-    <!-- Favicon de Saturno Premium (SVG Vetorial com fundo transparente) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none'%3E%3Cpath d='M12 36 C15 22, 49 22, 52 36' stroke='%23ea580c' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='15' fill='%2305070a' stroke='%2338bdf8' stroke-width='4'/%3E%3Cpath d='M6 31 C10 45, 54 45, 58 31' stroke='%23ea580c' stroke-width='5.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <!-- Favicon de Saturno Premium Transparente -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none'><ellipse cx='32' cy='32' rx='28' ry='9' stroke='%23ea580c' stroke-width='3.5' transform='rotate(-15 32 32)'/><circle cx='32' cy='32' r='14' fill='%2305070a' stroke='%23ea580c' stroke-width='3.5'/></svg>">
     
     <!-- Google Fonts: Space Grotesk -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -34,10 +34,10 @@
             cursor: default;
         }
 
-        /* --- ANIMAÇÕES ORIGINAIS --- */
+        /* --- ANIMAÇÕES --- */
         @keyframes alive-pulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(234, 88, 12, 0.4)); } /* Laranja */
-            50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.6)); } /* Azul Celeste */
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(234, 88, 12, 0.4)); }
+            50% { transform: scale(1.04); filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.6)); }
         }
 
         @keyframes spin-border {
@@ -50,44 +50,37 @@
             100% { transform: translateX(200%) skewX(-15deg); }
         }
 
-        /* --- NOVA ANIMAÇÃO: SHIMMER (TEXTO BRILHANTE) --- */
         @keyframes shimmer-text {
             0% { background-position: 200% center; }
             100% { background-position: -200% center; }
         }
 
         .text-shimmer {
-            /* Laranja predominante com um feixe de Azul Celeste mais suave no centro */
             background: linear-gradient(to right, #ea580c 0%, #ea580c 40%, #38bdf8 50%, #ea580c 60%, #ea580c 100%);
             background-size: 200% auto;
-            color: #ea580c; /* Fallback */
+            color: #ea580c;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Tempo aumentado para 8s para conferir "peso" e robustez institucional */
             animation: shimmer-text 8s linear infinite; 
         }
 
-        /* --- NOVA CLASSE: SHIMMER AZUL (PARA O NOME SATURNO) --- */
         .text-shimmer-blue {
-            /* Branco predominante com um feixe Azul no centro */
             background: linear-gradient(to right, #ffffff 0%, #ffffff 45%, #3b82f6 50%, #ffffff 55%, #ffffff 100%);
             background-size: 200% auto;
-            color: #ffffff; /* Fallback */
+            color: #ffffff;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: shimmer-text 8s linear infinite; 
         }
 
-        /* --- CLASSE BG SHIMMER (PARA O BOTÃO Laranja) --- */
-        .bg-shimmer {
-            background: linear-gradient(to right, #ea580c 0%, #ea580c 40%, #38bdf8 50%, #ea580c 60%, #ea580c 100%);
+        .bg-whatsapp-shimmer {
+            background: linear-gradient(to right, #047857 0%, #047857 40%, #34d399 50%, #047857 60%, #047857 100%);
             background-size: 200% auto;
             animation: shimmer-text 8s linear infinite;
         }
 
-        /* --- ANIMAÇÃO: DIGITAÇÃO (TYPEWRITER) --- */
         @keyframes typing {
             from { max-width: 0; }
             to { max-width: 160px; } 
@@ -98,7 +91,7 @@
             50% { border-color: #f97316; } 
         }
 
-        /* --- SISTEMA DE REVELAÇÃO DE CONTEÚVE --- */
+        /* --- SISTEMA DE REVELAÇÃO --- */
         .reveal-node {
             opacity: 0;
             filter: blur(15px);
@@ -112,7 +105,7 @@
             transform: translateY(0) scale(1);
         }
 
-        /* --- HEADER & LOGO AJUSTADO --- */
+        /* --- PRELOADER & LOGO --- */
         #preloader {
             position: fixed;
             inset: 0;
@@ -183,24 +176,16 @@
             animation-delay: 1.5s; 
         }
 
-        body.loaded .logo-title-brand .text-shimmer {
-             animation: shimmer-text 8s linear infinite;
-        }
-
-        body.loaded .logo-title-brand .text-shimmer-blue {
-             animation: shimmer-text 8s linear infinite;
-        }
-
-        /* --- COMPONENTES UI (Botões) --- */
-        .btn-animate-border {
+        /* --- BOTÕES --- */
+        .btn-animate-border-green {
             position: relative;
             overflow: hidden;
         }
-        .btn-animate-border::before {
+        .btn-animate-border-green::before {
             content: '';
             position: absolute;
             inset: -150%;
-            background: conic-gradient(from 0deg, transparent, transparent, #ea580c, transparent);
+            background: conic-gradient(from 0deg, transparent, transparent, #10b981, transparent);
             animation: spin-border 4s linear infinite;
         }
 
@@ -230,7 +215,6 @@
             box-shadow: 0 20px 40px -20px rgba(0,0,0,0.8);
         }
 
-        /* --- ESTILOS PREMIUM --- */
         .card-interactive {
             background: rgba(255, 255, 255, 0.015);
             backdrop-filter: blur(12px);
@@ -357,12 +341,13 @@
     <!-- Conteúdo Principal -->
     <main class="relative z-10" id="site-content">
         
-        <!-- SECÇÃO 01: HERO -->
+        <!-- SECÇÃO 01: HERO (Título e Botões originais com Depoimentos Compactos Contornados) -->
         <section id="hero" class="min-h-screen flex flex-col justify-start pt-40 px-8 text-center items-center">
             <div class="container mx-auto max-w-5xl">
                 <div class="mb-4 h-[20px]"></div> 
 
                 <div class="flex flex-col items-center gap-8">
+                    <!-- Título Original -->
                     <div class="max-w-4xl reveal-node">
                         <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[10px] font-bold mb-6 uppercase tracking-[0.4em]">
                             <i data-lucide="zap" class="w-3 h-3"></i> Fronteira com Saturno
@@ -373,9 +358,11 @@
                         </h1>
                     </div>
 
+                    <!-- Botões Principais no Tamanho Original -->
                     <div class="flex flex-col md:flex-row gap-6 w-full items-center justify-center reveal-node">
-                        <a href="https://wa.link/hpoklw" target="_blank" class="relative group p-[2px] btn-animate-border shadow-2xl shadow-orange-500/20 w-full md:w-auto">
-                            <div class="relative bg-shimmer px-10 py-6 flex items-center justify-center gap-4 z-10 hover:brightness-110 transition-all duration-300 min-w-[280px]">
+                        <!-- Botão WhatsApp Premium Verde (Tamanho Original) -->
+                        <a href="https://wa.link/hpoklw" target="_blank" class="relative group p-[2px] btn-animate-border-green shadow-2xl shadow-emerald-500/10 w-full md:w-auto">
+                            <div class="relative bg-whatsapp-shimmer px-10 py-6 flex items-center justify-center gap-4 z-10 hover:brightness-110 transition-all duration-300 min-w-[280px]">
                                 <div class="flex items-center gap-4">
                                     <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .01 5.403.006 12.039c0 2.12.54 4.19 1.566 6.02L0 24l6.102-1.6c1.774.96 3.788 1.47 5.846 1.47h.005c6.634 0 12.038-5.404 12.042-12.04c0-3.212-1.25-6.232-3.522-8.508z"/>
@@ -386,7 +373,7 @@
                             </div>
                         </a>
                         
-                        <!-- Botão com Animação Azul -->
+                        <!-- Botão de Portfólio (Tamanho Original) -->
                         <a href="#portfolio" class="relative group p-[2px] btn-animate-border-blue w-full md:w-auto">
                             <div class="relative bg-slate-950/40 backdrop-blur-sm px-8 py-5 flex items-center justify-center gap-4 z-10 hover:bg-white transition-all duration-500 min-w-[200px]">
                                 <span class="text-white group-hover:text-slate-950 font-bold uppercase tracking-[0.3em] text-[10px]">Ver Portfólio</span>
@@ -394,222 +381,259 @@
                             </div>
                         </a>
                     </div>
+
+                    <!-- DEPOIMENTOS COMPACTOS E SEÇÃO CONTORNADA (Minimalista & Premium) -->
+                    <div class="w-full max-w-lg reveal-node flex flex-col items-center gap-4 mt-6">
+                        <!-- Selo de Confiança do Google -->
+                        <div class="flex items-center gap-2.5 bg-white/[0.02] border border-white/5 rounded-full px-4 py-1.5 shadow-lg backdrop-blur-md">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            <div class="flex items-center gap-0.5">
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                                <i data-lucide="star" class="w-3 h-3 fill-amber-400 text-amber-400"></i>
+                            </div>
+                            <span class="text-[9px] text-slate-400 uppercase tracking-widest font-black">Somos uma empresa 5 estrelas no Google</span>
+                        </div>
+
+                        <!-- Card Rotativo de Depoimento (Contorno Premium & Minimalista) -->
+                        <div class="w-full border border-white/10 rounded-2xl p-6 bg-white/[0.01] backdrop-blur-md relative h-[140px] flex items-center justify-center overflow-hidden">
+                            <div id="testimonial-container" class="absolute w-full px-6 flex flex-col items-center justify-center transition-all duration-700 ease-in-out opacity-100 transform scale-100">
+                                <p id="testimonial-text" class="text-slate-300 text-[10px] leading-relaxed uppercase tracking-wider italic text-center max-w-md">
+                                    "O site superou todas as nossas expectativas de mercado. Velocidade incrível, design de altíssima fidelidade e conversão absurda."
+                                </p>
+                                <div class="flex items-center gap-3 mt-4 border-t border-white/5 pt-3 w-full justify-center">
+                                    <img id="testimonial-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80" alt="Avatar" class="w-7 h-7 rounded-full object-cover border border-white/10 shrink-0">
+                                    <div class="text-left">
+                                        <h4 id="testimonial-name" class="text-white text-[10px] font-black uppercase tracking-wider">Ana Silva</h4>
+                                        <p id="testimonial-role" class="text-slate-500 text-[7px] uppercase tracking-widest mt-0.5">Dir. de Marketing — JP Joias</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </section>
 
-        <!-- SECÇÃO 02: PORTFÓLIO -->
-        <section id="portfolio" class="py-32 px-8 border-t border-white/5">
+        <!-- SECÇÃO 02: PORTFÓLIO (Aproximação e Ajuste de Tamanhos) -->
+        <section id="portfolio" class="py-16 px-8 border-t border-white/5">
             <div class="container mx-auto">
-                <div class="text-left mb-24 reveal-node">
-                    <span class="text-orange-500/50 font-bold uppercase tracking-[0.6em] text-[10px]">Trabalhos concluídos</span>
-                    <h2 class="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mt-4">Nosso <span class="text-gradient">Portfólio</span></h2>
+                <div class="text-left mb-10 reveal-node">
+                    <span class="text-orange-500/50 font-bold uppercase tracking-[0.6em] text-[9px]">Trabalhos concluídos</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Nosso <span class="text-gradient">Portfólio</span></h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <a href="https://www.jpjoiasbrasil.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <a href="https://www.jpjoiasbrasil.com" target="_blank" class="project-button p-6 flex flex-col min-h-[280px] cursor-pointer group reveal-node">
+                        <div class="flex-1 flex items-center justify-center mb-6 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/TtIS08N.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="JP Joias">
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">JP Joias</h3>
-                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">Luxo & Joalheria</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">JP Joias</h3>
+                                <p class="text-orange-500 text-[8px] font-black uppercase tracking-[0.3em] mt-1.5">Luxo & Joalheria</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-600"></i>
                         </div>
                     </a>
                     
-                    <a href="https://www.panoramamercados.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 100ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
+                    <a href="https://www.panoramamercados.com" target="_blank" class="project-button p-6 flex flex-col min-h-[280px] cursor-pointer group reveal-node" style="transition-delay: 100ms;">
+                        <div class="flex-1 flex items-center justify-center mb-6 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/Tgx3UFQ.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Panorama Mercados">
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">Panorama Mercados</h3>
-                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">SaaS & Software</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Panorama Mercados</h3>
+                                <p class="text-orange-500 text-[8px] font-black uppercase tracking-[0.3em] mt-1.5">SaaS & Software</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-600"></i>
                         </div>
                     </a>
 
-                    <a href="https://www.trekiturismo.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 200ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
+                    <a href="https://www.trekiturismo.com" target="_blank" class="project-button p-6 flex flex-col min-h-[280px] cursor-pointer group reveal-node" style="transition-delay: 200ms;">
+                        <div class="flex-1 flex items-center justify-center mb-6 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
                             <img src="https://i.imgur.com/uAqZUZM.jpeg" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Treki Turismo">
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">Treki Turismo</h3>
-                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">Travel & Experience</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Treki Turismo</h3>
+                                <p class="text-orange-500 text-[8px] font-black uppercase tracking-[0.3em] mt-1.5">Travel & Experience</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-600"></i>
                         </div>
                     </a>
 
-                    <a href="https://www.venusdistribuidora.com" target="_blank" class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 100ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
-                            <img src="https://i.imgur.com/PkOgJO1.png" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Panorama Mercados">
+                    <a href="#" class="project-button p-6 flex flex-col min-h-[280px] cursor-pointer group reveal-node" style="transition-delay: 300ms;">
+                        <div class="flex-1 flex items-center justify-center mb-6 border border-white/5 bg-black/40 group-hover:border-orange-500/20 transition-all overflow-hidden relative">
+                            <img src="https://i.imgur.com/o6gQB2N.png" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-1000" alt="Vênus Distribuidora">
                         </div>
                         <div class="flex justify-between items-end">
                             <div>
-                                <h3 class="text-white font-black uppercase tracking-widest text-[11px]">Vênus Distribuidora</h3>
-                                <p class="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em] mt-2">Beautiful</p>
+                                <h3 class="text-white font-black uppercase tracking-widest text-[10px]">Vênus Distribuidora</h3>
+                                <p class="text-orange-500 text-[8px] font-black uppercase tracking-[0.3em] mt-1.5">Cosméticos & Beleza</p>
                             </div>
-                            <i data-lucide="external-link" class="w-4 h-4 text-slate-600"></i>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-600"></i>
                         </div>
                     </a>
 
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 400ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 group-hover:text-white/10 transition-all">05</span>
+                    <div class="project-button p-6 flex flex-col min-h-[280px] cursor-pointer group reveal-node" style="transition-delay: 400ms;">
+                        <div class="flex-1 flex items-center justify-center mb-6 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
+                            <span class="text-white/5 font-black text-3xl group-hover:scale-110 group-hover:text-white/10 transition-all">05</span>
                         </div>
-                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Nosso Ecosistema</h3>
+                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[10px]">Próximo Lançamento</h3>
                     </div>
 
-                    <div class="project-button p-8 flex flex-col min-h-[300px] cursor-pointer group reveal-node" style="transition-delay: 500ms;">
-                        <div class="flex-1 flex items-center justify-center mb-8 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
-                            <span class="text-white/5 font-black text-4xl group-hover:scale-110 group-hover:text-white/10 transition-all">06</span>
+                    <div class="project-button p-6 flex flex-col min-h-[280px] cursor-pointer group reveal-node" style="transition-delay: 500ms;">
+                        <div class="flex-1 flex items-center justify-center mb-6 border border-white/5 bg-white/[0.02] group-hover:border-orange-500/20 transition-all overflow-hidden text-center">
+                            <span class="text-white/5 font-black text-3xl group-hover:scale-110 group-hover:text-white/10 transition-all">06</span>
                         </div>
-                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[11px]">Expansão Global</h3>
+                        <h3 class="text-white/20 font-black uppercase tracking-widest text-[10px]">Expansão Global</h3>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECÇÃO 03: ARQUITETURA -->
-        <section id="solutions" class="py-32 px-8 border-t border-white/5 bg-black/20">
+        <!-- SECÇÃO 03: ARQUITETURA DE ÓRBITA -->
+        <section id="solutions" class="py-16 px-8 border-t border-white/5 bg-black/20">
             <div class="container mx-auto">
-                <div class="text-center mb-24 reveal-node">
-                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[10px]">Ecosystem Architecture</span>
-                    <h2 class="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mt-4">Arquitetura de <span class="text-gradient">Órbita.</span></h2>
+                <div class="text-center mb-10 reveal-node">
+                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[9px]">Ecosystem Architecture</span>
+                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Arquitetura de <span class="text-gradient">Órbita.</span></h2>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5">
-                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node">
+                    <div class="card-interactive p-8 flex flex-col justify-between min-h-[280px] reveal-node">
                         <div class="solution-icon-wrapper">
-                            <i data-lucide="layout" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="layout" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Sites Premium</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Estética de alto nível para marcas que buscam exclusividade.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Sites Premium</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Estética de alto nível para marcas que buscam exclusividade.</p>
                         </div>
                     </div>
-                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 100ms;">
+                    <div class="card-interactive p-8 flex flex-col justify-between min-h-[280px] reveal-node" style="transition-delay: 100ms;">
                         <div class="solution-icon-wrapper">
-                            <i data-lucide="bar-chart-3" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="bar-chart-3" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Tráfego</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Decisões pautadas em métricas reais e inteligência analítica.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Tráfego</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Decisões pautadas em métricas reais e inteligência analítica.</p>
                         </div>
                     </div>
-                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 200ms;">
+                    <div class="card-interactive p-8 flex flex-col justify-between min-h-[280px] reveal-node" style="transition-delay: 200ms;">
                         <div class="solution-icon-wrapper">
-                            <i data-lucide="zap" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="zap" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Performance</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Otimização máxima de velocidade e indexação global.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Performance</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Otimização máxima de velocidade e indexação global.</p>
                         </div>
                     </div>
-                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 300ms;">
+                    <div class="card-interactive p-8 flex flex-col justify-between min-h-[280px] reveal-node" style="transition-delay: 300ms;">
                         <div class="solution-icon-wrapper">
-                            <i data-lucide="cpu" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="cpu" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Sistemas</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Integração fluida de APIs e ecossistemas empresariais.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Sistemas</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Integração fluida de APIs e ecossistemas empresariais.</p>
                         </div>
                     </div>
-                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 400ms;">
+                    <div class="card-interactive p-8 flex flex-col justify-between min-h-[280px] reveal-node" style="transition-delay: 400ms;">
                         <div class="solution-icon-wrapper">
-                            <i data-lucide="target" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="target" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">Conversão</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Landing Pages desenhadas para converter tráfego em receita.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">Conversão</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Landing Pages desenhadas para converter tráfego em receita.</p>
                         </div>
                     </div>
-                    <div class="card-interactive p-12 flex flex-col justify-between min-h-[320px] reveal-node" style="transition-delay: 500ms;">
+                    <div class="card-interactive p-8 flex flex-col justify-between min-h-[280px] reveal-node" style="transition-delay: 500ms;">
                         <div class="solution-icon-wrapper">
-                            <i data-lucide="shopping-bag" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="shopping-bag" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">E-commerce</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Escalabilidade para vendas diretas com UX impecável.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">E-commerce</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Escalabilidade para vendas diretas com UX impecável.</p>
                         </div>
                     </div>
-                    <div class="card-interactive p-12 flex flex-col lg:col-span-2 justify-between min-h-[320px] reveal-node" style="transition-delay: 600ms;">
+                    <div class="card-interactive p-8 flex flex-col lg:col-span-2 justify-between min-h-[280px] reveal-node" style="transition-delay: 600ms;">
                         <div class="flex gap-4 solution-icon-wrapper">
-                            <i data-lucide="package" class="w-8 h-8 text-orange-500"></i>
-                            <i data-lucide="repeat" class="w-8 h-8 text-orange-500"></i>
+                            <i data-lucide="package" class="w-7 h-7 text-orange-500"></i>
+                            <i data-lucide="repeat" class="w-7 h-7 text-orange-500"></i>
                         </div>
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-tighter mb-4">MERCADO LIVRE E SHOPEE SYNC</h3>
-                            <p class="text-slate-500 text-[11px] leading-relaxed uppercase tracking-widest">Gestão centralizada para os maiores marketplaces do mercado.</p>
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-3">MERCADO LIVRE E SHOPEE SYNC</h3>
+                            <p class="text-slate-500 text-[10px] leading-relaxed uppercase tracking-widest">Gestão centralizada para os maiores marketplaces do mercado.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- O CICLO DA ÓRBITA (METODOLOGIA) -->
-        <section id="methodology" class="py-32 px-8 border-t border-white/5 relative">
+        <!-- SECÇÃO 04: WORKFLOW -->
+        <section id="methodology" class="py-16 px-8 border-t border-white/5 relative">
             <div class="container mx-auto">
-                <div class="text-left mb-20 reveal-node">
-                    <span class="text-blue-500 font-bold uppercase tracking-[0.5em] text-[10px]">Workflow</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-4">O Ciclo da <span class="text-gradient-blue">Órbita.</span></h2>
+                <div class="text-left mb-8 reveal-node">
+                    <span class="text-blue-500 font-bold uppercase tracking-[0.5em] text-[9px]">Workflow</span>
+                    <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mt-3">O Ciclo da <span class="text-gradient-blue">Órbita.</span></h2>
                 </div>
 
-                <div class="relative grid grid-cols-1 lg:grid-cols-3 gap-12 mt-12">
-                    <!-- Linha conectora -->
+                <div class="relative grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
                     <div class="step-line"></div>
 
                     <!-- Passo 01 -->
-                    <div class="relative z-10 bg-[#05070a] p-8 border border-white/5 reveal-node">
-                        <div class="w-12 h-12 bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mb-6 text-blue-400 font-black text-xl">01</div>
-                        <h3 class="text-white text-lg font-bold uppercase mb-3 tracking-wider">Diagnóstico</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed">Análise profunda da sua presença digital atual, identificando gargalos de conversão e oportunidades inexploradas no seu nicho.</p>
+                    <div class="relative z-10 bg-[#05070a] p-6 border border-white/5 reveal-node">
+                        <div class="w-10 h-10 bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mb-5 text-blue-400 font-black text-lg">01</div>
+                        <h3 class="text-white text-md font-bold uppercase mb-2 tracking-wider">Diagnóstico</h3>
+                        <p class="text-slate-500 text-[11px] leading-relaxed">Análise profunda da sua presença digital atual, identificando gargalos de conversão e oportunidades inexploradas no seu nicho.</p>
                     </div>
 
                     <!-- Passo 02 -->
-                    <div class="relative z-10 bg-[#05070a] p-8 border border-white/5 reveal-node" style="transition-delay: 150ms;">
-                        <div class="w-12 h-12 bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-6 text-purple-400 font-black text-xl">02</div>
-                        <h3 class="text-white text-lg font-bold uppercase mb-3 tracking-wider">Construção</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed">Desenvolvimento da arquitetura visual e técnica. Sites velozes, copy persuasiva e design alinhado com a psicologia do consumidor.</p>
+                    <div class="relative z-10 bg-[#05070a] p-6 border border-white/5 reveal-node" style="transition-delay: 150ms;">
+                        <div class="w-10 h-10 bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-5 text-purple-400 font-black text-lg">02</div>
+                        <h3 class="text-white text-md font-bold uppercase mb-2 tracking-wider">Construção</h3>
+                        <p class="text-slate-500 text-[11px] leading-relaxed">Desenvolvimento da arquitetura visual e técnica. Sites velozes, copy persuasiva e design alinhado com a psicologia do consumidor.</p>
                     </div>
 
                     <!-- Passo 03 -->
-                    <div class="relative z-10 bg-[#05070a] p-8 border border-white/5 reveal-node" style="transition-delay: 300ms;">
-                        <div class="w-12 h-12 bg-orange-500/10 border border-orange-500/30 flex items-center justify-center mb-6 text-orange-400 font-black text-xl">03</div>
-                        <h3 class="text-white text-lg font-bold uppercase mb-3 tracking-wider">Escala & ROI</h3>
-                        <p class="text-slate-500 text-sm leading-relaxed">Implementação de tráfego e otimização contínua. Transformamos visitantes em leads qualificados e clientes recorrentes.</p>
+                    <div class="relative z-10 bg-[#05070a] p-6 border border-white/5 reveal-node" style="transition-delay: 300ms;">
+                        <div class="w-10 h-10 bg-orange-500/10 border border-orange-500/30 flex items-center justify-center mb-5 text-orange-400 font-black text-lg">03</div>
+                        <h3 class="text-white text-md font-bold uppercase mb-2 tracking-wider">Escala & ROI</h3>
+                        <p class="text-slate-500 text-[11px] leading-relaxed">Implementação de tráfego e otimização contínua. Transformamos visitantes em leads qualificados e clientes recorrentes.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECÇÃO 04: MARKETING CORPORATIVO -->
-        <section id="marketing" class="py-40 px-8 border-t border-white/5">
-            <div class="container mx-auto max-w-5xl">
-                <div class="card-interactive p-16 md:p-24 relative overflow-hidden reveal-node">
+        <!-- SECÇÃO 05: PLANOS PERSONALIZADOS (Call-To-Action) -->
+        <section id="marketing" class="py-16 px-8 border-t border-white/5">
+            <div class="container mx-auto max-w-4xl">
+                <div class="card-interactive p-10 md:p-12 relative overflow-hidden reveal-node">
                     <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 blur-[120px]"></div>
                     <div class="relative z-10 flex flex-col items-center text-center">
-                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-blue-500/10 border-l-4 border-blue-500 text-blue-400 text-[10px] font-bold mb-12 uppercase tracking-[0.5em]">
-                            <i data-lucide="trending-up" class="w-4 h-4"></i> Saturno Business Intelligence
+                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-blue-500/10 border-l-4 border-blue-500 text-blue-400 text-[9px] font-bold mb-8 uppercase tracking-[0.5em]">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Saturno Business Intelligence
                         </div>
-                        <h2 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter uppercase leading-none">
+                        <h2 class="text-4xl md:text-5.5xl font-black text-white mb-6 tracking-tighter uppercase leading-none">
                             PLANOS <br/> <span class="text-gradient-blue">PERSONALIZADOS.</span>
                         </h2>
 
-                        <p class="text-slate-400 text-lg md:text-xl mb-12 max-w-3xl font-light italic-serif">
+                        <p class="text-slate-400 text-md md:text-lg mb-8 max-w-2xl font-light italic-serif">
                             Estratégias de growth e branding alinhadas para empresas que buscam liderança de mercado. Unimos design de alta fidelidade com inteligência de dados para maximizar seu LTV e ROI. Sua empresa não precisa apenas de um site, ela precisa de um motor de vendas.
                         </p>
 
                         <div class="flex flex-col md:flex-row gap-6 items-center w-full justify-center">
-                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium px-12 py-6 bg-white flex items-center gap-3 hover:bg-blue-600 transition-colors group">
-                                <span class="text-slate-950 group-hover:text-white text-xs font-black uppercase tracking-[0.3em]">PLANOS PERSONALIZADOS</span>
-                                <i data-lucide="briefcase" class="w-4 h-4 text-slate-950 group-hover:text-white"></i>
+                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-premium px-10 py-5 bg-white flex items-center gap-3 hover:bg-blue-600 transition-colors group">
+                                <span class="text-slate-950 group-hover:text-white text-[10px] font-black uppercase tracking-[0.3em]">PLANOS PERSONALIZADOS</span>
+                                <i data-lucide="briefcase" class="w-3.5 h-3.5 text-slate-950 group-hover:text-white"></i>
                             </a>
                         </div>
                     </div>
@@ -618,35 +642,35 @@
         </section>
 
         <!-- FOOTER INSTITUCIONAL -->
-        <footer class="py-32 border-t border-white/5 px-8 bg-black/60">
+        <footer class="py-12 border-t border-white/5 px-8 bg-black/60">
             <div class="container mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
-                    <div class="flex flex-col items-start gap-6">
-                        <div class="flex items-center gap-4">
-                            <img src="https://i.imgur.com/9z3OxpR.png" alt="Logo" class="w-10 h-10 opacity-80">
-                            <span class="text-white font-black tracking-[0.2em] text-sm uppercase">Saturno <span class="text-orange-500">Web</span></span>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-10">
+                    <div class="flex flex-col items-start gap-4">
+                        <div class="flex items-center gap-3">
+                            <img src="https://i.imgur.com/9z3OxpR.png" alt="Logo" class="w-8 h-8 opacity-80">
+                            <span class="text-white font-black tracking-[0.2em] text-xs uppercase">Saturno <span class="text-orange-500">Web</span></span>
                         </div>
-                        <p class="text-slate-600 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
+                        <p class="text-slate-600 text-[10px] leading-relaxed uppercase tracking-widest font-bold">
                             Design de Alta Performance & Estratégia Digital Corporativa.
                         </p>
                     </div>
-                    <div class="flex flex-col gap-6">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Empresa</span>
-                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Sobre Nós</a>
-                        <a href="#portfolio" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Portfólio</a>
+                    <div class="flex flex-col gap-4">
+                        <span class="text-white text-[9px] font-black uppercase tracking-[0.5em] mb-2">Empresa</span>
+                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Sobre Nós</a>
+                        <a href="#portfolio" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Portfólio</a>
                     </div>
-                    <div class="flex flex-col gap-6">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Serviços</span>
-                        <a href="#methodology" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Consultoria</a>
-                        <a href="#solutions" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">Desenvolvimento</a>
+                    <div class="flex flex-col gap-4">
+                        <span class="text-white text-[9px] font-black uppercase tracking-[0.5em] mb-2">Serviços</span>
+                        <a href="#methodology" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Consultoria</a>
+                        <a href="#solutions" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Desenvolvimento</a>
                     </div>
-                    <div class="flex flex-col gap-6">
-                        <span class="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4">Contato</span>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[10px] uppercase font-bold tracking-widest">WhatsApp Business</a>
+                    <div class="flex flex-col gap-4">
+                        <span class="text-white text-[9px] font-black uppercase tracking-[0.5em] mb-2">Contato</span>
+                        <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">WhatsApp Business</a>
                     </div>
                 </div>
-                <div class="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div class="text-[9px] text-slate-800 tracking-[0.5em] uppercase font-bold text-center md:text-left">
+                <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="text-[8px] text-slate-800 tracking-[0.5em] uppercase font-bold text-center md:text-left">
                         © 2026 Saturno Web Studios — Corporate Digital Solutions.
                     </div>
                 </div>
@@ -656,6 +680,61 @@
 
     <script>
         lucide.createIcons();
+
+        /* --- CARROSSEL DE DEPOIMENTOS DINÂMICO --- */
+        const testimonials = [
+            {
+                text: '"O site superou todas as nossas expectativas de mercado. Velocidade incrível, design de altíssima fidelidade e conversão absurda de leads."',
+                name: "Ana Silva",
+                role: "Dir. de Marketing — JP Joias",
+                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+                text: '"A melhor escolha para estruturar nosso ecossistema SaaS. O suporte corporativo da Saturno é impecável e a performance é incrível."',
+                name: "Marcos Souza",
+                role: "Fundador — Panorama Mercados",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+                text: '"Nossa taxa de conversão duplicou após a reestruturação e design da landing page. Mudou completamente a percepção do nosso público."',
+                name: "Letícia Ramos",
+                role: "E-commerce Mgr — Treki Turismo",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+        ];
+
+        let currentTestimonialIndex = 0;
+        const container = document.getElementById('testimonial-container');
+        const textEl = document.getElementById('testimonial-text');
+        const imgEl = document.getElementById('testimonial-img');
+        const nameEl = document.getElementById('testimonial-name');
+        const roleEl = document.getElementById('testimonial-role');
+
+        function rotateTestimonials() {
+            // Inicia o fade out de saída
+            container.classList.remove('opacity-100', 'scale-100');
+            container.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                // Modifica o index
+                currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+                const next = testimonials[currentTestimonialIndex];
+
+                // Atualiza o conteúdo DOM
+                textEl.innerText = next.text;
+                imgEl.src = next.image;
+                imgEl.alt = next.name;
+                nameEl.innerText = next.name;
+                roleEl.innerText = next.role;
+
+                // Inicia o fade in de entrada
+                container.classList.remove('opacity-0', 'scale-95');
+                container.classList.add('opacity-100', 'scale-100');
+            }, 700); // Sincronizado com a duração do transition-all do CSS (700ms)
+        }
+
+        // Troca o depoimento a cada 5 segundos
+        setInterval(rotateTestimonials, 5000);
 
         window.addEventListener('load', () => {
             setTimeout(() => {
@@ -672,7 +751,7 @@
             document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
         }
 
-        // MOTOR GRÁFICO 3D (3 Camadas)
+        /* --- MOTOR GRÁFICO 3D (3 Camadas) --- */
         const canvas = document.getElementById('bg-canvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -730,18 +809,18 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // PARALLAX APLICADO APENAS NAS SEÇÕES DE BAIXO
+        /* --- PARALLAX SUAVE --- */
         document.addEventListener('mousemove', (e) => {
             const cards = document.querySelectorAll('.card-interactive');
             cards.forEach(card => {
                 const rect = card.getBoundingClientRect();
                 const cardX = rect.left + rect.width / 2;
                 const cardY = rect.top + rect.height / 2;
-                const angleX = (e.clientY - cardY) / 60;
-                const angleY = (cardX - e.clientX) / 60;
+                const angleX = (e.clientY - cardY) / 75; // Efeito de rotação mais sutil e elegante
+                const angleY = (cardX - e.clientX) / 75;
 
-                if (Math.abs(angleX) < 15 && Math.abs(angleY) < 15) {
-                    card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px) scale(1.02)`;
+                if (Math.abs(angleX) < 12 && Math.abs(angleY) < 12) {
+                    card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-8px) scale(1.015)`;
                 } else {
                     card.style.transform = ``;
                 }
