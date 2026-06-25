@@ -49,7 +49,7 @@
                             '0%, 100%': { transform: 'translateY(0px) rotate(2deg)' },
                             '50%': { transform: 'translateY(-12px) rotate(-2deg)' },
                         },
-                        // Animações da Simulação de Tags Físicas (O telemóvel agora sobe para tocar na tag)
+                        // Animações da Simulação de Tags Físicas
                         simPhoneMove: {
                             '0%, 10%': { transform: 'translateY(50px)' },
                             '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' }, // Sobe e Toca na Tag
@@ -503,8 +503,8 @@
                 </div>
 
                 <div class="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-32">
-                    <!-- Lado Esquerdo: Telefone Mockup + Cartão Voador -->
-                    <div class="relative w-full max-w-[320px] flex justify-center reveal-node mt-10 lg:mt-0 order-2 lg:order-1">
+                    <!-- Lado Esquerdo: Telefone Mockup + Cartão Voador (Agora sempre primeiro, no telemóvel e no PC) -->
+                    <div class="relative w-full max-w-[320px] flex justify-center reveal-node order-1 lg:order-1 mb-10 lg:mb-0">
                         
                         <!-- Telefone Físico -->
                         <div class="relative w-[280px] h-[580px] bg-[#090b10] border-[6px] border-slate-800 rounded-[3rem] shadow-[0_0_80px_rgba(38,99,235,0.15)] overflow-hidden flex flex-col z-10">
@@ -563,7 +563,7 @@
                                             <i data-lucide="truck" class="w-5 h-5 text-blue-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Delivery</span>
                                         </div>
                                         <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <i data-lucide="instagram" class="w-5 h-5 text-pink-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Instagram</span>
+                                            <img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain"><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Instagram</span>
                                         </div>
                                         <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
                                             <i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Reviews</span>
@@ -599,7 +599,7 @@
                         <!-- TAGS FLUTUANTES -->
                         <div class="absolute -left-16 sm:-left-24 top-20 animate-float-tag-1 z-20 pointer-events-none">
                             <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-pink-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(236,72,153,0.15)]">
-                                <i data-lucide="instagram" class="w-5 h-5 text-pink-500"></i> 
+                                <img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain"> 
                                 <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Redes Sociais</span>
                             </div>
                         </div>
@@ -623,8 +623,8 @@
                         </div>
                     </div>
 
-                    <!-- Lado Direito: Explicação -->
-                    <div class="flex-1 space-y-6 w-full max-w-xl order-1 lg:order-2">
+                    <!-- Lado Direito: Explicação (Agora sempre depois do telemóvel) -->
+                    <div class="flex-1 space-y-6 w-full max-w-xl order-2 lg:order-2">
                         <div class="card-interactive p-6 reveal-node group border-l-4 border-l-orange-500 bg-orange-500/5 hover:bg-orange-500/10">
                             <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
                                 <div class="p-2 bg-orange-500/20 rounded-lg"><i data-lucide="target" class="w-5 h-5 text-orange-500"></i></div>
@@ -1069,25 +1069,26 @@
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Até 25 tags NFC de mesa (Cardápio)
                                 </li>
                                       <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 2 tag NFC (Wi-Fi)
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 10 Cartões NFC (BLACK) corporativo personalizados
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, rápido e de alta conversão
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 2 tag NFC (Wi-fi)
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Tag Personalizada de Avaliação Google
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> QR Code impresso
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC Instagram
+                                     </li>
+                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
+                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, rápido e de alta conversão
+                                </li>
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Cardápio e Redes Sociais
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Atualização 
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> QR Code impresso 
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC Instagram
@@ -1152,7 +1153,7 @@
                             <i data-lucide="building" class="w-3.5 h-3.5"></i> Contratos Empresariais
                         </div>
                         <h2 class="text-4xl md:text-5xl font-black text-white mb-6 tracking-tighter uppercase leading-none">
-                            EQUIPE A SUA <br/> <span class="text-gradient-blue">FORÇA DE VENDAS.</span>
+                            NOSSO PORTFÓLIO COM <br/> <span class="text-gradient-blue">TRABALHOS JÁ CONCLUÍDOS.</span>
                         </h2>
 
                         <p class="text-slate-400 text-md md:text-lg mb-10 max-w-2xl font-light italic-serif">
@@ -1629,8 +1630,6 @@
         const cardApproachAnim = document.getElementById('card-approach-anim');
         
         if (cardApproachAnim) {
-            // Ouve exatamente o evento em que o cartão recomeça seu voo (tela está apagada).
-            // Isto garante uma troca perfeita enquanto o app não está visível para o usuário.
             cardApproachAnim.addEventListener('animationiteration', () => {
                 phoneProfileIndex = (phoneProfileIndex + 1) % phoneProfiles.length;
                 const profile = phoneProfiles[phoneProfileIndex];
@@ -1647,16 +1646,21 @@
                 subEl.innerText = profile.sub;
                 subEl.className = `${profile.subColor} text-[8px] font-bold uppercase tracking-[0.2em]`;
                 
-                const gridHtml = profile.buttons.map(btn => `
+                const gridHtml = profile.buttons.map(btn => {
+                    let iconHtml = `<i data-lucide="${btn.icon}" class="w-5 h-5 ${btn.color}"></i>`;
+                    if(btn.icon === 'instagram') {
+                        iconHtml = `<img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain">`;
+                    }
+                    return `
                     <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                        <i data-lucide="${btn.icon}" class="w-5 h-5 ${btn.color}"></i>
+                        ${iconHtml}
                         <span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">${btn.text}</span>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
                 
                 document.getElementById('dynamic-phone-grid').innerHTML = gridHtml;
                 
-                // Recriar ícones SVG do Lucide para os elementos recém-injetados
                 lucide.createIcons();
             });
         }
