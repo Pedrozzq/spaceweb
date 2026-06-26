@@ -6,7 +6,7 @@
     <title>Saturno NFC | Tags & Cartões Corporativos</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.imgur.com/ina6zZ1.png">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/RqZd35M.png">
     
     <!-- Google Fonts: Space Grotesk -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -27,6 +27,7 @@
                         'sim-phone': 'simPhoneMove 6s infinite ease-in-out',
                         'sim-screen': 'simScreenFade 6s infinite ease-in-out',
                         'sim-ripple': 'simNfcRipple 6s infinite ease-out',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
@@ -49,11 +50,15 @@
                             '0%, 100%': { transform: 'translateY(0px) rotate(2deg)' },
                             '50%': { transform: 'translateY(-12px) rotate(-2deg)' },
                         },
+                        pulseGlow: {
+                            '0%, 100%': { filter: 'drop-shadow(0 0 15px rgba(234,88,12,0.2))' },
+                            '50%': { filter: 'drop-shadow(0 0 40px rgba(234,88,12,0.6))' },
+                        },
                         // Animações da Simulação de Tags Físicas
                         simPhoneMove: {
                             '0%, 10%': { transform: 'translateY(50px)' },
-                            '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' }, // Sobe e Toca na Tag
-                            '25%, 95%': { transform: 'translateY(50px)' }, // Desce e Exibe Ecrã
+                            '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' },
+                            '25%, 95%': { transform: 'translateY(50px)' },
                             '100%': { transform: 'translateY(50px)' },
                         },
                         simScreenFade: {
@@ -84,7 +89,7 @@
 
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background-color: #05070a; 
+            background-color: #05070a; /* Fundo escuro vibrante restaurado */
             color: #E5E7EB;
             overflow-x: hidden;
             margin: 0;
@@ -95,6 +100,47 @@
         .perspective-1000 { perspective: 1000px; }
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
+
+        /* --- BOTÕES PREMIUM (NOVOS ESTILOS CHAMATIVOS) --- */
+        .btn-premium {
+            background-size: 200% auto;
+            transition: 0.5s;
+            background-image: linear-gradient(to right, #f97316 0%, #ea580c 51%, #f97316 100%);
+            box-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
+            border-radius: 9999px; /* Arredondado total */
+        }
+        .btn-premium:hover {
+            background-position: right center;
+            box-shadow: 0 0 40px rgba(234, 88, 12, 0.7);
+            transform: translateY(-3px);
+        }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(234, 88, 12, 0.5);
+            box-shadow: 0 0 25px rgba(234, 88, 12, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .btn-white-glow {
+            background: #ffffff;
+            color: #000000;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        .btn-white-glow:hover {
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+            transform: translateY(-3px);
+        }
 
         /* --- ANIMAÇÕES GERAIS --- */
         @keyframes shine-sweep {
@@ -148,31 +194,6 @@
             animation: scan-line 3s infinite linear;
         }
 
-        /* --- ANIMAÇÕES DO TAP NFC (Hero Section) --- */
-        @keyframes tap-card-anim {
-            0%, 100% { transform: translate(120px, -200px) rotate(35deg); opacity: 0; }
-            15% { transform: translate(120px, -200px) rotate(35deg); opacity: 0; }
-            30% { transform: translate(-30px, -40px) rotate(-10deg) scale(1.05); opacity: 1; }
-            45% { transform: translate(-30px, -40px) rotate(-10deg) scale(1.05); opacity: 1; }
-            55% { transform: translate(120px, -200px) rotate(35deg); opacity: 0; }
-        }
-        @keyframes nfc-wave-anim {
-            0%, 28% { transform: scale(0.2); opacity: 0; border-color: transparent; }
-            30% { transform: scale(0.4); opacity: 1; border-color: rgba(234, 88, 12, 0.8); }
-            45% { transform: scale(2.2); opacity: 0; border-color: rgba(234, 88, 12, 0); }
-            100% { transform: scale(2.2); opacity: 0; }
-        }
-        @keyframes screen-fade-anim {
-            0%, 30% { opacity: 1; }
-            35%, 85% { opacity: 0; }
-            90%, 100% { opacity: 1; }
-        }
-        @keyframes profile-reveal-anim {
-            0%, 30% { opacity: 0; transform: scale(0.95); }
-            35%, 85% { opacity: 1; transform: scale(1); }
-            90%, 100% { opacity: 0; transform: scale(0.95); }
-        }
-
         /* --- ANIMAÇÕES DA MÁGICA DA CONVERSÃO (Cartão aproximando e desbloqueando) --- */
         @keyframes cardApproach {
             0%, 10% { transform: translate(150px, 150px) rotate(30deg); opacity: 0; }
@@ -213,11 +234,11 @@
             transform: translateY(0) scale(1);
         }
 
-        /* --- PRELOADER & NAVBAR --- */
+        /* --- PRELOADER --- */
         #preloader {
             position: fixed;
             inset: 0;
-            background: #0B0E14;
+            background: #05070a;
             z-index: 1000;
             display: flex;
             align-items: center;
@@ -257,6 +278,7 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-radius: 1.5rem;
         }
 
         .project-button:hover {
@@ -278,32 +300,6 @@
             border-color: rgba(234, 88, 12, 0.3);
             background: rgba(234, 88, 12, 0.03);
             box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5), 0 0 20px rgba(234, 88, 12, 0.05);
-        }
-
-        .btn-premium {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .btn-premium::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-            transform: translateX(-150%) skewX(-15deg);
-        }
-
-        .btn-premium:hover::after {
-            animation: shine-sweep 0.8s ease-in-out;
-        }
-
-        .solution-icon-wrapper {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .card-interactive:hover .solution-icon-wrapper {
-            transform: scale(1.2) rotate(10deg);
         }
 
         .text-gradient {
@@ -331,51 +327,31 @@
 
         .italic-serif { font-family: serif; font-style: italic; }
         
-        /* Ocultar barra de scroll dentro do telefone */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Animações de Transição de Ecrãs */
-        .app-view {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-        }
-
-        /* Conector de Passos (Workflow) */
-        .step-line {
-            position: absolute;
-            top: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
-            z-index: 0;
-        }
-        
-        @media (min-width: 1024px) {
-            .step-line {
-                width: 100%;
-                height: 2px;
-                top: 2.5rem;
-                left: 0;
-                transform: none;
-                background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Intro Preloader -->
+    <!-- Intro Preloader (Logo Ampliada e em Destaque) -->
     <div id="preloader">
-        <img src="https://i.imgur.com/ina6zZ1.png" alt="Loading" class="w-16 h-16 animate-pulse opacity-50">
+        <div class="flex flex-col items-center justify-center">
+            <!-- Logo Ampliada -->
+            <img src="https://i.imgur.com/RqZd35M.png" alt="Carregando Saturno NFC" class="h-24 md:h-32 w-auto object-contain animate-pulse-glow mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            
+            <!-- Barra de Progresso Elegante -->
+            <div class="w-48 h-[2px] bg-slate-800 rounded-full overflow-hidden relative">
+                <div class="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-[shine-sweep_1.5s_infinite]"></div>
+            </div>
+            <span class="text-orange-500/80 text-[9px] uppercase tracking-[0.5em] mt-4 font-bold">Inicializando</span>
+        </div>
     </div>
     
     <!-- Navbar Superior -->
     <nav id="top-navbar" class="bg-black/40 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex justify-between items-center">
-        <!-- Logo & Título -->
-        <div class="flex items-center gap-3">
-            <img src="https://i.imgur.com/ina6zZ1.png" alt="Logo Saturno NFC" class="w-10 md:w-12 h-auto object-contain drop-shadow-[0_0_10px_rgba(234,88,12,0.4)]">
+        <!-- Logo e Título Ampliados -->
+        <div class="flex items-center gap-4">
+            <img src="https://i.imgur.com/RqZd35M.png" alt="Logo Saturno NFC" class="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(234,88,12,0.4)]">
             <h1 class="font-black text-white uppercase text-lg md:text-xl nav-title">
                 <span class="text-shimmer-blue">Saturno</span> <span class="text-shimmer">NFC</span>
             </h1>
@@ -389,7 +365,7 @@
                     Tags e Cartões <i data-lucide="chevron-down" class="w-3 h-3"></i>
                 </button>
                 <div class="absolute top-[100%] left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                    <div class="w-60 bg-[#0B0E14] border border-white/10 rounded-md shadow-2xl flex flex-col overflow-hidden">
+                    <div class="w-60 bg-[#0B0E14] border border-white/10 rounded-xl shadow-2xl flex flex-col overflow-hidden">
                         <a href="#vantagens" class="px-5 py-4 text-[10px] text-slate-300 hover:text-white hover:bg-orange-500/20 border-b border-white/5 transition-colors">
                             <span class="block text-orange-400 mb-1 font-black">Cartões de Visita</span>
                             <span class="text-[9px] text-slate-400 normal-case tracking-normal">Uso pessoal para networking e prospecção de vendas.</span>
@@ -403,7 +379,7 @@
             </div>
             <a href="#animacao-toque" class="text-slate-300 hover:text-orange-500 transition-colors">Como Funciona</a>
             <a href="#produtos" class="text-slate-300 hover:text-orange-500 transition-colors">Planos</a>
-            <a href="#marketing" class="px-6 py-2.5 bg-white text-black hover:bg-orange-500 hover:text-white rounded-md transition-all drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Corporate B2B</a>
+            <a href="#marketing" class="px-6 py-2.5 bg-white text-black hover:bg-orange-500 hover:text-white rounded-full transition-all drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] font-black">Corporate B2B</a>
         </div>
     </nav>
 
@@ -420,7 +396,7 @@
                     <!-- Textos Hero -->
                     <div class="flex flex-col items-center lg:items-start text-center lg:text-left z-10">
                         <div class="reveal-node">
-                            <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[10px] font-bold mb-6 uppercase tracking-[0.4em]">
+                            <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[10px] font-bold mb-6 uppercase tracking-[0.4em] rounded-r-md">
                                 <i data-lucide="crosshair" class="w-3 h-3"></i> Alta Conversão B2B & B2C
                             </div>
                             
@@ -430,60 +406,70 @@
                             </h1>
                             
                             <p class="text-slate-400 text-sm sm:text-base md:text-lg mb-10 max-w-xl font-light leading-relaxed">
-                               Mais impacto no primeiro contato, mais reviews no Google, menos atrito no Wi-Fi, mais pedidos pelo Whatsapp e uma presença digital forte e de fácil acesso. 
+                               Mais impacto no primeiro contato, mais reviews no Google, menos atrito no Wi-Fi, mais pedidos pelo Whatsapp e uma presença digital forte e de fácil acesso.
+                            </p>
                         </div>
 
-                        <!-- Botões -->
+                        <!-- Botões Premium -->
                         <div class="flex flex-col sm:flex-row gap-5 w-full lg:w-auto items-center justify-center lg:justify-start reveal-node">
-                            <a href="#produtos" class="group relative px-8 py-5 bg-gradient-to-r from-orange-600 to-amber-500 rounded-sm overflow-hidden shadow-[0_0_40px_rgba(234,88,12,0.4)] hover:shadow-[0_0_60px_rgba(234,88,12,0.6)] transition-all duration-300 w-full sm:w-auto min-w-[280px] flex items-center justify-center gap-4">
-                                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+                            <!-- Botão Glow Premium -->
+                            <a href="#produtos" class="btn-premium px-8 py-4 w-full sm:w-auto min-w-[280px] flex items-center justify-center gap-4 relative overflow-hidden group">
                                 <i data-lucide="briefcase" class="w-5 h-5 text-white relative z-10 group-hover:scale-110 transition-transform"></i>
-                                <span class="text-white text-[11px] font-black uppercase tracking-[0.2em] relative z-10">Conhecer Cartões NFC</span>
+                                <span class="text-white text-[11px] font-black uppercase tracking-[0.2em] relative z-10">Conheça os Cartões NFC</span>
                             </a>
                             
-                            <a href="#tags-estabelecimento" class="group relative px-8 py-5 bg-black/40 backdrop-blur-sm border border-white/20 hover:border-orange-500/50 hover:bg-orange-500/10 transition-all duration-300 w-full sm:w-auto min-w-[220px] flex items-center justify-center gap-3 rounded-sm">
-                                <span class="text-slate-300 group-hover:text-white font-bold uppercase tracking-[0.2em] text-[10px]">Congeça Tag's Físicas</span>
+                            <!-- Botão Glassmorphism -->
+                            <a href="#tags-estabelecimento" class="btn-glass px-8 py-4 w-full sm:w-auto min-w-[220px] flex items-center justify-center gap-3 group">
+                                <span class="text-slate-300 group-hover:text-white font-bold uppercase tracking-[0.2em] text-[10px] transition-colors">Ver Soluções Físicas</span>
                                 <i data-lucide="target" class="w-4 h-4 text-slate-400 group-hover:text-orange-400 transition-colors"></i>
                             </a>
                         </div>
                     </div>
 
-                    <!-- Cartão 3D Interativo -->
+                    <!-- Cartão 3D Interativo (Com Giro Realista) -->
                     <div class="perspective-1000 flex justify-center lg:justify-end reveal-node mt-10 lg:mt-0" id="card-3d-wrapper">
-                        <div class="relative w-64 h-[400px] sm:w-80 sm:h-[480px] preserve-3d animate-float-slow nfc-3d-card transition-transform duration-200 ease-out">
-                            <div class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-3xl border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden backface-hidden">
-                                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-600/10 blur-3xl rounded-full"></div>
-                                <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-600/10 blur-3xl rounded-full"></div>
+                        <!-- Container de Flutuação -->
+                        <div class="relative w-64 h-[400px] sm:w-80 sm:h-[480px] preserve-3d animate-float-slow nfc-3d-card">
+                            
+                            <!-- Container Responsável pelo Flip Físico -->
+                            <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
+                                
+                                <!-- O Fundo do Cartão -->
+                                <div id="hero-3d-card-bg" class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden">
+                                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-600/20 blur-3xl rounded-full"></div>
+                                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-600/20 blur-3xl rounded-full"></div>
 
-                                <div class="p-8 flex flex-col justify-between h-full relative z-10">
-                                    <div class="flex justify-between items-start">
-                                        <div id="card-dynamic-icon" class="w-14 h-14 flex items-center justify-center bg-orange-500/10 text-orange-400 rounded-2xl shadow-lg border border-orange-500/30 transition-all duration-500">
-                                            <i data-lucide="utensils" class="w-7 h-7"></i>
-                                        </div>
-                                        <i data-lucide="wifi" class="text-gray-400 rotate-90 w-8 h-8"></i>
-                                    </div>
-                                    
-                                    <div class="mt-auto">
-                                        <div class="w-16 h-16 bg-white/40 backdrop-blur-md rounded-full mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm">
-                                            <i data-lucide="trending-up" class="w-8 h-8 text-gray-500"></i>
+                                    <div class="p-8 flex flex-col justify-between h-full relative z-10">
+                                        <div class="flex justify-between items-start">
+                                            <div id="card-dynamic-icon" class="w-14 h-14 flex items-center justify-center bg-orange-500/10 text-orange-400 rounded-2xl shadow-lg border border-orange-500/30">
+                                                <i data-lucide="utensils" class="w-7 h-7"></i>
+                                            </div>
+                                            <i data-lucide="wifi" id="card-wifi-icon" class="text-gray-400 rotate-90 w-8 h-8"></i>
                                         </div>
                                         
-                                        <!-- Texto Animado (Empresas) -->
-                                        <h3 class="text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase transition-opacity duration-300" id="niche-rotator">Restaurante Colonial</h3>
-                                        <p class="text-orange-500 text-[10px] font-black uppercase tracking-[0.3em] mb-6">Sua Empresa</p>
-                                        
-                                        <div class="w-10 h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-4 opacity-50 relative overflow-hidden">
-                                            <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
-                                        </div>
+                                        <div class="mt-auto">
+                                            <div id="card-chip" class="w-16 h-16 bg-white/40 backdrop-blur-md rounded-full mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm">
+                                                <i data-lucide="trending-up" id="card-chip-icon" class="w-8 h-8 text-gray-500"></i>
+                                            </div>
+                                            
+                                            <!-- Texto -->
+                                            <h3 class="text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="niche-rotator">Restaurante Colonial</h3>
+                                            <p class="text-orange-500 text-[10px] font-black uppercase tracking-[0.3em] mb-6">Sua Empresa</p>
+                                            
+                                            <div class="w-10 h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-4 opacity-50 relative overflow-hidden">
+                                                <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
+                                            </div>
 
-                                        <div class="w-full h-px bg-gray-300 mb-3"></div>
-                                        <div class="w-2/3 h-px bg-gray-300"></div>
+                                            <div id="card-line-1" class="w-full h-px bg-gray-300 mb-3"></div>
+                                            <div id="card-line-2" class="w-2/3 h-px bg-gray-300"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-orange-500/30 rounded-3xl -z-10 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-3xl -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
+                            <!-- Ondas de Sinal Fora do Flip para não quebrarem -->
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-orange-500/30 rounded-[2rem] -z-10 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-[2rem] -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
                         </div>
                     </div>
                 </div>
@@ -502,7 +488,7 @@
                 </div>
 
                 <div class="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-32">
-                    <!-- Lado Esquerdo: Telefone Mockup + Cartão Voador (Agora sempre primeiro, no telemóvel e no PC) -->
+                    <!-- Lado Esquerdo: Telefone Mockup + Cartão Voador (Agora sempre primeiro) -->
                     <div class="relative w-full max-w-[320px] flex justify-center reveal-node order-1 lg:order-1 mb-10 lg:mb-0">
                         
                         <!-- Telefone Físico -->
@@ -510,7 +496,7 @@
                             <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-scan z-40"></div>
                             <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
 
-                            <!-- Ecrã Bloqueado (Antes do Cartão Tocar) -->
+                            <!-- Ecrã Bloqueado -->
                             <div class="absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
                                     <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
@@ -519,17 +505,13 @@
                                 <span class="text-slate-400 text-[10px] uppercase tracking-widest font-black text-center px-6">Aproxime o Cartão NFC</span>
                             </div>
 
-                            <!-- Ecrã Desbloqueado (Hub Dinâmico Premium) -->
+                            <!-- Ecrã Desbloqueado -->
                             <div class="absolute inset-0 bg-[#0f111a] z-20 flex flex-col" style="animation: phoneUnlock 5.5s infinite ease-out;">
-                                <!-- Imagem de Capa -->
                                 <div id="dynamic-phone-cover" class="h-24 bg-[url('https://images.unsplash.com/photo-1513104890d38-7c0f4fff45f1?q=80&w=600&auto=format&fit=crop')] bg-cover bg-center relative shrink-0 transition-all duration-500">
                                     <div class="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-[#0f111a]/40 to-transparent"></div>
                                 </div>
                                 
-                                <!-- Container Com Scroll Responsivo -->
                                 <div class="flex-1 flex flex-col px-4 -mt-8 relative z-10 overflow-y-hidden pb-4">
-                                    
-                                    <!-- Foto Perfil e Info -->
                                     <div class="text-center mb-4 shrink-0 flex flex-col items-center">
                                         <div id="dynamic-phone-avatar-bg" class="w-[64px] h-[64px] bg-gradient-to-tr from-orange-500 to-amber-500 p-[3px] rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.5)] mb-2">
                                             <div class="w-full h-full bg-[#05070a] rounded-full flex items-center justify-center border-[3px] border-[#0f111a]">
@@ -540,7 +522,6 @@
                                         <p id="dynamic-phone-sub" class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.2em]">Tradição e Sabor</p>
                                     </div>
 
-                                    <!-- Botões Primários -->
                                     <div class="space-y-2 mb-3 shrink-0">
                                         <div class="w-full bg-white text-black py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_5px_15px_rgba(255,255,255,0.15)] cursor-default">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i> <span class="font-black text-[9px] uppercase tracking-widest">Salvar Contato</span>
@@ -550,39 +531,19 @@
                                         </div>
                                     </div>
 
-                                    <!-- Botões Secundários (Grid) -->
                                     <div id="dynamic-phone-grid" class="grid grid-cols-3 gap-2 shrink-0">
-                                        <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <i data-lucide="book-open" class="w-5 h-5 text-amber-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Menu</span>
-                                        </div>
-                                        <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <i data-lucide="pizza" class="w-5 h-5 text-orange-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Pizzas</span>
-                                        </div>
-                                        <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <i data-lucide="truck" class="w-5 h-5 text-blue-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Delivery</span>
-                                        </div>
-                                        <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain"><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Instagram</span>
-                                        </div>
-                                        <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <i data-lucide="star" class="w-5 h-5 text-yellow-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Reviews</span>
-                                        </div>
-                                        <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                                            <i data-lucide="map-pin" class="w-5 h-5 text-red-400"></i><span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">Local</span>
-                                        </div>
+                                        <!-- Javascript preenche aqui -->
                                     </div>
                                     
-                                    <!-- Footer do App -->
                                     <div class="mt-auto pt-3 border-t border-white/5 flex items-center justify-center shrink-0">
-                                        <img src="https://i.imgur.com/ina6zZ1.png" class="w-3.5 h-3.5 opacity-50 grayscale mr-2">
+                                        <img src="https://i.imgur.com/RqZd35M.png" class="h-3.5 w-auto opacity-50 grayscale mr-2">
                                         <span class="text-[6px] text-slate-500 uppercase tracking-widest">Powered by Saturno NFC</span>
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Animação do Cartão NFC Branco Físico (Chegando no Telefone) -->
+                        <!-- Animação do Cartão NFC -->
                         <div id="card-approach-anim" class="absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
                             <div class="w-full flex justify-end">
                                 <div class="w-3 h-3 rounded-full bg-slate-200"></div>
@@ -591,7 +552,6 @@
                             <div class="w-full flex justify-start">
                                 <div class="w-6 h-1.5 bg-slate-200 rounded-full"></div>
                             </div>
-                            <!-- Ripple Effect (Ondas NFC no momento do Toque) -->
                             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-[3px] border-orange-500 rounded-full opacity-0" style="animation: tapRipple 5.5s infinite ease-out;"></div>
                         </div>
 
@@ -622,21 +582,21 @@
                         </div>
                     </div>
 
-                    <!-- Lado Direito: Explicação (Agora sempre depois do telemóvel) -->
+                    <!-- Lado Direito: Explicação -->
                     <div class="flex-1 space-y-6 w-full max-w-xl order-2 lg:order-2">
-                        <div class="card-interactive p-6 reveal-node group border-l-4 border-l-orange-500 bg-orange-500/5 hover:bg-orange-500/10">
+                        <div class="card-interactive p-6 reveal-node group border-l-4 border-l-orange-500 bg-orange-500/5 hover:bg-orange-500/10 rounded-r-xl">
                             <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
                                 <div class="p-2 bg-orange-500/20 rounded-lg"><i data-lucide="target" class="w-5 h-5 text-orange-500"></i></div>
-                                Efeito Instantâneo
+                                Conquista Instantânea (O Efeito UAU)
                             </h3>
                             <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                               Ao aproximar o seu Cartão NFC, o cliente vive uma experiência tecnológica que gera autoridade imediata. Demonstrarando inovação nos primeiros segundos.
+                                Ao aproximar o seu Cartão NFC, o cliente vive uma experiência tecnológica que gera autoridade imediata. Demonstrarando inovação nos primeiros segundos.
                             </p>
                         </div>
-                        <div class="card-interactive p-6 reveal-node group border-l-4 border-l-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10" style="transition-delay: 200ms;">
+                        <div class="card-interactive p-6 reveal-node group border-l-4 border-l-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-r-xl" style="transition-delay: 200ms;">
                             <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
                                 <div class="p-2 bg-emerald-500/20 rounded-lg"><i data-lucide="download" class="w-5 h-5 text-emerald-500"></i></div>
-                                Ações Inteligentes
+                              Ações Inteligentes
                             </h3>
                             <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
                                Cada botão foi pensado para facilitar a ação do cliente e evitar a perda de oportunidades. Ele pode salvar seu contato na agenda, iniciar uma conversa no WhatsApp, acessar seu Instagram, agendar horário, visitar seu site ou abrir qualquer link importante sem precisar digitar nada.
@@ -736,7 +696,7 @@
             </div>
         </section>
 
-        <!-- SECÇÃO: SIMULAÇÃO PRÁTICA (ANIMAÇÃO 3 COLUNAS - AÇÃO E REAÇÃO) -->
+        <!-- SECÇÃO: SIMULAÇÃO PRÁTICA -->
         <section id="animacao-toque" class="py-24 px-4 sm:px-8 border-t border-white/5 relative bg-[#090b10] overflow-hidden">
             <div class="container mx-auto max-w-7xl">
                 <div class="text-center mb-20 reveal-node">
@@ -756,27 +716,19 @@
                         </div>
                         
                         <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                            <!-- Efeito Fundo -->
                             <div class="absolute bottom-10 w-40 h-40 bg-blue-500/10 blur-[40px] rounded-full"></div>
 
-                            <!-- Tag Física no Topo -->
                             <div class="absolute top-0 flex flex-col items-center z-10">
-                                <!-- Ondas NFC animadas -->
                                 <div class="absolute w-20 h-20 border-[2px] border-blue-400 rounded-full animate-sim-ripple" style="animation-delay: 0s;"></div>
-                                <!-- Tag Puck -->
                                 <div class="w-16 h-16 rounded-full border border-blue-400/40 bg-blue-400/10 flex items-center justify-center transform rotateX-12 shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
                                     <i data-lucide="wifi" class="w-6 h-6 text-blue-400 drop-shadow-lg"></i>
                                 </div>
                             </div>
 
-                            <!-- O Telefone Animado (Sobe até a Tag) -->
                             <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone" style="animation-delay: 0s;">
                                 <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
                                 
-                                <!-- O Ecrã Ligado -->
                                 <div class="absolute inset-0 bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop')] before:absolute before:inset-0 before:bg-black/40 animate-sim-screen" style="animation-delay: 0s;">
-                                    
-                                    <!-- UI Sucesso Wi-Fi -->
                                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] bg-white/95 backdrop-blur-md rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl">
                                         <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3 shadow-inner">
                                             <i data-lucide="check" class="w-6 h-6 text-green-600"></i>
@@ -784,9 +736,7 @@
                                         <h4 class="text-black font-black text-[13px] mb-1">Wifi Local</h4>
                                         <p class="text-[10px] text-green-600 font-bold mb-0 leading-tight uppercase tracking-wide">Conectado com sucesso</p>
                                     </div>
-
                                 </div>
-                                <!-- Ecrã Desligado (Atrás) -->
                                 <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
                                     <i data-lucide="lock" class="w-6 h-6 text-slate-700 mb-2"></i>
                                     <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
@@ -805,7 +755,6 @@
                         <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
                             <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
 
-                            <!-- Tag Física no Topo -->
                             <div class="absolute top-0 flex flex-col items-center z-10">
                                 <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple" style="animation-delay: 2s;"></div>
                                 <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center transform rotateX-12 shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
@@ -816,10 +765,7 @@
                             <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone" style="animation-delay: 2s;">
                                 <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
                                 
-                                <!-- O Ecrã Ligado -->
                                 <div class="absolute inset-0 bg-white animate-sim-screen flex flex-col" style="animation-delay: 2s;">
-                                    
-                                    <!-- UI Google Maps Review -->
                                     <div class="h-12 border-b border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
                                         <span class="font-black text-[12px] tracking-tighter">
                                             <span class="text-blue-500">G</span><span class="text-red-500">o</span><span class="text-yellow-500">o</span><span class="text-blue-500">g</span><span class="text-green-500">l</span><span class="text-red-500">e</span> Maps
@@ -832,7 +778,6 @@
                                         <h4 class="text-black font-bold text-[12px] mb-1">Restaurante</h4>
                                         <p class="text-[9px] text-gray-500 mb-5 leading-tight">Avalie a sua experiência neste local.</p>
                                         
-                                        <!-- Estrelas -->
                                         <div class="flex gap-1 mb-6">
                                             <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
                                             <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
@@ -867,7 +812,6 @@
                         <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
                             <div class="absolute bottom-10 w-40 h-40 bg-orange-500/10 blur-[40px] rounded-full"></div>
 
-                            <!-- Tag Física no Topo -->
                             <div class="absolute top-0 flex flex-col items-center z-10">
                                 <div class="absolute w-20 h-20 border-[2px] border-orange-400 rounded-full animate-sim-ripple" style="animation-delay: 4s;"></div>
                                 <div class="w-16 h-16 rounded-full border border-orange-400/40 bg-orange-400/10 flex items-center justify-center transform rotateX-12 shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
@@ -878,10 +822,7 @@
                             <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone" style="animation-delay: 4s;">
                                 <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
                                 
-                                <!-- O Ecrã Ligado -->
                                 <div class="absolute inset-0 bg-[#fafafa] animate-sim-screen flex flex-col" style="animation-delay: 4s;">
-                                    
-                                    <!-- UI Menu -->
                                     <div class="h-24 bg-gradient-to-r from-orange-600 to-amber-500 relative flex items-end px-4 pb-2 shrink-0">
                                         <div class="absolute inset-0 bg-black/20"></div>
                                         <h4 class="text-white font-black text-[14px] relative z-10 drop-shadow-md">Menu Digital</h4>
@@ -890,9 +831,7 @@
                                         </div>
                                     </div>
                                     
-                                    <!-- Itens do Menu -->
                                     <div class="flex-1 overflow-y-hidden p-3 space-y-3">
-                                        <!-- Item 1 -->
                                         <div class="flex gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 items-center">
                                             <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
                                                 <i data-lucide="coffee" class="w-6 h-6 text-orange-500"></i>
@@ -903,7 +842,6 @@
                                                 <span class="text-orange-600 font-black text-[10px]">R$ 8,00</span>
                                             </div>
                                         </div>
-                                        <!-- Item 2 -->
                                         <div class="flex gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 items-center">
                                             <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
                                                 <i data-lucide="pizza" class="w-6 h-6 text-orange-500"></i>
@@ -914,7 +852,6 @@
                                                 <span class="text-orange-600 font-black text-[10px]">R$ 15,00</span>
                                             </div>
                                         </div>
-                                        <!-- Item 3 -->
                                         <div class="flex gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 items-center">
                                             <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
                                                 <i data-lucide="beer" class="w-6 h-6 text-orange-500"></i>
@@ -939,7 +876,6 @@
 
                 </div>
 
-                <!-- Informação Técnica de Durabilidade -->
                 <div class="mt-20 max-w-4xl mx-auto p-6 md:p-8 bg-blue-900/10 border border-blue-500/20 rounded-2xl flex flex-col md:flex-row items-center gap-6 reveal-node text-center md:text-left">
                     <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-500/30">
                         <i data-lucide="infinity" class="w-8 h-8 text-blue-400"></i>
@@ -966,7 +902,6 @@
                 <!-- GRADE PRINCIPAL: 3 COLUNAS -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     
-                    <!-- Produto 1: Oferta de entrada -->
                     <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-white/10">
                         <div>
                             <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Oferta de Entrada</h3>
@@ -987,7 +922,7 @@
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Tag Personalizada de Avaliação Google
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> P[agina digital do seu negócio
+                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site simples do seu negócio
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> QR Code impresso
@@ -1003,12 +938,11 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto">
+                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
                             Escolher Plano
                         </button>
                     </div>
 
-                    <!-- Produto 2: Oferta Principal (Destaque) -->
                     <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-orange-500/40 relative transform lg:-translate-y-4 bg-orange-500/[0.02] shadow-[0_0_30px_rgba(234,88,12,0.1)]" style="transition-delay: 100ms;">
                         <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-500 text-black px-6 py-1.5 text-[9px] font-black uppercase tracking-widest whitespace-nowrap rounded-full">
                             Mais Vendido
@@ -1032,7 +966,7 @@
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Tag Personalizada de Avaliação Google
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site personalizado com a identidade da empresa
+                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site personalizado com o estilo do seu negócio
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> QR Code impresso
@@ -1048,12 +982,12 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="w-full py-4 bg-orange-500 text-black hover:bg-orange-400 text-[11px] font-black uppercase tracking-[0.2em] transition-colors shadow-lg mt-auto rounded-sm">
+                        <!-- Botão Premium Atualizado -->
+                        <button class="w-full btn-premium py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] mt-auto">
                             Assinar Premium
                         </button>
                     </div>
 
-                    <!-- Produto 3: Kit Restaurante -->
                     <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-white/10" style="transition-delay: 200ms;">
                         <div>
                             <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Kit Restaurante</h3>
@@ -1068,40 +1002,38 @@
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Até 25 tags NFC de mesa (Cardápio)
                                 </li>
                                       <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 2 tag NFC (Wi-Fi)
+                                </li>
+                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 10 Cartões NFC (BLACK) corporativo personalizados
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 2 tag NFC (Wi-fi)
+                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, rápido e de alta conversão
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Tag Personalizada de Avaliação Google
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC Instagram
-                                     </li>
-                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, rápido e de alta conversão
-                                </li>
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> QR Code impresso
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Cardápio e Redes Sociais
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> QR Code impresso 
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Atualização 
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC Instagram
                                 </li>
                             </ul>
                         </div>
-                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto">
+                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
                             Ver Kit
                         </button>
                     </div>
                 </div>
 
-                <!-- BLOCO INFERIOR (WEBSITE PROFISSIONAL) -->
-                <div class="max-w-4xl mx-auto mt-12 project-button p-6 md:p-10 flex flex-col md:flex-row items-center justify-between border-white/10 rounded-xl reveal-node bg-white/[0.02]" style="transition-delay: 300ms;">
+                <div class="max-w-4xl mx-auto mt-12 project-button p-6 md:p-10 flex flex-col md:flex-row items-center justify-between border-white/10 reveal-node bg-white/[0.02]" style="transition-delay: 300ms;">
                     <div class="flex-1 md:pr-12 mb-8 md:mb-0 text-center md:text-left">
                         <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[9px] font-bold mb-4 uppercase tracking-[0.2em] rounded">
                             <i data-lucide="layout-template" class="w-3 h-3"></i> Opcional
@@ -1131,7 +1063,7 @@
                         <div class="text-4xl font-black text-white mb-6 tracking-tighter flex items-end justify-center">
                             R$ 600
                         </div>
-                        <button class="w-full px-10 py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors rounded-sm whitespace-nowrap">
+                        <button class="w-full px-10 py-4 btn-white-glow text-[11px] font-black uppercase tracking-[0.2em]">
                             Solicitar Website
                         </button>
                     </div>
@@ -1140,10 +1072,10 @@
             </div>
         </section>
 
-        <!-- SECÇÃO 06: PLANOS CORPORATIVOS B2B (CTA) -->
+        <!-- SECÇÃO 06: PLANOS CORPORATIVOS B2B E PORTFÓLIO -->
         <section id="marketing" class="py-24 px-8 border-t border-white/5">
             <div class="container mx-auto max-w-5xl">
-                <div class="card-interactive p-10 md:p-16 relative overflow-hidden reveal-node border border-blue-500/20">
+                <div class="card-interactive p-10 md:p-16 relative overflow-hidden reveal-node border border-blue-500/20 rounded-[2rem]">
                     <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 blur-[120px]"></div>
                     <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-600/10 blur-[120px]"></div>
                     
@@ -1155,12 +1087,66 @@
                             NOSSO PORTFÓLIO COM <br/> <span class="text-gradient-blue">TRABALHOS JÁ CONCLUÍDOS.</span>
                         </h2>
 
-                        <p class="text-slate-400 text-md md:text-lg mb-10 max-w-2xl font-light italic-serif">
-                            Condições exclusivas de B2B para pedidos acima de 10 unidades de <strong>Cartões</strong> ou <strong>Tags</strong>. Um pequeno investimento para a sua empresa que garante padronização e profissionalismo no atendimento ao cliente. Inclui painel central para o RH e suporte técnico VIP.
-                        </p>
+                        <!-- Grelha de Portfólio -->
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-4xl mx-auto mb-12">
+                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all duration-300 group cursor-default shadow-lg">
+                                <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="laptop" class="w-5 h-5 text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">TechNova S.A.</h4>
+                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Tecnologia & Software</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-orange-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all duration-300 group cursor-default shadow-lg">
+                                <div class="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center border border-orange-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="utensils" class="w-5 h-5 text-orange-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Grupo Sabor</h4>
+                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Rede de Restaurantes</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-emerald-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all duration-300 group cursor-default shadow-lg">
+                                <div class="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="home" class="w-5 h-5 text-emerald-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Prime Imóveis</h4>
+                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Mercado Imobiliário</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-pink-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-pink-500/10 hover:border-pink-500/40 transition-all duration-300 group cursor-default shadow-lg">
+                                <div class="w-12 h-12 bg-pink-500/10 rounded-full flex items-center justify-center border border-pink-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="scissors" class="w-5 h-5 text-pink-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Studio Bella</h4>
+                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Estética & Beleza</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-purple-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-purple-500/10 hover:border-purple-500/40 transition-all duration-300 group cursor-default shadow-lg">
+                                <div class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center border border-purple-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="briefcase" class="w-5 h-5 text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Advocacia Silva</h4>
+                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Consultoria Jurídica</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all duration-300 group cursor-default shadow-lg">
+                                <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center border border-cyan-500/20 group-hover:scale-110 transition-transform">
+                                    <i data-lucide="stethoscope" class="w-5 h-5 text-cyan-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Clínica Vita</h4>
+                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Saúde & Bem-Estar</span>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="flex flex-col md:flex-row gap-6 items-center w-full justify-center">
-                            <a href="https://wa.link/hpoklw" target="_blank" class="group relative px-10 py-5 bg-white text-slate-950 rounded-sm overflow-hidden hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-300 flex items-center justify-center gap-4 min-w-[300px]">
+                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-white-glow px-10 py-5 flex items-center justify-center gap-4 min-w-[300px] group">
                                 <span class="font-black uppercase tracking-[0.3em] text-[10px] relative z-10">Solicitar Cotação para a Equipa</span>
                                 <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10"></i>
                             </a>
@@ -1176,7 +1162,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     <div class="flex flex-col items-start gap-5">
                         <div class="flex items-center gap-3">
-                            <img src="https://i.imgur.com/ina6zZ1.png" alt="Saturno NFC" class="w-8 h-8 object-contain">
+                            <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-10 w-auto object-contain">
                             <span class="text-white font-black tracking-[0.2em] text-xs uppercase">Saturno <span class="text-orange-500">NFC</span></span>
                         </div>
                         <p class="text-slate-600 text-[10px] leading-relaxed uppercase tracking-widest font-bold">
@@ -1224,6 +1210,9 @@
             }, 800);
         });
 
+        // =========================================================
+        // LÓGICA DO CARTÃO 3D COM GIRO FÍSICO E TROCA DE CORES
+        // =========================================================
         const niches = [
             { name: "Restaurante Colonial", icon: "utensils", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
             { name: "Clínica São José", icon: "stethoscope", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
@@ -1233,33 +1222,80 @@
             { name: "Imóveis Prime", icon: "home", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
             { name: "Sua Empresa", icon: "briefcase", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
         ];
+        
         let nicheIndex = 0;
+        let isBlackCard = false;
+        
+        const cardInner = document.getElementById('card-inner-flip');
+        const cardBg = document.getElementById('hero-3d-card-bg');
         const nicheEl = document.getElementById('niche-rotator');
         const iconContainer = document.getElementById('card-dynamic-icon');
+        const wifiIcon = document.getElementById('card-wifi-icon');
+        const cardChip = document.getElementById('card-chip');
+        const cardChipIcon = document.getElementById('card-chip-icon');
+        const cardLine1 = document.getElementById('card-line-1');
+        const cardLine2 = document.getElementById('card-line-2');
 
-        if (nicheEl && iconContainer) {
+        if (cardInner && nicheEl && iconContainer) {
             setInterval(() => {
-                nicheEl.style.opacity = '0'; 
-                iconContainer.style.opacity = '0';
-                iconContainer.style.transform = 'scale(0.8)';
+                
+                // Fase 1: Inicia o giro (Roda o cartão 90 graus para ficar invisível de perfil)
+                cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
+                cardInner.style.transform = 'rotateY(90deg) scale(1.05)';
+                cardInner.style.filter = 'brightness(1.5)';
                 
                 setTimeout(() => {
+                    // Fase 2: Ponto cego (O cartão está girado de lado)
+                    // -> É o momento perfeito para trocar o conteúdo sem ninguém perceber
+                    isBlackCard = !isBlackCard;
+
+                    // Troca Cores Preto/Branco
+                    if(isBlackCard) {
+                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-zinc-900 to-black rounded-[2rem] border border-zinc-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden backface-hidden";
+                        nicheEl.classList.replace('text-gray-900', 'text-white');
+                        wifiIcon.classList.replace('text-gray-400', 'text-zinc-500');
+                        cardChip.className = "w-16 h-16 bg-zinc-800/80 backdrop-blur-md rounded-full mb-5 border border-zinc-600 flex items-center justify-center overflow-hidden shadow-sm";
+                        cardChipIcon.classList.replace('text-gray-500', 'text-zinc-400');
+                        cardLine1.classList.replace('bg-gray-300', 'bg-zinc-700');
+                        cardLine2.classList.replace('bg-gray-300', 'bg-zinc-700');
+                    } else {
+                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden";
+                        nicheEl.classList.replace('text-white', 'text-gray-900');
+                        wifiIcon.classList.replace('text-zinc-500', 'text-gray-400');
+                        cardChip.className = "w-16 h-16 bg-white/40 backdrop-blur-md rounded-full mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm";
+                        cardChipIcon.classList.replace('text-zinc-400', 'text-gray-500');
+                        cardLine1.classList.replace('bg-zinc-700', 'bg-gray-300');
+                        cardLine2.classList.replace('bg-zinc-700', 'bg-gray-300');
+                    }
+
+                    // Troca Nome e Ícones
                     nicheIndex = (nicheIndex + 1) % niches.length;
                     const comp = niches[nicheIndex];
-                    
                     nicheEl.innerText = comp.name;
                     iconContainer.innerHTML = `<i data-lucide="${comp.icon}" class="w-7 h-7 ${comp.color}"></i>`;
-                    iconContainer.className = `w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg transition-all duration-500 border ${comp.bg} ${comp.border}`;
+                    iconContainer.className = `w-14 h-14 flex items-center justify-center rounded-2xl shadow-lg border ${comp.bg} ${comp.border}`;
+                    lucide.createIcons();
+
+                    // Prepara a segunda metade do giro
+                    // Saltamos o cartão para -90 graus instantaneamente sem transição
+                    cardInner.style.transition = 'none';
+                    cardInner.style.transform = 'rotateY(-90deg) scale(1.05)';
                     
-                    lucide.createIcons(); 
+                    // Força o navegador a processar o salto de posição antes de ativar a transição final
+                    void cardInner.offsetWidth;
+
+                    // Fase 3: Traz o cartão de volta até 0 graus (Completando a ilusão de um flip completo de 180)
+                    cardInner.style.transition = 'transform 0.4s ease-out, filter 0.4s ease-out';
+                    cardInner.style.transform = 'rotateY(0deg) scale(1)';
+                    cardInner.style.filter = 'brightness(1)';
                     
-                    nicheEl.style.opacity = '1'; 
-                    iconContainer.style.opacity = '1';
-                    iconContainer.style.transform = 'scale(1)';
-                }, 300); 
-            }, 3000); 
+                }, 400); 
+            }, 4000); 
         }
 
+        // =========================================================
+        // LÓGICA TAGS DE ESTABELECIMENTO
+        // =========================================================
         const tagData = {
             google: {
                 title: "Avaliação Google",
@@ -1346,7 +1382,6 @@
             }, 300);
         };
 
-        // Lógica para alternar automaticamente as Tags de Balcão e Mesa
         let currentTagIndex = 0;
         const tagTypesList = ['google', 'wifi', 'menu'];
         
@@ -1355,11 +1390,9 @@
             window.changeTagType(tagTypesList[currentTagIndex]);
         }, 5000);
 
-        // Se o usuário clicar manualmente, reinicia o timer para não conflitar com o clique
         document.querySelectorAll('.tag-control-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 clearInterval(tagAutoRotation);
-                // Retoma a rotação automática a partir de onde o usuário clicou após 8 segundos
                 tagAutoRotation = setInterval(() => {
                     currentTagIndex = (currentTagIndex + 1) % tagTypesList.length;
                     window.changeTagType(tagTypesList[currentTagIndex]);
@@ -1367,6 +1400,9 @@
             });
         });
 
+        // =========================================================
+        // SCROLL REVEAL E THREE.JS
+        // =========================================================
         function initScrollReveal() {
             const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
             const observer = new IntersectionObserver((entries) => {
@@ -1433,6 +1469,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
+        // 3D Tilt nos blocos
         document.addEventListener('mousemove', (e) => {
             const cards = document.querySelectorAll('.card-interactive');
             cards.forEach(card => {
@@ -1450,34 +1487,9 @@
             });
         });
 
-        const cardContainer = document.getElementById('card-3d-wrapper');
-        if(cardContainer) {
-            const nfcCard = cardContainer.querySelector('.nfc-3d-card');
-            
-            cardContainer.addEventListener('mousemove', (e) => {
-                if(window.innerWidth > 1024) {
-                    const rect = cardContainer.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    
-                    const rotateX = ((y - centerY) / centerY) * -20; 
-                    const rotateY = ((x - centerX) / centerX) * 20;  
-                    
-                    nfcCard.style.animation = 'none';
-                    nfcCard.style.transform = `translateY(0) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                }
-            });
-
-            cardContainer.addEventListener('mouseleave', () => {
-                if(window.innerWidth > 1024) {
-                    nfcCard.style.animation = 'float 6s ease-in-out infinite';
-                    nfcCard.style.transform = ''; 
-                }
-            });
-        }
-
+        // =========================================================
+        // LÓGICA DO CELULAR SIMULADO
+        // =========================================================
         const phoneProfiles = [
             {
                 name: "Restaurante Colonial",
