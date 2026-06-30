@@ -125,6 +125,19 @@
             transform: translateY(-3px);
         }
 
+        .btn-premium-purple {
+            background-size: 200% auto;
+            transition: 0.5s;
+            background-image: linear-gradient(to right, #a855f7 0%, #9333ea 51%, #a855f7 100%);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+            border-radius: 9999px;
+        }
+        .btn-premium-purple:hover {
+            background-position: right center;
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.7);
+            transform: translateY(-3px);
+        }
+
         .btn-glass {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
@@ -900,22 +913,27 @@
                     <!-- PLANO 1: Fora de Órbita (Mais Caro) -->
                     <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-white/10">
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Fora de Órbita</h3>
-                            <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">Ideal para bares, restaurantes, cafeterias, eventos, vendedores...</p>
+                            <h3 class="text-purple-500 text-xl font-black uppercase tracking-widest mb-2">Plano Fora de Órbita</h3>
+                            <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">Ideal para bares, restaurantes, cafeterias e lanchonetes.</p>
                             
-                            <div class="text-4xl font-black text-white mb-6 tracking-tighter">
-                                R$ 1.200
-                     </div>
+                            <div class="mb-6">
+                                <div class="text-4xl font-black text-white tracking-tighter">
+                                    R$ 1.000
+                                </div>
+                                <div class="text-purple-400 text-[11px] font-bold uppercase tracking-widest mt-1">
+                                    em até 2x sem juros
+                                </div>
+                            </div>
 
                             <ul class="space-y-4 mb-8">
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 15 Cartões NFC coorporativo
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Até 25 tags NFC de mesa (Cardápio)
                                 </li>
                                       <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Até 25 tags NFC personalizaveis (Cardápio, quarto de hotel, recepção...)
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 15 Cartões NFC corporativo personalizados
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> +10 tags para usar como quiser (Wi-fi, chave pix, localização, avaliação google) 
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 10 tags para usar como quiser (Wi-fi, chave pix, localização, site) 
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC (Instagram) 
@@ -924,22 +942,22 @@
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Cardápio Personalizado 
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, SEO e domínio próprio .com 
+                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, SEO e domínio próprio
                                      </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Dados de acesso, visualizações, retenção, conversão
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Dados de acesso, cliques nos botões, retenção...
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização + Avaliações 
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização, Avaliações 
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i>  NFC (Wi-Fi) + QR CODE
                                 </li>
                             </ul>
                         </div>
-                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
+                        <a href="#SEU_LINK_AQUI" class="w-full text-center block btn-premium-purple py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] mt-auto">
                             Escolher Plano
-                        </button>
+                        </a>
                     </div>
 
                     <!-- PLANO 2: Profissional (Intermediário) -->
@@ -948,11 +966,16 @@
                             Mais Vendido
                         </div>
                         <div>
-                            <h3 class="text-orange-400 text-xl font-black uppercase tracking-widest mb-2">Profissional</h3>
+                            <h3 class="text-orange-400 text-xl font-black uppercase tracking-widest mb-2">Plano Profissional</h3>
                             <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">Presença completa com identidade visual e funções avançadas.</p>
                             
-                            <div class="text-5xl font-black text-white mb-6 tracking-tighter">
-                                R$ 650
+                            <div class="mb-6">
+                                <div class="text-5xl font-black text-white tracking-tighter">
+                                    R$ 650
+                                </div>
+                                <div class="text-orange-500 text-[11px] font-bold uppercase tracking-widest mt-1">
+                                    em até 2x sem juros
+                                </div>
                             </div>
 
                             <ul class="space-y-4 mb-8">
@@ -972,26 +995,26 @@
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Domínio próprio
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização, Salvar contato...
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Agendamento e Redes Sociais
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
                                     <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> NFC (Wi-Fi) + QR CODE
                                 </li>
                                 <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC (Instagram) 
+                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização, Salvar contato...
                                 </li>
                             </ul>
                         </div>
                         <!-- Botão Premium Atualizado -->
-                        <button class="w-full btn-premium py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] mt-auto">
+                        <a href="#SEU_LINK_AQUI" class="w-full text-center block btn-premium py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] mt-auto">
                             Escolher Plano
-                        </button>
+                        </a>
                     </div>
 
                     <!-- PLANO 3: Essencial (Mais Barato) -->
                     <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-white/10" style="transition-delay: 200ms;">
                         <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Essencial</h3>
+                            <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Plano Essencial</h3>
                             <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">O pacote essencial para dar o primeiro passo no networking digital.</p>
                             
                             <div class="text-4xl font-black text-white mb-6 tracking-tighter">
@@ -1025,9 +1048,9 @@
                                 </li>
                             </ul>
                         </div>
-                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
+                        <a href="#SEU_LINK_AQUI" class="w-full text-center block py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
                             Escolher Plano
-                        </button>
+                        </a>
                     </div>
                 </div>
 
