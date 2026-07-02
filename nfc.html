@@ -90,13 +90,59 @@
             animation: logoReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
             transform: scale(0.8) translateY(-20px);
-            filter: drop-shadow(0 0 0 rgba(0, 210, 255, 0));
+            filter: drop-shadow(0 0 0 rgba(184, 145, 46, 0));
         }
-        
+
         @keyframes logoReveal {
-            0% { opacity: 0; transform: scale(0.8) translateY(-20px); filter: drop-shadow(0 0 0 rgba(0, 210, 255, 0)); }
-            50% { opacity: 1; transform: scale(1.05) translateY(0); filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.5)); }
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.3)); }
+            0% { opacity: 0; transform: scale(0.8) translateY(-20px); filter: drop-shadow(0 0 0 rgba(184, 145, 46, 0)); }
+            50% { opacity: 1; transform: scale(1.05) translateY(0); filter: drop-shadow(0 0 14px rgba(184, 145, 46, 0.35)); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(184, 145, 46, 0.2)); }
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: -200% 50%; }
+        }
+
+        /* Realce único percorrendo TODO o título, de forma contínua e suave */
+        @keyframes titleShine {
+            0%   { background-position: 100% center; }
+            100% { background-position: -100% center; }
+        }
+
+        /* Título dinâmico PRETO & DOURADO (combina com a logo) */
+        .premium-title {
+            background: linear-gradient(
+                100deg,
+                #120c02 0%,
+                #6b5410 18%,
+                #B8912E 34%,
+                #DFC066 50%,
+                #B8912E 66%,
+                #6b5410 82%,
+                #120c02 100%
+            );
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-stroke: 0.6px rgba(0, 0, 0, 0.55); /* leve contorno preto nas letras */
+            animation: titleShine 5s linear infinite;
+            filter: drop-shadow(0 2px 10px rgba(184, 145, 46, 0.28));
+            transition: filter 0.4s ease, transform 0.4s ease;
+            display: inline-block;
+        }
+
+        /* Entrada (fadeUp) + brilho contínuo percorrendo TODO o texto.
+           Especificidade maior que .stagger-item para não ser sobrescrita. */
+        .premium-title.stagger-item {
+            animation: fadeUp 0.6s ease forwards, titleShine 5s linear infinite;
+        }
+
+        .premium-title:hover {
+            animation: fadeUp 0.6s ease forwards, titleShine 2.8s linear infinite;
+            filter: drop-shadow(0 4px 16px rgba(212, 175, 55, 0.5)) drop-shadow(0 0 8px rgba(184, 145, 46, 0.35));
+            transform: scale(1.03);
         }
 
         /* Botões Glassmorphism Premium */
@@ -177,9 +223,139 @@
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* ===================== PRELOADER / LOADING DA LOGO ===================== */
+        body.loading { overflow: hidden; }
+
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 45%, #0d0d14 0%, #050508 70%);
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Trilha por onde o planeta atravessa a tela */
+        .planet-track {
+            position: relative;
+            width: 100vw;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        /* Conjunto planeta + rastro, movendo-se juntos */
+        .planet-comet {
+            position: absolute;
+            top: 50%; left: 0;
+            display: flex;
+            align-items: center;
+            transform: translate(-30vw, -50%);
+            animation: planetCross 3s ease-in-out infinite;
+        }
+        .planet-trail {
+            display: block;
+            width: 150px; height: 3px;
+            margin-right: -12px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55));
+            filter: blur(2px);
+        }
+        .planet-cross {
+            width: 108px;
+            height: auto;
+            filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.5));
+        }
+        @keyframes planetCross {
+            0%   { transform: translate(-30vw, -50%) scale(0.85); opacity: 0; }
+            12%  { opacity: 1; }
+            50%  { transform: translate(40vw, -60%) scale(1.05); opacity: 1; }
+            88%  { opacity: 1; }
+            100% { transform: translate(120vw, -50%) scale(0.85); opacity: 0; }
+        }
+
+        /* Nome com shimmer dourado */
+        .loader-text {
+            margin-top: 30px;
+            font-weight: 800;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            background: linear-gradient(to right, #8a6a10, #FFD700, #fff7cc, #FFD700, #8a6a10);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShine 2.5s linear infinite;
+        }
+
+        /* Barra de progresso */
+        .loader-bar {
+            margin-top: 16px;
+            width: 160px;
+            height: 3px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+        .loader-bar span {
+            display: block;
+            height: 100%;
+            width: 40%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, transparent, #FFD700, #FFB800, transparent);
+            animation: loaderBar 1.2s ease-in-out infinite;
+        }
+        @keyframes loaderBar {
+            0%   { transform: translateX(-120%); }
+            100% { transform: translateX(320%); }
+        }
+
+        /* Selo "Aproxime. Conecte. Converta." — dourado, combinando com o título */
+        .tagline-badge {
+            border: 1px solid rgba(255, 184, 0, 0.35);
+            background: linear-gradient(135deg, rgba(255, 184, 0, 0.10), rgba(255, 140, 0, 0.04));
+            /* fadeUp = entrada (mantém o stagger) + badgeGlow = brilho contínuo */
+            animation: fadeUp 0.6s ease forwards, badgeGlow 3s ease-in-out 0.6s infinite;
+        }
+        .tagline-badge span {
+            background: linear-gradient(to right, #8a6a10, #FFB800, #FFD700, #fff7cc, #FFD700, #FFB800, #8a6a10);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShine 3s linear infinite;
+        }
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.12); border-color: rgba(255, 184, 0, 0.30); }
+            50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-brand-purple selection:text-white">
+<body class="antialiased selection:bg-brand-purple selection:text-white loading">
+
+    <!-- ===================== LOADING / ANIMAÇÃO DA LOGO ===================== -->
+    <!-- Aparece ao entrar no site e desaparece após o carregamento -->
+    <div id="preloader">
+        <!-- Planeta Saturno atravessando a tela -->
+        <div class="planet-track">
+            <div class="planet-comet">
+                <span class="planet-trail"></span>
+                <!-- LOGO: mesma imagem do cabeçalho -->
+                <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC" class="planet-cross">
+            </div>
+        </div>
+        <div class="loader-text">Saturno NFC</div>
+        <div class="loader-bar"><span></span></div>
+    </div>
 
     <!-- Background Elements -->
     <div class="cosmic-bg"></div>
@@ -190,15 +366,22 @@
         <!-- Header -->
         <header class="text-center w-full mb-10 flex flex-col items-center">
             <!-- LOGO: Substitua o src caso a URL mude -->
-            <div class="w-48 md:w-56 mb-6 logo-enter">
+            <div class="w-36 md:w-44 mb-6 logo-enter">
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto object-contain drop-shadow-2xl">
             </div>
             
-            <p class="text-gray-400 text-sm md:text-base font-medium max-w-sm mx-auto stagger-item" style="animation-delay: 0.2s;">
+            <!-- Novo título principal premium -->
+            <h1 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tight premium-title stagger-item mb-4" style="animation-delay: 0.15s;">
+                Saturno NFC
+            </h1>
+            
+            <p class="text-gray-400 text-sm md:text-base font-medium max-w-sm mx-auto stagger-item mb-2" style="animation-delay: 0.2s;">
                 Conecte sua marca com apenas uma aproximação.
             </p>
-            <div class="mt-3 inline-block px-4 py-1 rounded-full border border-brand-purple/30 bg-brand-purple/10 text-brand-blue text-xs font-semibold tracking-widest uppercase stagger-item" style="animation-delay: 0.3s;">
-                Aproxime. Conecte. Converta.
+            
+            <!-- Selo dourado animado, combinando com o título -->
+            <div class="tagline-badge mt-3 inline-block px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase stagger-item" style="animation-delay: 0.3s;">
+                <span>Aproxime. Conecte. Converta.</span>
             </div>
         </header>
 
@@ -410,6 +593,30 @@
 
     <!-- Scripts de Interatividade -->
     <script>
+        // --- 0. PRELOADER: mostra a animação da logo e some após o carregamento ---
+        (function () {
+            const preloader = document.getElementById('preloader');
+            if (!preloader) return;
+
+            function hidePreloader() {
+                preloader.classList.add('hidden');
+                document.body.classList.remove('loading');
+                setTimeout(() => preloader.remove(), 900); // remove do DOM após o fade
+            }
+
+            // Tempo mínimo de exibição para a animação ser percebida (ms)
+            const MIN_TIME = 2200;
+            const start = performance.now();
+
+            window.addEventListener('load', () => {
+                const elapsed = performance.now() - start;
+                setTimeout(hidePreloader, Math.max(0, MIN_TIME - elapsed));
+            });
+
+            // Segurança: esconde de qualquer forma após 5s
+            setTimeout(hidePreloader, 5000);
+        })();
+
         // --- 1. BOTÕES MAGNÉTICOS SUTIS ---
         const magneticBtns = document.querySelectorAll('.magnetic-btn');
         
