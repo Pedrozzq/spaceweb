@@ -196,16 +196,6 @@
             animation: shimmer-text 8s linear infinite; 
         }
 
-        @keyframes typing {
-            from { max-width: 0; }
-            to { max-width: 250px; } 
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: #f97316; } 
-        }
-
         /* Animação Pulso do Telefone (Interface) */
         @keyframes scan-line {
             0% { transform: translateY(0); opacity: 0; }
@@ -257,42 +247,10 @@
             transform: translateY(0) scale(1);
         }
 
-        /* --- PRELOADER --- */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            background: #05070a;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), visibility 1.2s;
-        }
-        body.loaded #preloader { opacity: 0; visibility: hidden; }
-
         #top-navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
             z-index: 999;
-            opacity: 0;
-            transform: translateY(-100%);
-            transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
-            transition-delay: 0.2s;
-        }
-        body.loaded #top-navbar {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .nav-title {
-            max-width: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 2px solid #f97316;
-        }
-        body.loaded .nav-title {
-            animation: typing 2.5s steps(30, end) forwards, blink-caret 0.75s step-end infinite;
-            animation-delay: 0.8s;
         }
 
         /* --- COMPONENTES --- */
@@ -343,10 +301,8 @@
             width: 100%; height: 100%;
             z-index: 0;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 4s ease;
+            opacity: 1;
         }
-        body.loaded #bg-canvas { opacity: 1; }
 
         .italic-serif { font-family: serif; font-style: italic; }
         
@@ -356,20 +312,6 @@
 </head>
 <body>
 
-    <!-- Intro Preloader (Logo Ampliada e em Destaque) -->
-    <div id="preloader">
-        <div class="flex flex-col items-center justify-center">
-            <!-- Logo Ampliada -->
-            <img src="https://i.imgur.com/RqZd35M.png" alt="Carregando Saturno NFC" class="h-24 md:h-32 w-auto object-contain animate-pulse-glow mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            
-            <!-- Barra de Progresso Elegante -->
-            <div class="w-48 h-[2px] bg-slate-800 rounded-full overflow-hidden relative">
-                <div class="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-[shine-sweep_1.5s_infinite]"></div>
-            </div>
-            <span class="text-orange-500/80 text-[9px] uppercase tracking-[0.5em] mt-4 font-bold">Inicializando</span>
-        </div>
-    </div>
-    
     <!-- Navbar Superior -->
     <nav id="top-navbar" class="bg-black/40 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex justify-between items-center">
         <!-- Logo e Título Ampliados -->
@@ -428,7 +370,7 @@
                             </h1>
                             
                             <p class="text-slate-400 text-xs sm:text-base md:text-lg mb-0 sm:mb-10 max-w-xl font-light leading-relaxed">
-                               Mais impacto no primeiro contato, mais reviews no Google, menos atrito no Wi-Fi, mais pedidos pelo Whatsapp e uma presença digital forte e de fácil acesso.
+                                Mais impacto no primeiro contato, mais reviews no Google, menos atrito no Wi-Fi, mais pedidos pelo Whatsapp e uma presença digital forte e de fácil acesso.
                             </p>
                         </div>
                     </div>
@@ -606,7 +548,7 @@
                                 Alta Conversão
                             </h3>
                             <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                               Com botões inteligentes de ação rápida, o cliente pode salvar seu contato na agenda, falar com sua empresa pelo WhatsApp, avaliar no Google, agendar horário, conectar ao wi-fi, ter acesso a localização sem esforço e sem digitação.
+                                Com botões inteligentes de ação rápida, o cliente pode salvar seu contato na agenda, falar com sua empresa pelo WhatsApp, avaliar no Google, agendar horário, conectar ao wi-fi, ter acesso a localização sem esforço e sem digitação.
                             </p>
                         </div>
                     </div>
@@ -1104,7 +1046,6 @@
                 </div>
 
             </div>
-</a>
         </section>
 
         <!-- FOOTER INSTITUCIONAL -->
@@ -1156,11 +1097,9 @@
     <script>
         lucide.createIcons();
 
+        // O delay e a classe body.loaded foram removidos para a exibição ser instantânea
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-                initScrollReveal();
-            }, 800);
+            initScrollReveal();
         });
 
         // =========================================================
