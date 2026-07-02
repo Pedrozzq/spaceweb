@@ -1,76 +1,53 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saturno NFC | Tags & Cartões Corporativos</title>
+    <title>Saturno NFC | Cartões Inteligentes</title>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.imgur.com/RqZd35M.png">
+    <!-- Google Fonts: Plus Jakarta Sans for a premium tech feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Google Fonts: Space Grotesk -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            black: '#050508',
+                            dark: '#0a0a10',
+                            gray: '#1a1a24',
+                            gold: '#FFB800',
+                            goldlight: '#FFD700',
+                            blue: '#00D2FF',
+                            purple: '#8A2BE2'
+                        }
+                    },
                     animation: {
-                        'float-slow': 'float 6s ease-in-out infinite',
-                        'float-tag-1': 'floatTag1 4s ease-in-out infinite',
-                        'float-tag-2': 'floatTag2 5s ease-in-out infinite',
-                        'float-tag-3': 'floatTag3 6s ease-in-out infinite',
-                        'float-tag-4': 'floatTag4 4.5s ease-in-out infinite',
-                        'sim-phone': 'simPhoneMove 6s infinite ease-in-out',
-                        'sim-screen': 'simScreenFade 6s infinite ease-in-out',
-                        'sim-ripple': 'simNfcRipple 6s infinite ease-out',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'spin-slow': 'spin 20s linear infinite',
                         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
-                            '0%, 100%': { transform: 'translateY(0) rotateX(15deg) rotateY(-15deg)' },
-                            '50%': { transform: 'translateY(-20px) rotateX(25deg) rotateY(-5deg)' },
-                        },
-                        floatTag1: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(-2deg)' },
-                            '50%': { transform: 'translateY(-15px) rotate(2deg)' },
-                        },
-                        floatTag2: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(3deg)' },
-                            '50%': { transform: 'translateY(-10px) rotate(-1deg)' },
-                        },
-                        floatTag3: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(-1deg)' },
-                            '50%': { transform: 'translateY(-20px) rotate(1deg)' },
-                        },
-                        floatTag4: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(2deg)' },
-                            '50%': { transform: 'translateY(-12px) rotate(-2deg)' },
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
                         },
                         pulseGlow: {
-                            '0%, 100%': { filter: 'drop-shadow(0 0 15px rgba(234,88,12,0.2))' },
-                            '50%': { filter: 'drop-shadow(0 0 40px rgba(234,88,12,0.6))' },
-                        },
-                        // Animações da Simulação de Tags Físicas
-                        simPhoneMove: {
-                            '0%, 10%': { transform: 'translateY(50px)' },
-                            '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' },
-                            '25%, 95%': { transform: 'translateY(50px)' },
-                            '100%': { transform: 'translateY(50px)' },
-                        },
-                        simScreenFade: {
-                            '0%, 22%': { opacity: '0' },
-                            '25%, 90%': { opacity: '1' },
-                            '95%, 100%': { opacity: '0' },
-                        },
-                        simNfcRipple: {
-                            '0%, 14%': { transform: 'scale(0.5)', opacity: '0' },
-                            '15%': { transform: 'scale(0.5)', opacity: '1' },
-                            '25%': { transform: 'scale(2.5)', opacity: '0' },
-                            '100%': { transform: 'scale(2.5)', opacity: '0' },
+                            '0%, 100%': { opacity: '0.8', filter: 'brightness(1)' },
+                            '50%': { opacity: '1', filter: 'brightness(1.3)' },
                         }
                     }
                 }
@@ -78,1588 +55,448 @@
         }
     </script>
 
-    <!-- Three.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
-        html { scroll-behavior: smooth; }
-
+        /* Base e Scrollbar */
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #05070a; /* Fundo escuro vibrante restaurado */
-            color: #E5E7EB;
-            overflow-x: hidden;
-            margin: 0;
-            cursor: default;
-        }
-
-        /* --- ESTILOS DO CARTÃO 3D --- */
-        .perspective-1000 { perspective: 1000px; }
-        .preserve-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-
-        /* --- BOTÕES PREMIUM (NOVOS ESTILOS CHAMATIVOS) --- */
-        .btn-premium {
-            background-size: 200% auto;
-            transition: 0.5s;
-            background-image: linear-gradient(to right, #f97316 0%, #ea580c 51%, #f97316 100%);
-            box-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
-            border-radius: 9999px; /* Arredondado total */
-        }
-        .btn-premium:hover {
-            background-position: right center;
-            box-shadow: 0 0 40px rgba(234, 88, 12, 0.7);
-            transform: translateY(-3px);
-        }
-
-        .btn-glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 9999px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-        .btn-glass:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(234, 88, 12, 0.5);
-            box-shadow: 0 0 25px rgba(234, 88, 12, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .btn-white-glow {
-            background: #ffffff;
-            color: #000000;
-            border-radius: 9999px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        .btn-white-glow:hover {
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
-            transform: translateY(-3px);
-        }
-
-        /* --- ANIMAÇÕES GERAIS --- */
-        @keyframes shine-sweep {
-            0% { transform: translateX(-100%) skewX(-15deg); }
-            100% { transform: translateX(200%) skewX(-15deg); }
-        }
-
-        @keyframes shimmer-text {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
-        }
-
-        .text-shimmer {
-            background: linear-gradient(to right, #ea580c 0%, #ea580c 40%, #38bdf8 50%, #ea580c 60%, #ea580c 100%);
-            background-size: 200% auto;
-            color: #ea580c;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer-text 8s linear infinite; 
-        }
-
-        .text-shimmer-blue {
-            background: linear-gradient(to right, #ffffff 0%, #ffffff 45%, #3b82f6 50%, #ffffff 55%, #ffffff 100%);
-            background-size: 200% auto;
+            background-color: #050508;
             color: #ffffff;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer-text 8s linear infinite; 
+            overflow-x: hidden;
+            scroll-behavior: smooth;
         }
-
-        @keyframes typing {
-            from { max-width: 0; }
-            to { max-width: 250px; } 
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: #f97316; } 
-        }
-
-        /* Animação Pulso do Telefone (Interface) */
-        @keyframes scan-line {
-            0% { transform: translateY(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(200px); opacity: 0; }
-        }
-        .animate-scan {
-            animation: scan-line 3s infinite linear;
-        }
-
-        /* --- ANIMAÇÕES DA MÁGICA DA CONVERSÃO (Cartão aproximando e desbloqueando) --- */
-        @keyframes cardApproach {
-            0%, 10% { transform: translate(150px, 150px) rotate(30deg); opacity: 0; }
-            15% { transform: translate(150px, 150px) rotate(30deg); opacity: 1; }
-            25% { transform: translate(-30px, 20px) rotate(-5deg) scale(0.95); opacity: 1; }
-            28% { transform: translate(-30px, 20px) rotate(-5deg) scale(0.95); opacity: 1; }
-            32% { transform: translate(-30px, 20px) rotate(-5deg) scale(0.95); opacity: 0; }
-            100% { opacity: 0; }
-        }
-        @keyframes phoneLockFade {
-            0%, 26% { opacity: 1; }
-            28%, 85% { opacity: 0; }
-            90%, 100% { opacity: 1; }
-        }
-        @keyframes phoneUnlock {
-            0%, 26% { opacity: 0; transform: scale(0.95); pointer-events: none; }
-            29%, 85% { opacity: 1; transform: scale(1); pointer-events: auto; }
-            90%, 100% { opacity: 0; transform: scale(0.95); pointer-events: none; }
-        }
-        @keyframes tapRipple {
-            0%, 24% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; border-width: 4px; }
-            25% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
-            35% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; border-width: 0px; }
-            100% { opacity: 0; }
-        }
-
-        /* --- SISTEMA DE REVELAÇÃO --- */
-        .reveal-node {
-            opacity: 0;
-            filter: blur(15px);
-            transform: translateY(30px) scale(0.98);
-            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .reveal-node.active {
-            opacity: 1;
-            filter: blur(0);
-            transform: translateY(0) scale(1);
-        }
-
-        /* --- PRELOADER --- */
-        #preloader {
-            position: fixed;
-            inset: 0;
-            background: #05070a;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), visibility 1.2s;
-        }
-        body.loaded #preloader { opacity: 0; visibility: hidden; }
-
-        #top-navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            z-index: 999;
-            opacity: 0;
-            transform: translateY(-100%);
-            transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
-            transition-delay: 0.2s;
-        }
-        body.loaded #top-navbar {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .nav-title {
-            max-width: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 2px solid #f97316;
-        }
-        body.loaded .nav-title {
-            animation: typing 2.5s steps(30, end) forwards, blink-caret 0.75s step-end infinite;
-            animation-delay: 0.8s;
-        }
-
-        /* --- COMPONENTES --- */
-        .project-button {
-            background: rgba(11, 14, 20, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-            border-radius: 1.5rem;
-        }
-
-        .project-button:hover {
-            border-color: rgba(234, 88, 12, 0.4);
-            background: rgba(234, 88, 12, 0.05);
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.8);
-        }
-
-        .card-interactive {
-            background: rgba(255, 255, 255, 0.015);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-            position: relative;
-        }
-
-        .card-interactive:hover {
-            border-color: rgba(234, 88, 12, 0.3);
-            background: rgba(234, 88, 12, 0.03);
-            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5), 0 0 20px rgba(234, 88, 12, 0.05);
-        }
-
-        .text-gradient {
-            background: linear-gradient(135deg, #fb923c, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .text-gradient-blue {
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 4s ease;
-        }
-        body.loaded #bg-canvas { opacity: 1; }
-
-        .italic-serif { font-family: serif; font-style: italic; }
         
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050508; }
+        ::-webkit-scrollbar-thumb { background: #1a1a24; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8A2BE2; }
+
+        /* Fundo Cósmico */
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(26, 26, 36, 0.4) 0%, rgba(5, 5, 8, 1) 60%);
+            z-index: -2;
+        }
+        
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Animação de Entrada da Logo */
+        .logo-enter {
+            animation: logoReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: scale(0.8) translateY(-20px);
+            filter: drop-shadow(0 0 0 rgba(0, 210, 255, 0));
+        }
+        
+        @keyframes logoReveal {
+            0% { opacity: 0; transform: scale(0.8) translateY(-20px); filter: drop-shadow(0 0 0 rgba(0, 210, 255, 0)); }
+            50% { opacity: 1; transform: scale(1.05) translateY(0); filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.5)); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.3)); }
+        }
+
+        /* Botões Glassmorphism Premium */
+        .link-btn {
+            background: rgba(26, 26, 36, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+            z-index: 1;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(0, 210, 255, 0.3);
+            background: rgba(26, 26, 36, 0.7);
+        }
+
+        .link-btn:hover::before {
+            left: 200%;
+        }
+
+        .link-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Botão Destaque (Comprar) */
+        .btn-highlight {
+            background: linear-gradient(135deg, rgba(255, 184, 0, 0.1), rgba(255, 140, 0, 0.1));
+            border: 1px solid rgba(255, 184, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.15);
+        }
+
+        .btn-highlight:hover {
+            border-color: rgba(255, 184, 0, 0.8);
+            box-shadow: 0 0 30px rgba(255, 184, 0, 0.4), inset 0 0 15px rgba(255, 184, 0, 0.2);
+            background: linear-gradient(135deg, rgba(255, 184, 0, 0.2), rgba(255, 140, 0, 0.2));
+        }
+
+        .btn-highlight .icon-wrapper {
+            color: #FFB800;
+        }
+
+        /* Cards de Glassmorphism (Como funciona / Benefícios) */
+        .glass-card {
+            background: rgba(26, 26, 36, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(26, 26, 36, 0.6);
+            border-color: rgba(138, 43, 226, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(138, 43, 226, 0.2);
+        }
+
+        /* Elementos de Animação de Entrada */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-brand-purple selection:text-white">
 
-    <!-- Intro Preloader (Logo Ampliada e em Destaque) -->
-    <div id="preloader">
-        <div class="flex flex-col items-center justify-center">
-            <!-- Logo Ampliada -->
-            <img src="https://i.imgur.com/RqZd35M.png" alt="Carregando Saturno NFC" class="h-24 md:h-32 w-auto object-contain animate-pulse-glow mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-            
-            <!-- Barra de Progresso Elegante -->
-            <div class="w-48 h-[2px] bg-slate-800 rounded-full overflow-hidden relative">
-                <div class="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-orange-500 to-transparent animate-[shine-sweep_1.5s_infinite]"></div>
-            </div>
-            <span class="text-orange-500/80 text-[9px] uppercase tracking-[0.5em] mt-4 font-bold">Inicializando</span>
-        </div>
-    </div>
-    
-    <!-- Navbar Superior -->
-    <nav id="top-navbar" class="bg-black/40 backdrop-blur-md border-b border-white/5 py-4 px-6 md:px-12 flex justify-between items-center">
-        <!-- Logo e Título Ampliados -->
-        <div class="flex items-center gap-4">
-            <img src="https://i.imgur.com/RqZd35M.png" alt="Logo Saturno NFC" class="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(234,88,12,0.4)]">
-            <h1 class="font-black text-white uppercase text-lg md:text-xl nav-title">
-                <span class="text-shimmer-blue">Saturno</span> <span class="text-shimmer">NFC</span>
-            </h1>
-        </div>
+    <!-- Background Elements -->
+    <div class="cosmic-bg"></div>
+    <canvas id="particles-canvas"></canvas>
 
-        <!-- Links de Navegação -->
-        <div class="hidden md:flex items-center gap-8 text-[11px] font-bold tracking-[0.2em] uppercase">
-            <!-- Dropdown Menu Específico -->
-            <div class="relative group">
-                <button class="text-slate-300 hover:text-orange-500 transition-colors flex items-center gap-1 uppercase">
-                    Tags e Cartões <i data-lucide="chevron-down" class="w-3 h-3"></i>
-                </button>
-                <div class="absolute top-[100%] left-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                    <div class="w-60 bg-[#0B0E14] border border-white/10 rounded-md shadow-2xl flex flex-col overflow-hidden">
-                        <a href="#vantagens" class="px-5 py-4 text-[10px] text-slate-300 hover:text-white hover:bg-orange-500/20 border-b border-white/5 transition-colors">
-                            <span class="block text-orange-400 mb-1 font-black">Cartões de Visita</span>
-                            <span class="text-[9px] text-slate-400 normal-case tracking-normal">Uso pessoal para networking e prospecção de vendas.</span>
-                        </a>
-                        <a href="#tags-estabelecimento" class="px-5 py-4 text-[10px] text-slate-300 hover:text-white hover:bg-blue-500/20 transition-colors">
-                            <span class="block text-blue-400 mb-1 font-black">Tags Estáticas</span>
-                            <span class="text-[9px] text-slate-400 normal-case tracking-normal">Adesivos e totens que ficam nas mesas ou balcão da loja.</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <a href="#animacao-toque" class="text-slate-300 hover:text-orange-500 transition-colors">Como Funciona</a>
-            <a href="#produtos" class="text-slate-300 hover:text-orange-500 transition-colors">Portfólio</a>
-            <a href="#marketing" class="px-6 py-2.5 bg-white text-black hover:bg-orange-500 hover:text-white rounded-md transition-all drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Planos</a>
-        </div>
-    </nav>
-
-    <!-- Motor Gráfico 3D -->
-    <canvas id="bg-canvas"></canvas>
-
-    <!-- Conteúdo Principal -->
-    <main class="relative z-10" id="site-content">
+    <main class="max-w-3xl mx-auto px-4 py-12 relative z-10 flex flex-col items-center">
         
-        <!-- SECÇÃO 01: HERO -->
-        <section id="hero" class="min-h-screen flex flex-col justify-center pt-24 pb-8 sm:pt-32 sm:pb-16 px-6 sm:px-8">
-            <div class="container mx-auto max-w-7xl">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-16 lg:gap-8 items-center">
-                    <!-- Textos Hero -->
-                    <div class="flex flex-col items-center lg:items-start text-center lg:text-left z-10">
-                        <div class="reveal-node">
-                            <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[10px] font-bold mb-3 sm:mb-6 uppercase tracking-[0.4em] rounded-r-md">
-                                <i data-lucide="crosshair" class="w-3 h-3"></i> Alta Conversão
-                            </div>
-                            
-                            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black mb-2 sm:mb-6 tracking-tighter leading-tight uppercase drop-shadow-[0_0_15px_rgba(234,88,12,0.3)]">
-                               A tecnologia que conecta sua<br class="hidden lg:block"/>
-                                <span class="text-shimmer">empresa ao cliente em segundos.</span>
-                            </h1>
-                            
-                            <p class="text-slate-400 text-xs sm:text-base md:text-lg mb-0 sm:mb-10 max-w-xl font-light leading-relaxed">
-                               Mais impacto no primeiro contato, mais reviews no Google, menos atrito no Wi-Fi, mais pedidos pelo Whatsapp e uma presença digital forte e de fácil acesso.
-                            </p>
-                        </div>
+        <!-- Header -->
+        <header class="text-center w-full mb-10 flex flex-col items-center">
+            <!-- LOGO: Substitua o src caso a URL mude -->
+            <div class="w-48 md:w-56 mb-6 logo-enter">
+                <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto object-contain drop-shadow-2xl">
+            </div>
+            
+            <p class="text-gray-400 text-sm md:text-base font-medium max-w-sm mx-auto stagger-item" style="animation-delay: 0.2s;">
+                Conecte sua marca com apenas uma aproximação.
+            </p>
+            <div class="mt-3 inline-block px-4 py-1 rounded-full border border-brand-purple/30 bg-brand-purple/10 text-brand-blue text-xs font-semibold tracking-widest uppercase stagger-item" style="animation-delay: 0.3s;">
+                Aproxime. Conecte. Converta.
+            </div>
+        </header>
+
+        <!-- Linktree Buttons -->
+        <section class="w-full flex flex-col gap-4 mb-16 stagger-item" style="animation-delay: 0.4s;">
+            
+            <!-- Botão 1: Comprar (Destaque) -->
+            <!-- Substitua o href pelo seu link de checkout/compra -->
+            <a href="#" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20">
+                        <i class="ph ph-shopping-cart-simple text-xl"></i>
                     </div>
+                    <span class="font-semibold text-white text-base md:text-lg">Comprar meu Cartão NFC</span>
+                </div>
+                <i class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+            </a>
 
-                    <!-- Cartão 3D Interativo (Com Giro Realista) -->
-                    <div class="perspective-1000 flex justify-center lg:justify-end reveal-node mt-4 sm:mt-10 lg:mt-0" id="card-3d-wrapper">
-                        <!-- Container de Flutuação -->
-                        <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float-slow nfc-3d-card">
-                            
-                            <!-- Container Responsável pelo Flip Físico -->
-                            <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
-                                
-                                <!-- O Fundo do Cartão -->
-                                <div id="hero-3d-card-bg" class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden">
-                                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-600/20 blur-3xl rounded-full"></div>
-                                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-600/20 blur-3xl rounded-full"></div>
-
-                                    <div class="p-5 sm:p-8 flex flex-col justify-between h-full relative z-10">
-                                        <div class="flex justify-between items-start">
-                                            <div id="card-dynamic-icon" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-orange-500/10 text-orange-400 rounded-2xl shadow-lg border border-orange-500/30">
-                                                <i data-lucide="utensils" class="w-6 h-6 sm:w-7 sm:h-7"></i>
-                                            </div>
-                                            <i data-lucide="wifi" id="card-wifi-icon" class="text-gray-400 rotate-90 w-6 h-6 sm:w-8 sm:h-8"></i>
-                                        </div>
-                                        
-                                        <div class="mt-auto">
-                                            <div id="card-chip" class="w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm">
-                                                <i data-lucide="trending-up" id="card-chip-icon" class="w-6 h-6 sm:w-8 sm:h-8 text-gray-500"></i>
-                                            </div>
-                                            
-                                            <!-- Texto -->
-                                            <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="niche-rotator">Restaurante</h3>
-                                            <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6">Sua Empresa</p>
-                                            
-                                            <div class="w-8 h-6 sm:w-10 sm:h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-3 sm:mb-4 opacity-50 relative overflow-hidden">
-                                                <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
-                                            </div>
-
-                                            <div id="card-line-1" class="w-full h-px bg-gray-300 mb-3"></div>
-                                            <div id="card-line-2" class="w-2/3 h-px bg-gray-300"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Ondas de Sinal Fora do Flip para não quebrarem -->
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-orange-500/30 rounded-[2rem] -z-10 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-[2rem] -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
-                        </div>
+            <!-- Botão 2: WhatsApp -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors">
+                        <i class="ph ph-whatsapp-logo text-xl"></i>
                     </div>
+                    <span class="font-medium text-gray-100">Falar no WhatsApp</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 3: Modelos -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/20 transition-colors">
+                        <i class="ph ph-cards text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Ver Modelos Disponíveis</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 4: Como Funciona -->
+            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors">
+                        <i class="ph ph-info text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Como Funciona</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 5: Orçamento -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 group-hover:bg-white/10 transition-colors">
+                        <i class="ph ph-calculator text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Solicitar Orçamento</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 6: Instagram -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors">
+                        <i class="ph ph-instagram-logo text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Instagram</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 7: Portfólio -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 group-hover:bg-white/10 transition-colors">
+                        <i class="ph ph-image text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Portfólio de Cartões</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 8: Planos Empresas -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/20 transition-colors">
+                        <i class="ph ph-buildings text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Planos para Empresas</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 9: Campanhas Políticas -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors">
+                        <i class="ph ph-megaphone text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Cartões para Campanhas Políticas</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+
+            <!-- Botão 10: Negócios Locais -->
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors">
+                        <i class="ph ph-storefront text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100">Cartões para Negócios Locais</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
+        </section>
+
+        <!-- Como Funciona Section -->
+        <section id="como-funciona" class="w-full mb-16 stagger-item" style="animation-delay: 0.5s;">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona o Cartão NFC?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Passo 1 -->
+                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center mb-4 border border-brand-blue/30">
+                        <i class="ph ph-wifi-high text-2xl rotate-90"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">1. Aproxime</h3>
+                    <p class="text-sm text-gray-400">O cliente aproxima o celular do cartão NFC.</p>
+                </div>
+                
+                <!-- Passo 2 -->
+                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mb-4 border border-brand-purple/30">
+                        <i class="ph ph-device-mobile text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">2. Acesse</h3>
+                    <p class="text-sm text-gray-400">O link personalizado abre automaticamente no navegador.</p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center mb-4 border border-brand-gold/30">
+                        <i class="ph ph-rocket-launch text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">3. Converta</h3>
+                    <p class="text-sm text-gray-400">O cliente chama no WhatsApp, salva contato ou segue no Instagram.</p>
                 </div>
             </div>
         </section>
 
-        <!-- SECÇÃO 02: SHOWCASE DE VANTAGENS (Networking Pessoal) -->
-        <section id="vantagens" class="py-24 px-8 border-t border-white/5 relative bg-[#05070a]/60 overflow-hidden">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
-
-            <div class="container mx-auto max-w-7xl relative z-10">
-                <div class="text-center mb-20 reveal-node">
-                    <span class="text-blue-500 font-bold uppercase tracking-[0.5em] text-[9px]">Uso Pessoal & Equipes Comerciais</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Como Funciona na <span class="text-gradient-blue">Prática</span></h2>
-                    <p class="mt-4 text-slate-400 text-sm max-w-2xl mx-auto italic-serif">Veja exatamente o que o seu cliente experiencia quando você apresenta o seu Cartão NFC corporativo (de bolso).</p>
+        <!-- Benefícios Section -->
+        <section class="w-full mb-16 stagger-item" style="animation-delay: 0.6s;">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
+            
+            <div class="grid grid-cols-2 gap-3 md:gap-4">
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-lightning text-brand-gold text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Atendimento mais rápido</span>
                 </div>
-
-                <div class="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-32">
-                    <!-- Lado Esquerdo: Telefone Mockup + Cartão Voador (Agora sempre primeiro) -->
-                    <div class="relative w-full max-w-[320px] flex justify-center reveal-node order-1 lg:order-1 mb-10 lg:mb-0">
-                        
-                        <!-- Telefone Físico -->
-                        <div class="relative w-[280px] h-[580px] bg-[#090b10] border-[6px] border-slate-800 rounded-[3rem] shadow-[0_0_80px_rgba(38,99,235,0.15)] overflow-hidden flex flex-col z-10">
-                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-scan z-40"></div>
-                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
-
-                            <!-- Ecrã Bloqueado -->
-                            <div class="absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
-                                <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
-                                    <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
-                                    <i data-lucide="smartphone" class="w-6 h-6 text-slate-500"></i>
-                                </div>
-                                <span class="text-slate-400 text-[10px] uppercase tracking-widest font-black text-center px-6">Aproxime o Cartão NFC</span>
-                            </div>
-
-                            <!-- Ecrã Desbloqueado -->
-                            <div class="absolute inset-0 bg-[#0f111a] z-20 flex flex-col" style="animation: phoneUnlock 5.5s infinite ease-out;">
-                                <div id="dynamic-phone-cover" class="h-24 bg-[url('https://images.unsplash.com/photo-1513104890d38-7c0f4fff45f1?q=80&w=600&auto=format&fit=crop')] bg-cover bg-center relative shrink-0 transition-all duration-500">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-[#0f111a]/40 to-transparent"></div>
-                                </div>
-                                
-                                <div class="flex-1 flex flex-col px-4 -mt-8 relative z-10 overflow-y-hidden pb-4">
-                                    <div class="text-center mb-4 shrink-0 flex flex-col items-center">
-                                        <div id="dynamic-phone-avatar-bg" class="w-[64px] h-[64px] bg-gradient-to-tr from-orange-500 to-amber-500 p-[3px] rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.5)] mb-2">
-                                            <div class="w-full h-full bg-[#05070a] rounded-full flex items-center justify-center border-[3px] border-[#0f111a]">
-                                                <div id="dynamic-phone-icon-container"><i data-lucide="utensils-crossed" class="w-5 h-5 text-white"></i></div>
-                                            </div>
-                                        </div>
-                                        <h4 id="dynamic-phone-name" class="text-white font-black text-[14px] tracking-wide mb-0.5 leading-tight">Restaurante</h4>
-                                        <p id="dynamic-phone-sub" class="text-orange-500 text-[8px] font-bold uppercase tracking-[0.2em]">Tradição e Sabor</p>
-                                    </div>
-
-                                    <div class="space-y-2 mb-3 shrink-0">
-                                        <div class="w-full bg-white text-black py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_5px_15px_rgba(255,255,255,0.15)] cursor-default">
-                                            <i data-lucide="download" class="w-3.5 h-3.5"></i> <span class="font-black text-[9px] uppercase tracking-widest">Salvar Contato</span>
-                                        </div>
-                                        <div class="w-full bg-[#25D366] text-white py-2.5 rounded-xl flex items-center justify-center gap-2 shadow-[0_5px_15px_rgba(37,211,102,0.2)] cursor-default">
-                                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> <span class="font-black text-[9px] uppercase tracking-widest">WhatsApp</span>
-                                        </div>
-                                    </div>
-
-                                    <div id="dynamic-phone-grid" class="grid grid-cols-3 gap-2 shrink-0">
-                                        <!-- Javascript preenche aqui -->
-                                    </div>
-                                    
-                                    <div class="mt-auto pt-3 border-t border-white/5 flex items-center justify-center shrink-0">
-                                        <img src="https://i.imgur.com/RqZd35M.png" class="h-3.5 w-auto opacity-50 grayscale mr-2">
-                                        <span class="text-[6px] text-slate-500 uppercase tracking-widest">Powered by Saturno NFC</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Animação do Cartão NFC -->
-                        <div id="card-approach-anim" class="absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
-                            <div class="w-full flex justify-end">
-                                <div class="w-3 h-3 rounded-full bg-slate-200"></div>
-                            </div>
-                            <i data-lucide="wifi" class="text-slate-400 w-8 h-8 rotate-90 drop-shadow-md"></i>
-                            <div class="w-full flex justify-start">
-                                <div class="w-6 h-1.5 bg-slate-200 rounded-full"></div>
-                            </div>
-                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-[3px] border-orange-500 rounded-full opacity-0" style="animation: tapRipple 5.5s infinite ease-out;"></div>
-                        </div>
-
-                        <!-- TAGS FLUTUANTES -->
-                        <div class="absolute -left-16 sm:-left-24 top-20 animate-float-tag-1 z-20 pointer-events-none">
-                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-pink-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(236,72,153,0.15)]">
-                                <img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain"> 
-                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Redes Sociais</span>
-                            </div>
-                        </div>
-                        <div class="absolute -right-12 sm:-right-20 top-40 animate-float-tag-2 z-20 pointer-events-none">
-                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-amber-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(245,158,11,0.15)]">
-                                <i data-lucide="coffee" class="w-5 h-5 text-amber-500"></i> 
-                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Serviços / Menu</span>
-                            </div>
-                        </div>
-                        <div class="absolute -left-10 sm:-left-16 bottom-48 animate-float-tag-3 z-20 pointer-events-none">
-                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-blue-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(59,130,246,0.15)]">
-                                <i data-lucide="globe" class="w-5 h-5 text-blue-500"></i> 
-                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Site Oficial</span>
-                            </div>
-                        </div>
-                        <div class="absolute -right-16 sm:-right-24 bottom-24 animate-float-tag-4 z-20 pointer-events-none">
-                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-emerald-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(16,185,129,0.15)]">
-                                <i data-lucide="message-circle" class="w-5 h-5 text-emerald-500"></i> 
-                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">WhatsApp</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lado Direito: Explicação -->
-                    <div class="flex-1 space-y-6 w-full max-w-xl order-2 lg:order-2">
-                        <div class="card-interactive p-6 reveal-node group border-l-4 border-l-orange-500 bg-orange-500/5 hover:bg-orange-500/10 rounded-r-xl">
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
-                                <div class="p-2 bg-orange-500/20 rounded-lg"><i data-lucide="target" class="w-5 h-5 text-orange-500"></i></div>
-                                Conquista Instantânea
-                            </h3>
-                            <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                              Ao aproximar o seu Cartão NFC, o cliente vive uma experiência tecnológica que gera autoridade imediata. Demonstre inovação no primeiro segundo.
-                            </p>
-                        </div>
-                        <div class="card-interactive p-6 reveal-node group border-l-4 border-l-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-r-xl" style="transition-delay: 200ms;">
-                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
-                                <div class="p-2 bg-emerald-500/20 rounded-lg"><i data-lucide="download" class="w-5 h-5 text-emerald-500"></i></div>
-                               Alta Conversão
-                            </h3>
-                            <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                               Com botões inteligentes de ação rápida, o cliente pode salvar seu contato na agenda, falar com sua empresa pelo WhatsApp, avaliar no Google, agendar horário, conectar ao wi-fi, ter acesso a localização sem esforço e sem digitação.
-                            </p>
-                        </div>
-                    </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-chats-circle text-brand-blue text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais conversões no Whats</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-users text-brand-purple text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Insta</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-star text-brand-gold text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais avaliações no Google</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-briefcase text-gray-300 text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Aparência profissional</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-recycle text-[#25D366] text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
                 </div>
             </div>
         </section>
 
-        <!-- SECÇÃO: TAGS PARA ESTABELECIMENTOS FISICOS -->
-        <section id="tags-estabelecimento" class="py-24 px-8 border-t border-white/5 relative bg-[#05070a] overflow-hidden">
-            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-600/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
-
-            <div class="container mx-auto max-w-7xl relative z-10">
-                <div class="text-center mb-16 reveal-node">
-                    <span class="text-amber-500 font-bold uppercase tracking-[0.5em] text-[9px]">Tags para Pontos Físicos</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Interação no <span class="text-gradient">Balcão e Mesa.</span></h2>
-                    <p class="mt-4 text-slate-400 text-sm max-w-3xl mx-auto italic-serif">
-                        Diferente dos Cartões de Visita (para reuniões e prospecção de rua), as <strong>Tags NFC</strong> são pontos estáticos e fixos (adesivos ou totens de acrílico) que você cola no balcão, caixa ou mesas da sua loja, clínica ou restaurante.
-                    </p>
-                </div>
-
-                <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-                    <!-- Lado Esquerdo: Controles -->
-                    <div class="w-full lg:w-1/3 flex flex-col gap-4 reveal-node">
-                        <h3 class="text-white font-bold uppercase tracking-widest text-[11px] mb-2 text-slate-500 border-b border-white/10 pb-4">Selecione a Ação da Tag Estática:</h3>
-                        
-                        <button id="btn-tag-google" onclick="changeTagType('google')" class="tag-control-btn w-full text-left p-5 rounded-xl border border-white/40 bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all duration-300 flex items-center gap-4 group cursor-pointer">
-                            <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center border border-amber-500/30 group-hover:scale-110 transition-transform">
-                                <i data-lucide="star" class="w-5 h-5 text-amber-400"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-black uppercase text-[12px] tracking-wider">Avaliação Google</h4>
-                                <span class="text-[9px] text-slate-400 uppercase tracking-widest">Captação de 5 Estrelas</span>
-                            </div>
-                        </button>
-
-                        <button id="btn-tag-wifi" onclick="changeTagType('wifi')" class="tag-control-btn w-full text-left p-5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/5 transition-all duration-300 flex items-center gap-4 group cursor-pointer">
-                            <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center border border-blue-500/30 group-hover:scale-110 transition-transform">
-                                <i data-lucide="wifi" class="w-5 h-5 text-blue-400"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-black uppercase text-[12px] tracking-wider">Conexão Wi-Fi</h4>
-                                <span class="text-[9px] text-slate-400 uppercase tracking-widest">Acesso Instantâneo</span>
-                            </div>
-                        </button>
-
-                        <button id="btn-tag-menu" onclick="changeTagType('menu')" class="tag-control-btn w-full text-left p-5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/5 transition-all duration-300 flex items-center gap-4 group cursor-pointer">
-                            <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center border border-orange-500/30 group-hover:scale-110 transition-transform">
-                                <i data-lucide="coffee" class="w-5 h-5 text-orange-400"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-black uppercase text-[12px] tracking-wider">Cardápio / Menu</h4>
-                                <span class="text-[9px] text-slate-400 uppercase tracking-widest">Mesa Inteligente</span>
-                            </div>
-                        </button>
-                    </div>
-
-                    <!-- Lado Direito: Visualização -->
-                    <div class="w-full lg:w-2/3 reveal-node relative">
-                        <div id="tag-display-glow" class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] blur-[80px] rounded-full transition-all duration-500 bg-gradient-to-br from-amber-600/20 to-yellow-600/5 pointer-events-none z-0"></div>
-
-                        <div id="tag-display-area" class="card-interactive p-8 md:p-12 rounded-2xl relative z-10 flex flex-col md:flex-row items-center gap-10 transition-opacity duration-500">
-                            <!-- A Tag Visual -->
-                            <div class="shrink-0 relative perspective-1000">
-                                <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-black/50 blur-md rounded-[100%]"></div>
-                                <div id="tag-visual-puck" class="w-40 h-40 rounded-full border-2 border-amber-400/30 bg-amber-400/10 flex items-center justify-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_40px_rgba(0,0,0,0.5)] transform rotateX-12">
-                                    <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-                                    <div class="absolute inset-2 border border-white/10 rounded-full"></div>
-                                    <i data-lucide="star" class="w-16 h-16 text-amber-400 relative z-10 filter drop-shadow-md"></i>
-                                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-50">
-                                        <i data-lucide="wifi" class="w-4 h-4 text-white rotate-90"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Benefícios -->
-                            <div class="flex-1">
-                                <h3 id="tag-display-title" class="text-2xl font-black text-white uppercase tracking-tighter mb-3">Avaliação Google</h3>
-                                <p id="tag-display-desc" class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold mb-6 italic-serif">
-                                    Aproveite o momento exato em que o cliente está satisfeito no balcão para captar uma avaliação 5 estrelas em segundos, sem que ele precise pesquisar pelo seu negócio.
-                                </p>
-                                
-                                <ul id="tag-benefits-list" class="space-y-3">
-                                    <li class="flex items-start text-slate-300 text-[11px] uppercase tracking-wider">
-                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Aumente o SEO Local e destaque-se no Google Maps.
-                                    </li>
-                                    <li class="flex items-start text-slate-300 text-[11px] uppercase tracking-wider">
-                                        <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Acesso direto à página de avaliação (1 Clique).
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Footer -->
+        <footer class="w-full text-center pb-8 border-t border-white/5 pt-8 stagger-item" style="animation-delay: 0.7s;">
+            <div class="w-24 mx-auto mb-4 opacity-50">
+                <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto grayscale">
             </div>
-        </section>
+            
+            <p class="text-gray-400 text-sm mb-6">Tecnologia que aproxima marcas e pessoas.</p>
+            
+            <!-- Botão CTA Final -->
+            <a href="#" class="inline-block bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] mb-8 transform hover:scale-105 duration-200">
+                Quero meu Cartão Inteligente
+            </a>
 
-        <!-- SECÇÃO: SIMULAÇÃO PRÁTICA -->
-        <section id="animacao-toque" class="py-24 px-4 sm:px-8 border-t border-white/5 relative bg-[#090b10] overflow-hidden">
-            <div class="container mx-auto max-w-7xl">
-                <div class="text-center mb-20 reveal-node">
-                    <span class="text-emerald-500 font-bold uppercase tracking-[0.5em] text-[9px]">A Experiência Real com Tags Físicas</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Ação e <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-500">Reação.</span></h2>
-                    <p class="mt-4 text-slate-400 text-sm max-w-2xl mx-auto italic-serif">Observe o que acontece instantaneamente no ecrã do telemóvel quando ele é aproximado de uma <strong>Tag NFC</strong> estática no seu balcão ou mesa.</p>
-                </div>
-
-                <!-- Grid de Simulação (3 Colunas) -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-8 relative z-10">
-                    
-                    <!-- Coluna 1: Wi-Fi -->
-                    <div class="flex flex-col items-center reveal-node">
-                        <div class="mb-8 text-center h-16">
-                            <h3 class="text-white font-black uppercase tracking-widest text-[14px]">Conexão Wi-Fi</h3>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-2">Um toque, rede conectada.</p>
-                        </div>
-                        
-                        <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                            <div class="absolute bottom-10 w-40 h-40 bg-blue-500/10 blur-[40px] rounded-full"></div>
-
-                            <div class="absolute top-0 flex flex-col items-center z-10">
-                                <div class="absolute w-20 h-20 border-[2px] border-blue-400 rounded-full animate-sim-ripple" style="animation-delay: 0s;"></div>
-                                <div class="w-16 h-16 rounded-full border border-blue-400/40 bg-blue-400/10 flex items-center justify-center transform rotateX-12 shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
-                                    <i data-lucide="wifi" class="w-6 h-6 text-blue-400 drop-shadow-lg"></i>
-                                </div>
-                            </div>
-
-                            <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone" style="animation-delay: 0s;">
-                                <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
-                                
-                                <div class="absolute inset-0 bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop')] before:absolute before:inset-0 before:bg-black/40 animate-sim-screen" style="animation-delay: 0s;">
-                                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] bg-white/95 backdrop-blur-md rounded-2xl p-5 flex flex-col items-center text-center shadow-2xl">
-                                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3 shadow-inner">
-                                            <i data-lucide="check" class="w-6 h-6 text-green-600"></i>
-                                        </div>
-                                        <h4 class="text-black font-black text-[13px] mb-1">Wifi Local</h4>
-                                        <p class="text-[10px] text-green-600 font-bold mb-0 leading-tight uppercase tracking-wide">Conectado com sucesso</p>
-                                    </div>
-                                </div>
-                                <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
-                                    <i data-lucide="lock" class="w-6 h-6 text-slate-700 mb-2"></i>
-                                    <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Coluna 2: Google Review -->
-                    <div class="flex flex-col items-center reveal-node" style="transition-delay: 200ms;">
-                        <div class="mb-8 text-center h-16">
-                            <h3 class="text-white font-black uppercase tracking-widest text-[14px]">Avaliação Google</h3>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-2">5 Estrelas sem pesquisa.</p>
-                        </div>
-                        
-                        <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                            <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
-
-                            <div class="absolute top-0 flex flex-col items-center z-10">
-                                <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple" style="animation-delay: 2s;"></div>
-                                <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center transform rotateX-12 shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
-                                    <i data-lucide="star" class="w-6 h-6 text-amber-400 drop-shadow-lg"></i>
-                                </div>
-                            </div>
-
-                            <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone" style="animation-delay: 2s;">
-                                <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
-                                
-                                <div class="absolute inset-0 bg-white animate-sim-screen flex flex-col" style="animation-delay: 2s;">
-                                    <div class="h-12 border-b border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
-                                        <span class="font-black text-[12px] tracking-tighter">
-                                            <span class="text-blue-500">G</span><span class="text-red-500">o</span><span class="text-yellow-500">o</span><span class="text-blue-500">g</span><span class="text-green-500">l</span><span class="text-red-500">e</span> Maps
-                                        </span>
-                                    </div>
-                                    <div class="p-4 flex-1 flex flex-col items-center text-center">
-                                        <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-3 overflow-hidden">
-                                            <i data-lucide="building" class="w-5 h-5 text-gray-500"></i>
-                                        </div>
-                                        <h4 class="text-black font-bold text-[12px] mb-1">Restaurante</h4>
-                                        <p class="text-[9px] text-gray-500 mb-5 leading-tight">Avalie a sua experiência neste local.</p>
-                                        
-                                        <div class="flex gap-1 mb-6">
-                                            <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
-                                            <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
-                                            <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
-                                            <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
-                                            <i data-lucide="star" class="w-7 h-7 text-yellow-400 fill-yellow-400"></i>
-                                        </div>
-
-                                        <div class="w-full bg-gray-100 rounded-lg h-16 border border-gray-200 p-2 text-left mb-4">
-                                            <span class="text-[8px] text-gray-400">Descreva a sua experiência...</span>
-                                        </div>
-
-                                        <button class="w-full py-2.5 bg-blue-600 text-white rounded-full font-bold text-[10px] shadow-md mt-auto">Postar Avaliação</button>
-                                    </div>
-                                </div>
-
-                                <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
-                                    <i data-lucide="lock" class="w-6 h-6 text-slate-700 mb-2"></i>
-                                    <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Coluna 3: Cardápio / Agendamento -->
-                    <div class="flex flex-col items-center reveal-node" style="transition-delay: 400ms;">
-                        <div class="mb-8 text-center h-16">
-                            <h3 class="text-white font-black uppercase tracking-widest text-[14px]">Cardápio Digital</h3>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-2">Acesso imediato à oferta.</p>
-                        </div>
-                        
-                        <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                            <div class="absolute bottom-10 w-40 h-40 bg-orange-500/10 blur-[40px] rounded-full"></div>
-
-                            <div class="absolute top-0 flex flex-col items-center z-10">
-                                <div class="absolute w-20 h-20 border-[2px] border-orange-400 rounded-full animate-sim-ripple" style="animation-delay: 4s;"></div>
-                                <div class="w-16 h-16 rounded-full border border-orange-400/40 bg-orange-400/10 flex items-center justify-center transform rotateX-12 shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
-                                    <i data-lucide="coffee" class="w-6 h-6 text-orange-400 drop-shadow-lg"></i>
-                                </div>
-                            </div>
-
-                            <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone" style="animation-delay: 4s;">
-                                <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
-                                
-                                <div class="absolute inset-0 bg-[#fafafa] animate-sim-screen flex flex-col" style="animation-delay: 4s;">
-                                    <div class="h-24 bg-gradient-to-r from-orange-600 to-amber-500 relative flex items-end px-4 pb-2 shrink-0">
-                                        <div class="absolute inset-0 bg-black/20"></div>
-                                        <h4 class="text-white font-black text-[14px] relative z-10 drop-shadow-md">Menu Digital</h4>
-                                        <div class="absolute top-5 right-3 w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center z-10">
-                                            <i data-lucide="search" class="w-3 h-3 text-white"></i>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="flex-1 overflow-y-hidden p-3 space-y-3">
-                                        <div class="flex gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 items-center">
-                                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
-                                                <i data-lucide="coffee" class="w-6 h-6 text-orange-500"></i>
-                                            </div>
-                                            <div class="flex-1">
-                                                <h5 class="text-black font-bold text-[10px]">Café Expresso</h5>
-                                                <p class="text-gray-400 text-[7px] leading-tight">Grãos premium.</p>
-                                                <span class="text-orange-600 font-black text-[10px]">R$ 8,00</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 items-center">
-                                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
-                                                <i data-lucide="pizza" class="w-6 h-6 text-orange-500"></i>
-                                            </div>
-                                            <div class="flex-1">
-                                                <h5 class="text-black font-bold text-[10px]">Fatia Artesanal</h5>
-                                                <p class="text-gray-400 text-[7px] leading-tight">Massa crocante.</p>
-                                                <span class="text-orange-600 font-black text-[10px]">R$ 15,00</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100 items-center">
-                                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center shrink-0">
-                                                <i data-lucide="beer" class="w-6 h-6 text-orange-500"></i>
-                                            </div>
-                                            <div class="flex-1">
-                                                <h5 class="text-black font-bold text-[10px]">Cerveja Artesanal</h5>
-                                                <p class="text-gray-400 text-[7px] leading-tight">Copo 500ml.</p>
-                                                <span class="text-orange-600 font-black text-[10px]">R$ 22,00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-
-                                <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
-                                    <i data-lucide="lock" class="w-6 h-6 text-slate-700 mb-2"></i>
-                                    <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="mt-20 max-w-4xl mx-auto p-6 md:p-8 bg-blue-900/10 border border-blue-500/20 rounded-2xl flex flex-col md:flex-row items-center gap-6 reveal-node text-center md:text-left">
-                    <div class="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0 border border-blue-500/30">
-                        <i data-lucide="infinity" class="w-8 h-8 text-blue-400"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-white font-black uppercase tracking-widest text-[16px] mb-2">Tecnologia (Zero Bateria)</h4>
-                        <p class="text-slate-200 text-[14px] leading-relaxed font-medium">
-                            As tags da Saturno NFC <strong>não utilizam bateria</strong> e possuem vida útil estimada <strong>superior a 10 anos</strong>, suportando centenas de milhares de leituras e regravações sem perder eficiência.
-                        </p>
-                    </div>
-                </div>
-
+            <!-- Ícones Sociais -->
+            <div class="flex justify-center gap-6">
+                <a href="#" class="text-gray-500 hover:text-[#25D366] transition-colors"><i class="ph ph-whatsapp-logo text-2xl"></i></a>
+                <a href="#" class="text-gray-500 hover:text-[#E1306C] transition-colors"><i class="ph ph-instagram-logo text-2xl"></i></a>
+                <a href="#" class="text-gray-500 hover:text-brand-blue transition-colors"><i class="ph ph-map-pin text-2xl"></i></a>
             </div>
-        </section>
-
-        <!-- SECÇÃO 05: PRODUTOS (Planos Corporativos) -->
-        <section id="produtos" class="py-24 px-8 border-t border-white/5 bg-black/40">
-            <div class="container mx-auto max-w-7xl">
-                <div class="text-center mb-16 reveal-node">
-                    <span class="text-orange-500 font-bold uppercase tracking-[0.5em] text-[9px]">MAIOR CRESCIMENTO E CONVERSÃO</span>
-                    <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Escolha seu <span class="text-gradient">Plano</span></h2>
-                </div>
-
-                <!-- GRADE PRINCIPAL: 3 COLUNAS -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    
-                    <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-white/10">
-                        <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Plano Starter</h3>
-                            <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">O pacote essencial para dar o primeiro passo no networking digital.</p>
-                            
-                            <div class="text-4xl font-black text-white mb-6 tracking-tighter">
-                                R$ 350
-                            </div>
-
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 3 Cartões NFC corporativos personalizados
-                                </li>
-                                      <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 2 tag físicas estabelecimentos (Agendamento e Avaliação Google)
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Tag Personalizada de Avaliação Google
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Website com domínio próprio e identidade da sua marca
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i>  NFC (Wi-Fi) + QR CODE
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Agendamento e Redes Sociais
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Botão conversar WhatsApp
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização, Salvar contato...
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
-                            Escolher Plano
-                        </button>
-                    </div>
-
-                    <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-orange-500/40 relative transform lg:-translate-y-4 bg-orange-500/[0.02] shadow-[0_0_30px_rgba(234,88,12,0.1)]" style="transition-delay: 100ms;">
-                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-500 text-black px-6 py-1.5 text-[9px] font-black uppercase tracking-widest whitespace-nowrap rounded-full">
-                            Mais Vendido
-                        </div>
-                        <div>
-                            <h3 class="text-orange-400 text-xl font-black uppercase tracking-widest mb-2">MAIS ALCANCE</h3>
-                            <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">Presença completa com identidade visual e funções avançadas.</p>
-                            
-                            <div class="text-5xl font-black text-white mb-6 tracking-tighter">
-                                R$ 650
-                            </div>
-
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 9 Cartões NFC corporativos personalizados
-                                </li>
-                                      <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Até 10 tags físicas estabelecimentos 
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Tag Personalizada de Avaliação Google
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site personalizado com a identidade do seu negócio
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Domínio próprio
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Agendamento e Redes Sociais
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> NFC (Wi-Fi) + QR CODE
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização, Salvar contato...
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Botão Premium Atualizado -->
-                        <button class="w-full btn-premium py-4 text-white text-[11px] font-black uppercase tracking-[0.2em] mt-auto">
-                            Escolher Plano
-                        </button>
-                    </div>
-
-                    <div class="project-button p-6 md:p-8 flex flex-col justify-between min-h-[480px] reveal-node border-white/10" style="transition-delay: 200ms;">
-                        <div>
-                            <h3 class="text-white text-xl font-black uppercase tracking-widest mb-2">Kit Restaurante</h3>
-                            <p class="text-slate-500 text-[10px] uppercase tracking-widest mb-6">Ideal para bares, restaurantes, cafeterias e lanchonetes.</p>
-                            
-                            <div class="text-4xl font-black text-white mb-6 tracking-tighter">
-                                R$ 1.000
-                     </div>
-
-                            <ul class="space-y-4 mb-8">
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Até 25 tags NFC de mesa (Cardápio)
-                                </li>
-                                      <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 15 Cartões NFC corporativo personalizados
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 10 tags para usar como quiser (Wi-fi, chave pix, localização, site) 
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> 1 Chaveiro NFC (Instagram) 
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Cardápio Personalizado 
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="star" class="w-4 h-4 text-amber-400 mr-3 shrink-0"></i> Site profissional, SEO e domínio próprio
-                                     </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Dados de acesso, cliques nos botões, retenção...
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i> Localização, Avaliações 
-                                </li>
-                                <li class="flex items-start text-[11px] uppercase tracking-wider text-slate-300">
-                                    <i data-lucide="check" class="w-4 h-4 text-emerald-500 mr-3 shrink-0"></i>  NFC (Wi-Fi) + QR CODE
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="w-full py-4 border border-white/20 hover:bg-white/10 text-white text-[11px] font-black uppercase tracking-[0.2em] transition-colors mt-auto rounded-full">
-                            Escolher Plano
-                        </button>
-                    </div>
-                </div>
-
-                <div class="max-w-4xl mx-auto mt-12 project-button p-6 md:p-10 flex flex-col md:flex-row items-center justify-between border-white/10 reveal-node bg-white/[0.02]" style="transition-delay: 300ms;">
-                    <div class="flex-1 md:pr-12 mb-8 md:mb-0 text-center md:text-left">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[9px] font-bold mb-4 uppercase tracking-[0.2em] rounded">
-                            <i data-lucide="layout-template" class="w-3 h-3"></i> Opcional
-                        </div>
-                        <h3 class="text-white text-2xl font-black uppercase tracking-widest mb-3">Website Profissional + SEO</h3>
-                        <p class="text-slate-500 text-[11px] uppercase tracking-widest mb-6 leading-relaxed">
-                            Desenvolvimento de um site institucional de alta performance, otimizado para os motores de busca (SEO) e integrado com Google Analytics.
-                        </p>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 text-left">
-                            <div class="flex items-center text-[10px] uppercase tracking-wider text-slate-300">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 mr-2 shrink-0"></i> Otimização SEO Google
-                            </div>
-                            <div class="flex items-center text-[10px] uppercase tracking-wider text-slate-300">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 mr-2 shrink-0"></i> Integração Google Analytics
-                            </div>
-                            <div class="flex items-center text-[10px] uppercase tracking-wider text-slate-300">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 mr-2 shrink-0"></i> Design Responsivo Premium
-                            </div>
-                            <div class="flex items-center text-[10px] uppercase tracking-wider text-slate-300">
-                                <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 mr-2 shrink-0"></i> Domínio Personalizado
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="w-full md:w-auto flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-12">
-                        <div class="text-4xl font-black text-white mb-6 tracking-tighter flex items-end justify-center">
-                            R$ 600
-                        </div>
-                        <button class="w-full px-10 py-4 btn-white-glow text-[11px] font-black uppercase tracking-[0.2em]">
-                            Solicitar Website
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SECÇÃO 06: PLANOS CORPORATIVOS B2B E PORTFÓLIO -->
-        <section id="marketing" class="py-24 px-8 border-t border-white/5">
-            <div class="container mx-auto max-w-5xl">
-                <div class="card-interactive p-10 md:p-16 relative overflow-hidden reveal-node border border-blue-500/20 rounded-[2rem]">
-                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/10 blur-[120px]"></div>
-                    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-600/10 blur-[120px]"></div>
-                    
-                    <div class="relative z-10 flex flex-col items-center text-center">
-                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-blue-500/10 border-l-4 border-blue-500 text-blue-400 text-[9px] font-bold mb-8 uppercase tracking-[0.5em]">
-                            <i data-lucide="building" class="w-3.5 h-3.5"></i> Contratos Empresariais
-                        </div>
-                        <h2 class="text-4xl md:text-5xl font-black text-white mb-6 tracking-tighter uppercase leading-none">
-                            NOSSO PORTFÓLIO COM <br/> <span class="text-gradient-blue">TRABALHOS JÁ CONCLUÍDOS.</span>
-                        </h2>
-
-                        <!-- Grelha de Portfólio -->
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-4xl mx-auto mb-12">
-                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-blue-500/10 hover:border-blue-500/40 transition-all duration-300 group cursor-default shadow-lg">
-                                <div class="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="laptop" class="w-5 h-5 text-blue-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">TechNova</h4>
-                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Tecnologia & Software</span>
-                                </div>
-                            </div>
-                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-orange-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all duration-300 group cursor-default shadow-lg">
-                                <div class="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center border border-orange-500/20 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="utensils" class="w-5 h-5 text-orange-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Restaurante</h4>
-                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Rede de Restaurantes</span>
-                                </div>
-                            </div>
-                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-emerald-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all duration-300 group cursor-default shadow-lg">
-                                <div class="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="home" class="w-5 h-5 text-emerald-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Imóveis</h4>
-                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Mercado Imobiliário</span>
-                                </div>
-                            </div>
-                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-pink-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-pink-500/10 hover:border-pink-500/40 transition-all duration-300 group cursor-default shadow-lg">
-                                <div class="w-12 h-12 bg-pink-500/10 rounded-full flex items-center justify-center border border-pink-500/20 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="scissors" class="w-5 h-5 text-pink-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Salão de Beleza</h4>
-                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Estética & Beleza</span>
-                                </div>
-                            </div>
-                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-purple-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-purple-500/10 hover:border-purple-500/40 transition-all duration-300 group cursor-default shadow-lg">
-                                <div class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center border border-purple-500/20 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="briefcase" class="w-5 h-5 text-purple-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Advocacia</h4>
-                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Consultoria Jurídica</span>
-                                </div>
-                            </div>
-                            <div class="bg-[#0B0E14]/80 backdrop-blur-sm border border-cyan-500/20 rounded-xl p-5 flex flex-col items-center justify-center gap-3 hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all duration-300 group cursor-default shadow-lg">
-                                <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center border border-cyan-500/20 group-hover:scale-110 transition-transform">
-                                    <i data-lucide="stethoscope" class="w-5 h-5 text-cyan-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-black text-[12px] uppercase tracking-wider mb-1">Clínica</h4>
-                                    <span class="text-slate-400 text-[8px] uppercase tracking-[0.2em] font-bold block">Saúde & Bem-Estar</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col md:flex-row gap-6 items-center w-full justify-center">
-                            <a href="https://wa.link/hpoklw" target="_blank" class="btn-white-glow px-10 py-5 flex items-center justify-center gap-4 min-w-[300px] group">
-                                <span class="font-black uppercase tracking-[0.3em] text-[10px] relative z-10">Solicitar Cotação para a Equipa</span>
-                                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform relative z-10"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER INSTITUCIONAL -->
-        <footer class="py-16 border-t border-white/5 px-8 bg-black/80 backdrop-blur-sm relative z-20">
-            <div class="container mx-auto max-w-7xl">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                    <div class="flex flex-col items-start gap-5">
-                        <div class="flex items-center gap-3">
-                            <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-10 w-auto object-contain">
-                            <span class="text-white font-black tracking-[0.2em] text-xs uppercase">Saturno <span class="text-orange-500">NFC</span></span>
-                        </div>
-                        <p class="text-slate-600 text-[10px] leading-relaxed uppercase tracking-widest font-bold">
-                            Elevamos a capacidade de networking da sua empresa. Captar futuros clientes nunca foi tão inteligente.
-                        </p>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.5em] mb-3">Para a sua Empresa</span>
-                        <a href="#produtos" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Cartões Comerciais (PVC)</a>
-                        <a href="#tags-estabelecimento" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Tags de Mesa / Balcão</a>
-                        <a href="#produtos" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Linha Diretoria (Metal)</a>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.5em] mb-3">Plataforma</span>
-                        <a href="#metodologia" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">A Estratégia de Captação</a>
-                        <a href="#vantagens" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Funcionalidades do Perfil</a>
-                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest">Login de Funcionários</a>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.5em] mb-3">Contacto Comercial</span>
-                        <a href="https://wa.link/hpoklw" target="_blank" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest flex items-center gap-2"><i data-lucide="message-circle" class="w-3 h-3"></i> Falar com Especialista B2B</a>
-                        <a href="#" class="text-slate-500 hover:text-orange-500 transition-colors text-[9px] uppercase font-bold tracking-widest flex items-center gap-2"><i data-lucide="mail" class="w-3 h-3"></i> comercial@saturnonfc.com</a>
-                    </div>
-                </div>
-                <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div class="text-[8px] text-slate-700 tracking-[0.5em] uppercase font-bold text-center md:text-left">
-                        © 2026 Saturno NFC — Soluções B2B para Captação.
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="#" class="text-[8px] text-slate-700 hover:text-white tracking-[0.2em] uppercase font-bold">Termos Empresariais</a>
-                        <a href="#" class="text-[8px] text-slate-700 hover:text-white tracking-[0.2em] uppercase font-bold">Privacidade de Dados (RGPD)</a>
-                    </div>
-                </div>
-            </div>
+            
+            <p class="text-xs text-gray-600 mt-8">&copy; 2024 Saturno NFC. Todos os direitos reservados.</p>
         </footer>
+
     </main>
 
+    <!-- Scripts de Interatividade -->
     <script>
-        lucide.createIcons();
-
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.body.classList.add('loaded');
-                initScrollReveal();
-            }, 800);
-        });
-
-        // =========================================================
-        // LÓGICA DO CARTÃO 3D COM GIRO FÍSICO E TROCA DE CORES
-        // =========================================================
-        const niches = [
-            { name: "Restaurante", icon: "utensils", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
-            { name: "Clínica", icon: "stethoscope", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-            { name: "Sua Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
-            { name: "Barbearia", icon: "scissors", color: "text-amber-700", bg: "bg-amber-700/10", border: "border-amber-700/30" },
-            { name: "Advocacia", icon: "scale", color: "text-slate-600", bg: "bg-slate-600/10", border: "border-slate-600/30" },
-            { name: "Imóveis", icon: "home", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
-            { name: "Sua Empresa", icon: "briefcase", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
-        ];
+        // --- 1. BOTÕES MAGNÉTICOS SUTIS ---
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
         
-        let nicheIndex = 0;
-        let isBlackCard = false;
-        
-        const cardInner = document.getElementById('card-inner-flip');
-        const cardBg = document.getElementById('hero-3d-card-bg');
-        const nicheEl = document.getElementById('niche-rotator');
-        const iconContainer = document.getElementById('card-dynamic-icon');
-        const wifiIcon = document.getElementById('card-wifi-icon');
-        const cardChip = document.getElementById('card-chip');
-        const cardChipIcon = document.getElementById('card-chip-icon');
-        const cardLine1 = document.getElementById('card-line-1');
-        const cardLine2 = document.getElementById('card-line-2');
-
-        if (cardInner && nicheEl && iconContainer) {
-            setInterval(() => {
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
                 
-                // Fase 1: Inicia o giro (Roda o cartão 90 graus para ficar invisível de perfil)
-                cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
-                cardInner.style.transform = 'rotateY(90deg) scale(1.05)';
-                cardInner.style.filter = 'brightness(1.5)';
-                
-                setTimeout(() => {
-                    // Fase 2: Ponto cego (O cartão está girado de lado)
-                    // -> É o momento perfeito para trocar o conteúdo sem ninguém perceber
-                    isBlackCard = !isBlackCard;
-
-                    // Troca Cores Preto/Branco e aplica classes com tamanhos responsivos ajustados
-                    if(isBlackCard) {
-                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-zinc-900 to-black rounded-[2rem] border border-zinc-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden backface-hidden";
-                        nicheEl.classList.replace('text-gray-900', 'text-white');
-                        wifiIcon.classList.replace('text-gray-400', 'text-zinc-500');
-                        cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-zinc-800/80 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-zinc-600 flex items-center justify-center overflow-hidden shadow-sm";
-                        cardChipIcon.classList.replace('text-gray-500', 'text-zinc-400');
-                        cardLine1.classList.replace('bg-gray-300', 'bg-zinc-700');
-                        cardLine2.classList.replace('bg-gray-300', 'bg-zinc-700');
-                    } else {
-                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden";
-                        nicheEl.classList.replace('text-white', 'text-gray-900');
-                        wifiIcon.classList.replace('text-zinc-500', 'text-gray-400');
-                        cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm";
-                        cardChipIcon.classList.replace('text-zinc-400', 'text-gray-500');
-                        cardLine1.classList.replace('bg-zinc-700', 'bg-gray-300');
-                        cardLine2.classList.replace('bg-zinc-700', 'bg-gray-300');
-                    }
-
-                    // Troca Nome e Ícones, mantendo dimensões responsivas que foram aplicadas
-                    nicheIndex = (nicheIndex + 1) % niches.length;
-                    const comp = niches[nicheIndex];
-                    nicheEl.innerText = comp.name;
-                    iconContainer.innerHTML = `<i data-lucide="${comp.icon}" class="w-6 h-6 sm:w-7 sm:h-7 ${comp.color}"></i>`;
-                    iconContainer.className = `w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl shadow-lg border ${comp.bg} ${comp.border}`;
-                    lucide.createIcons();
-
-                    // Prepara a segunda metade do giro
-                    // Saltamos o cartão para -90 graus instantaneamente sem transição
-                    cardInner.style.transition = 'none';
-                    cardInner.style.transform = 'rotateY(-90deg) scale(1.05)';
-                    
-                    // Força o navegador a processar o salto de posição antes de ativar a transição final
-                    void cardInner.offsetWidth;
-
-                    // Fase 3: Traz o cartão de volta até 0 graus (Completando a ilusão de um flip completo de 180)
-                    cardInner.style.transition = 'transform 0.4s ease-out, filter 0.4s ease-out';
-                    cardInner.style.transform = 'rotateY(0deg) scale(1)';
-                    cardInner.style.filter = 'brightness(1)';
-                    
-                }, 400); 
-            }, 4000); 
-        }
-
-        // =========================================================
-        // LÓGICA TAGS DE ESTABELECIMENTO
-        // =========================================================
-        const tagData = {
-            google: {
-                title: "Avaliação Google",
-                icon: "star",
-                colorClass: "text-amber-400",
-                bgClass: "bg-amber-400/10",
-                borderClass: "border-amber-400/30",
-                glowClass: "from-amber-600/20 to-yellow-600/5",
-                desc: "Aproveite o momento exato em que o cliente está satisfeito no balcão para captar uma avaliação 5 estrelas em segundos, sem que ele precise pesquisar pelo seu negócio.",
-                benefits: [
-                    "Aumente o SEO Local e destaque-se no Google Maps.",
-                    "Acesso direto à página de avaliação (1 Clique)."
-                ]
-            },
-            wifi: {
-                title: "Conexão Wi-Fi Instantânea",
-                icon: "wifi",
-                colorClass: "text-blue-400",
-                bgClass: "bg-blue-400/10",
-                borderClass: "border-blue-400/30",
-                glowClass: "from-blue-600/20 to-cyan-600/5",
-                desc: "Elimine o atrito de partilhar senhas difíceis. O cliente aproxima o telemóvel à tag e conecta-se automaticamente à rede do seu estabelecimento.",
-                benefits: [
-                    "Fim da pergunta: 'Qual é a senha do Wi-Fi?'.",
-                    "Experiência premium e moderna, sem necessidade de digitação."
-                ]
-            },
-            menu: {
-                title: "Cardápio / Menu na Mesa",
-                icon: "coffee",
-                colorClass: "text-orange-400",
-                bgClass: "bg-orange-400/10",
-                borderClass: "border-orange-400/30",
-                glowClass: "from-orange-600/20 to-red-600/5",
-                desc: "Cole uma Tag NFC (Adesivo ou Acrílico) em cada mesa ou balcão. O cliente acede instantaneamente ao cardápio digital, campanhas ou sistema de pedidos.",
-                benefits: [
-                    "Reduz drasticamente os custos com impressão de menus.",
-                    "Atualize preços e adicione links em tempo real no sistema."
-                ]
-            }
-        };
-
-        window.changeTagType = function(type) {
-            document.querySelectorAll('.tag-control-btn').forEach(btn => {
-                btn.classList.remove('border-white/40', 'bg-white/10', 'shadow-[0_0_15px_rgba(255,255,255,0.1)]');
-                btn.classList.add('border-white/5', 'bg-white/[0.02]');
+                // Move o botão ligeiramente em direção ao mouse
+                btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) scale(1.02)`;
             });
-            const activeBtn = document.getElementById('btn-tag-' + type);
-            activeBtn.classList.remove('border-white/5', 'bg-white/[0.02]');
-            activeBtn.classList.add('border-white/40', 'bg-white/10', 'shadow-[0_0_15px_rgba(255,255,255,0.1)]');
-
-            const displayArea = document.getElementById('tag-display-area');
-            displayArea.style.opacity = '0';
             
-            setTimeout(() => {
-                const data = tagData[type];
-                document.getElementById('tag-display-title').innerText = data.title;
-                document.getElementById('tag-display-desc').innerText = data.desc;
-                
-                const visualTag = document.getElementById('tag-visual-puck');
-                visualTag.className = `w-40 h-40 rounded-full border-2 flex items-center justify-center relative overflow-hidden transition-all duration-500 shadow-[0_20px_40px_rgba(0,0,0,0.5)] transform rotateX-12 ${data.bgClass} ${data.borderClass}`;
-                
-                visualTag.innerHTML = `
-                    <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-                    <div class="absolute inset-2 border border-white/10 rounded-full"></div>
-                    <i data-lucide="${data.icon}" class="w-16 h-16 ${data.colorClass} relative z-10 filter drop-shadow-md"></i>
-                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 opacity-50">
-                        <i data-lucide="wifi" class="w-4 h-4 text-white rotate-90"></i>
-                    </div>
-                `;
-                
-                const glow = document.getElementById('tag-display-glow');
-                glow.className = `absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] blur-[80px] rounded-full transition-all duration-500 bg-gradient-to-br pointer-events-none z-0 ${data.glowClass}`;
-                
-                const benefitsList = document.getElementById('tag-benefits-list');
-                benefitsList.innerHTML = data.benefits.map(b => `
-                    <li class="flex items-start text-slate-300 text-[11px] uppercase tracking-wider mb-3">
-                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-3 shrink-0 ${data.colorClass}"></i> ${b}
-                    </li>
-                `).join('');
-
-                lucide.createIcons();
-                displayArea.style.opacity = '1'; 
-            }, 300);
-        };
-
-        let currentTagIndex = 0;
-        const tagTypesList = ['google', 'wifi', 'menu'];
-        
-        let tagAutoRotation = setInterval(() => {
-            currentTagIndex = (currentTagIndex + 1) % tagTypesList.length;
-            window.changeTagType(tagTypesList[currentTagIndex]);
-        }, 5000);
-
-        document.querySelectorAll('.tag-control-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                clearInterval(tagAutoRotation);
-                tagAutoRotation = setInterval(() => {
-                    currentTagIndex = (currentTagIndex + 1) % tagTypesList.length;
-                    window.changeTagType(tagTypesList[currentTagIndex]);
-                }, 8000);
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate(0px, 0px) scale(1)`;
             });
         });
 
-        // =========================================================
-        // SCROLL REVEAL E THREE.JS
-        // =========================================================
-        function initScrollReveal() {
-            const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-            }, observerOptions);
-            document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
-        }
 
-        const canvas = document.getElementById('bg-canvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        function createStars(count, size, opacity, colorBase) {
-            const geo = new THREE.BufferGeometry();
-            const pos = new Float32Array(count * 3);
-            const cols = new Float32Array(count * 3);
-            for(let i = 0; i < count; i++) {
-                pos[i*3] = (Math.random() - 0.5) * 20;
-                pos[i*3+1] = (Math.random() - 0.5) * 20;
-                pos[i*3+2] = (Math.random() - 0.5) * 15;
-                const c = colorBase === 'orange' ? [0.95, 0.4, 0.1] : [0.4, 0.5, 0.8];
-                cols[i*3] = c[0]; cols[i*3+1] = c[1]; cols[i*3+2] = c[2];
-            }
-            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
-            const mat = new THREE.PointsMaterial({ size, vertexColors: true, transparent: true, opacity, blending: THREE.AdditiveBlending });
-            return new THREE.Points(geo, mat);
-        }
-
-        const layer1 = createStars(3500, 0.008, 0.5, 'blue');
-        const layer2 = createStars(800, 0.02, 0.6, 'orange');
-        const layer3 = createStars(150, 0.05, 0.3, 'white'); 
-        scene.add(layer1); scene.add(layer2); scene.add(layer3);
-
-        camera.position.z = 6;
-
-        let mouseX = 0, mouseY = 0;
-        let targetX = 0, targetY = 0;
+        // --- 3. SISTEMA DE PARTÍCULAS NO FUNDO ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
         
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5);
-            mouseY = (e.clientY / window.innerHeight - 0.5);
-        });
-
-        const animate = () => {
-            requestAnimationFrame(animate);
-            targetX += (mouseX - targetX) * 0.03;
-            targetY += (mouseY - targetY) * 0.03;
-            layer1.rotation.y += 0.0003; layer2.rotation.y -= 0.0002; layer3.rotation.y += 0.0001;
-            layer1.position.x = targetX * 1; layer1.position.y = -targetY * 1;
-            layer2.position.x = targetX * 2; layer2.position.y = -targetY * 2;
-            layer3.position.x = targetX * 3.5; layer3.position.y = -targetY * 3.5;
-            camera.position.y = -window.scrollY * 0.0005;
-            renderer.render(scene, camera);
-        };
-        animate();
-
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particlesArray = [];
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                // Cores do tema: Branco, Azul Neon ou Roxo
+                const colors = ['rgba(255,255,255,0.5)', 'rgba(0, 210, 255, 0.3)', 'rgba(138, 43, 226, 0.3)'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Reposiciona se sair da tela
+                if (this.x > canvas.width) this.x = 0;
+                else if (this.x < 0) this.x = canvas.width;
+                
+                if (this.y > canvas.height) this.y = 0;
+                else if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+        
+        function initParticles() {
+            particlesArray = [];
+            // Ajusta quantidade baseada no tamanho da tela (performance)
+            const numberOfParticles = window.innerWidth < 768 ? 40 : 100;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        
+        initParticles();
+        animateParticles();
+        
+        // Redimensiona o canvas ao alterar o tamanho da janela
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
         });
-
-        // 3D Tilt nos blocos
-        document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.card-interactive');
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const cardX = rect.left + rect.width / 2;
-                const cardY = rect.top + rect.height / 2;
-                const angleX = (e.clientY - cardY) / 75;
-                const angleY = (cardX - e.clientX) / 75;
-
-                if (Math.abs(angleX) < 12 && Math.abs(angleY) < 12) {
-                    card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-8px) scale(1.015)`;
-                } else {
-                    card.style.transform = ``;
-                }
-            });
-        });
-
-        // =========================================================
-        // LÓGICA DO CELULAR SIMULADO
-        // =========================================================
-        const phoneProfiles = [
-            {
-                name: "Restaurante",
-                sub: "Tradição e Sabor",
-                cover: "https://images.unsplash.com/photo-1513104890d38-7c0f4fff45f1?q=80&w=600&auto=format&fit=crop",
-                icon: "utensils-crossed",
-                subColor: "text-orange-500",
-                bgGradient: "from-orange-500 to-amber-500",
-                buttons: [
-                    { icon: "book-open", text: "Menu", color: "text-amber-400" },
-                    { icon: "pizza", text: "Pizzas", color: "text-orange-400" },
-                    { icon: "truck", text: "Delivery", color: "text-blue-400" },
-                    { icon: "instagram", text: "Instagram", color: "text-pink-400" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Localização", color: "text-red-400" }
-                ]
-            },
-            {
-                name: "Clínica",
-                sub: "Saúde & Prevenção",
-                cover: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=600&auto=format&fit=crop",
-                icon: "stethoscope",
-                subColor: "text-blue-400",
-                bgGradient: "from-blue-500 to-cyan-500",
-                buttons: [
-                    { icon: "calendar", text: "Agendar", color: "text-cyan-400" },
-                    { icon: "file-text", text: "Exames", color: "text-blue-400" },
-                    { icon: "heart-pulse", text: "Convênios", color: "text-red-400" },
-                    { icon: "users", text: "Médicos", color: "text-emerald-400" },
-                    { icon: "phone", text: "Ligar", color: "text-green-400" },
-                    { icon: "map-pin", text: "Chegar", color: "text-red-500" }
-                ]
-            },
-            {
-                name: "Barbearia",
-                sub: "Estilo & Cabelo",
-                cover: "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=600&auto=format&fit=crop",
-                icon: "scissors",
-                subColor: "text-amber-600",
-                bgGradient: "from-amber-700 to-yellow-600",
-                buttons: [
-                    { icon: "calendar-clock", text: "Horário", color: "text-amber-400" },
-                    { icon: "scissors", text: "Serviços", color: "text-slate-300" },
-                    { icon: "image", text: "Cortes", color: "text-orange-300" },
-                    { icon: "instagram", text: "Instagram", color: "text-pink-400" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Local", color: "text-red-400" }
-                ]
-            },
-            {
-                name: "Cafeteria",
-                sub: "Cafeteria & Especialidades",
-                cover: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=600&auto=format&fit=crop",
-                icon: "coffee",
-                subColor: "text-amber-500",
-                bgGradient: "from-amber-600 to-yellow-500",
-                buttons: [
-                    { icon: "coffee", text: "Cardápio", color: "text-amber-300" },
-                    { icon: "shopping-bag", text: "Takeaway", color: "text-orange-400" },
-                    { icon: "cookie", text: "Doces", color: "text-yellow-500" },
-                    { icon: "instagram", text: "Siga-nos", color: "text-pink-400" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Chegar", color: "text-red-400" }
-                ]
-            },
-            {
-                name: "Salão de Beleza",
-                sub: "Salão de Beleza",
-                cover: "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=600&auto=format&fit=crop",
-                icon: "sparkles",
-                subColor: "text-pink-400",
-                bgGradient: "from-pink-600 to-rose-400",
-                buttons: [
-                    { icon: "calendar-heart", text: "Agendar", color: "text-pink-400" },
-                    { icon: "scissors", text: "Serviços", color: "text-slate-300" },
-                    { icon: "smile", text: "Estética", color: "text-rose-400" },
-                    { icon: "instagram", text: "Portfólio", color: "text-pink-500" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Localização", color: "text-red-400" }
-                ]
-            },
-            {
-                name: "Academia",
-                sub: "Academia & Saúde",
-                cover: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop",
-                icon: "dumbbell",
-                subColor: "text-red-500",
-                bgGradient: "from-red-600 to-orange-500",
-                buttons: [
-                    { icon: "credit-card", text: "Planos", color: "text-red-400" },
-                    { icon: "calendar-days", text: "Aulas", color: "text-orange-400" },
-                    { icon: "users", text: "Personais", color: "text-yellow-500" },
-                    { icon: "instagram", text: "Instagram", color: "text-pink-400" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Chegar", color: "text-red-500" }
-                ]
-            },
-            {
-                name: "Sua Loja",
-                sub: "Roupas e Acessórios",
-                cover: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?q=80&w=600&auto=format&fit=crop",
-                icon: "shirt",
-                subColor: "text-purple-400",
-                bgGradient: "from-purple-600 to-indigo-500",
-                buttons: [
-                    { icon: "shopping-cart", text: "Loja Online", color: "text-purple-400" },
-                    { icon: "tag", text: "Promoções", color: "text-pink-400" },
-                    { icon: "shirt", text: "Coleção", color: "text-indigo-400" },
-                    { icon: "instagram", text: "Looks", color: "text-pink-500" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Lojas Físicas", color: "text-red-400" }
-                ]
-            },
-            {
-                name: "Auto Peças / Mecânico",
-                sub: "Oficina & Lava-Jato",
-                cover: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=600&auto=format&fit=crop",
-                icon: "wrench",
-                subColor: "text-slate-400",
-                bgGradient: "from-slate-600 to-gray-500",
-                buttons: [
-                    { icon: "calendar", text: "Agendar", color: "text-blue-400" },
-                    { icon: "settings", text: "Serviços", color: "text-slate-400" },
-                    { icon: "droplet", text: "Lavagem", color: "text-cyan-400" },
-                    { icon: "instagram", text: "Instagram", color: "text-pink-400" },
-                    { icon: "star", text: "Avaliações", color: "text-yellow-400" },
-                    { icon: "map-pin", text: "Oficina", color: "text-red-400" }
-                ]
-            },
-            {
-                name: "Pousada",
-                sub: "Hotéis e Pousadas",
-                cover: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600&auto=format&fit=crop",
-                icon: "bed-double",
-                subColor: "text-sky-400",
-                bgGradient: "from-sky-500 to-blue-400",
-                buttons: [
-                    { icon: "calendar-check", text: "Reservas", color: "text-blue-400" },
-                    { icon: "image", text: "Galeria", color: "text-sky-300" },
-                    { icon: "utensils", text: "Restaurante", color: "text-orange-400" },
-                    { icon: "instagram", text: "Instagram", color: "text-pink-400" },
-                    { icon: "star", text: "TripAdvisor", color: "text-green-500" },
-                    { icon: "map-pin", text: "Como Chegar", color: "text-red-400" }
-                ]
-            }
-        ];
-
-        let phoneProfileIndex = 0;
-        const cardApproachAnim = document.getElementById('card-approach-anim');
-        
-        if (cardApproachAnim) {
-            cardApproachAnim.addEventListener('animationiteration', () => {
-                phoneProfileIndex = (phoneProfileIndex + 1) % phoneProfiles.length;
-                const profile = phoneProfiles[phoneProfileIndex];
-                
-                document.getElementById('dynamic-phone-cover').style.backgroundImage = `url('${profile.cover}')`;
-                
-                document.getElementById('dynamic-phone-avatar-bg').className = `w-[64px] h-[64px] bg-gradient-to-tr ${profile.bgGradient} p-[3px] rounded-full shadow-[0_10px_25px_rgba(0,0,0,0.5)] mb-2`;
-                
-                document.getElementById('dynamic-phone-icon-container').innerHTML = `<i data-lucide="${profile.icon}" class="w-5 h-5 text-white"></i>`;
-                
-                document.getElementById('dynamic-phone-name').innerText = profile.name;
-                
-                const subEl = document.getElementById('dynamic-phone-sub');
-                subEl.innerText = profile.sub;
-                subEl.className = `${profile.subColor} text-[8px] font-bold uppercase tracking-[0.2em]`;
-                
-                const gridHtml = profile.buttons.map(btn => {
-                    let iconHtml = `<i data-lucide="${btn.icon}" class="w-5 h-5 ${btn.color}"></i>`;
-                    if(btn.icon === 'instagram') {
-                        iconHtml = `<img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain">`;
-                    }
-                    return `
-                    <div class="bg-white/5 border border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 p-2 aspect-square backdrop-blur-sm">
-                        ${iconHtml}
-                        <span class="text-white text-[7px] font-bold uppercase tracking-wider text-center w-full truncate">${btn.text}</span>
-                    </div>
-                    `;
-                }).join('');
-                
-                document.getElementById('dynamic-phone-grid').innerHTML = gridHtml;
-                
-                lucide.createIcons();
-            });
-        }
 
     </script>
 </body>
