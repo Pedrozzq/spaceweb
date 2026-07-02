@@ -101,6 +101,69 @@
             opacity: 0.6;
         }
 
+        /* ===================== DECORAÇÃO ANIMADA DO FUNDO ===================== */
+        .bg-decor {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        /* Planeta Saturno flutuando pra lá e pra cá (maior e mais visível) */
+        .bg-saturn {
+            position: absolute;
+            top: 16%;
+            left: 6%;
+            width: 90px;
+            height: auto;
+            opacity: 0.55;
+            filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.5));
+            animation: saturnDrift 28s ease-in-out infinite;
+        }
+        @keyframes saturnDrift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50%      { transform: translate(74vw, 8vh) rotate(8deg); }
+        }
+
+        /* Cartão NFC se movimentando no fundo (mais visível, sem botões) */
+        .bg-nfc-card {
+            position: absolute;
+            top: 62%;
+            left: 72%;
+            width: 74px;
+            height: 116px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #23232f, #0a0a12);
+            border: 1px solid rgba(255, 184, 0, 0.45);
+            box-shadow: 0 0 26px rgba(255, 184, 0, 0.28);
+            opacity: 0.5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            animation: cardDrift 24s ease-in-out infinite;
+        }
+        .bg-nfc-chip {
+            width: 22px;
+            height: 16px;
+            border-radius: 4px;
+            background: linear-gradient(135deg, #FFD700, #B8912E);
+            opacity: 0.9;
+        }
+        .bg-nfc-wave {
+            align-self: flex-end;
+            font-size: 24px;
+            color: #FFD700;
+            transform: rotate(90deg);
+            opacity: 0.9;
+            line-height: 1;
+        }
+        @keyframes cardDrift {
+            0%, 100% { transform: translate(0, 0) rotate(-8deg); }
+            50%      { transform: translate(-60vw, -6vh) rotate(8deg); }
+        }
+
         /* Animação de Entrada da Logo */
         .logo-enter {
             animation: logoReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -272,7 +335,7 @@
         .planet-track {
             position: relative;
             width: 100vw;
-            height: 200px;
+            height: 260px;
             display: flex;
             align-items: center;
             overflow: hidden;
@@ -288,16 +351,16 @@
         }
         .planet-trail {
             display: block;
-            width: 150px; height: 3px;
-            margin-right: -12px;
-            border-radius: 3px;
+            width: 190px; height: 4px;
+            margin-right: -14px;
+            border-radius: 4px;
             background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55));
             filter: blur(2px);
         }
         .planet-cross {
-            width: 108px;
+            width: 168px;
             height: auto;
-            filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.5));
+            filter: drop-shadow(0 0 28px rgba(212, 175, 55, 0.55));
         }
         @keyframes planetCross {
             0%   { transform: translate(-30vw, -50%) scale(0.85); opacity: 0; }
@@ -305,63 +368,6 @@
             50%  { transform: translate(40vw, -60%) scale(1.05); opacity: 1; }
             88%  { opacity: 1; }
             100% { transform: translate(120vw, -50%) scale(0.85); opacity: 0; }
-        }
-
-        /* Nome com shimmer dourado */
-        .loader-text {
-            margin-top: 30px;
-            font-weight: 800;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            background: linear-gradient(to right, #8a6a10, #FFD700, #fff7cc, #FFD700, #8a6a10);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: textShine 2.5s linear infinite;
-        }
-
-        /* Barra de progresso */
-        .loader-bar {
-            margin-top: 16px;
-            width: 160px;
-            height: 3px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.08);
-            overflow: hidden;
-        }
-        .loader-bar span {
-            display: block;
-            height: 100%;
-            width: 40%;
-            border-radius: 3px;
-            background: linear-gradient(90deg, transparent, #FFD700, #FFB800, transparent);
-            animation: loaderBar 1.2s ease-in-out infinite;
-        }
-        @keyframes loaderBar {
-            0%   { transform: translateX(-120%); }
-            100% { transform: translateX(320%); }
-        }
-
-        /* Selo "Aproxime. Conecte. Converta." — dourado, combinando com o título */
-        .tagline-badge {
-            border: 1px solid rgba(255, 184, 0, 0.35);
-            background: linear-gradient(135deg, rgba(255, 184, 0, 0.10), rgba(255, 140, 0, 0.04));
-            /* fadeUp = entrada (mantém o stagger) + badgeGlow = brilho contínuo */
-            animation: fadeUp 0.6s ease forwards, badgeGlow 3s ease-in-out 0.6s infinite;
-        }
-        .tagline-badge span {
-            background: linear-gradient(to right, #8a6a10, #FFB800, #FFD700, #fff7cc, #FFD700, #FFB800, #8a6a10);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: textShine 3s linear infinite;
-        }
-        @keyframes badgeGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.12); border-color: rgba(255, 184, 0, 0.30); }
-            50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
         }
 
         /* ===================== ESTILOS INJETADOS DA TELA ANTIGA ===================== */
@@ -382,6 +388,26 @@
         .perspective-1000 { perspective: 1000px; }
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
+
+        /* Selo "Aproxime. Conecte. Converta." — dourado premium, combinando com o título */
+        .tagline-badge {
+            border: 1px solid rgba(255, 184, 0, 0.35);
+            background: linear-gradient(135deg, rgba(255, 184, 0, 0.10), rgba(255, 140, 0, 0.04));
+            /* fadeUp = entrada (mantém o stagger) + badgeGlow = brilho contínuo */
+            animation: fadeUp 0.6s ease forwards, badgeGlow 3s ease-in-out 0.6s infinite;
+        }
+        .tagline-badge span {
+            background: linear-gradient(to right, #8a6a10, #FFB800, #FFD700, #fff7cc, #FFD700, #FFB800, #8a6a10);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShine 3s linear infinite;
+        }
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.12); border-color: rgba(255, 184, 0, 0.30); }
+            50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
+        }
 
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
         .text-gradient-blue {
@@ -461,7 +487,7 @@
 </head>
 <body class="antialiased selection:bg-brand-purple selection:text-white loading">
 
-    <!-- ===================== LOADING / ANIMAÇÃO DA LOGO ===================== -->
+    <!-- ===================== LOADING / ANIMAÇÃO DA LOGO (somente animação) ===================== -->
     <div id="preloader">
         <div class="planet-track">
             <div class="planet-comet">
@@ -469,13 +495,20 @@
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC" class="planet-cross">
             </div>
         </div>
-        <div class="loader-text">Saturno NFC</div>
-        <div class="loader-bar"><span></span></div>
     </div>
 
     <!-- Background Elements -->
     <div class="cosmic-bg"></div>
     <canvas id="particles-canvas"></canvas>
+
+    <!-- Decoração animada no fundo: Saturno + Cartão NFC -->
+    <div class="bg-decor" aria-hidden="true">
+        <img src="https://i.imgur.com/xGuUPD5.png" alt="" class="bg-saturn">
+        <div class="bg-nfc-card">
+            <span class="bg-nfc-chip"></span>
+            <i class="ph ph-wifi-high bg-nfc-wave"></i>
+        </div>
+    </div>
 
     <main class="max-w-3xl mx-auto px-4 py-6 relative z-10 flex flex-col items-center">
 
@@ -555,7 +588,7 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
             </a>
 
-            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="https://www.instagram.com/saturnonfc" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors">
                         <i class="ph ph-instagram-logo text-xl"></i>
@@ -566,6 +599,12 @@
             </a>
 
         </section>
+
+        <!-- Indicador "Deslize" logo após os botões -->
+        <a href="#pratica" class="flex flex-col items-center mt-2 mb-4 scroll-hint hover:opacity-80 transition-opacity">
+            <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
+            <i class="ph ph-caret-down text-brand-gold text-xl"></i>
+        </a>
 
         <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
         <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
@@ -752,15 +791,15 @@
             <div class="grid grid-cols-2 gap-3 md:gap-4">
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-lightning text-brand-gold text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Atendimento mais rápido</span>
+                    <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
                 </div>
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-chats-circle text-brand-blue text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais conversões no Whats</span>
+                    <span class="text-sm font-medium text-gray-200">Mais conversões no WhatsApp</span>
                 </div>
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-users text-brand-purple text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Insta</span>
+                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Instagram</span>
                 </div>
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-star text-brand-gold text-xl"></i>
