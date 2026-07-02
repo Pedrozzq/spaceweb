@@ -9,22 +9,22 @@
 
   gtag('config', 'G-83X0GRFQBL');
 </script>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saturno NFC | Cartões Inteligentes</title>
-    
+
     <!-- Google Fonts: Plus Jakarta Sans for a premium tech feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -72,7 +72,7 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #050508; }
         ::-webkit-scrollbar-thumb { background: #1a1a24; border-radius: 10px; }
@@ -85,7 +85,7 @@
             background: radial-gradient(circle at 50% 0%, rgba(26, 26, 36, 0.4) 0%, rgba(5, 5, 8, 1) 60%);
             z-index: -2;
         }
-        
+
         #particles-canvas {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -214,7 +214,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
         }
-        
+
         .glass-card:hover {
             background: rgba(26, 26, 36, 0.6);
             border-color: rgba(138, 43, 226, 0.3);
@@ -231,6 +231,15 @@
 
         @keyframes fadeUp {
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Indicador "Deslize" com seta para baixo animada */
+        .scroll-hint {
+            animation: fadeUp 0.6s ease forwards, scrollBounce 1.8s ease-in-out 0.6s infinite;
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(10px); }
         }
 
         /* ===================== PRELOADER / LOADING DA LOGO ===================== */
@@ -370,33 +379,33 @@
     <div class="cosmic-bg"></div>
     <canvas id="particles-canvas"></canvas>
 
-    <main class="max-w-3xl mx-auto px-4 py-12 relative z-10 flex flex-col items-center">
-        
+    <main class="max-w-3xl mx-auto px-4 py-6 relative z-10 flex flex-col items-center">
+
         <!-- Header -->
-        <header class="text-center w-full mb-10 flex flex-col items-center">
+        <header class="text-center w-full mb-4 flex flex-col items-center">
             <!-- LOGO: Substitua o src caso a URL mude -->
-            <div class="w-36 md:w-44 mb-6 logo-enter">
+            <div class="w-28 md:w-36 mb-1 logo-enter">
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto object-contain drop-shadow-2xl">
             </div>
-            
+
             <!-- Novo título principal premium -->
-            <h1 class="text-3xl md:text-4xl font-extrabold uppercase tracking-tight premium-title stagger-item mb-4" style="animation-delay: 0.15s;">
+            <h1 class="text-2xl md:text-3xl font-extrabold uppercase tracking-tight premium-title stagger-item mb-2" style="animation-delay: 0.15s;">
                 Saturno NFC
             </h1>
-            
+
             <p class="text-gray-400 text-sm md:text-base font-medium max-w-sm mx-auto stagger-item mb-2" style="animation-delay: 0.2s;">
                 Conecte sua marca com apenas uma aproximação.
             </p>
-            
+
             <!-- Selo dourado animado, combinando com o título -->
-            <div class="tagline-badge mt-3 inline-block px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase stagger-item" style="animation-delay: 0.3s;">
+            <div class="tagline-badge mt-2 inline-block px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase stagger-item" style="animation-delay: 0.3s;">
                 <span>Aproxime. Conecte. Converta.</span>
             </div>
         </header>
 
         <!-- Linktree Buttons -->
-        <section class="w-full flex flex-col gap-4 mb-16 stagger-item" style="animation-delay: 0.4s;">
-            
+        <section class="w-full flex flex-col gap-3 mb-4 stagger-item" style="animation-delay: 0.4s;">
+
             <!-- Botão 1: Comprar (Destaque) -->
             <!-- Substitua o href pelo seu link de checkout/compra -->
             <a href="planos.html" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
@@ -429,6 +438,7 @@
                     <span class="font-medium text-gray-100">Como Funciona</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+            </a>
 
             <!-- Botão 3: Portfólio -->
             <a href="projetos.html" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
@@ -439,8 +449,6 @@
                     <span class="font-medium text-gray-100">Portfólio com projetos concluídos</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
-            </a>
-
             </a>
 
             <!-- Botão 5: Orçamento -->
@@ -455,7 +463,7 @@
             </a>
 
             <!-- Botão 6: Instagram -->
-            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="https://www.instagram.com/saturnonfc" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors">
                         <i class="ph ph-instagram-logo text-xl"></i>
@@ -464,11 +472,19 @@
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
             </a>
-            
+
+        </section>
+
+        <!-- Indicador de deslizar para baixo -->
+        <div class="w-full flex flex-col items-center mb-16 scroll-hint" style="animation-delay: 0.45s;">
+            <span class="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
+            <i class="ph ph-caret-down text-brand-gold text-2xl"></i>
+        </div>
+
         <!-- Como Funciona Section -->
         <section id="como-funciona" class="w-full mb-16 stagger-item" style="animation-delay: 0.5s;">
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona o Cartão NFC?</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Passo 1 -->
                 <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
@@ -478,7 +494,7 @@
                     <h3 class="font-bold text-lg mb-2">1. Aproxime</h3>
                     <p class="text-sm text-gray-400">O cliente aproxima o celular do cartão NFC.</p>
                 </div>
-                
+
                 <!-- Passo 2 -->
                 <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
                     <div class="w-12 h-12 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mb-4 border border-brand-purple/30">
@@ -502,7 +518,7 @@
         <!-- Benefícios Section -->
         <section class="w-full mb-16 stagger-item" style="animation-delay: 0.6s;">
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
-            
+
             <div class="grid grid-cols-2 gap-3 md:gap-4">
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-lightning text-brand-gold text-xl"></i>
@@ -536,9 +552,9 @@
             <div class="w-24 mx-auto mb-4 opacity-50">
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto grayscale">
             </div>
-            
+
             <p class="text-gray-400 text-sm mb-6">Tecnologia que aproxima marcas e pessoas.</p>
-            
+
             <!-- Botão CTA Final -->
             <a href="#" class="inline-block bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] mb-8 transform hover:scale-105 duration-200">
                 Quero meu Cartão Inteligente
@@ -550,7 +566,7 @@
                 <a href="#" class="text-gray-500 hover:text-[#E1306C] transition-colors"><i class="ph ph-instagram-logo text-2xl"></i></a>
                 <a href="#" class="text-gray-500 hover:text-brand-blue transition-colors"><i class="ph ph-map-pin text-2xl"></i></a>
             </div>
-            
+
             <p class="text-xs text-gray-600 mt-8">&copy; 2024 Saturno NFC. Todos os direitos reservados.</p>
         </footer>
 
@@ -584,17 +600,17 @@
 
         // --- 1. BOTÕES MAGNÉTICOS SUTIS ---
         const magneticBtns = document.querySelectorAll('.magnetic-btn');
-        
+
         magneticBtns.forEach(btn => {
             btn.addEventListener('mousemove', (e) => {
                 const rect = btn.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                
+
                 // Move o botão ligeiramente em direção ao mouse
                 btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) scale(1.02)`;
             });
-            
+
             btn.addEventListener('mouseleave', () => {
                 btn.style.transform = `translate(0px, 0px) scale(1)`;
             });
@@ -604,12 +620,12 @@
         // --- 3. SISTEMA DE PARTÍCULAS NO FUNDO ---
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
-        
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        
+
         let particlesArray = [];
-        
+
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -621,19 +637,19 @@
                 const colors = ['rgba(255,255,255,0.5)', 'rgba(0, 210, 255, 0.3)', 'rgba(138, 43, 226, 0.3)'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
             }
-            
+
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                
+
                 // Reposiciona se sair da tela
                 if (this.x > canvas.width) this.x = 0;
                 else if (this.x < 0) this.x = canvas.width;
-                
+
                 if (this.y > canvas.height) this.y = 0;
                 else if (this.y < 0) this.y = canvas.height;
             }
-            
+
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -641,7 +657,7 @@
                 ctx.fill();
             }
         }
-        
+
         function initParticles() {
             particlesArray = [];
             // Ajusta quantidade baseada no tamanho da tela (performance)
@@ -650,7 +666,7 @@
                 particlesArray.push(new Particle());
             }
         }
-        
+
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particlesArray.length; i++) {
@@ -659,10 +675,10 @@
             }
             requestAnimationFrame(animateParticles);
         }
-        
+
         initParticles();
         animateParticles();
-        
+
         // Redimensiona o canvas ao alterar o tamanho da janela
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
