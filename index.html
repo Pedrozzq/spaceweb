@@ -356,6 +356,81 @@
             0%, 100% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.12); border-color: rgba(255, 184, 0, 0.30); }
             50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
         }
+
+        /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
+        .text-gradient-blue {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .italic-serif { font-family: serif; font-style: italic; }
+
+        .card-interactive {
+            background: rgba(255, 255, 255, 0.015);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+        }
+
+        /* Animação de entrada dos elementos da seção */
+        .reveal-node {
+            opacity: 0;
+            filter: blur(15px);
+            transform: translateY(30px) scale(0.98);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal-node.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0) scale(1);
+        }
+
+        /* Linha de scan no topo do telefone */
+        @keyframes scan-line {
+            0% { transform: translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(560px); opacity: 0; }
+        }
+        .animate-scan { animation: scan-line 3s infinite linear; }
+
+        /* Cartão NFC aproximando do telefone */
+        @keyframes cardApproach {
+            0%, 10% { transform: translate(150px, 150px) rotate(30deg); opacity: 0; }
+            15% { transform: translate(150px, 150px) rotate(30deg); opacity: 1; }
+            25% { transform: translate(-30px, 20px) rotate(-5deg) scale(0.95); opacity: 1; }
+            28% { transform: translate(-30px, 20px) rotate(-5deg) scale(0.95); opacity: 1; }
+            32% { transform: translate(-30px, 20px) rotate(-5deg) scale(0.95); opacity: 0; }
+            100% { opacity: 0; }
+        }
+        @keyframes phoneLockFade {
+            0%, 26% { opacity: 1; }
+            28%, 85% { opacity: 0; }
+            90%, 100% { opacity: 1; }
+        }
+        @keyframes phoneUnlock {
+            0%, 26% { opacity: 0; transform: scale(0.95); }
+            29%, 85% { opacity: 1; transform: scale(1); }
+            90%, 100% { opacity: 0; transform: scale(0.95); }
+        }
+        @keyframes tapRipple {
+            0%, 24% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; border-width: 4px; }
+            25% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
+            35% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; border-width: 0px; }
+            100% { opacity: 0; }
+        }
+
+        /* Tags flutuantes */
+        @keyframes floatTag1 { 0%,100%{ transform: translateY(0) rotate(-2deg);} 50%{ transform: translateY(-15px) rotate(2deg);} }
+        @keyframes floatTag2 { 0%,100%{ transform: translateY(0) rotate(3deg);} 50%{ transform: translateY(-10px) rotate(-1deg);} }
+        @keyframes floatTag3 { 0%,100%{ transform: translateY(0) rotate(-1deg);} 50%{ transform: translateY(-20px) rotate(1deg);} }
+        @keyframes floatTag4 { 0%,100%{ transform: translateY(0) rotate(2deg);} 50%{ transform: translateY(-12px) rotate(-2deg);} }
+        .animate-float-tag-1 { animation: floatTag1 4s ease-in-out infinite; }
+        .animate-float-tag-2 { animation: floatTag2 5s ease-in-out infinite; }
+        .animate-float-tag-3 { animation: floatTag3 6s ease-in-out infinite; }
+        .animate-float-tag-4 { animation: floatTag4 4.5s ease-in-out infinite; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-purple selection:text-white loading">
@@ -463,7 +538,7 @@
             </a>
 
             <!-- Botão 6: Instagram -->
-            <a href="https://www.instagram.com/saturnonfc" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors">
                         <i class="ph ph-instagram-logo text-xl"></i>
@@ -515,6 +590,102 @@
             </div>
         </section>
 
+        <!-- Como Funciona na Prática -->
+        <section id="pratica" class="w-full mb-16 relative overflow-hidden">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-purple/10 blur-[150px] rounded-full pointer-events-none z-0"></div>
+            <div class="relative z-10">
+                <div class="text-center mb-14 reveal-node">
+                    <span class="text-brand-blue font-bold uppercase tracking-[0.4em] text-[9px]">Uso Pessoal &amp; Equipes Comerciais</span>
+                    <h2 class="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mt-3">Como Funciona na <span class="text-gradient-blue">Prática</span></h2>
+                    <p class="mt-4 text-gray-400 text-sm max-w-2xl mx-auto italic-serif">Veja exatamente o que o seu cliente experiencia quando você apresenta o seu Cartão NFC.</p>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24">
+                    <!-- Mockup do telefone -->
+                    <div class="relative w-full max-w-[320px] flex justify-center mx-auto shrink-0 reveal-node mb-6 lg:mb-0">
+
+                        <!-- Telefone Físico -->
+                        <div class="relative w-[280px] h-[580px] bg-[#090b10] border-[6px] border-slate-800 rounded-[3rem] shadow-[0_0_80px_rgba(138,43,226,0.2)] overflow-hidden flex flex-col z-10">
+                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-brand-blue to-transparent shadow-[0_0_15px_rgba(0,210,255,0.8)] animate-scan z-40"></div>
+                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
+
+                            <!-- Ecrã Bloqueado -->
+                            <div class="absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
+                                <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
+                                    <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
+                                    <i class="ph ph-device-mobile text-2xl text-slate-500"></i>
+                                </div>
+                                <span class="text-slate-400 text-[10px] uppercase tracking-widest font-black text-center px-6">Aproxime o Cartão NFC</span>
+                            </div>
+
+                            <!-- Ecrã Desbloqueado — Imagem completa (mostra todo o conteúdo) -->
+                            <div id="phone-unlocked-screen" class="absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('https://i.imgur.com/QIgetD1.jpeg');"></div>
+                        </div>
+
+                        <!-- Animação do Cartão NFC -->
+                        <div id="card-approach-anim" class="absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
+                            <div class="w-full flex justify-end">
+                                <div class="w-3 h-3 rounded-full bg-slate-200"></div>
+                            </div>
+                            <i class="ph ph-wifi-high text-3xl text-slate-400 rotate-90 drop-shadow-md"></i>
+                            <div class="w-full flex justify-start">
+                                <div class="w-6 h-1.5 bg-slate-200 rounded-full"></div>
+                            </div>
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-[3px] border-brand-gold rounded-full opacity-0" style="animation: tapRipple 5.5s infinite ease-out;"></div>
+                        </div>
+
+                        <!-- TAGS FLUTUANTES -->
+                        <div class="absolute -left-2 sm:-left-16 top-20 animate-float-tag-1 z-20 pointer-events-none">
+                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-pink-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(236,72,153,0.15)]">
+                                <i class="ph ph-instagram-logo text-lg text-pink-500"></i>
+                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Redes Sociais</span>
+                            </div>
+                        </div>
+                        <div class="absolute -right-2 sm:-right-12 top-40 animate-float-tag-2 z-20 pointer-events-none">
+                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-amber-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(245,158,11,0.15)]">
+                                <i class="ph ph-coffee text-lg text-amber-500"></i>
+                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Serviços / Menu</span>
+                            </div>
+                        </div>
+                        <div class="absolute -left-2 sm:-left-12 bottom-48 animate-float-tag-3 z-20 pointer-events-none">
+                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-brand-blue/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(0,210,255,0.15)]">
+                                <i class="ph ph-globe text-lg text-brand-blue"></i>
+                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Site Oficial</span>
+                            </div>
+                        </div>
+                        <div class="absolute -right-2 sm:-right-16 bottom-24 animate-float-tag-4 z-20 pointer-events-none">
+                            <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-emerald-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(16,185,129,0.15)]">
+                                <i class="ph ph-whatsapp-logo text-lg text-emerald-500"></i>
+                                <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">WhatsApp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cards de texto -->
+                    <div class="flex-1 space-y-6 w-full max-w-xl">
+                        <div class="card-interactive p-6 reveal-node border-l-4 border-l-brand-gold bg-brand-gold/5 rounded-r-xl">
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
+                                <div class="p-2 bg-brand-gold/20 rounded-lg"><i class="ph ph-target text-xl text-brand-gold"></i></div>
+                                Conquista Instantânea
+                            </h3>
+                            <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
+                                Ao aproximar o seu Cartão NFC, o cliente vive uma experiência tecnológica que gera autoridade imediata. Demonstre inovação no primeiro segundo.
+                            </p>
+                        </div>
+                        <div class="card-interactive p-6 reveal-node border-l-4 border-l-emerald-500 bg-emerald-500/5 rounded-r-xl">
+                            <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
+                                <div class="p-2 bg-emerald-500/20 rounded-lg"><i class="ph ph-download-simple text-xl text-emerald-500"></i></div>
+                                Alta Conversão
+                            </h3>
+                            <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
+                                Com botões inteligentes de ação rápida, o cliente pode salvar seu contato na agenda, falar com sua empresa pelo WhatsApp, avaliar no Google, agendar horário, conectar ao wi-fi e ter acesso à localização sem esforço e sem digitação.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Benefícios Section -->
         <section class="w-full mb-16 stagger-item" style="animation-delay: 0.6s;">
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
@@ -546,102 +717,6 @@
                 </div>
             </div>
         </section>
-
-      <!-- SECÇÃO 02: COMO FUNCIONA -->
-<section id="vantagens" class="py-24 px-8 border-t border-white/5 relative bg-[#05070a]/60 overflow-hidden">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
-    <div class="container mx-auto max-w-7xl relative z-10">
-        <div class="text-center mb-20 reveal-node">
-            <span class="text-blue-500 font-bold uppercase tracking-[0.5em] text-[9px]">Uso Pessoal & Equipes Comerciais</span>
-            <h2 class="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mt-3">Como Funciona na <span class="text-gradient-blue">Prática</span></h2>
-            <p class="mt-4 text-slate-400 text-sm max-w-2xl mx-auto italic-serif">Veja exatamente o que o seu cliente experiencia quando você apresenta o seu Cartão NFC corporativo (de bolso).</p>
-        </div>
-
-        <div class="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-32">
-            <div class="relative w-full max-w-[320px] flex justify-center reveal-node order-1 lg:order-1 mb-10 lg:mb-0">
-                
-                <!-- Telefone Físico -->
-                <div class="relative w-[280px] h-[580px] bg-[#090b10] border-[6px] border-slate-800 rounded-[3rem] shadow-[0_0_80px_rgba(38,99,235,0.15)] overflow-hidden flex flex-col z-10">
-                    <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent shadow-[0_0_15px_rgba(59,130,246,0.8)] animate-scan z-40"></div>
-                    <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
-
-                    <!-- Ecrã Bloqueado -->
-                    <div class="absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
-                        <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
-                            <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
-                            <i data-lucide="smartphone" class="w-6 h-6 text-slate-500"></i>
-                        </div>
-                        <span class="text-slate-400 text-[10px] uppercase tracking-widest font-black text-center px-6">Aproxime o Cartão NFC</span>
-                    </div>
-
-                    <!-- Ecrã Desbloqueado — Imagem Fullscreen -->
-                    <div id="phone-unlocked-screen" class="absolute inset-0 z-20 bg-cover bg-center bg-no-repeat" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('https://i.imgur.com/yz6MdRM.jpeg');">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                    </div>
-                </div>
-
-                <!-- Animação do Cartão NFC -->
-                <div id="card-approach-anim" class="absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
-                    <div class="w-full flex justify-end">
-                        <div class="w-3 h-3 rounded-full bg-slate-200"></div>
-                    </div>
-                    <i data-lucide="wifi" class="text-slate-400 w-8 h-8 rotate-90 drop-shadow-md"></i>
-                    <div class="w-full flex justify-start">
-                        <div class="w-6 h-1.5 bg-slate-200 rounded-full"></div>
-                    </div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-[3px] border-orange-500 rounded-full opacity-0" style="animation: tapRipple 5.5s infinite ease-out;"></div>
-                </div>
-
-                <!-- TAGS FLUTUANTES -->
-                <div class="absolute -left-16 sm:-left-24 top-20 animate-float-tag-1 z-20 pointer-events-none">
-                    <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-pink-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(236,72,153,0.15)]">
-                        <img src="https://png.pngtree.com/png-clipart/20180626/ourmid/pngtree-instagram-icon-instagram-logo-png-image_3584852.png" alt="Instagram" class="w-5 h-5 object-contain">
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Redes Sociais</span>
-                    </div>
-                </div>
-                <div class="absolute -right-12 sm:-right-20 top-40 animate-float-tag-2 z-20 pointer-events-none">
-                    <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-amber-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(245,158,11,0.15)]">
-                        <i data-lucide="coffee" class="w-5 h-5 text-amber-500"></i>
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Serviços / Menu</span>
-                    </div>
-                </div>
-                <div class="absolute -left-10 sm:-left-16 bottom-48 animate-float-tag-3 z-20 pointer-events-none">
-                    <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-blue-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(59,130,246,0.15)]">
-                        <i data-lucide="globe" class="w-5 h-5 text-blue-500"></i>
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">Site Oficial</span>
-                    </div>
-                </div>
-                <div class="absolute -right-16 sm:-right-24 bottom-24 animate-float-tag-4 z-20 pointer-events-none">
-                    <div class="flex items-center gap-3 bg-[#0B0E14]/80 backdrop-blur-md border border-emerald-500/30 rounded-xl px-4 py-2.5 shadow-[0_5px_20px_rgba(16,185,129,0.15)]">
-                        <i data-lucide="message-circle" class="w-5 h-5 text-emerald-500"></i>
-                        <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">WhatsApp</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 space-y-6 w-full max-w-xl order-2 lg:order-2">
-                <div class="card-interactive p-6 reveal-node group border-l-4 border-l-orange-500 bg-orange-500/5 hover:bg-orange-500/10 rounded-r-xl">
-                    <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
-                        <div class="p-2 bg-orange-500/20 rounded-lg"><i data-lucide="target" class="w-5 h-5 text-orange-500"></i></div>
-                        Conquista Instantânea
-                    </h3>
-                    <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                      Ao aproximar o seu Cartão NFC, o cliente vive uma experiência tecnológica que gera autoridade imediata. Demonstre inovação no primeiro segundo.
-                    </p>
-                </div>
-                <div class="card-interactive p-6 reveal-node group border-l-4 border-l-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/10 rounded-r-xl" style="transition-delay: 200ms;">
-                    <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
-                        <div class="p-2 bg-emerald-500/20 rounded-lg"><i data-lucide="download" class="w-5 h-5 text-emerald-500"></i></div>
-                        Alta Conversão
-                    </h3>
-                    <p class="text-slate-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">
-                       Com botões inteligentes de ação rápida, o cliente pode salvar seu contato na agenda, falar com sua empresa pelo WhatsApp, avaliar no Google, agendar horário, conectar ao wi-fi, ter acesso a localização sem esforço e sem digitação.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
         <!-- Footer -->
         <footer class="w-full text-center pb-8 border-t border-white/5 pt-8 stagger-item" style="animation-delay: 0.7s;">
@@ -781,6 +856,35 @@
             canvas.height = window.innerHeight;
             initParticles();
         });
+
+        // --- 4. COMO FUNCIONA NA PRÁTICA: revelar elementos ao rolar ---
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
+
+        // --- 5. MOCKUP: troca a imagem a cada aproximação do cartão NFC ---
+        const screenImages = [
+            "https://i.imgur.com/QIgetD1.jpeg",
+            "https://i.imgur.com/PwS1pGl.png",
+            "https://i.imgur.com/mqfWQM7.png",
+            "https://i.imgur.com/p4F55uS.png",
+            "https://i.imgur.com/8ulijWa.png"
+        ];
+
+        // Pré-carrega as imagens para a troca ocorrer sem piscar
+        screenImages.forEach(src => { const img = new Image(); img.src = src; });
+
+        let screenImageIndex = 0;
+        const cardApproachAnim = document.getElementById('card-approach-anim');
+        const phoneUnlockedScreen = document.getElementById('phone-unlocked-screen');
+
+        if (cardApproachAnim && phoneUnlockedScreen) {
+            cardApproachAnim.addEventListener('animationiteration', () => {
+                screenImageIndex = (screenImageIndex + 1) % screenImages.length;
+                phoneUnlockedScreen.style.backgroundImage = `url('${screenImages[screenImageIndex]}')`;
+            });
+        }
 
     </script>
 </body>
