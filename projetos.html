@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio | Saturno NFC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #050508; color: white; }
+        .text-gradient { background: linear-gradient(90deg, #FF7A00, #FFB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-white-glow {
+            background: linear-gradient(135deg, #FFB800, #FF7A00);
+            color: black;
+            font-weight: 900;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.3);
+        }
+        .btn-white-glow:hover { box-shadow: 0 0 30px rgba(255, 184, 0, 0.5); transform: scale(1.02); }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255, 184, 0, 0.3);
+            color: white;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover { border-color: #FFB800; background: rgba(255, 184, 0, 0.1); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- SECÇÃO 06: PORTFÓLIO -->
+    <section id="marketing" class="py-24 px-8">
+        <div class="container mx-auto max-w-5xl">
+            <div class="card-interactive p-10 md:p-16 relative overflow-hidden border border-white/10 rounded-[2rem] bg-[#0a0a0c]">
+                <div class="absolute -top-40 -right-40 w-96 h-96 bg-orange-600/10 blur-[120px]"></div>
+                <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-600/10 blur-[120px]"></div>
+                
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[9px] font-bold mb-8 uppercase tracking-[0.5em]">
+                        <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Trabalhos Concluídos
+                    </div>
+                    
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-12 tracking-tighter uppercase leading-none">
+                        NOSSO PORTFÓLIO COM <br/> <span class="text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
+                    </h2>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full max-w-4xl mx-auto mb-12">
+                        <!-- ... existing code ... -->
+                        <a href="https://maiaprodutor.site" target="_blank" class="bg-[#0B0E14]/80 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group shadow-lg">
+                            <img src="https://i.imgur.com/nu6DjeK.png" alt="Maia Produtor" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform">
+                            <div class="text-left"><h4 class="text-white font-black text-[13px] uppercase">Maia Produtor</h4></div>
+                        </a>
+                        <a href="https://primemoveis.site" target="_blank" class="bg-[#0B0E14]/80 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group shadow-lg">
+                            <img src="https://i.imgur.com/EPT09I8.png" alt="Prime Móveis" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform">
+                            <div class="text-left"><h4 class="text-white font-black text-[13px] uppercase">Prime Móveis</h4></div>
+                        </a>
+                        <a href="https://jpjoiasbrasil.com" target="_blank" class="bg-[#0B0E14]/80 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group shadow-lg">
+                            <img src="https://i.imgur.com/CYJwkZJ.png" alt="JP Joias" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform">
+                            <div class="text-left"><h4 class="text-white font-black text-[13px] uppercase">JP Joias</h4></div>
+                        </a>
+                        <a href="https://venusdistribuidora.com" target="_blank" class="bg-[#0B0E14]/80 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group shadow-lg">
+                            <img src="https://i.imgur.com/Ns344Ii.png" alt="Vênus Distribuidora" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform">
+                            <div class="text-left"><h4 class="text-white font-black text-[13px] uppercase">Vênus Distribuidora</h4></div>
+                        </a>
+                        <a href="https://ouropack.site" target="_blank" class="bg-[#0B0E14]/80 backdrop-blur-sm border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group shadow-lg">
+                            <img src="https://i.imgur.com/R0kT6RL.png" alt="OuroPack" class="w-full h-32 object-cover rounded-lg group-hover:scale-105 transition-transform">
+                            <div class="text-left"><h4 class="text-white font-black text-[13px] uppercase">OuroPack</h4></div>
+                        </a>
+                        <div class="bg-[#0B0E14]/80 border border-white/10 rounded-xl p-4 flex flex-col gap-3 opacity-40">
+                            <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center"><i data-lucide="scissors" class="w-8 h-8 text-slate-600"></i></div>
+                            <div class="text-left"><h4 class="text-white font-black text-[13px] uppercase">Essencial Barbearia</h4></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4 w-full justify-center items-center">
+                        <a href="#" class="btn-white-glow px-10 py-5 flex items-center justify-center gap-4 min-w-[300px] uppercase tracking-widest text-[12px]">
+                            Comprar meu Cartão NFC
+                        </a>
+                        <a href="https://wa.link/hpoklw" target="_blank" class="btn-outline px-10 py-5 flex items-center justify-center gap-4 min-w-[300px] uppercase tracking-widest text-[12px] group">
+                            Solicitar Cotação
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
