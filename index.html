@@ -10,12 +10,12 @@
   gtag('config', 'G-83X0GRFQBL');
 </script>
 
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saturno NFC | Cartões Inteligentes</title>
   
   <!-- Favicon -->
-
     <link rel="icon" type="image/png" href="https://i.imgur.com/RqZd35M.png">
   
     <!-- Google Fonts: Plus Jakarta Sans for a premium tech feel -->
@@ -23,8 +23,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Phosphor Icons -->
+    <!-- Phosphor Icons (Para o novo Layout) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Lucide Icons (Para o Cartão 3D Importado) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -361,6 +364,25 @@
             50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
         }
 
+        /* ===================== ESTILOS INJETADOS DA TELA ANTIGA ===================== */
+        @keyframes shimmer-orange {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+        .text-shimmer {
+            background: linear-gradient(to right, #ea580c 0%, #ea580c 40%, #38bdf8 50%, #ea580c 60%, #ea580c 100%);
+            background-size: 200% auto;
+            color: #ea580c;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-orange 8s linear infinite; 
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
         .text-gradient-blue {
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
@@ -440,13 +462,10 @@
 <body class="antialiased selection:bg-brand-purple selection:text-white loading">
 
     <!-- ===================== LOADING / ANIMAÇÃO DA LOGO ===================== -->
-    <!-- Aparece ao entrar no site e desaparece após o carregamento -->
     <div id="preloader">
-        <!-- Planeta Saturno atravessando a tela -->
         <div class="planet-track">
             <div class="planet-comet">
                 <span class="planet-trail"></span>
-                <!-- LOGO: mesma imagem do cabeçalho -->
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC" class="planet-cross">
             </div>
         </div>
@@ -461,32 +480,31 @@
     <main class="max-w-3xl mx-auto px-4 py-6 relative z-10 flex flex-col items-center">
 
         <!-- Header -->
-        <header class="text-center w-full mb-4 flex flex-col items-center">
-            <!-- LOGO: Substitua o src caso a URL mude -->
-            <div class="w-28 md:w-36 mb-1 logo-enter">
-                <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto object-contain drop-shadow-2xl">
+        <header class="text-center w-full mb-4 flex flex-col items-center mt-4">
+            <!-- Logo minimalista -->
+            <div class="w-16 md:w-20 mb-2 stagger-item" style="animation-delay: 0.1s;">
+                <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
             </div>
 
-            <!-- Novo título principal premium -->
-            <h1 class="text-2xl md:text-3xl font-extrabold uppercase tracking-tight premium-title stagger-item mb-2" style="animation-delay: 0.15s;">
-                Saturno NFC
-            </h1>
+            <!-- Título Oculto original para manter estrutura -->
+            <h1 class="hidden">Saturno NFC</h1>
 
-            <p class="text-gray-400 text-sm md:text-base font-medium max-w-sm mx-auto stagger-item mb-2" style="animation-delay: 0.2s;">
-                Conecte sua marca com apenas uma aproximação.
-            </p>
+            <!-- Título Principal -->
+            <h2 class="text-2xl md:text-3xl font-black tracking-tighter leading-tight uppercase drop-shadow-[0_0_15px_rgba(234,88,12,0.3)] mt-2 mb-6 stagger-item" style="animation-delay: 0.2s;">
+                A tecnologia que conecta sua<br>
+                <span class="text-shimmer">empresa ao cliente em segundos.</span>
+            </h2>
 
-            <!-- Selo dourado animado, combinando com o título -->
-            <div class="tagline-badge mt-2 inline-block px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase stagger-item" style="animation-delay: 0.3s;">
-                <span>Aproxime. Conecte. Converta.</span>
-            </div>
+            <!-- Indicador "Entenda como funciona" -->
+            <a href="#como-funciona" class="flex flex-col items-center mb-8 scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.3s;">
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Entenda como funciona</span>
+                <i class="ph ph-caret-down text-brand-gold text-xl"></i>
+            </a>
         </header>
 
         <!-- Linktree Buttons -->
         <section class="w-full flex flex-col gap-3 mb-4 stagger-item" style="animation-delay: 0.4s;">
 
-            <!-- Botão 1: Comprar (Destaque) -->
-            <!-- Substitua o href pelo seu link de checkout/compra -->
             <a href="planos.html" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20">
@@ -497,7 +515,6 @@
                 <i class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all"></i>
             </a>
 
-            <!-- Botão 2: WhatsApp -->
             <a href="https://wa.link/b7gpgn" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors">
@@ -508,7 +525,6 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
             </a>
 
-            <!-- Botão 4: Como Funciona -->
             <a href="nfc.html" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors">
@@ -519,7 +535,6 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
             </a>
 
-            <!-- Botão 3: Portfólio -->
             <a href="projetos.html" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/20 transition-colors">
@@ -530,7 +545,6 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
             </a>
 
-            <!-- Botão 5: Orçamento -->
             <a href="https://wa.link/idb3mn" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-300 group-hover:bg-white/10 transition-colors">
@@ -541,7 +555,6 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
             </a>
 
-            <!-- Botão 6: Instagram -->
             <a href="#" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors">
@@ -554,14 +567,50 @@
 
         </section>
 
-        <!-- Indicador de deslizar para baixo -->
-        <div class="w-full flex flex-col items-center mb-16 scroll-hint" style="animation-delay: 0.45s;">
-            <span class="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
-            <i class="ph ph-caret-down text-brand-gold text-2xl"></i>
+        <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
+        <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
+            <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
+                
+                <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
+                    
+                    <div id="hero-3d-card-bg" class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-600/20 blur-3xl rounded-full"></div>
+                        <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-600/20 blur-3xl rounded-full"></div>
+
+                        <div class="p-5 sm:p-8 flex flex-col justify-between h-full relative z-10">
+                            <div class="flex justify-between items-start">
+                                <div id="card-dynamic-icon" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-orange-500/10 text-orange-400 rounded-2xl shadow-lg border border-orange-500/30">
+                                    <i data-lucide="utensils" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+                                </div>
+                                <i data-lucide="wifi" id="card-wifi-icon" class="text-gray-400 rotate-90 w-6 h-6 sm:w-8 sm:h-8"></i>
+                            </div>
+                            
+                            <div class="mt-auto">
+                                <div id="card-chip" class="w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm">
+                                    <i data-lucide="trending-up" id="card-chip-icon" class="w-6 h-6 sm:w-8 sm:h-8 text-gray-500"></i>
+                                </div>
+                                
+                                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="niche-rotator">Restaurante</h3>
+                                <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6">Sua Empresa</p>
+                                
+                                <div class="w-8 h-6 sm:w-10 sm:h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-3 sm:mb-4 opacity-50 relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
+                                </div>
+
+                                <div id="card-line-1" class="w-full h-px bg-gray-300 mb-3"></div>
+                                <div id="card-line-2" class="w-2/3 h-px bg-gray-300"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-orange-500/30 rounded-[2rem] -z-10 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-[2rem] -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
+            </div>
         </div>
 
         <!-- Como Funciona Section -->
-        <section id="como-funciona" class="w-full mb-16 stagger-item" style="animation-delay: 0.5s;">
+        <section id="como-funciona" class="w-full mb-16 stagger-item" style="animation-delay: 0.6s;">
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona o Cartão NFC?</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -687,10 +736,17 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Selo Aproxime. Conecte. Converta. movido para o final da seção -->
+            <div class="w-full flex justify-center mt-14 mb-4 reveal-node">
+                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                    <span>Aproxime. Conecte. Converta.</span>
+                </div>
+            </div>
         </section>
 
         <!-- Benefícios Section -->
-        <section class="w-full mb-16 stagger-item" style="animation-delay: 0.6s;">
+        <section class="w-full mb-16 stagger-item" style="animation-delay: 0.7s;">
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
 
             <div class="grid grid-cols-2 gap-3 md:gap-4">
@@ -722,7 +778,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="w-full text-center pb-8 border-t border-white/5 pt-8 stagger-item" style="animation-delay: 0.7s;">
+        <footer class="w-full text-center pb-8 border-t border-white/5 pt-8 stagger-item" style="animation-delay: 0.8s;">
             <div class="w-24 mx-auto mb-4 opacity-50">
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto grayscale">
             </div>
@@ -748,6 +804,11 @@
 
     <!-- Scripts de Interatividade -->
     <script>
+        // Inicializa ícones Lucide para o Cartão 3D Importado
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
         // --- 0. PRELOADER: mostra a animação da logo e some após o carregamento ---
         (function () {
             const preloader = document.getElementById('preloader');
@@ -887,6 +948,80 @@
                 screenImageIndex = (screenImageIndex + 1) % screenImages.length;
                 phoneUnlockedScreen.style.backgroundImage = `url('${screenImages[screenImageIndex]}')`;
             });
+        }
+
+        // --- 6. CARTÃO 3D INTERATIVO (Lógica Importada) ---
+        const niches = [
+            { name: "Restaurante", icon: "utensils", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
+            { name: "Clínica", icon: "stethoscope", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
+            { name: "Sua Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
+            { name: "Barbearia", icon: "scissors", color: "text-amber-700", bg: "bg-amber-700/10", border: "border-amber-700/30" },
+            { name: "Advocacia", icon: "scale", color: "text-slate-600", bg: "bg-slate-600/10", border: "border-slate-600/30" },
+            { name: "Imóveis", icon: "home", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
+            { name: "Sua Empresa", icon: "briefcase", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
+        ];
+        
+        let nicheIndex = 0;
+        let isBlackCard = false;
+        
+        const cardInner = document.getElementById('card-inner-flip');
+        const cardBg = document.getElementById('hero-3d-card-bg');
+        const nicheEl = document.getElementById('niche-rotator');
+        const iconContainer = document.getElementById('card-dynamic-icon');
+        const wifiIcon = document.getElementById('card-wifi-icon');
+        const cardChip = document.getElementById('card-chip');
+        const cardChipIcon = document.getElementById('card-chip-icon');
+        const cardLine1 = document.getElementById('card-line-1');
+        const cardLine2 = document.getElementById('card-line-2');
+
+        if (cardInner && nicheEl && iconContainer) {
+            setInterval(() => {
+                // Fase 1: Inicia o giro
+                cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
+                cardInner.style.transform = 'rotateY(90deg) scale(1.05)';
+                cardInner.style.filter = 'brightness(1.5)';
+                
+                setTimeout(() => {
+                    // Fase 2: Ponto cego / Troca do conteúdo
+                    isBlackCard = !isBlackCard;
+
+                    if(isBlackCard) {
+                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-zinc-900 to-black rounded-[2rem] border border-zinc-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden backface-hidden";
+                        nicheEl.classList.replace('text-gray-900', 'text-white');
+                        wifiIcon.classList.replace('text-gray-400', 'text-zinc-500');
+                        cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-zinc-800/80 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-zinc-600 flex items-center justify-center overflow-hidden shadow-sm";
+                        cardChipIcon.classList.replace('text-gray-500', 'text-zinc-400');
+                        cardLine1.classList.replace('bg-gray-300', 'bg-zinc-700');
+                        cardLine2.classList.replace('bg-gray-300', 'bg-zinc-700');
+                    } else {
+                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden";
+                        nicheEl.classList.replace('text-white', 'text-gray-900');
+                        wifiIcon.classList.replace('text-zinc-500', 'text-gray-400');
+                        cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm";
+                        cardChipIcon.classList.replace('text-zinc-400', 'text-gray-500');
+                        cardLine1.classList.replace('bg-zinc-700', 'bg-gray-300');
+                        cardLine2.classList.replace('bg-zinc-700', 'bg-gray-300');
+                    }
+
+                    nicheIndex = (nicheIndex + 1) % niches.length;
+                    const comp = niches[nicheIndex];
+                    nicheEl.innerText = comp.name;
+                    iconContainer.innerHTML = `<i data-lucide="${comp.icon}" class="w-6 h-6 sm:w-7 sm:h-7 ${comp.color}"></i>`;
+                    iconContainer.className = `w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl shadow-lg border ${comp.bg} ${comp.border}`;
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+                    cardInner.style.transition = 'none';
+                    cardInner.style.transform = 'rotateY(-90deg) scale(1.05)';
+                    
+                    void cardInner.offsetWidth; // Force Reflow
+
+                    // Fase 3: Volta até 0 graus
+                    cardInner.style.transition = 'transform 0.4s ease-out, filter 0.4s ease-out';
+                    cardInner.style.transform = 'rotateY(0deg) scale(1)';
+                    cardInner.style.filter = 'brightness(1)';
+                    
+                }, 400); 
+            }, 4000); 
         }
 
     </script>
