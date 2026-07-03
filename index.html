@@ -110,20 +110,26 @@
             overflow: hidden;
         }
 
-        /* Planeta Saturno flutuando pra lá e pra cá (maior e mais visível) */
+        /* ===================== SATURNO PRÓPRIO (SVG) FLUTUANDO NO FUNDO PRETO ===================== */
         .bg-saturn {
             position: absolute;
-            top: 16%;
-            left: 6%;
-            width: 90px;
+            top: 14%;
+            left: 4%;
+            width: 130px;
             height: auto;
-            opacity: 0.55;
-            filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.5));
-            animation: saturnDrift 28s ease-in-out infinite;
+            opacity: 0.5;
+            filter: drop-shadow(0 0 26px rgba(255, 200, 90, 0.45));
+            animation: saturnDrift 34s ease-in-out infinite;
         }
+        .bg-saturn svg { display: block; width: 100%; height: auto; }
+
+        /* Deriva suave: atravessa o fundo, sobe e desce, e gira lentamente */
         @keyframes saturnDrift {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50%      { transform: translate(74vw, 8vh) rotate(8deg); }
+            0%   { transform: translate(0, 0) rotate(0deg); }
+            25%  { transform: translate(30vw, 14vh) rotate(4deg); }
+            50%  { transform: translate(70vw, 4vh) rotate(9deg); }
+            75%  { transform: translate(40vw, 20vh) rotate(5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
 
         /* Cartão NFC se movimentando no fundo (mais visível, sem botões) */
@@ -382,7 +388,24 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shimmer-orange 8s linear infinite; 
+            animation: shimmer-orange 8s linear infinite;
+        }
+
+        /* Nome da marca no topo (substitui a logo) — mesma fonte e efeito do texto principal */
+        .brand-name {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #38bdf8 0%, #38bdf8 40%, #ea580c 50%, #38bdf8 60%, #38bdf8 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-orange 8s linear infinite;
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.35));
+            display: inline-block;
+            line-height: 1.1;
         }
 
         .perspective-1000 { perspective: 1000px; }
@@ -501,9 +524,42 @@
     <div class="cosmic-bg"></div>
     <canvas id="particles-canvas"></canvas>
 
-    <!-- Decoração animada no fundo: Saturno + Cartão NFC -->
+    <!-- Decoração animada no fundo: Saturno próprio (SVG) + Cartão NFC -->
     <div class="bg-decor" aria-hidden="true">
-        <img src="https://i.imgur.com/xGuUPD5.png" alt="" class="bg-saturn">
+        <!-- Saturno feito à mão em SVG, flutuando pelo fundo preto -->
+        <div class="bg-saturn">
+            <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <radialGradient id="satBody" cx="38%" cy="34%" r="78%">
+                        <stop offset="0%" stop-color="#fff2cf"/>
+                        <stop offset="38%" stop-color="#f5c66a"/>
+                        <stop offset="72%" stop-color="#c8922f"/>
+                        <stop offset="100%" stop-color="#6d4a11"/>
+                    </radialGradient>
+                    <linearGradient id="satRing" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%"   stop-color="rgba(255,214,120,0)"/>
+                        <stop offset="18%"  stop-color="rgba(255,214,120,0.85)"/>
+                        <stop offset="50%"  stop-color="#ffeab6"/>
+                        <stop offset="82%"  stop-color="rgba(255,214,120,0.85)"/>
+                        <stop offset="100%" stop-color="rgba(255,214,120,0)"/>
+                    </linearGradient>
+                    <clipPath id="satFrontRing">
+                        <rect x="0" y="75" width="220" height="75"/>
+                    </clipPath>
+                </defs>
+                <g transform="rotate(-18 110 75)">
+                    <!-- anel (metade de trás) -->
+                    <ellipse cx="110" cy="75" rx="100" ry="30" fill="none" stroke="url(#satRing)" stroke-width="9"/>
+                    <!-- planeta -->
+                    <circle cx="110" cy="75" r="42" fill="url(#satBody)"/>
+                    <!-- faixas atmosféricas sutis -->
+                    <path d="M70 66 q40 -10 80 0" fill="none" stroke="rgba(109,74,17,0.35)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M72 86 q38 9 76 0" fill="none" stroke="rgba(255,242,207,0.25)" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- anel (metade da frente, cruzando por cima do planeta) -->
+                    <ellipse cx="110" cy="75" rx="100" ry="30" fill="none" stroke="url(#satRing)" stroke-width="9" clip-path="url(#satFrontRing)"/>
+                </g>
+            </svg>
+        </div>
         <div class="bg-nfc-card">
             <span class="bg-nfc-chip"></span>
             <i class="ph ph-wifi-high bg-nfc-wave"></i>
@@ -514,16 +570,16 @@
 
         <!-- Header -->
         <header class="text-center w-full mb-4 flex flex-col items-center mt-4">
-            <!-- Logo minimalista -->
-            <div class="w-16 md:w-20 mb-2 stagger-item" style="animation-delay: 0.1s;">
-                <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]">
+            <!-- Nome da marca (substitui a logo) -->
+            <div class="mb-3 stagger-item" style="animation-delay: 0.1s;">
+                <span class="brand-name text-3xl md:text-4xl">Saturno NFC</span>
             </div>
 
             <!-- Título Oculto original para manter estrutura -->
             <h1 class="hidden">Saturno NFC</h1>
 
             <!-- Título Principal -->
-            <h2 class="text-2xl md:text-3xl font-black tracking-tighter leading-tight uppercase drop-shadow-[0_0_15px_rgba(234,88,12,0.3)] mt-2 mb-6 stagger-item" style="animation-delay: 0.2s;">
+            <h2 class="text-lg md:text-2xl font-black tracking-tighter leading-tight uppercase drop-shadow-[0_0_15px_rgba(56,189,248,0.3)] mt-2 mb-6 stagger-item" style="animation-delay: 0.2s;">
                 A tecnologia que conecta sua<br>
                 <span class="text-shimmer">empresa ao cliente em segundos.</span>
             </h2>
