@@ -412,9 +412,9 @@
             100% { background-position: -200% center; }
         }
         .text-shimmer {
-            background: linear-gradient(to right, #ea580c 0%, #ea580c 40%, #38bdf8 50%, #ea580c 60%, #ea580c 100%);
+            background: linear-gradient(to right, #FFB800 0%, #FFB800 40%, #e8ecf1 50%, #FFB800 60%, #FFB800 100%);
             background-size: 200% auto;
-            color: #ea580c;
+            color: #FFB800;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -594,6 +594,112 @@
         .btn-blue:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); filter: brightness(1.1); }
         .btn-white { background: #ffffff; color: #000000; }
         .btn-white:hover { box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); filter: brightness(1.05); }
+
+        /* Estilo dourado "SATURNO NFC" para o plano Fora de Órbita (substitui o roxo) */
+        .text-saturno-gold {
+            background: linear-gradient(to right, #8a6a10, #FFB800, #FFD700, #fff7cc, #FFD700, #FFB800, #8a6a10);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s linear infinite;
+            filter: drop-shadow(0 0 12px rgba(255, 184, 0, 0.35));
+        }
+        .badge-saturno-gold {
+            background: linear-gradient(90deg, #8a6a10, #FFB800, #FFD700, #FFB800, #8a6a10);
+            background-size: 200% auto;
+            color: #2b1d00;
+            animation: textShine 3s linear infinite;
+            box-shadow: 0 0 15px rgba(255, 184, 0, 0.5);
+        }
+        .card-gold {
+            border: 1px solid rgba(255, 184, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 184, 0, 0.05);
+        }
+        .card-gold:hover {
+            border-color: rgba(255, 184, 0, 0.8);
+            box-shadow: 0 10px 40px -10px rgba(255, 184, 0, 0.25), inset 0 0 20px rgba(255, 184, 0, 0.05);
+        }
+        .btn-saturno-gold {
+            color: #2b1d00;
+            background: linear-gradient(90deg, #d4a017, #f5d67a, #b8860b, #f5d67a, #d4a017);
+            background-size: 200% auto;
+            box-shadow: 0 0 15px rgba(212, 160, 23, 0.3);
+            animation: goldShimmer 4s linear infinite;
+        }
+        .btn-saturno-gold:hover { box-shadow: 0 0 30px rgba(212, 160, 23, 0.55); filter: brightness(1.08); }
+        @keyframes goldShimmer { to { background-position: 200% center; } }
+
+        /* Estilo PRATA (metálico) para o plano Profissional */
+        .text-saturno-silver {
+            background: linear-gradient(to right, #6b7280, #b8c0cc, #eaeff5, #ffffff, #eaeff5, #b8c0cc, #6b7280);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s linear infinite;
+            filter: drop-shadow(0 0 12px rgba(200, 205, 214, 0.35));
+        }
+        .badge-saturno-silver {
+            background: linear-gradient(90deg, #6b7280, #c0c5ce, #ffffff, #c0c5ce, #6b7280);
+            background-size: 200% auto;
+            color: #1f2937;
+            animation: textShine 3s linear infinite;
+            box-shadow: 0 0 15px rgba(200, 205, 214, 0.5);
+        }
+        .card-silver {
+            border: 1px solid rgba(192, 197, 206, 0.4);
+            box-shadow: 0 0 30px rgba(192, 197, 206, 0.05);
+        }
+        .card-silver:hover {
+            border-color: rgba(220, 225, 232, 0.8);
+            box-shadow: 0 10px 40px -10px rgba(192, 197, 206, 0.25), inset 0 0 20px rgba(192, 197, 206, 0.05);
+        }
+        .btn-saturno-silver {
+            color: #1f2937;
+            background: linear-gradient(90deg, #9aa0a8, #e8ecf1, #b8bec8, #e8ecf1, #9aa0a8);
+            background-size: 200% auto;
+            box-shadow: 0 0 15px rgba(200, 205, 214, 0.3);
+            animation: goldShimmer 4s linear infinite;
+        }
+        .btn-saturno-silver:hover { box-shadow: 0 0 30px rgba(220, 225, 232, 0.55); filter: brightness(1.08); }
+
+        /* Estilo BRONZE (metálico) para o plano Essencial */
+        .text-saturno-bronze {
+            background: linear-gradient(to right, #5a3618, #a86a3d, #cd9b6a, #f2d3ac, #cd9b6a, #a86a3d, #5a3618);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s linear infinite;
+            filter: drop-shadow(0 0 12px rgba(205, 155, 106, 0.35));
+        }
+        .badge-saturno-bronze {
+            background: linear-gradient(90deg, #5a3618, #a86a3d, #d9a066, #a86a3d, #5a3618);
+            background-size: 200% auto;
+            color: #2b1a08;
+            animation: textShine 3s linear infinite;
+            box-shadow: 0 0 15px rgba(169, 113, 66, 0.5);
+        }
+        .card-bronze {
+            border: 1px solid rgba(169, 113, 66, 0.45);
+            box-shadow: 0 0 30px rgba(169, 113, 66, 0.05);
+        }
+        .card-bronze:hover {
+            border-color: rgba(205, 155, 106, 0.85);
+            box-shadow: 0 10px 40px -10px rgba(169, 113, 66, 0.25), inset 0 0 20px rgba(169, 113, 66, 0.05);
+        }
+        .btn-saturno-bronze {
+            color: #2b1a08;
+            background: linear-gradient(90deg, #8a5a2e, #d9a066, #b3743c, #d9a066, #8a5a2e);
+            background-size: 200% auto;
+            box-shadow: 0 0 15px rgba(169, 113, 66, 0.3);
+            animation: goldShimmer 4s linear infinite;
+        }
+        .btn-saturno-bronze:hover { box-shadow: 0 0 30px rgba(205, 155, 106, 0.55); filter: brightness(1.08); }
 
         .list-text {
             font-size: 0.75rem;
@@ -1126,12 +1232,12 @@
                 <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-12">
 
                     <!-- PLANO ESSENCIAL (Mais Vendido - Azul) -->
-                    <div class="plan-card card-blue p-8 flex flex-col relative">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-plan-blue text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)] whitespace-nowrap">
+                    <div class="plan-card card-bronze p-8 flex flex-col relative">
+                        <div class="badge-saturno-bronze absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
                             Mais Vendido
                         </div>
                         <div class="mb-6 mt-2">
-                            <h3 class="text-xl md:text-2xl font-black text-plan-blue uppercase tracking-wide mb-2">Plano Essencial</h3>
+                            <h3 class="text-saturno-bronze text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Essencial</h3>
                             <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">O pacote essencial para dar o primeiro passo no networking digital.</p>
                         </div>
                         <div class="mb-8">
@@ -1140,55 +1246,53 @@
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(4) CARTÕES NFC CORPORATIVOS</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE COM DOMÍNIO E IDENTIDADE DA SUA MARCA</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">BOTÕES ANIMADOS E EFEITOS VISUAIS LEVES</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">WEBSITE COM DOMÍNIO .SITE E IDENTIDADE DA SUA MARCA</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 TAG PERSONALIZADA DE AVALIAÇÃO NO GOOGLE POR APROXIMAÇÃO</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">AGENDAMENTO E REDES SOCIAIS</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">BOTÃO CONVERSAR WHATSAPP, LOCALIZAÇÃO, SALVAR CONTATO</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 MÊS DE ALTERAÇÕES ILIMITADAS</span></li>
                         </ul>
-                        <a href="https://wa.link/304efy" class="btn btn-blue w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
+                        <a href="https://wa.link/304efy" class="btn btn-saturno-bronze w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
 
                     <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
-                    <div class="plan-card card-orange p-8 flex flex-col relative">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-plan-orange text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full shadow-[0_0_15px_rgba(255,107,0,0.5)] whitespace-nowrap">
+                    <div class="plan-card card-silver p-8 flex flex-col relative">
+                        <div class="badge-saturno-silver absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
                             Custo Benefício
                         </div>
                         <div class="mb-6 mt-2">
-                            <h3 class="text-xl md:text-2xl font-black text-plan-orange uppercase tracking-wide mb-2">Plano Profissional</h3>
+                            <h3 class="text-saturno-silver text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Profissional</h3>
                             <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença completa com identidade visual e funções avançadas.</p>
                         </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 750</span>
-                            <span class="block text-xs font-bold text-plan-orange mt-2 uppercase tracking-widest">Em até 2x sem juros de R$375,00</span>
+                            <span class="text-saturno-silver block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$375,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(10) CARTÕES NFC CORPORATIVOS</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(10) TAGS PARA ESTABELECIMENTOS PERSONALIZADOS</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(3) PLACAS FÍSICAS NFC: GOOGLE + WIFI + AGENDAMENTO</span></li>
                             <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE PERSONALIZADO COM A IDENTIDADE DO SEU NEGÓCIO</span></li>
-                          <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">ANIMAÇÕES AVANÇADAS COM EXPERIÊNCIA VISUAL PROFISSIONAL</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">DOMÍNIO PRÓPRIO</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">AGENDAMENTO E REDES SOCIAIS</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR CODE IMPRESSO</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 MÊS DE ALTERAÇÕES ILIMITADAS</span></li>
                         </ul>
-                        <a href="https://wa.link/bu191w" class="btn btn-orange w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
+                        <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
 
                     <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
-                    <div class="plan-card card-purple p-8 flex flex-col relative">
-                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-plan-purple text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] whitespace-nowrap">
+                    <div class="plan-card card-gold p-8 flex flex-col relative">
+                        <div class="badge-saturno-gold absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
                             Para Grandes Empresas
                         </div>
                         <div class="mb-6 mt-2">
-                            <h3 class="text-xl md:text-2xl font-black text-plan-purple uppercase tracking-wide mb-2">Plano Fora de Órbita</h3>
+                            <h3 class="text-saturno-gold text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Fora de Órbita</h3>
                             <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ideal para: eventos, restaurantes, hoteis, cafeterias, pousadas</p>
                         </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 1.500</span>
-                            <span class="block text-xs font-bold text-plan-purple mt-2 uppercase tracking-widest">Em até 3x sem juros de R$500,00</span>
+                            <span class="text-saturno-gold block text-xs font-bold mt-2 uppercase tracking-widest">Em até 3x sem juros de R$500,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(30) CARTÕES NFC CORPORATIVO</span></li>
@@ -1196,13 +1300,12 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(3) PLACAS FÍSICAS NFC: GOOGLE + WIFI + AGENDAMENTO</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(1) CHAVEIRO NFC (INSTAGRAM)</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">CARDÁPIO PERSONALIZADO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE PROFISSIONAL, SEO E DOMÍNIO .COM.BR</span></li>
-                           <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">ANIMAÇÕES EXCLUSIVAS COM EXPERIÊNCIA VISUAL IMERSIVA</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE PROFISSIONAL, SEO E DOMÍNIO .COM</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">DADOS DE ACESSO, CLIQUES NOS BOTÕES, RETENÇÃO...</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR CODE IMPRESSO</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">2 MESES DE ALTERAÇÕES ILIMITADAS</span></li>
                         </ul>
-                        <a href="https://wa.link/qq7evn" class="btn btn-purple w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
+                        <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
 
                 </div>
