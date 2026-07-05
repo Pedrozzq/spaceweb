@@ -48,6 +48,13 @@
                             goldlight: '#FFD700',
                             blue: '#00D2FF',
                             purple: '#8A2BE2'
+                        },
+                        plan: {
+                            orange: '#FF6B00',
+                            blue: '#3b82f6',
+                            purple: '#A855F7',
+                            green: '#22c55e',
+                            yellow: '#eab308'
                         }
                     },
                     animation: {
@@ -73,10 +80,15 @@
 
     <style>
         /* Base e Scrollbar */
+        html {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
         body {
             background-color: #050508;
             color: #ffffff;
             overflow-x: hidden;
+            max-width: 100%;
             scroll-behavior: smooth;
         }
 
@@ -115,10 +127,10 @@
             position: absolute;
             top: 14%;
             left: 4%;
-            width: 130px;
+            width: 155px;
             height: auto;
-            opacity: 0.5;
-            filter: drop-shadow(0 0 26px rgba(255, 200, 90, 0.45));
+            opacity: 0.62;
+            filter: drop-shadow(0 0 30px rgba(255, 200, 90, 0.5));
             animation: saturnDrift 34s ease-in-out infinite;
         }
         .bg-saturn svg { display: block; width: 100%; height: auto; }
@@ -230,58 +242,76 @@
             transform: scale(1.03);
         }
 
-        /* Botões Glassmorphism Premium */
+        /* ===================== BOTÕES PREMIUM (ANÉIS DE SATURNO) ===================== */
         .link-btn {
-            background: rgba(26, 26, 36, 0.4);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(15, 15, 22, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1rem;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
             overflow: hidden;
-            transform-style: preserve-3d;
-        }
-
-        .link-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s ease;
             z-index: 1;
+            /* Cores padrão neon */
+            --saturn-color-1: rgba(0, 210, 255, 0.9);
+            --saturn-color-2: rgba(138, 43, 226, 0.9);
+        }
+        .link-btn > * { position: relative; z-index: 2; }
+
+        /* Multi-bandas de luz rodando como anéis */
+        .link-btn::before {
+            content: ''; position: absolute;
+            top: 50%; left: 50%; width: 200%; height: 500%;
+            background: conic-gradient(
+                from 0deg, transparent 0%, transparent 35%,
+                var(--saturn-color-1) 45%, transparent 50%,
+                var(--saturn-color-2) 65%, transparent 75%,
+                var(--saturn-color-1) 90%, var(--saturn-color-2) 100%
+            );
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: saturn-orbit 4s linear infinite;
+            opacity: 0; transition: opacity 0.5s ease; z-index: -2;
         }
 
+        /* Máscara escura interna que cria a borda animada */
+        .link-btn::after {
+            content: ''; position: absolute; inset: 2px;
+            background: rgba(12, 12, 18, 0.92); border-radius: calc(1rem - 2px);
+            z-index: -1; transition: background 0.5s ease, inset 0.5s ease;
+        }
+
+        @keyframes saturn-orbit {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Efeitos no Hover */
         .link-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            border-color: rgba(0, 210, 255, 0.3);
-            box-shadow: 0 10px 30px -10px rgba(0, 210, 255, 0.3);
-            background: rgba(26, 26, 36, 0.7);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px -10px var(--saturn-color-1), 0 0 20px rgba(255, 255, 255, 0.05);
+            border-color: transparent;
         }
+        .link-btn:hover::before { opacity: 1; }
+        .link-btn:hover::after { background: rgba(18, 18, 28, 0.65); inset: 1.5px; }
+        .link-btn:active { transform: translateY(1px) scale(0.98); transition: all 0.1s ease; }
 
-        .link-btn:hover::before {
-            left: 200%;
-        }
-
-        .link-btn:active {
-            transform: translateY(1px) scale(0.98);
-        }
-
-        /* Botão Destaque (Comprar) */
+        /* Botão Destaque (Dourado/Laranja) */
         .btn-highlight {
-            background: linear-gradient(135deg, rgba(255, 184, 0, 0.1), rgba(255, 140, 0, 0.1));
-            border: 1px solid rgba(255, 184, 0, 0.4);
-            box-shadow: 0 0 20px rgba(255, 184, 0, 0.15);
+            --saturn-color-1: #FFD700; --saturn-color-2: #FF4500;
+            border-color: rgba(255, 184, 0, 0.3);
         }
-
+        .btn-highlight::before { opacity: 0.7; animation: saturn-orbit 3.5s linear infinite; }
+        .btn-highlight:hover::before { animation: saturn-orbit 1.5s linear infinite; }
         .btn-highlight:hover {
-            border-color: rgba(255, 184, 0, 0.8);
-            box-shadow: 0 0 30px rgba(255, 184, 0, 0.4), inset 0 0 15px rgba(255, 184, 0, 0.2);
-            background: linear-gradient(135deg, rgba(255, 184, 0, 0.2), rgba(255, 140, 0, 0.2));
+            box-shadow: 0 10px 40px -10px rgba(255, 184, 0, 0.7), 0 0 25px rgba(255, 69, 0, 0.5);
         }
 
-        .btn-highlight .icon-wrapper {
-            color: #FFB800;
-        }
+        /* Cores vibrantes únicas para cada link baseado no contexto */
+        .link-btn[href*="wa.link"] { --saturn-color-1: #25D366; --saturn-color-2: #028A54; }
+        .link-btn[href="nfc.html"] { --saturn-color-1: #9D4EDD; --saturn-color-2: #FF00FF; }
+        .link-btn[href="projetos.html"] { --saturn-color-1: #00D2FF; --saturn-color-2: #00FF87; }
+        .link-btn[href*="instagram.com"] { --saturn-color-1: #F56040; --saturn-color-2: #E1306C; }
 
         /* Cards de Glassmorphism (Como funciona / Benefícios) */
         .glass-card {
@@ -506,6 +536,153 @@
         .animate-float-tag-2 { animation: floatTag2 5s ease-in-out infinite; }
         .animate-float-tag-3 { animation: floatTag3 6s ease-in-out infinite; }
         .animate-float-tag-4 { animation: floatTag4 4.5s ease-in-out infinite; }
+
+        /* ===================== SEÇÃO DE PLANOS ===================== */
+        .plans-section { font-family: "Plus Jakarta Sans", sans-serif; }
+        .title-highlight { font-weight: 900; letter-spacing: -0.02em; }
+
+        .plan-card {
+            background-color: #0a0a0c;
+            border-radius: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .plan-card:hover { transform: translateY(-5px); }
+
+        .card-purple { border: 1px solid rgba(255, 255, 255, 0.05); }
+        .card-purple:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.15);
+        }
+
+        .card-orange {
+            border: 1px solid rgba(255, 107, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.05);
+        }
+        .card-orange:hover {
+            border-color: rgba(255, 107, 0, 0.8);
+            box-shadow: 0 10px 40px -10px rgba(255, 107, 0, 0.2), inset 0 0 20px rgba(255, 107, 0, 0.05);
+        }
+
+        .card-white { border: 1px solid rgba(255, 255, 255, 0.05); }
+        .card-white:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px -10px rgba(255, 255, 255, 0.05);
+        }
+
+        .card-blue {
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.05);
+        }
+        .card-blue:hover {
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.2), inset 0 0 20px rgba(59, 130, 246, 0.05);
+        }
+
+        .btn {
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+        .btn-purple { background: linear-gradient(90deg, #b062ff, #9b40f5); color: #ffffff; }
+        .btn-purple:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); filter: brightness(1.1); }
+        .btn-orange { background: linear-gradient(90deg, #ff7a1a, #f96300); color: #ffffff; }
+        .btn-orange:hover { box-shadow: 0 0 20px rgba(255, 107, 0, 0.5); filter: brightness(1.1); }
+        .btn-blue { background: linear-gradient(90deg, #60a5fa, #2563eb); color: #ffffff; }
+        .btn-blue:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); filter: brightness(1.1); }
+        .btn-white { background: #ffffff; color: #000000; }
+        .btn-white:hover { box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); filter: brightness(1.05); }
+
+        .list-text {
+            font-size: 0.75rem;
+            line-height: 1.4;
+            color: #d1d5db;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        @media (min-width: 768px)  { .list-text { font-size: 0.70rem; } }
+        @media (min-width: 1024px) { .list-text { font-size: 0.75rem; } }
+
+        .icon-check { font-size: 1.1rem; color: #22c55e; margin-top: -1px; flex-shrink: 0; font-weight: bold; }
+        .icon-star  { font-size: 1.1rem; color: #eab308; margin-top: -1px; flex-shrink: 0; }
+
+        /* ===================== SEÇÃO DE PORTFÓLIO ===================== */
+        .portfolio-section { font-family: "Plus Jakarta Sans", sans-serif; }
+        .text-gradient {
+            background: linear-gradient(90deg, #FF7A00, #FFB800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-white-glow {
+            background: linear-gradient(135deg, #FFB800, #FF7A00);
+            color: black;
+            font-weight: 900;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 184, 0, 0.3);
+        }
+        .btn-white-glow:hover { box-shadow: 0 0 30px rgba(255, 184, 0, 0.5); transform: scale(1.02); }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255, 184, 0, 0.3);
+            color: white;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover { border-color: #FFB800; background: rgba(255, 184, 0, 0.1); }
+
+        /* Setas do slider */
+        .slider-arrow {
+            background: rgba(10, 10, 12, 0.85);
+            border: 1px solid rgba(255, 184, 0, 0.3);
+            color: #FFB800;
+            transition: all 0.3s ease;
+        }
+        .slider-arrow:hover { border-color: #FFB800; background: rgba(255, 184, 0, 0.15); }
+        .slider-arrow:disabled { opacity: 0; pointer-events: none; }
+
+        /* ===================== CTA WHATSAPP PREMIUM ANIMADO ===================== */
+        .btn-whatsapp-cta {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #25D366 0%, #1EBE5B 45%, #128C7E 100%);
+            box-shadow: 0 10px 30px -8px rgba(37, 211, 102, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: waPulse 2.6s ease-in-out infinite;
+        }
+        .btn-whatsapp-cta > * { position: relative; z-index: 1; }
+        @keyframes waPulse {
+            0%, 100% { box-shadow: 0 10px 30px -8px rgba(37, 211, 102, 0.45), 0 0 0 0 rgba(37, 211, 102, 0.5); }
+            50%      { box-shadow: 0 14px 38px -8px rgba(37, 211, 102, 0.65), 0 0 0 10px rgba(37, 211, 102, 0); }
+        }
+        .btn-whatsapp-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -120%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transform: skewX(-20deg);
+            animation: waShine 3.4s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes waShine {
+            0%   { left: -120%; }
+            55%  { left: 150%; }
+            100% { left: 150%; }
+        }
+        .btn-whatsapp-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 44px -8px rgba(37, 211, 102, 0.7);
+        }
+        .btn-whatsapp-cta:active { transform: translateY(0) scale(0.99); }
+        .btn-whatsapp-cta .wa-icon { animation: waIconBeat 2.6s ease-in-out infinite; }
+        @keyframes waIconBeat {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.12); }
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-purple selection:text-white loading">
@@ -528,35 +705,104 @@
     <div class="bg-decor" aria-hidden="true">
         <!-- Saturno feito à mão em SVG, flutuando pelo fundo preto -->
         <div class="bg-saturn">
-            <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg">
                 <defs>
-                    <radialGradient id="satBody" cx="38%" cy="34%" r="78%">
-                        <stop offset="0%" stop-color="#fff2cf"/>
-                        <stop offset="38%" stop-color="#f5c66a"/>
-                        <stop offset="72%" stop-color="#c8922f"/>
-                        <stop offset="100%" stop-color="#6d4a11"/>
+                    <!-- Esfera do planeta com luz vindo do canto superior esquerdo -->
+                    <radialGradient id="satSphere" cx="34%" cy="30%" r="82%">
+                        <stop offset="0%"  stop-color="#fff4da"/>
+                        <stop offset="20%" stop-color="#f2cf88"/>
+                        <stop offset="45%" stop-color="#d9a24f"/>
+                        <stop offset="68%" stop-color="#b07a2f"/>
+                        <stop offset="86%" stop-color="#7c531c"/>
+                        <stop offset="100%" stop-color="#3f2a0d"/>
                     </radialGradient>
-                    <linearGradient id="satRing" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%"   stop-color="rgba(255,214,120,0)"/>
-                        <stop offset="18%"  stop-color="rgba(255,214,120,0.85)"/>
-                        <stop offset="50%"  stop-color="#ffeab6"/>
-                        <stop offset="82%"  stop-color="rgba(255,214,120,0.85)"/>
-                        <stop offset="100%" stop-color="rgba(255,214,120,0)"/>
+                    <!-- Sombreamento de volume / terminador dia-noite -->
+                    <radialGradient id="satShade" cx="33%" cy="29%" r="80%">
+                        <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
+                        <stop offset="52%"  stop-color="rgba(0,0,0,0)"/>
+                        <stop offset="74%"  stop-color="rgba(45,24,4,0.20)"/>
+                        <stop offset="90%"  stop-color="rgba(22,11,0,0.52)"/>
+                        <stop offset="100%" stop-color="rgba(6,3,0,0.82)"/>
+                    </radialGradient>
+                    <!-- Brilho especular (reflexo da luz na atmosfera) -->
+                    <radialGradient id="satSpec" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%"   stop-color="rgba(255,250,235,0.65)"/>
+                        <stop offset="100%" stop-color="rgba(255,250,235,0)"/>
+                    </radialGradient>
+                    <!-- Anéis: banda B (mais brilhante), A (externa) e C (interna, tênue) -->
+                    <linearGradient id="ringB" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%"   stop-color="rgba(226,205,160,0.12)"/>
+                        <stop offset="15%"  stop-color="rgba(236,216,175,0.92)"/>
+                        <stop offset="50%"  stop-color="rgba(251,238,208,0.96)"/>
+                        <stop offset="85%"  stop-color="rgba(236,216,175,0.92)"/>
+                        <stop offset="100%" stop-color="rgba(226,205,160,0.12)"/>
                     </linearGradient>
-                    <clipPath id="satFrontRing">
-                        <rect x="0" y="75" width="220" height="75"/>
-                    </clipPath>
+                    <linearGradient id="ringA" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%"   stop-color="rgba(200,180,145,0.08)"/>
+                        <stop offset="18%"  stop-color="rgba(206,186,150,0.72)"/>
+                        <stop offset="50%"  stop-color="rgba(222,202,167,0.82)"/>
+                        <stop offset="82%"  stop-color="rgba(206,186,150,0.72)"/>
+                        <stop offset="100%" stop-color="rgba(200,180,145,0.08)"/>
+                    </linearGradient>
+                    <linearGradient id="ringC" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%"   stop-color="rgba(180,165,140,0)"/>
+                        <stop offset="25%"  stop-color="rgba(186,171,146,0.38)"/>
+                        <stop offset="75%"  stop-color="rgba(186,171,146,0.38)"/>
+                        <stop offset="100%" stop-color="rgba(180,165,140,0)"/>
+                    </linearGradient>
+                    <clipPath id="satSphereClip"><circle cx="120" cy="85" r="42"/></clipPath>
+                    <clipPath id="satFront"><rect x="0" y="85" width="240" height="85"/></clipPath>
+                    <clipPath id="satShadowRing"><rect x="120" y="50" width="46" height="35"/></clipPath>
+                    <filter id="satSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.1"/></filter>
+                    <filter id="satShadowBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2"/></filter>
                 </defs>
-                <g transform="rotate(-18 110 75)">
-                    <!-- anel (metade de trás) -->
-                    <ellipse cx="110" cy="75" rx="100" ry="30" fill="none" stroke="url(#satRing)" stroke-width="9"/>
-                    <!-- planeta -->
-                    <circle cx="110" cy="75" r="42" fill="url(#satBody)"/>
-                    <!-- faixas atmosféricas sutis -->
-                    <path d="M70 66 q40 -10 80 0" fill="none" stroke="rgba(109,74,17,0.35)" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M72 86 q38 9 76 0" fill="none" stroke="rgba(255,242,207,0.25)" stroke-width="2.5" stroke-linecap="round"/>
-                    <!-- anel (metade da frente, cruzando por cima do planeta) -->
-                    <ellipse cx="110" cy="75" rx="100" ry="30" fill="none" stroke="url(#satRing)" stroke-width="9" clip-path="url(#satFrontRing)"/>
+
+                <g transform="rotate(-20 120 85)">
+                    <!-- ===== ANÉIS (metade de trás) ===== -->
+                    <g>
+                        <ellipse cx="120" cy="85" rx="66"  ry="19.8" fill="none" stroke="url(#ringC)" stroke-width="11"/>
+                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="url(#ringB)" stroke-width="23"/>
+                        <ellipse cx="120" cy="85" rx="100" ry="30"   fill="none" stroke="rgba(12,9,5,0.6)" stroke-width="4"/>
+                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="url(#ringA)" stroke-width="14"/>
+                    </g>
+
+                    <!-- Sombra do planeta projetada sobre os anéis de trás -->
+                    <g clip-path="url(#satShadowRing)" filter="url(#satShadowBlur)">
+                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="23"/>
+                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="rgba(0,0,0,0.5)"  stroke-width="14"/>
+                    </g>
+
+                    <!-- ===== PLANETA ===== -->
+                    <g>
+                        <circle cx="120" cy="85" r="42" fill="url(#satSphere)"/>
+                        <!-- Faixas atmosféricas -->
+                        <g clip-path="url(#satSphereClip)" filter="url(#satSoft)">
+                            <rect x="78" y="49" width="84" height="4" fill="rgba(180,130,60,0.22)"/>
+                            <rect x="78" y="59" width="84" height="6" fill="rgba(120,80,30,0.30)"/>
+                            <rect x="78" y="70" width="84" height="4" fill="rgba(255,240,205,0.22)"/>
+                            <rect x="78" y="79" width="84" height="7" fill="rgba(150,100,40,0.28)"/>
+                            <rect x="78" y="91" width="84" height="5" fill="rgba(255,235,195,0.18)"/>
+                            <rect x="78" y="99" width="84" height="6" fill="rgba(120,78,28,0.30)"/>
+                            <rect x="78" y="109" width="84" height="5" fill="rgba(110,70,25,0.28)"/>
+                        </g>
+                        <!-- Volume / terminador -->
+                        <circle cx="120" cy="85" r="42" fill="url(#satShade)"/>
+                        <!-- Reflexo especular -->
+                        <ellipse cx="105" cy="67" rx="16" ry="11" fill="url(#satSpec)" clip-path="url(#satSphereClip)"/>
+                    </g>
+
+                    <!-- Sombra dos anéis projetada sobre o planeta -->
+                    <g clip-path="url(#satSphereClip)">
+                        <ellipse cx="120" cy="90" rx="42" ry="6.5" fill="none" stroke="rgba(0,0,0,0.30)" stroke-width="6" filter="url(#satSoft)"/>
+                    </g>
+
+                    <!-- ===== ANÉIS (metade da frente, cruzando por cima do planeta) ===== -->
+                    <g clip-path="url(#satFront)">
+                        <ellipse cx="120" cy="85" rx="66"  ry="19.8" fill="none" stroke="url(#ringC)" stroke-width="11"/>
+                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="url(#ringB)" stroke-width="23"/>
+                        <ellipse cx="120" cy="85" rx="100" ry="30"   fill="none" stroke="rgba(12,9,5,0.6)" stroke-width="4"/>
+                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="url(#ringA)" stroke-width="14"/>
+                    </g>
                 </g>
             </svg>
         </div>
@@ -594,54 +840,54 @@
         <!-- Linktree Buttons -->
         <section class="w-full flex flex-col gap-3 mb-4 stagger-item" style="animation-delay: 0.4s;">
 
-            <a href="planos.html" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="#planos" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
-                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20">
+                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20 z-10 relative">
                         <i class="ph ph-shopping-cart-simple text-xl"></i>
                     </div>
-                    <span class="font-semibold text-white text-base md:text-lg">Tenha seu Cartão Inteligente NFC</span>
+                    <span class="font-semibold text-white text-base md:text-lg z-10 relative">Comprar agora seu Cartão NFC</span>
                 </div>
-                <i class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+                <i class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all z-10 relative"></i>
             </a>
 
             <a href="https://wa.link/b7gpgn" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors z-10 relative">
                         <i class="ph ph-whatsapp-logo text-xl"></i>
                     </div>
-                    <span class="font-medium text-gray-100">Tire sua dúvida pelo WhatsApp</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Tire sua dúvida pelo WhatsApp</span>
                 </div>
-                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
-            <a href="nfc.html" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors z-10 relative">
                         <i class="ph ph-info text-xl"></i>
                     </div>
-                    <span class="font-medium text-gray-100">Entenda como funciona</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Entenda como funciona</span>
                 </div>
-                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
-            <a href="projetos.html" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="#portfolio" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/20 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/20 transition-colors z-10 relative">
                         <i class="ph ph-cards text-xl"></i>
                     </div>
-                    <span class="font-medium text-gray-100">Projetos concluídos</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Projetos concluídos</span>
                 </div>
-                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
             <a href="https://www.instagram.com/saturnonfc" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors z-10 relative">
                         <i class="ph ph-instagram-logo text-xl"></i>
                     </div>
-                    <span class="font-medium text-gray-100">Instagram</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Instagram</span>
                 </div>
-                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors"></i>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
         </section>
@@ -862,13 +1108,334 @@
             </div>
         </section>
 
+        <!-- ===================== SEÇÃO DE PLANOS ===================== -->
+        <section id="planos" class="plans-section px-4 mt-8 mb-20" style="width: 100vw; max-width: 100vw;">
+            <div class="max-w-[1200px] mx-auto flex flex-col items-center">
+
+                <header class="text-center w-full mb-16 flex flex-col items-center">
+                    <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC" class="h-12 md:h-14 w-auto object-contain mb-6">
+                    <p class="text-plan-orange text-xs md:text-sm font-bold tracking-[0.3em] uppercase mb-3">
+                        Maior Crescimento e Conversão
+                    </p>
+                    <h2 class="text-4xl md:text-6xl title-highlight uppercase">
+                        <span class="text-white">Escolha Seu</span> <span class="text-plan-orange">Plano</span>
+                    </h2>
+                </header>
+
+                <!-- GRID DOS 3 PLANOS -->
+                <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-12">
+
+                    <!-- PLANO ESSENCIAL (Mais Vendido - Azul) -->
+                    <div class="plan-card card-blue p-8 flex flex-col relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-plan-blue text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)] whitespace-nowrap">
+                            Mais Vendido
+                        </div>
+                        <div class="mb-6 mt-2">
+                            <h3 class="text-xl md:text-2xl font-black text-plan-blue uppercase tracking-wide mb-2">Plano Essencial</h3>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">O pacote essencial para dar o primeiro passo no networking digital.</p>
+                        </div>
+                        <div class="mb-8">
+                            <span class="text-4xl md:text-5xl font-black text-white">R$ 400</span>
+                            <span class="block text-xs font-bold text-transparent mt-2 uppercase tracking-widest select-none">&nbsp;</span>
+                        </div>
+                        <ul class="space-y-5 mb-10 flex-1">
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(4) CARTÕES NFC CORPORATIVOS</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">WEBSITE COM DOMÍNIO .SITE E IDENTIDADE DA SUA MARCA</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 TAG PERSONALIZADA DE AVALIAÇÃO NO GOOGLE POR APROXIMAÇÃO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">AGENDAMENTO E REDES SOCIAIS</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">BOTÃO CONVERSAR WHATSAPP, LOCALIZAÇÃO, SALVAR CONTATO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 MÊS DE ALTERAÇÕES ILIMITADAS</span></li>
+                        </ul>
+                        <a href="https://wa.link/304efy" class="btn btn-blue w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
+                    </div>
+
+                    <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
+                    <div class="plan-card card-orange p-8 flex flex-col relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-plan-orange text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full shadow-[0_0_15px_rgba(255,107,0,0.5)] whitespace-nowrap">
+                            Custo Benefício
+                        </div>
+                        <div class="mb-6 mt-2">
+                            <h3 class="text-xl md:text-2xl font-black text-plan-orange uppercase tracking-wide mb-2">Plano Profissional</h3>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença completa com identidade visual e funções avançadas.</p>
+                        </div>
+                        <div class="mb-8">
+                            <span class="text-4xl md:text-5xl font-black text-white">R$ 750</span>
+                            <span class="block text-xs font-bold text-plan-orange mt-2 uppercase tracking-widest">Em até 2x sem juros de R$375,00</span>
+                        </div>
+                        <ul class="space-y-5 mb-10 flex-1">
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(10) CARTÕES NFC CORPORATIVOS</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(10) TAGS PARA ESTABELECIMENTOS PERSONALIZADOS</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(3) PLACAS FÍSICAS NFC: GOOGLE + WIFI + AGENDAMENTO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE PERSONALIZADO COM A IDENTIDADE DO SEU NEGÓCIO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">DOMÍNIO PRÓPRIO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">AGENDAMENTO E REDES SOCIAIS</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR CODE IMPRESSO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 MÊS DE ALTERAÇÕES ILIMITADAS</span></li>
+                        </ul>
+                        <a href="https://wa.link/bu191w" class="btn btn-orange w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
+                    </div>
+
+                    <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
+                    <div class="plan-card card-purple p-8 flex flex-col relative">
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-plan-purple text-white text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] whitespace-nowrap">
+                            Para Grandes Empresas
+                        </div>
+                        <div class="mb-6 mt-2">
+                            <h3 class="text-xl md:text-2xl font-black text-plan-purple uppercase tracking-wide mb-2">Plano Fora de Órbita</h3>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ideal para: eventos, restaurantes, hoteis, cafeterias, pousadas</p>
+                        </div>
+                        <div class="mb-8">
+                            <span class="text-4xl md:text-5xl font-black text-white">R$ 1.500</span>
+                            <span class="block text-xs font-bold text-plan-purple mt-2 uppercase tracking-widest">Em até 3x sem juros de R$500,00</span>
+                        </div>
+                        <ul class="space-y-5 mb-10 flex-1">
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(30) CARTÕES NFC CORPORATIVO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(30) TAGS FÍSICAS (MESA, CARDÁPIO, QUARTO DE HOTEL, VENDAS, ENTRE OUTROS)</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(3) PLACAS FÍSICAS NFC: GOOGLE + WIFI + AGENDAMENTO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">(1) CHAVEIRO NFC (INSTAGRAM)</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">CARDÁPIO PERSONALIZADO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE PROFISSIONAL, SEO E DOMÍNIO .COM</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">DADOS DE ACESSO, CLIQUES NOS BOTÕES, RETENÇÃO...</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR CODE IMPRESSO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">2 MESES DE ALTERAÇÕES ILIMITADAS</span></li>
+                        </ul>
+                        <a href="https://wa.link/qq7evn" class="btn btn-purple w-full py-4 rounded-full text-center mt-auto shadow-lg">Escolher Plano</a>
+                    </div>
+
+                </div>
+
+                <!-- ASSINATURA / GESTÃO SATURNO -->
+                <div class="w-full max-w-4xl mx-auto mb-12">
+                    <div class="plan-card card-white p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="flex-1 text-center md:text-left">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold mb-4 uppercase tracking-[0.2em] rounded-full">
+                                <i class="ph ph-arrows-clockwise"></i> Assinatura
+                            </div>
+                            <h3 class="text-white text-2xl md:text-3xl font-black uppercase tracking-wide mb-3">Gestão Saturno</h3>
+                            <p class="text-gray-500 text-[11px] uppercase tracking-wider mb-6 leading-relaxed font-semibold">
+                                Manutenção, suporte, alterações, melhorias, acompanhamento, dados de acesso, atualizações e evolução do projeto.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-left">
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Alterações ilimitadas na página NFC</span></div>
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Atualização de links, produtos e informações</span></div>
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Relatórios completos enviados semanalmente</span></div>
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Acompanhamento de acessos e desempenho</span></div>
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Estatísticas de cliques, visualizações e conversões</span></div>
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Suporte prioritário via WhatsApp</span></div>
+                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Backup e monitoramento da página</span></div>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-auto flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-10 shrink-0">
+                            <div class="text-4xl font-black text-white tracking-tight">R$ 49,90</div>
+                            <div class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">por mês</div>
+                            <a href="https://buy.stripe.com/28EbJ0gYo7RncEde2Ogw004" target="_blank" rel="noopener noreferrer" class="btn btn-white w-full md:w-auto px-10 py-4 rounded-full text-center whitespace-nowrap">
+                                Assinar agora
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA WhatsApp: Ainda restam dúvidas? -->
+                <div class="w-full max-w-md mx-auto">
+                    <a href="https://wa.link/b7gpgn" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta w-full rounded-2xl p-5 flex items-center justify-center gap-4 group">
+                        <span class="wa-icon w-11 h-11 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                            <i class="ph-fill ph-whatsapp-logo text-2xl text-white"></i>
+                        </span>
+                        <span class="flex flex-col items-start text-left leading-tight">
+                            <span class="text-white font-black text-sm sm:text-base uppercase tracking-wide">Ainda restam dúvidas?</span>
+                            <span class="text-white/90 text-[11px] font-semibold uppercase tracking-wider">Fale conosco no WhatsApp</span>
+                        </span>
+                        <i class="ph ph-arrow-right text-white text-xl ml-auto group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===================== SEÇÃO DE PORTFÓLIO ===================== -->
+        <section id="portfolio" class="portfolio-section px-4 py-12 md:py-16" style="width: 100vw; max-width: 100vw;">
+            <div class="mx-auto max-w-5xl">
+                <div class="card-interactive p-4 sm:p-10 md:p-16 relative overflow-hidden border border-white/10 rounded-[2rem] bg-[#0a0a0c]">
+                    <div class="absolute -top-40 -right-40 w-96 h-96 bg-orange-600/10 blur-[120px]"></div>
+                    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-orange-600/10 blur-[120px]"></div>
+
+                    <div class="relative z-10 flex flex-col items-center text-center">
+                        <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[9px] font-bold mb-8 uppercase tracking-[0.4em]">
+                            <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Trabalhos Concluídos
+                        </div>
+
+                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
+                            NOSSO PORTFÓLIO COM <br/> <span class="text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
+                        </h2>
+
+                        <!-- Instrução para o usuário -->
+                        <div class="flex items-center justify-center gap-2 mb-6 text-slate-400 text-[11px] md:text-xs uppercase tracking-wider">
+                            <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-orange-400"></i>
+                            <span>Clique em um projeto para <span class="text-orange-400 font-bold">visualizá-lo</span></span>
+                        </div>
+
+                        <!-- SLIDER -->
+                        <div class="relative w-full max-w-4xl mx-auto mb-8 px-6 sm:px-0">
+
+                            <!-- Viewport -->
+                            <div id="portfolio-viewport" class="overflow-hidden">
+                                <div id="portfolio-track" class="flex transition-transform duration-500 ease-out" style="transform: translateX(0%);">
+
+                                    <!-- PÁGINA 1: Projetos concluídos -->
+                                    <div class="w-full shrink-0">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                                            <a href="https://maiaprodutor.site" target="_blank" class="bg-transparent border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group">
+                                                <img src="https://i.imgur.com/nu6DjeKl.jpg" alt="Maia Produtor" width="640" height="480" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://i.imgur.com/nu6DjeK.png';" class="w-full h-32 object-cover rounded-lg bg-white/5 group-hover:scale-105 transition-transform">
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Maia Produtor</h4>
+                                                    <p class="text-red-500 text-[10px] mt-1 font-medium">Produção e divulgação de eventos</p>
+                                                </div>
+                                            </a>
+                                            <a href="https://primemoveis.site" target="_blank" class="bg-transparent border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group">
+                                                <img src="https://i.imgur.com/EPT09I8l.jpg" alt="Prime Móveis" width="640" height="480" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://i.imgur.com/EPT09I8.png';" class="w-full h-32 object-cover rounded-lg bg-white/5 group-hover:scale-105 transition-transform">
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Prime Móveis</h4>
+                                                    <p class="text-blue-500 text-[10px] mt-1 font-medium">Móveis Planejados</p>
+                                                </div>
+                                            </a>
+                                            <a href="https://jpjoiasbrasil.com" target="_blank" class="bg-transparent border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group">
+                                                <img src="https://i.imgur.com/CYJwkZJl.jpg" alt="JP Joias" width="640" height="480" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://i.imgur.com/CYJwkZJ.png';" class="w-full h-32 object-cover rounded-lg bg-white/5 group-hover:scale-105 transition-transform">
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">JP Joias</h4>
+                                                    <p class="text-[#FFB800] text-[10px] mt-1 font-medium">Joalheria</p>
+                                                </div>
+                                            </a>
+                                            <a href="https://venusdistribuidora.com" target="_blank" class="bg-transparent border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group">
+                                                <img src="https://i.imgur.com/Ns344Iil.jpg" alt="Vênus Distribuidora" width="640" height="480" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://i.imgur.com/Ns344Ii.png';" class="w-full h-32 object-cover rounded-lg bg-white/5 group-hover:scale-105 transition-transform">
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Vênus Distribuidora</h4>
+                                                    <p class="text-purple-500 text-[10px] mt-1 font-medium">Distribuidora de cosméticos</p>
+                                                </div>
+                                            </a>
+                                            <a href="https://www.ouropack.site" target="_blank" class="bg-transparent border border-white/10 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/30 transition-all group">
+                                                <img src="https://i.imgur.com/R0kT6RLl.jpg" alt="OuroPack" width="640" height="480" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://i.imgur.com/R0kT6RL.png';" class="w-full h-32 object-cover rounded-lg bg-white/5 group-hover:scale-105 transition-transform">
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">OuroPack</h4>
+                                                    <p class="text-[#C08A52] text-[10px] mt-1 font-medium">Caixas de Papelão</p>
+                                                </div>
+                                            </a>
+
+                                            <!-- Vaga em branco para editar futuramente -->
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- PÁGINA 2: 6 projetos em branco (mesma proporção) -->
+                                    <div class="w-full shrink-0">
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-transparent border border-dashed border-white/15 rounded-xl p-4 flex flex-col gap-3 hover:border-orange-500/40 transition-all group">
+                                                <div class="w-full h-32 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-orange-500/5 transition-colors">
+                                                    <i data-lucide="plus" class="w-8 h-8 text-slate-600 group-hover:text-orange-400 transition-colors"></i>
+                                                </div>
+                                                <div class="text-left">
+                                                    <h4 class="text-white font-black text-[13px] uppercase">Seu Projeto</h4>
+                                                    <p class="text-orange-500 text-[10px] mt-1 font-medium">Estamos te aguardando</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Seta Anterior -->
+                            <button id="prevBtn" aria-label="Anterior" disabled
+                                class="slider-arrow absolute left-0 md:-left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
+                                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                            </button>
+
+                            <!-- Seta Próximo -->
+                            <button id="nextBtn" aria-label="Ver mais projetos"
+                                class="slider-arrow absolute right-0 md:-right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <!-- Indicadores (bolinhas) -->
+                        <div class="flex items-center justify-center gap-2 mb-12">
+                            <span class="dot w-2 h-2 rounded-full bg-orange-500 transition-all"></span>
+                            <span class="dot w-2 h-2 rounded-full bg-white/20 transition-all"></span>
+                        </div>
+
+                        <div class="flex flex-col gap-4 w-full justify-center items-center">
+                            <a href="planos.html" class="btn-white-glow px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px]">
+                                Comprar meu Cartão NFC
+                            </a>
+                            <a href="https://wa.link/idb3mn" target="_blank" class="btn-outline px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px] group">
+                                Solicitar Cotação
+                                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Footer -->
         <footer class="w-full text-center pb-8 border-t border-white/5 pt-8 stagger-item" style="animation-delay: 0.8s;">
             <div class="w-24 mx-auto mb-4 opacity-50">
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC Logo" class="w-full h-auto grayscale">
             </div>
 
-            <p class="text-gray-400 text-sm mb-6">Transforme seu cartão em uma experiência inteligente.</p>
+            <p class="text-gray-400 text-sm mb-6">Tecnologia que aproxima marcas e pessoas.</p>
 
             <!-- Botão CTA Final -->
             <a href="planos.html" class="inline-block bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] mb-8 transform hover:scale-105 duration-200">
@@ -1105,9 +1672,38 @@
                     cardInner.style.transform = 'rotateY(0deg) scale(1)';
                     cardInner.style.filter = 'brightness(1)';
                     
-                }, 400); 
-            }, 4000); 
+                }, 400);
+            }, 4000);
         }
+
+        // --- 7. SLIDER DO PORTFÓLIO (setas para navegar entre as páginas) ---
+        (function () {
+            const track = document.getElementById('portfolio-track');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dots = document.querySelectorAll('#portfolio .dot');
+            if (!track || !prevBtn || !nextBtn) return;
+
+            const totalPages = 2;
+            let index = 0;
+
+            function update() {
+                track.style.transform = `translateX(-${index * 100}%)`;
+                prevBtn.disabled = (index === 0);
+                nextBtn.disabled = (index === totalPages - 1);
+                dots.forEach((d, i) => {
+                    d.className = 'dot w-2 h-2 rounded-full transition-all ' + (i === index ? 'bg-orange-500' : 'bg-white/20');
+                });
+            }
+
+            nextBtn.addEventListener('click', () => { if (index < totalPages - 1) { index++; update(); } });
+            prevBtn.addEventListener('click', () => { if (index > 0) { index--; update(); } });
+
+            update();
+        })();
+
+        // Garante que os ícones Lucide da seção de portfólio sejam renderizados
+        if (typeof lucide !== 'undefined') lucide.createIcons();
 
     </script>
 </body>
