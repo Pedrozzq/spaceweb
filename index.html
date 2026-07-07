@@ -409,9 +409,12 @@
            O scale vai só até 1: a imagem apenas reduz durante o trajeto,
            então permanece sempre nítida (sem upscaling do bitmap). */
         @keyframes planetApproach {
-            0%   { transform: translate(-95vw, -50%) scale(0.14); opacity: 0; filter: blur(7px); }
+            /* -50% mantém o conjunto centralizado (independe da largura da imagem);
+               o offset em vw só empurra para a esquerda -> garante o mesmo trajeto
+               (esquerda -> centro, crescendo) no desktop e no celular. */
+            0%   { transform: translate(calc(-50% - 65vw), -50%) scale(0.14); opacity: 0; filter: blur(7px); }
             18%  { opacity: 1; }
-            62%  { transform: translate(-14vw, -50%) scale(0.5); opacity: 1; filter: blur(0); }
+            62%  { transform: translate(calc(-50% - 22vw), -50%) scale(0.5); opacity: 1; filter: blur(0); }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 1; filter: blur(0); }
         }
         /* O rastro (cauda) some conforme o planeta chega e cresce */
