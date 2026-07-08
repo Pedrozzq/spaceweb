@@ -1044,35 +1044,7 @@
                 <i id="wa-personalizado-caret" class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
-            <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md">
-                <div class="p-4 sm:p-5 flex flex-col gap-4">
-                    <div>
-                        <label for="wa-personalizado-nome" class="block text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">Seu nome</label>
-                        <input id="wa-personalizado-nome" type="text" placeholder="Digite seu nome" autocomplete="name" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 sm:py-3 text-white text-base sm:text-sm placeholder-gray-500 focus:outline-none focus:border-[#25D366] transition-colors">
-                        <p id="wa-personalizado-erro" class="hidden text-[11px] font-semibold text-red-400 mt-2">Digite seu nome antes de escolher uma opção.</p>
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Iniciar conversa sobre</span>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <button type="button" class="wa-chip" data-frase="Quero fazer meu cartão personalizado">Quero fazer meu cartão personalizado</button>
-                            <button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>
-                            <button type="button" class="wa-chip" data-frase="Posso ver exemplos de cartões prontos?">Ver exemplos de cartões</button>
-                            <button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>
-                            <button type="button" class="wa-chip" data-frase="Vocês parcelam?">Vocês parcelam?</button>
-                            <button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>
-                            <button type="button" id="wa-chip-outro" class="wa-chip sm:col-span-2 flex items-center justify-between">
-                                Outro <i class="ph ph-caret-down text-xs transition-transform"></i>
-                            </button>
-                        </div>
-                        <div id="wa-outro-box" class="wa-outro-box flex flex-col gap-2">
-                            <textarea id="wa-outro-texto" rows="3" placeholder="Escreva sua mensagem..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#25D366] transition-colors resize-none"></textarea>
-                            <button type="button" id="wa-outro-enviar" class="wa-chip w-full flex items-center justify-center gap-2 text-center">
-                                Enviar mensagem <i class="ph ph-paper-plane-tilt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
 
             <a href="#portfolio" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
@@ -1089,7 +1061,7 @@
                     <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors z-10 relative">
                         <i class="ph ph-instagram-logo text-xl"></i>
                     </div>
-                    <span class="font-medium text-gray-100 z-10 relative">Instagram</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Conhecer a Saturno NFC no Instagram</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
@@ -1446,7 +1418,7 @@
 
                 <!-- CTA WhatsApp: Ainda restam dúvidas? -->
                 <div class="w-full max-w-md mx-auto reveal-node">
-                    <a href="https://wa.link/0zpwgo" data-wa-ask-name="5531920067518" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta w-full rounded-2xl p-5 flex items-center justify-center gap-4 group">
+                    <a href="https://wa.link/0zpwgo" id="btn-wa-duvidas" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta w-full rounded-2xl p-5 flex items-center justify-center gap-4 group">
                         <span class="wa-icon w-11 h-11 rounded-full flex items-center justify-center shrink-0">
                             <i class="ph-fill ph-whatsapp-logo text-2xl text-[#25D366]"></i>
                         </span>
@@ -1456,6 +1428,7 @@
                         </span>
                         <i class="ph ph-arrow-right text-[#25D366] text-xl ml-auto group-hover:translate-x-1 transition-transform"></i>
                     </a>
+                    <div id="wa-duvidas-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md mt-3"></div>
                 </div>
 
             </div>
@@ -1625,10 +1598,11 @@
                             <a href="#planos" class="btn-white-glow px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px]">
                                 Solicitar meu Cartão NFC
                             </a>
-                            <a href="https://wa.link/0zpwgo" data-wa-ask-name="5531920067518" target="_blank" class="btn-outline px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px] group">
+                            <a href="https://wa.link/0zpwgo" id="btn-wa-agora" target="_blank" class="btn-outline px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px] group">
                                 Receber atendimento agora
                                 <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                             </a>
+                            <div id="wa-agora-panel" class="wa-panel w-full max-w-md rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
                         </div>
                     </div>
                 </div>
@@ -1792,22 +1766,56 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- "Receber atendimento personalizado": abre painel com nome + frases prontas ---
-        (function () {
-            var btn = document.getElementById('btn-wa-personalizado');
-            var panel = document.getElementById('wa-personalizado-panel');
-            var caret = document.getElementById('wa-personalizado-caret');
-            var nomeInput = document.getElementById('wa-personalizado-nome');
-            var erroMsg = document.getElementById('wa-personalizado-erro');
-            if (!btn || !panel || !nomeInput) return;
-            var phone = '5531920067518';
+        // --- Painéis "nome + iniciar conversa" (personalizado, dúvidas, atendimento agora) ---
+        function buildWaPanelHTML(prefix) {
+            return '' +
+                '<div class="p-4 sm:p-5 flex flex-col gap-4">' +
+                    '<div>' +
+                        '<label for="' + prefix + '-nome" class="block text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-2">Seu nome</label>' +
+                        '<input id="' + prefix + '-nome" type="text" placeholder="Digite seu nome" autocomplete="name" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 sm:py-3 text-white text-base sm:text-sm placeholder-gray-500 focus:outline-none focus:border-[#25D366] transition-colors">' +
+                        '<p id="' + prefix + '-erro" class="hidden text-[11px] font-semibold text-red-400 mt-2">Digite seu nome antes de escolher uma opção.</p>' +
+                    '</div>' +
+                    '<div class="flex flex-col gap-2">' +
+                        '<span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Iniciar conversa sobre</span>' +
+                        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">' +
+                            '<button type="button" class="wa-chip" data-frase="Quero fazer meu cartão personalizado">Quero fazer meu cartão personalizado</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Posso ver exemplos de cartões prontos?">Ver exemplos de cartões</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Vocês parcelam?">Vocês parcelam?</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
+                            '<button type="button" class="wa-chip wa-chip-outro sm:col-span-2 flex items-center justify-between">Outro <i class="ph ph-caret-down text-xs transition-transform"></i></button>' +
+                        '</div>' +
+                        '<div class="wa-outro-box flex flex-col gap-2">' +
+                            '<textarea rows="3" placeholder="Escreva sua mensagem..." class="wa-outro-texto w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#25D366] transition-colors resize-none"></textarea>' +
+                            '<button type="button" class="wa-chip wa-outro-enviar w-full flex items-center justify-center gap-2 text-center">Enviar mensagem <i class="ph ph-paper-plane-tilt"></i></button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        function initWaPanel(config) {
+            var btn = document.getElementById(config.btnId);
+            var panel = document.getElementById(config.panelId);
+            if (!btn || !panel) return;
+            panel.innerHTML = buildWaPanelHTML(config.panelId);
+
+            var caret = config.caretId ? document.getElementById(config.caretId) : null;
+            var nomeInput = document.getElementById(config.panelId + '-nome');
+            var erroMsg = document.getElementById(config.panelId + '-erro');
+            var phone = config.phone;
 
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 var abrindo = !panel.classList.contains('wa-panel-open');
                 panel.classList.toggle('wa-panel-open');
                 if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
-                if (abrindo) setTimeout(function () { nomeInput.focus(); }, 250);
+                if (abrindo) {
+                    setTimeout(function () {
+                        nomeInput.focus();
+                        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 250);
+                }
             });
 
             nomeInput.addEventListener('input', function () {
@@ -1837,11 +1845,10 @@
                 });
             });
 
-            // --- Opção "Outro": revela caixa de texto livre ---
-            var chipOutro = document.getElementById('wa-chip-outro');
-            var outroBox = document.getElementById('wa-outro-box');
-            var outroTexto = document.getElementById('wa-outro-texto');
-            var outroEnviar = document.getElementById('wa-outro-enviar');
+            var chipOutro = panel.querySelector('.wa-chip-outro');
+            var outroBox = panel.querySelector('.wa-outro-box');
+            var outroTexto = panel.querySelector('.wa-outro-texto');
+            var outroEnviar = panel.querySelector('.wa-outro-enviar');
 
             if (chipOutro && outroBox && outroTexto) {
                 chipOutro.addEventListener('click', function () {
@@ -1869,20 +1876,11 @@
                     enviarWhatsApp(frase);
                 });
             }
-        })();
+        }
 
-        // --- Botões de WhatsApp: pergunta o nome antes de redirecionar ---
-        document.querySelectorAll('[data-wa-ask-name]').forEach(function (el) {
-            el.addEventListener('click', function (e) {
-                e.preventDefault();
-                var phone = el.getAttribute('data-wa-ask-name');
-                var resposta = window.prompt('Antes de continuar, qual é o seu nome?');
-                if (resposta === null) return;
-                var nome = resposta.trim();
-                var texto = nome ? ('Olá, meu nome é ' + nome + '.') : 'Olá!';
-                window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(texto), '_blank');
-            });
-        });
+        initWaPanel({ btnId: 'btn-wa-personalizado', panelId: 'wa-personalizado-panel', caretId: 'wa-personalizado-caret', phone: '5531920067518' });
+        initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
+        initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
         // --- 5. MOCKUP: troca a imagem a cada aproximação do cartão NFC ---
         const screenImages = [
