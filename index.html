@@ -307,6 +307,19 @@
             box-shadow: 0 10px 40px -10px rgba(255, 184, 0, 0.7), 0 0 25px rgba(255, 69, 0, 0.5);
         }
 
+        /* Botão Destaque (Amarelo) — só anima ao passar o mouse ou clicar, como os demais botões */
+        .btn-highlight-yellow {
+            --saturn-color-1: #FFEB3B; --saturn-color-2: #FDD835;
+        }
+        .btn-highlight-yellow:hover::before,
+        .btn-highlight-yellow:active::before {
+            opacity: 1;
+            animation: saturn-orbit 1.5s linear infinite;
+        }
+        .btn-highlight-yellow:hover {
+            box-shadow: 0 10px 40px -10px rgba(255, 235, 59, 0.7), 0 0 25px rgba(253, 216, 53, 0.5);
+        }
+
         /* Cores vibrantes únicas para cada link baseado no contexto */
         .link-btn[href*="wa.link"] { --saturn-color-1: #25D366; --saturn-color-2: #028A54; }
         .link-btn[href="nfc.html"] { --saturn-color-1: #9D4EDD; --saturn-color-2: #FF00FF; }
@@ -376,25 +389,16 @@
             align-items: center;
             overflow: hidden;
         }
-        /* Conjunto planeta + rastro: surge distante, atravessa a tela e cresce
-           como se estivesse se aproximando do observador (zoom / aproximação) */
+        /* Logo: surge minúscula no fundo (profundidade da tela) e cresce vindo
+           em direção ao observador, como se emergisse do próprio fundo do site */
         .planet-comet {
             position: absolute;
             top: 50%; left: 50%;
             display: flex;
             align-items: center;
-            transform: translate(-50%, -50%) scale(0.12);
-            animation: planetApproach 2.8s cubic-bezier(0.34, 0.02, 0.24, 1) forwards;
-            will-change: transform, opacity;
-        }
-        .planet-trail {
-            display: block;
-            width: 220px; height: 4px;
-            margin-right: -14px;
-            border-radius: 4px;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55));
-            filter: blur(2px);
-            animation: trailFade 2.8s ease-out forwards;
+            transform: translate(-50%, -50%) scale(0.03);
+            animation: planetApproach 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: transform, opacity, filter;
         }
         /* Já renderizada no tamanho final grande (imagem nativa 1011x638),
            para nunca ampliar via scale acima de 1 e perder nitidez */
@@ -404,23 +408,15 @@
             height: auto;
             filter: drop-shadow(0 0 28px rgba(212, 175, 55, 0.55));
         }
-        /* Trajetória: distante e pequeno à esquerda -> cruza a tela crescendo ->
-           chega no tamanho real e centralizado (impressão de aproximação).
-           O scale vai só até 1: a imagem apenas reduz durante o trajeto,
-           então permanece sempre nítida (sem upscaling do bitmap). */
+        /* Trajetória: ponto minúsculo e desfocado no centro (fundo) -> cresce
+           mantendo-se centralizado, como se viesse do fundo do site até o
+           observador. O scale vai só até 1: a imagem apenas reduz durante o
+           trajeto, então permanece sempre nítida (sem upscaling do bitmap). */
         @keyframes planetApproach {
-            /* -50% mantém o conjunto centralizado (independe da largura da imagem);
-               o offset em vw só empurra para a esquerda -> garante o mesmo trajeto
-               (esquerda -> centro, crescendo) no desktop e no celular. */
-            0%   { transform: translate(calc(-50% - 65vw), -50%) scale(0.14); opacity: 0; filter: blur(7px); }
-            18%  { opacity: 1; }
-            62%  { transform: translate(calc(-50% - 22vw), -50%) scale(0.5); opacity: 1; filter: blur(0); }
+            0%   { transform: translate(-50%, -50%) scale(0.03); opacity: 0; filter: blur(14px); }
+            12%  { opacity: 1; }
+            70%  { transform: translate(-50%, -50%) scale(0.75); opacity: 1; filter: blur(1px); }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 1; filter: blur(0); }
-        }
-        /* O rastro (cauda) some conforme o planeta chega e cresce */
-        @keyframes trailFade {
-            0%, 42% { opacity: 1; }
-            100%    { opacity: 0; }
         }
 
         /* ===================== ESTILOS INJETADOS DA TELA ANTIGA ===================== */
@@ -603,6 +599,44 @@
             text-transform: uppercase;
             font-size: 0.875rem;
         }
+        .btn-plano-select {
+            aspect-ratio: 1 / 1;
+            max-width: 76px;
+            margin: 0 auto;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.1rem;
+            padding: 0.3rem;
+            width: 100%;
+        }
+        .btn-plano-select .btn-plano-num {
+            font-family: var(--font-sans, inherit);
+            font-size: 0.95rem;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: normal;
+        }
+        .btn-plano-select .btn-plano-unid {
+            font-size: 0.55em;
+            font-weight: 700;
+            letter-spacing: normal;
+            text-transform: lowercase;
+            opacity: 0.75;
+            margin-left: 1px;
+        }
+        @media (min-width: 768px) {
+            .btn-plano-select { max-width: none; }
+        }
+        .btn-plano-select .btn-plano-label {
+            font-size: 0.42rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-align: center;
+            opacity: 0.92;
+        }
         .btn-purple { background: linear-gradient(90deg, #b062ff, #9b40f5); color: #ffffff; }
         .btn-purple:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); filter: brightness(1.1); }
         .btn-orange { background: linear-gradient(90deg, #ff7a1a, #f96300); color: #ffffff; }
@@ -717,6 +751,19 @@
             animation: goldShimmer 4s linear infinite;
         }
         .btn-saturno-bronze:hover { box-shadow: 0 0 30px rgba(205, 155, 106, 0.55); filter: brightness(1.08); }
+
+        /* ===================== EFEITO ATRÁS DA IMAGEM DOS PLANOS ===================== */
+        .plan-img-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+        .plan-img-wrap img { position: relative; z-index: 1; }
+        .plan-img-wrap.glow-silver::before,
+        .plan-img-wrap.glow-gold::before,
+        .plan-img-wrap.glow-bronze::before {
+            content: ''; position: absolute; inset: -15%; z-index: 0;
+            border-radius: 50%; filter: blur(18px);
+        }
+        .plan-img-wrap.glow-bronze::before { background: radial-gradient(circle, rgba(205, 155, 106, 0.55) 0%, rgba(205, 155, 106, 0) 70%); }
+        .plan-img-wrap.glow-silver::before { background: radial-gradient(circle, rgba(220, 225, 232, 0.55) 0%, rgba(220, 225, 232, 0) 70%); }
+        .plan-img-wrap.glow-gold::before { background: radial-gradient(circle, rgba(212, 160, 23, 0.5) 0%, rgba(212, 160, 23, 0) 70%); }
 
         .list-text {
             font-size: 0.75rem;
@@ -865,7 +912,6 @@
     <div id="preloader">
         <div class="planet-track">
             <div class="planet-comet">
-                <span class="planet-trail"></span>
                 <img src="https://i.imgur.com/xGuUPD5.png" alt="Saturno NFC" class="planet-cross">
             </div>
         </div>
@@ -1014,15 +1060,35 @@
         <!-- Linktree Buttons -->
         <section class="w-full flex flex-col gap-3 mb-4 stagger-item" style="animation-delay: 0.4s;">
 
-            <a href="#planos" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="#planos" id="btn-escolher-plano" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20 z-10 relative">
                         <i class="ph ph-shopping-cart-simple text-xl"></i>
                     </div>
                     <span class="font-semibold text-white text-base md:text-lg z-10 relative">Quero meu Cartão NFC</span>
                 </div>
-                <i class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all z-10 relative"></i>
+                <i id="escolher-plano-caret" class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all z-10 relative"></i>
             </a>
+
+            <div id="escolher-plano-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md">
+                <div class="p-4 sm:p-5 flex flex-col gap-3">
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Escolha seu plano</span>
+                    <div class="grid grid-cols-3 gap-2 max-w-[260px] mx-auto md:max-w-none md:gap-4">
+                        <button type="button" class="btn btn-saturno-bronze btn-plano-select" data-plano="Essencial" data-cartoes="4 Cartões NFC personalizados">
+                            <span class="btn-plano-num">4<span class="btn-plano-unid">un</span></span>
+                            <span class="btn-plano-label">Essencial</span>
+                        </button>
+                        <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="10 Cartões NFC personalizados">
+                            <span class="btn-plano-num">10<span class="btn-plano-unid">un</span></span>
+                            <span class="btn-plano-label">Profissional</span>
+                        </button>
+                        <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados">
+                            <span class="btn-plano-num">30<span class="btn-plano-unid">un</span></span>
+                            <span class="btn-plano-label">Fora de Órbita</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
@@ -1030,6 +1096,16 @@
                         <i class="ph ph-info text-xl"></i>
                     </div>
                     <span class="font-medium text-gray-100 z-10 relative">Ver como funciona</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
+
+            <a href="#planos" class="link-btn btn-highlight-yellow magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
+                        <i class="ph ph-tag text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Planos e Valores</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
@@ -1061,7 +1137,7 @@
                     <div class="w-10 h-10 rounded-full bg-[#E1306C]/10 flex items-center justify-center text-[#E1306C] group-hover:bg-[#E1306C]/20 transition-colors z-10 relative">
                         <i class="ph ph-instagram-logo text-xl"></i>
                     </div>
-                    <span class="font-medium text-gray-100 z-10 relative">Conhecer a Saturno NFC no Instagram</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Instagram</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
@@ -1310,6 +1386,9 @@
                             <h3 class="text-saturno-bronze text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Essencial</h3>
                             <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">O pacote essencial para dar o primeiro passo no networking digital.</p>
                         </div>
+                        <div class="plan-img-wrap glow-bronze mb-6">
+                            <img src="https://i.imgur.com/1ntjhVC.png" alt="Cartão NFC - Plano Essencial" class="w-32 md:w-40 h-auto">
+                        </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 400</span>
                             <span class="block text-xs font-bold text-transparent mt-2 uppercase tracking-widest select-none">&nbsp;</span>
@@ -1333,6 +1412,9 @@
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-silver text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Profissional</h3>
                             <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença completa com identidade visual e funções avançadas.</p>
+                        </div>
+                        <div class="plan-img-wrap glow-silver mb-6">
+                            <img src="https://i.imgur.com/32Av2z1.png" alt="Cartão NFC - Plano Profissional" class="w-32 md:w-40 h-auto">
                         </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 800</span>
@@ -1361,6 +1443,9 @@
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-gold text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Fora de Órbita</h3>
                             <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ideal para: eventos, restaurantes, hoteis, cafeterias, pousadas</p>
+                        </div>
+                        <div class="plan-img-wrap glow-gold mb-6">
+                            <img src="https://i.imgur.com/coi9eE6.png" alt="Cartão NFC - Plano Fora de Órbita" class="w-32 md:w-40 h-auto">
                         </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 2.000</span>
@@ -1624,7 +1709,7 @@
 
             <!-- Ícones Sociais -->
             <div class="flex justify-center gap-6">
-                <a href="https://wa.link/xkt6u9" class="text-gray-500 hover:text-[#25D366] transition-colors"><i class="ph ph-whatsapp-logo text-2xl"></i></a>
+                <a href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-[#25D366] transition-colors"><i class="ph ph-whatsapp-logo text-2xl"></i></a>
                 <a href="https://www.instagram.com/saturnonfc" class="text-gray-500 hover:text-[#E1306C] transition-colors"><i class="ph ph-instagram-logo text-2xl"></i></a>
                 <a href="#" class="text-gray-500 hover:text-brand-blue transition-colors"><i class="ph ph-map-pin text-2xl"></i></a>
             </div>
@@ -1660,7 +1745,7 @@
             }
 
             // Tempo mínimo de exibição para a animação ser percebida (ms)
-            const MIN_TIME = 2800;
+            const MIN_TIME = 3000;
             const start = performance.now();
 
             window.addEventListener('load', () => {
@@ -1881,6 +1966,30 @@
         initWaPanel({ btnId: 'btn-wa-personalizado', panelId: 'wa-personalizado-panel', caretId: 'wa-personalizado-caret', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
+
+        // --- "Quero meu Cartão NFC": abre box para escolher o plano e envia direto pro WhatsApp ---
+        (function () {
+            var btn = document.getElementById('btn-escolher-plano');
+            var panel = document.getElementById('escolher-plano-panel');
+            var caret = document.getElementById('escolher-plano-caret');
+            if (!btn || !panel) return;
+            var phone = '5531920067518';
+
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                var abrindo = !panel.classList.contains('wa-panel-open');
+                panel.classList.toggle('wa-panel-open');
+                if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
+                if (abrindo) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 250);
+            });
+
+            panel.querySelectorAll('button[data-plano]').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var texto = 'Olá, tenho interesse no Plano ' + b.getAttribute('data-plano') + ' (' + b.getAttribute('data-cartoes') + ').';
+                    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(texto), '_blank');
+                });
+            });
+        })();
 
         // --- 5. MOCKUP: troca a imagem a cada aproximação do cartão NFC ---
         const screenImages = [
