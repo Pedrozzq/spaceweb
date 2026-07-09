@@ -397,7 +397,7 @@
             display: flex;
             align-items: center;
             transform: translate(-50%, -50%) scale(0.03);
-            animation: planetApproach 3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: planetApproach 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             will-change: transform, opacity, filter;
         }
         /* Já renderizada no tamanho final grande (imagem nativa 1011x638),
@@ -1193,7 +1193,7 @@
                         <i class="ph ph-wifi-high text-2xl rotate-90"></i>
                     </div>
                     <h3 class="font-bold text-lg mb-2">1. Aproxime</h3>
-                    <p class="text-sm text-gray-400">O cliente aproxima o celular do cartão NFC.</p>
+                    <p class="text-sm text-gray-400">Basta aproximar o cartão NFC do celular.</p>
                 </div>
 
                 <!-- Passo 2 -->
@@ -1381,7 +1381,7 @@
                         </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 400</span>
-                            <span class="block text-xs font-bold text-transparent mt-2 uppercase tracking-widest select-none">&nbsp;</span>
+                            <span class="text-saturno-bronze block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$200,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">4 CARTÕES NFC PERSONALIZADOS</span></li>
@@ -1740,7 +1740,7 @@
             }
 
             // Tempo mínimo de exibição para a animação ser percebida (ms)
-            const MIN_TIME = 3000;
+            const MIN_TIME = 1500;
             const start = performance.now();
 
             window.addEventListener('load', () => {
@@ -1988,11 +1988,11 @@
 
         // --- 5. MOCKUP: troca a imagem a cada aproximação do cartão NFC ---
         const screenImages = [
-            "https://i.imgur.com/QIgetD1.jpeg",
-            "https://i.imgur.com/PwS1pGl.png",
-            "https://i.imgur.com/mqfWQM7.png",
-            "https://i.imgur.com/p4F55uS.png",
-            "https://i.imgur.com/8ulijWa.png"
+            "img/mockup-tela-1.webp",
+            "img/mockup-tela-2.webp",
+            "img/mockup-tela-3.webp",
+            "img/mockup-tela-4.webp",
+            "img/mockup-tela-5.webp"
         ];
 
         // Pré-carrega as imagens para a troca ocorrer sem piscar
