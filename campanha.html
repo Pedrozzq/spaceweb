@@ -26,19 +26,24 @@
                     },
                     colors: {
                         brand: {
-                            50: '#fffbea',
-                            100: '#fef3c7',
-                            500: '#FFB800',
-                            600: '#E6A600',
-                            700: '#CC9200',
-                            800: '#B8860B',
-                            900: '#3d2b00', // Dark gold for dark tech feel
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af',
+                            800: '#1e3a8a',
+                            900: '#172554',
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'wave': 'wave 2s linear infinite',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                        'link-glow': 'linkGlow 2.5s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
@@ -48,6 +53,14 @@
                         wave: {
                             '0%': { transform: 'scale(0.8)', opacity: '1' },
                             '100%': { transform: 'scale(2.5)', opacity: '0' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        linkGlow: {
+                            '0%, 100%': { boxShadow: '0 0 0 0 rgba(37,99,235,0.35)' },
+                            '50%': { boxShadow: '0 0 0 8px rgba(37,99,235,0)' },
                         }
                     }
                 }
@@ -57,13 +70,13 @@
     <style>
         /* Custom Styles for elements not easily handled by basic Tailwind */
         .glass-nav {
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(31, 41, 55, 0.8);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
         }
 
         .tech-gradient-text {
-            background: linear-gradient(135deg, #FFD700, #ffffff);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -95,6 +108,47 @@
             z-index: 10;
         }
 
+        @media (max-width: 639px) {
+            .phone-notch {
+                width: 90px;
+                height: 18px;
+                border-bottom-left-radius: 12px;
+                border-bottom-right-radius: 12px;
+            }
+        }
+
+        /* Linktree-style animated buttons */
+        .linktree-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-primary {
+            animation: fadeInUp 0.6s ease-out 0.1s forwards, linkGlow 2.5s ease-in-out 0.8s infinite;
+        }
+        .linktree-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.7s ease;
+        }
+        .linktree-btn:hover::before {
+            left: 125%;
+        }
+
+        /* Mobile step/benefit carousels */
+        .no-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
         /* FAQ Accordion Transition */
         .faq-content {
             transition: max-height 0.3s ease-out, padding 0.3s ease;
@@ -110,7 +164,7 @@
         }
     </style>
 </head>
-<body class="font-sans text-gray-300 antialiased bg-black overflow-x-hidden">
+<body class="font-sans text-gray-600 antialiased bg-white overflow-x-hidden">
 
     <!-- HEADER -->
     <header class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
@@ -119,15 +173,15 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
                     <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-10 w-auto">
-                    <span class="font-bold text-2xl tracking-tight text-white">Saturno<span class="text-brand-500">NFC</span></span>
+                    <span class="font-bold text-2xl tracking-tight text-blue-900">Saturno<span class="text-brand-500">NFC</span></span>
                 </div>
 
                 <!-- Desktop Nav -->
                 <nav class="hidden md:flex space-x-8 items-center">
-                    <a href="#como-funciona" class="text-gray-300 hover:text-brand-500 font-medium transition-colors">Como funciona</a>
-                    <a href="#solucoes" class="text-gray-300 hover:text-brand-500 font-medium transition-colors">Soluções</a>
-                    <a href="#planos" class="text-gray-300 hover:text-brand-500 font-medium transition-colors">Planos</a>
-                    <a href="#duvidas" class="text-gray-300 hover:text-brand-500 font-medium transition-colors">Dúvidas</a>
+                    <a href="#como-funciona" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Como funciona</a>
+                    <a href="#solucoes" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Soluções</a>
+                    <a href="#planos" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Planos</a>
+                    <a href="#duvidas" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Dúvidas</a>
                     <a href="#contato" class="bg-brand-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-brand-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                         Quero fortalecer minha campanha
                     </a>
@@ -135,7 +189,7 @@
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" class="text-gray-300 hover:text-brand-500 focus:outline-none p-2">
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-brand-500 focus:outline-none p-2">
                         <i class="ph ph-list text-3xl"></i>
                     </button>
                 </div>
@@ -143,12 +197,12 @@
         </div>
 
         <!-- Mobile Nav -->
-        <div id="mobile-menu" class="hidden md:hidden bg-black border-t border-gray-800 absolute w-full shadow-xl">
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 absolute w-full shadow-xl">
             <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="#como-funciona" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-500 hover:bg-gray-900">Como funciona</a>
-                <a href="#solucoes" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-500 hover:bg-gray-900">Soluções</a>
-                <a href="#planos" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-500 hover:bg-gray-900">Planos</a>
-                <a href="#duvidas" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-brand-500 hover:bg-gray-900">Dúvidas frequentes</a>
+                <a href="#como-funciona" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:text-brand-500 hover:bg-blue-50">Como funciona</a>
+                <a href="#solucoes" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:text-brand-500 hover:bg-blue-50">Soluções</a>
+                <a href="#planos" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:text-brand-500 hover:bg-blue-50">Planos</a>
+                <a href="#duvidas" class="mobile-link block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:text-brand-500 hover:bg-blue-50">Dúvidas frequentes</a>
                 <a href="#contato" class="mobile-link mt-4 block w-full text-center bg-brand-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-brand-700">
                     Falar com especialista
                 </a>
@@ -157,11 +211,11 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-black">
+    <section class="relative pt-28 pb-12 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
         <!-- Background Tech Elements -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-900 rounded-full blur-3xl opacity-40 transform translate-x-1/2 -translate-y-1/4"></div>
-            <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-900 rounded-full blur-3xl opacity-30 transform -translate-x-1/2 translate-y-1/4"></div>
+            <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-100 rounded-full blur-3xl opacity-70 transform translate-x-1/2 -translate-y-1/4"></div>
+            <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-100 rounded-full blur-3xl opacity-60 transform -translate-x-1/2 translate-y-1/4"></div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -169,23 +223,29 @@
 
                 <!-- Text Content -->
                 <div class="lg:col-span-6 text-center lg:text-left mb-16 lg:mb-0 order-2 lg:order-1">
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-blue-950 mb-6 leading-tight">
                         Transforme cada cartão em um <span class="tech-gradient-text">ponto digital</span> da sua campanha
                     </h1>
-                    <p class="text-lg sm:text-xl text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                    <p class="text-lg sm:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                         Leve suas propostas, redes sociais, agenda, WhatsApp e materiais oficiais diretamente para o celular dos eleitores com cartões NFC personalizados e uma página exclusiva para sua candidatura.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="#planos" class="bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                            Conhecer os planos <i class="ph-bold ph-arrow-right"></i>
+                    <div class="flex flex-col gap-3.5 w-full max-w-md mx-auto lg:mx-0">
+                        <div class="relative">
+                            <span class="absolute -top-3 left-1/2 -translate-x-1/2 lg:left-6 lg:translate-x-0 bg-blue-900 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md z-10 whitespace-nowrap opacity-0 animate-fade-in-up" style="animation-delay: 0.35s;">Comece por aqui</span>
+                            <a href="#planos" class="linktree-btn cta-primary opacity-0 bg-brand-600 text-white px-6 py-5 rounded-full font-extrabold text-lg sm:text-xl ring-4 ring-brand-100 hover:bg-brand-700 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 w-full">
+                                Conhecer os planos <i class="ph-bold ph-arrow-right"></i>
+                            </a>
+                        </div>
+                        <a href="#como-funciona" class="linktree-btn opacity-0 animate-fade-in-up bg-white text-brand-700 border-2 border-brand-200 px-6 py-4 rounded-full font-bold text-base sm:text-lg hover:border-brand-500 hover:bg-blue-50 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full" style="animation-delay: 0.25s;">
+                            Entenda como funciona <i class="ph-bold ph-play-circle"></i>
                         </a>
-                        <a href="#contato" class="bg-black text-white border-2 border-gray-700 px-8 py-4 rounded-xl font-bold text-lg hover:border-brand-500 hover:bg-gray-900 transition-all flex items-center justify-center gap-2">
+                        <a href="#contato" class="linktree-btn opacity-0 animate-fade-in-up bg-white text-gray-700 border-2 border-gray-200 px-6 py-4 rounded-full font-bold text-base sm:text-lg hover:border-brand-500 hover:bg-gray-50 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full" style="animation-delay: 0.4s;">
                             Solicitar orçamento <i class="ph-bold ph-presentation-chart"></i>
                         </a>
                     </div>
 
                     <!-- Small highlights -->
-                    <div class="mt-10 grid grid-cols-2 gap-4 text-sm font-medium text-gray-400">
+                    <div class="mt-10 grid grid-cols-2 gap-4 text-sm font-medium text-gray-600">
                         <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-green-500 text-lg"></i> Sem app necessário</div>
                         <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-green-500 text-lg"></i> Entregue configurado</div>
                         <div class="flex items-center gap-2"><i class="ph-fill ph-check-circle text-green-500 text-lg"></i> Personalização completa</div>
@@ -194,10 +254,10 @@
                 </div>
 
                 <!-- Mockup Visual -->
-                <div class="order-1 lg:order-2 lg:col-span-6 relative h-[500px] mb-24 lg:mb-0 flex justify-center items-center">
-                    
+                <div class="order-1 lg:order-2 lg:col-span-6 relative h-[420px] sm:h-[500px] mb-16 sm:mb-24 lg:mb-0 flex justify-center items-center px-6 sm:px-0">
+
                     <!-- Phone Mockup -->
-                    <div class="phone-mockup w-[280px] h-[550px] animate-float z-10 bg-gray-50 relative">
+                    <div class="phone-mockup w-[220px] h-[430px] sm:w-[280px] sm:h-[550px] animate-float z-10 bg-gray-50 relative">
                         <div class="phone-notch"></div>
                         <!-- Phone Screen Content (Simulated Profile) -->
                         <div class="w-full h-full pt-10 px-4 pb-4 flex flex-col relative overflow-hidden">
@@ -247,20 +307,20 @@
                     </div>
 
                     <!-- NFC Card Mockup (Hovering and approaching) -->
-                    <div class="nfc-card-mockup absolute w-[240px] h-[150px] rounded-2xl z-20 top-1/2 -right-4 lg:-right-12 transform -translate-y-1/2 flex flex-col justify-between p-5 text-white animate-pulse-slow rotate-[-10deg]">
+                    <div class="nfc-card-mockup absolute w-[170px] h-[110px] sm:w-[240px] sm:h-[150px] rounded-2xl z-20 top-1/2 right-0 sm:-right-4 lg:-right-12 transform -translate-y-1/2 flex flex-col justify-between p-3.5 sm:p-5 text-white animate-pulse-slow rotate-[-10deg]">
                         <div class="flex justify-between items-start">
-                            <div class="font-bold text-lg tracking-wider">CANDIDATO</div>
-                            <i class="ph-bold ph-waves text-2xl text-brand-500"></i>
+                            <div class="font-bold text-sm sm:text-lg tracking-wider">CANDIDATO</div>
+                            <i class="ph-bold ph-waves text-lg sm:text-2xl text-brand-500"></i>
                         </div>
                         <div>
-                            <div class="w-8 h-8 bg-brand-500 bg-opacity-30 rounded-md mb-2 flex items-center justify-center">
-                                <i class="ph-fill ph-qr-code text-white"></i>
+                            <div class="w-6 h-6 sm:w-8 sm:h-8 bg-brand-500 bg-opacity-30 rounded-md mb-1.5 sm:mb-2 flex items-center justify-center">
+                                <i class="ph-fill ph-qr-code text-white text-xs sm:text-base"></i>
                             </div>
-                            <div class="text-xs text-gray-400">Aproxime do celular</div>
+                            <div class="text-[10px] sm:text-xs text-gray-400">Aproxime do celular</div>
                         </div>
-                        
+
                         <!-- NFC Waves Animation -->
-                        <div class="absolute -left-12 top-1/2 transform -translate-y-1/2 w-10 h-10">
+                        <div class="absolute -left-8 sm:-left-12 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10">
                             <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 0s;"></div>
                             <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 0.5s;"></div>
                             <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 1s;"></div>
@@ -273,59 +333,59 @@
     </section>
 
     <!-- PLANOS -->
-    <section id="planos" class="py-24 bg-gray-950">
+    <section id="planos" class="py-14 lg:py-24 bg-blue-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-500 font-bold tracking-wide uppercase text-sm mb-2">Investimento</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Escolha o plano ideal para sua campanha</h3>
-                <p class="text-gray-400 text-lg">Pacotes completos incluindo cartões físicos configurados e plataforma digital. Sem mensalidades durante a campanha.</p>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-4">Escolha o plano ideal para sua campanha</h3>
+                <p class="text-gray-600 text-lg">Pacotes completos incluindo cartões físicos configurados e plataforma digital. Sem mensalidades durante a campanha.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div id="planos-track" class="flex md:grid md:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-auto md:px-0 no-scrollbar">
 
                 <!-- PLANO MUNICIPAL -->
-                <div class="bg-gray-900 rounded-3xl shadow-lg border border-gray-800 p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+                <div class="carousel-card min-w-[82%] sm:min-w-[55%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center bg-white rounded-3xl shadow-lg border border-gray-200 p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300">
                     <div class="mb-6">
-                        <h4 class="text-xl font-bold text-white">Esfera Municipal</h4>
-                        <p class="text-gray-400 text-sm mt-2 min-h-[60px]">Indicado para campanhas que desejam fortalecer a presença em cidades estratégicas, bairros e bases específicas.</p>
+                        <h4 class="text-xl font-bold text-blue-950">Esfera Municipal</h4>
+                        <p class="text-gray-500 text-sm mt-2 min-h-[60px]">Indicado para campanhas que desejam fortalecer a presença em cidades estratégicas, bairros e bases específicas.</p>
                     </div>
                     <div class="mb-6">
-                        <span class="text-gray-400 text-sm">A partir de</span>
-                        <div class="text-4xl font-extrabold text-white">R$ 2.500</div>
+                        <span class="text-gray-500 text-sm">A partir de</span>
+                        <div class="text-4xl font-extrabold text-blue-950">R$ 2.500</div>
                     </div>
                     <ul class="space-y-4 mb-8 flex-1">
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300 font-medium">25 cartões NFC personalizados</span>
+                            <span class="text-gray-600 font-medium">25 cartões NFC personalizados</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">3 tags NFC para comitê</span>
+                            <span class="text-gray-600">Tags NFC para comitê</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Site personalizado da campanha</span>
+                            <span class="text-gray-600">Site personalizado da campanha</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">QR Code integrado (verso)</span>
+                            <span class="text-gray-600">QR Code integrado (verso)</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Botões para WhatsApp e Redes</span>
+                            <span class="text-gray-600">Botões para WhatsApp e Redes</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Formulário para apoiadores</span>
+                            <span class="text-gray-600">Formulário para apoiadores</span>
                         </li>
                     </ul>
-                    <a href="#" onclick="event.preventDefault(); abrirWhatsAppPlano('Municipal', '25 cartões NFC')" class="w-full block text-center bg-gray-800 text-brand-400 font-bold py-3 rounded-xl hover:bg-gray-700 transition-colors border border-gray-700">
+                    <a href="#" onclick="event.preventDefault(); abrirWhatsAppPlano('Municipal', '25 cartões NFC')" class="w-full block text-center bg-blue-50 text-brand-700 font-bold py-3 rounded-xl hover:bg-blue-100 transition-colors border border-brand-200">
                         Quero o Plano Municipal
                     </a>
                 </div>
 
                 <!-- PLANO ESTADUAL (DESTAQUE) -->
-                <div class="bg-brand-900 rounded-3xl shadow-2xl border border-brand-600 p-8 flex flex-col relative transform md:-translate-y-4">
+                <div class="carousel-card min-w-[82%] sm:min-w-[55%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center bg-brand-900 rounded-3xl shadow-2xl border border-brand-600 p-8 flex flex-col relative transform md:-translate-y-4">
                     <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <span class="bg-gradient-to-r from-brand-600 to-brand-500 text-white text-xs font-bold uppercase tracking-wider py-1.5 px-4 rounded-full shadow-lg">
                             Mais Escolhido
@@ -346,7 +406,7 @@
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-brand-400 mt-1"></i>
-                            <span class="text-gray-100 font-bold">10 tags NFC para comitês</span>
+                            <span class="text-gray-100 font-bold">Tags NFC para comitê</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-brand-400 mt-1"></i>
@@ -371,53 +431,59 @@
                 </div>
 
                 <!-- PLANO FEDERAL -->
-                <div class="bg-gray-900 rounded-3xl shadow-lg border border-gray-800 p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-yellow-900/60 text-yellow-300 text-xs font-bold px-3 py-1 rounded-bl-lg">
+                <div class="carousel-card min-w-[82%] sm:min-w-[55%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center bg-white rounded-3xl shadow-lg border border-gray-200 p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-bl-lg">
                         Maior Alcance
                     </div>
                     <div class="mb-6">
-                        <h4 class="text-xl font-bold text-white">Esfera Federal</h4>
-                        <p class="text-gray-400 text-sm mt-2 min-h-[60px]">Indicado para campanhas com maior estrutura, equipes distribuídas e forte atuação em diversas regiões.</p>
+                        <h4 class="text-xl font-bold text-blue-950">Esfera Federal</h4>
+                        <p class="text-gray-500 text-sm mt-2 min-h-[60px]">Indicado para campanhas com maior estrutura, equipes distribuídas e forte atuação em diversas regiões.</p>
                     </div>
                     <div class="mb-6">
-                        <span class="text-gray-400 text-sm">A partir de</span>
-                        <div class="text-4xl font-extrabold text-white">R$ 7.000</div>
+                        <span class="text-gray-500 text-sm">A partir de</span>
+                        <div class="text-4xl font-extrabold text-blue-950">R$ 7.000</div>
                     </div>
                     <ul class="space-y-4 mb-8 flex-1">
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-white font-bold">100 cartões NFC personalizados</span>
+                            <span class="text-blue-950 font-bold">100 cartões NFC personalizados</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-white font-bold">20 tags NFC para pontos de apoio</span>
+                            <span class="text-blue-950 font-bold">Tags NFC para comitê</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Site premium da campanha</span>
+                            <span class="text-gray-600">Site premium da campanha</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Múltiplos formulários (Apoiador/Voluntário)</span>
+                            <span class="text-gray-600">Múltiplos formulários (Apoiador/Voluntário)</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Localização de múltiplos comitês</span>
+                            <span class="text-gray-600">Localização de múltiplos comitês</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i class="ph-bold ph-check text-green-500 mt-1"></i>
-                            <span class="text-gray-300">Suporte prioritário na implantação</span>
+                            <span class="text-gray-600">Suporte prioritário na implantação</span>
                         </li>
                     </ul>
-                    <a href="#" onclick="event.preventDefault(); abrirWhatsAppPlano('Federal', '100 cartões NFC')" class="w-full block text-center bg-white text-gray-900 font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">
+                    <a href="#" onclick="event.preventDefault(); abrirWhatsAppPlano('Federal', '100 cartões NFC')" class="w-full block text-center bg-gray-900 text-white font-bold py-3 rounded-xl hover:bg-black transition-colors">
                         Quero o Plano Federal
                     </a>
                 </div>
 
             </div>
 
+            <div class="flex justify-center mt-6 md:hidden">
+                <button id="planos-next" type="button" aria-label="Ver próximo plano" class="flex items-center gap-2 pl-5 pr-4 py-2.5 rounded-full bg-brand-600 text-white font-semibold shadow-lg hover:bg-brand-700 active:scale-95 transition-all">
+                    Próximo plano <i class="ph-bold ph-arrow-right text-lg"></i>
+                </button>
+            </div>
+
             <div class="mt-12 text-center">
-                <p class="text-gray-400 mb-4">Precisa de uma quantidade diferente? Desenvolvemos uma solução personalizada para a estrutura da sua campanha.</p>
+                <p class="text-gray-600 mb-4">Precisa de uma quantidade diferente? Desenvolvemos uma solução personalizada para a estrutura da sua campanha.</p>
                 <a href="#contato" class="inline-flex items-center gap-2 text-brand-500 font-semibold hover:text-brand-400 transition-colors">
                     Solicitar orçamento personalizado <i class="ph-bold ph-arrow-right"></i>
                 </a>
@@ -426,150 +492,162 @@
     </section>
 
     <!-- COMO FUNCIONA -->
-    <section id="como-funciona" class="py-24 bg-gray-950 text-white relative">
+    <section id="como-funciona" class="py-14 lg:py-24 bg-white text-blue-950 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-brand-400 font-bold tracking-wide uppercase text-sm mb-2">Processo Simples</h2>
+            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-16">
+                <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Processo Simples</h2>
                 <h3 class="text-3xl md:text-4xl font-extrabold mb-4">Sua campanha na palma da mão do eleitor</h3>
-                <p class="text-gray-400 text-lg">Entregamos uma solução completa, desde o design dos cartões até a estrutura digital, pronta para sua equipe usar.</p>
+                <p class="text-gray-600 text-lg">Entregamos uma solução completa, desde o design dos cartões até a estrutura digital, pronta para sua equipe usar.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+            <div id="como-funciona-track" class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 relative no-scrollbar">
                 <!-- Connecting Line (Desktop) -->
-                <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gray-800 z-0"></div>
+                <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-blue-100 z-0"></div>
 
                 <!-- Step 1 -->
-                <div class="relative z-10 bg-gray-900/60 p-6 rounded-2xl border border-gray-800 hover:bg-gray-900 transition-colors">
-                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-brand-500">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center relative z-10 bg-blue-50/60 p-6 rounded-2xl border border-blue-100 hover:bg-blue-50 transition-colors">
+                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-brand-500 text-white">
                         <i class="ph-fill ph-palette"></i>
                     </div>
-                    <div class="text-brand-400 font-bold mb-2">Passo 1</div>
+                    <div class="text-brand-600 font-bold mb-2">Passo 1</div>
                     <h4 class="text-xl font-bold mb-3">Personalizamos os cartões</h4>
-                    <p class="text-gray-300 text-sm leading-relaxed">
+                    <p class="text-gray-600 text-sm leading-relaxed">
                         Os cartões recebem a identidade visual, o nome, o número, o partido, o slogan e as principais informações do candidato.
                     </p>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative z-10 bg-gray-900/60 p-6 rounded-2xl border border-gray-800 hover:bg-gray-900 transition-colors">
-                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-brand-500">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center relative z-10 bg-blue-50/60 p-6 rounded-2xl border border-blue-100 hover:bg-blue-50 transition-colors">
+                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-brand-500 text-white">
                         <i class="ph-fill ph-browser"></i>
                     </div>
-                    <div class="text-brand-400 font-bold mb-2">Passo 2</div>
+                    <div class="text-brand-600 font-bold mb-2">Passo 2</div>
                     <h4 class="text-xl font-bold mb-3">Criamos o site da campanha</h4>
-                    <p class="text-gray-300 text-sm leading-relaxed">
+                    <p class="text-gray-600 text-sm leading-relaxed">
                         Desenvolvemos uma página personalizada, responsiva e preparada para apresentar propostas, redes, agenda e contatos.
                     </p>
                 </div>
 
                 <!-- Step 3 -->
-                <div class="relative z-10 bg-gray-900/60 p-6 rounded-2xl border border-gray-800 hover:bg-gray-900 transition-colors">
-                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-brand-500">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center relative z-10 bg-blue-50/60 p-6 rounded-2xl border border-blue-100 hover:bg-blue-50 transition-colors">
+                    <div class="w-16 h-16 bg-brand-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-brand-500 text-white">
                         <i class="ph-fill ph-cpu"></i>
                     </div>
-                    <div class="text-brand-400 font-bold mb-2">Passo 3</div>
+                    <div class="text-brand-600 font-bold mb-2">Passo 3</div>
                     <h4 class="text-xl font-bold mb-3">Configuramos a tecnologia</h4>
-                    <p class="text-gray-300 text-sm leading-relaxed">
+                    <p class="text-gray-600 text-sm leading-relaxed">
                         Todos os cartões e tags NFC são entregues programados, testados e prontos para utilização imediata.
                     </p>
                 </div>
 
                 <!-- Step 4 -->
-                <div class="relative z-10 bg-gray-900/60 p-6 rounded-2xl border border-gray-800 hover:bg-gray-900 transition-colors">
-                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-green-400">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center relative z-10 bg-blue-50/60 p-6 rounded-2xl border border-blue-100 hover:bg-blue-50 transition-colors">
+                    <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg border border-green-400 text-white">
                         <i class="ph-fill ph-rocket-launch"></i>
                     </div>
-                    <div class="text-brand-400 font-bold mb-2">Passo 4</div>
+                    <div class="text-brand-600 font-bold mb-2">Passo 4</div>
                     <h4 class="text-xl font-bold mb-3">Sua equipe divulga</h4>
-                    <p class="text-gray-300 text-sm leading-relaxed">
+                    <p class="text-gray-600 text-sm leading-relaxed">
                         Apoiadores e cabos eleitorais aproximam o cartão do celular dos eleitores e compartilham a campanha em segundos.
                     </p>
                 </div>
+            </div>
+
+            <div class="flex justify-center mt-6 md:hidden">
+                <button id="como-funciona-next" type="button" aria-label="Ver próximo passo" class="flex items-center gap-2 pl-5 pr-4 py-2.5 rounded-full bg-brand-600 text-white font-semibold shadow-lg hover:bg-brand-700 active:scale-95 transition-all">
+                    Próximo passo <i class="ph-bold ph-arrow-right text-lg"></i>
+                </button>
             </div>
         </div>
     </section>
 
     <!-- POR QUE USAR NFC -->
-    <section class="py-24 bg-black" id="solucoes">
+    <section class="py-14 lg:py-24 bg-white" id="solucoes">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-16">
+            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-500 font-bold tracking-wide uppercase text-sm mb-2">Benefícios Estratégicos</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Mais alcance para sua campanha em cada encontro</h3>
-                <div class="bg-gray-900 border border-gray-800 p-4 rounded-xl inline-block">
-                    <p class="text-gray-200 font-medium text-lg">
+                <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Mais alcance para sua campanha em cada encontro</h3>
+                <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl inline-block">
+                    <p class="text-gray-700 font-medium text-lg">
                         "Um único cartão pode apresentar toda a sua candidatura em poucos segundos."
                     </p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="solucoes-track" class="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
                 <!-- Benefit Item -->
-                <div class="flex gap-4 p-6 rounded-2xl hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-800">
-                    <div class="flex-shrink-0 w-12 h-12 bg-amber-950/60 text-brand-500 rounded-full flex items-center justify-center text-2xl">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center flex gap-4 p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-2xl">
                         <i class="ph-fill ph-lightning"></i>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-white mb-2">Divulgação rápida e moderna</h4>
-                        <p class="text-gray-400 text-sm">Substitua a entrega de dezenas de papéis por uma única interação tecnológica que impressiona o eleitor.</p>
+                        <h4 class="text-lg font-bold text-blue-950 mb-2">Divulgação rápida e moderna</h4>
+                        <p class="text-gray-600 text-sm">Substitua a entrega de dezenas de papéis por uma única interação tecnológica que impressiona o eleitor.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-6 rounded-2xl hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-800">
-                    <div class="flex-shrink-0 w-12 h-12 bg-amber-950/60 text-brand-500 rounded-full flex items-center justify-center text-2xl">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center flex gap-4 p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-2xl">
                         <i class="ph-fill ph-target"></i>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-white mb-2">Acesso imediato às propostas</h4>
-                        <p class="text-gray-400 text-sm">O eleitor não precisa pesquisar; as informações oficiais abrem automaticamente na tela do celular.</p>
+                        <h4 class="text-lg font-bold text-blue-950 mb-2">Acesso imediato às propostas</h4>
+                        <p class="text-gray-600 text-sm">O eleitor não precisa pesquisar; as informações oficiais abrem automaticamente na tela do celular.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-6 rounded-2xl hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-800">
-                    <div class="flex-shrink-0 w-12 h-12 bg-amber-950/60 text-brand-500 rounded-full flex items-center justify-center text-2xl">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center flex gap-4 p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-2xl">
                         <i class="ph-fill ph-users-three"></i>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-white mb-2">Conquista de apoiadores</h4>
-                        <p class="text-gray-400 text-sm">Formulários integrados facilitam a captação de contatos de lideranças e eleitores interessados.</p>
+                        <h4 class="text-lg font-bold text-blue-950 mb-2">Conquista de apoiadores</h4>
+                        <p class="text-gray-600 text-sm">Formulários integrados facilitam a captação de contatos de lideranças e eleitores interessados.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-6 rounded-2xl hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-800">
-                    <div class="flex-shrink-0 w-12 h-12 bg-green-950/60 text-green-400 rounded-full flex items-center justify-center text-2xl">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center flex gap-4 p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <div class="flex-shrink-0 w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center text-2xl">
                         <i class="ph-fill ph-whatsapp-logo"></i>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-white mb-2">Integração com WhatsApp</h4>
-                        <p class="text-gray-400 text-sm">Botões diretos para que o eleitor entre nos grupos oficiais da campanha ou fale com o comitê com um toque.</p>
+                        <h4 class="text-lg font-bold text-blue-950 mb-2">Integração com WhatsApp</h4>
+                        <p class="text-gray-600 text-sm">Botões diretos para que o eleitor entre nos grupos oficiais da campanha ou fale com o comitê com um toque.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-6 rounded-2xl hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-800">
-                    <div class="flex-shrink-0 w-12 h-12 bg-amber-950/60 text-brand-500 rounded-full flex items-center justify-center text-2xl">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center flex gap-4 p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-2xl">
                         <i class="ph-fill ph-arrows-clockwise"></i>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-white mb-2">Atualização sem troca</h4>
-                        <p class="text-gray-400 text-sm">Mude as propostas ou a agenda no site a qualquer momento, sem precisar produzir novos cartões físicos.</p>
+                        <h4 class="text-lg font-bold text-blue-950 mb-2">Atualização sem troca</h4>
+                        <p class="text-gray-600 text-sm">Mude as propostas ou a agenda no site a qualquer momento, sem precisar produzir novos cartões físicos.</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 p-6 rounded-2xl hover:bg-gray-900 transition-colors border border-transparent hover:border-gray-800">
-                    <div class="flex-shrink-0 w-12 h-12 bg-amber-950/60 text-brand-500 rounded-full flex items-center justify-center text-2xl">
+                <div class="carousel-card min-w-[75%] sm:min-w-[45%] md:min-w-0 flex-shrink-0 md:flex-shrink snap-center flex gap-4 p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-2xl">
                         <i class="ph-fill ph-chart-bar"></i>
                     </div>
                     <div>
-                        <h4 class="text-lg font-bold text-white mb-2">Acompanhe as interações</h4>
-                        <p class="text-gray-400 text-sm">Saiba quantas vezes os cartões foram acessados e meça o engajamento da sua equipe nas ruas.</p>
+                        <h4 class="text-lg font-bold text-blue-950 mb-2">Acompanhe as interações</h4>
+                        <p class="text-gray-600 text-sm">Saiba quantas vezes os cartões foram acessados e meça o engajamento da sua equipe nas ruas.</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="flex justify-center mt-6 md:hidden">
+                <button id="solucoes-next" type="button" aria-label="Ver próximo benefício" class="flex items-center gap-2 pl-5 pr-4 py-2.5 rounded-full bg-brand-600 text-white font-semibold shadow-lg hover:bg-brand-700 active:scale-95 transition-all">
+                    Próximo benefício <i class="ph-bold ph-arrow-right text-lg"></i>
+                </button>
             </div>
         </div>
     </section>
 
     <!-- TAGS PARA COMITÊS & SITE PERSONALIZADO (Z-Pattern Layout) -->
-    <section class="py-24 bg-black overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+    <section class="py-14 lg:py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14 lg:space-y-24">
 
             <!-- Tags Section -->
             <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
@@ -577,12 +655,12 @@
                     <img src="https://i.imgur.com/PvVZ90b.png" alt="Tag NFC física para comitês e pontos de apoio" class="w-full aspect-square object-cover rounded-3xl shadow-xl">
                 </div>
                 <div>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Transforme comitês e pontos de apoio em canais digitais</h2>
-                    <p class="text-lg text-gray-400 mb-6">As tags NFC (adesivos ou totens inteligentes) podem ser instaladas estrategicamente na recepção dos comitês, mesas de atendimento, veículos da campanha e locais de eventos.</p>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Transforme comitês e pontos de apoio em canais digitais</h2>
+                    <p class="text-lg text-gray-600 mb-6">As tags NFC (adesivos ou totens inteligentes) podem ser instaladas estrategicamente na recepção dos comitês, mesas de atendimento, veículos da campanha e locais de eventos.</p>
 
-                    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 mb-6">
-                        <h4 class="font-bold text-white mb-4 flex items-center gap-2"><i class="ph-fill ph-hand-tap text-brand-500"></i> Ao aproximar o celular, o eleitor poderá:</h4>
-                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-300">
+                    <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100 mb-6">
+                        <h4 class="font-bold text-blue-950 mb-4 flex items-center gap-2"><i class="ph-fill ph-hand-tap text-brand-500"></i> Ao aproximar o celular, o eleitor poderá:</h4>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700">
                             <li class="flex items-center gap-2"><i class="ph-bold ph-check text-green-500"></i> Conhecer as propostas</li>
                             <li class="flex items-center gap-2"><i class="ph-bold ph-check text-green-500"></i> Seguir nas redes</li>
                             <li class="flex items-center gap-2"><i class="ph-bold ph-check text-green-500"></i> Salvar o contato</li>
@@ -595,158 +673,158 @@
             <!-- Site Personalizado Section -->
             <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center flex-col-reverse flex">
                 <div class="mt-12 lg:mt-0 order-2 lg:order-1">
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Muito mais do que um cartão: uma estrutura digital completa</h2>
-                    <p class="text-lg text-gray-400 mb-8">Nós não entregamos apenas o cartão físico. Desenvolvemos o destino digital que seu eleitor acessa. Um painel responsivo, rápido e fácil de atualizar pela sua equipe.</p>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Muito mais do que um cartão: uma estrutura digital completa</h2>
+                    <p class="text-lg text-gray-600 mb-8">Nós não entregamos apenas o cartão físico. Desenvolvemos o destino digital que seu eleitor acessa. Um painel responsivo, rápido e fácil de atualizar pela sua equipe.</p>
 
                     <div class="space-y-4">
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-amber-950/60 text-brand-500 flex items-center justify-center flex-shrink-0 mt-1">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-500 flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="ph-fill ph-file-text text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white text-lg">Conteúdo Oficial</h4>
-                                <p class="text-gray-400 text-sm">História, biografia, propostas organizadas por tema e vídeos da campanha centralizados.</p>
+                                <h4 class="font-bold text-blue-950 text-lg">Conteúdo Oficial</h4>
+                                <p class="text-gray-600 text-sm">História, biografia, propostas organizadas por tema e vídeos da campanha centralizados.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-amber-950/60 text-brand-500 flex items-center justify-center flex-shrink-0 mt-1">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-500 flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="ph-fill ph-users text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white text-lg">Mobilização</h4>
-                                <p class="text-gray-400 text-sm">Formulários para captação de voluntários e links diretos para grupos de WhatsApp.</p>
+                                <h4 class="font-bold text-blue-950 text-lg">Mobilização</h4>
+                                <p class="text-gray-600 text-sm">Formulários para captação de voluntários e links diretos para grupos de WhatsApp.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 rounded-full bg-amber-950/60 text-brand-500 flex items-center justify-center flex-shrink-0 mt-1">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-brand-500 flex items-center justify-center flex-shrink-0 mt-1">
                                 <i class="ph-fill ph-download-simple text-xl"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white text-lg">Central de Materiais</h4>
-                                <p class="text-gray-400 text-sm">Área para download de jingles, santinhos digitais e adesivos para redes sociais.</p>
+                                <h4 class="font-bold text-blue-950 text-lg">Central de Materiais</h4>
+                                <p class="text-gray-600 text-sm">Área para download de jingles, santinhos digitais e adesivos para redes sociais.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="order-1 lg:order-2 relative">
-                    <img src="https://i.imgur.com/a1N1sJL.png" alt="Site responsivo sobre campanhas políticas, em celular e desktop" class="w-full rounded-xl shadow-2xl border border-gray-800">
+                    <img src="https://i.imgur.com/a1N1sJL.png" alt="Site responsivo sobre campanhas políticas, em celular e desktop" class="w-full rounded-xl shadow-2xl border border-gray-200">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ONDE UTILIZAR -->
-    <section class="py-20 bg-gray-950 text-white">
+    <section class="py-12 lg:py-20 bg-blue-50 text-blue-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-12">Tecnologia preparada para acompanhar o candidato</h2>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-8 lg:mb-12">Tecnologia preparada para acompanhar o candidato</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Use Case 1 -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
-                    <i class="ph-fill ph-steps text-3xl text-brand-400 mb-4"></i>
+                <div class="bg-white p-6 rounded-xl border border-gray-200">
+                    <i class="ph-fill ph-steps text-3xl text-brand-600 mb-4"></i>
                     <h4 class="text-lg font-bold mb-2">Caminhadas e visitas</h4>
-                    <p class="text-gray-400 text-sm">Apresente a candidatura rapidamente durante encontros na rua, evitando acúmulo de papel.</p>
+                    <p class="text-gray-600 text-sm">Apresente a candidatura rapidamente durante encontros na rua, evitando acúmulo de papel.</p>
                 </div>
                 <!-- Use Case 2 -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
-                    <i class="ph-fill ph-users-four text-3xl text-brand-400 mb-4"></i>
+                <div class="bg-white p-6 rounded-xl border border-gray-200">
+                    <i class="ph-fill ph-users-four text-3xl text-brand-600 mb-4"></i>
                     <h4 class="text-lg font-bold mb-2">Reuniões políticas</h4>
-                    <p class="text-gray-400 text-sm">Compartilhe contatos e materiais oficiais com lideranças ao final de cada encontro.</p>
+                    <p class="text-gray-600 text-sm">Compartilhe contatos e materiais oficiais com lideranças ao final de cada encontro.</p>
                 </div>
                 <!-- Use Case 3 -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
-                    <i class="ph-fill ph-storefront text-3xl text-brand-400 mb-4"></i>
+                <div class="bg-white p-6 rounded-xl border border-gray-200">
+                    <i class="ph-fill ph-storefront text-3xl text-brand-600 mb-4"></i>
                     <h4 class="text-lg font-bold mb-2">Comitês de campanha</h4>
-                    <p class="text-gray-400 text-sm">Instale tags NFC para que visitantes acessem a plataforma da candidatura autônomamente.</p>
+                    <p class="text-gray-600 text-sm">Instale tags NFC para que visitantes acessem a plataforma da candidatura autônomamente.</p>
                 </div>
                 <!-- Use Case 4 -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
-                    <i class="ph-fill ph-microphone-stage text-3xl text-brand-400 mb-4"></i>
+                <div class="bg-white p-6 rounded-xl border border-gray-200">
+                    <i class="ph-fill ph-microphone-stage text-3xl text-brand-600 mb-4"></i>
                     <h4 class="text-lg font-bold mb-2">Eventos de lançamento</h4>
-                    <p class="text-gray-400 text-sm">Distribua cartões para coordenadores operarem como multiplicadores no salão.</p>
+                    <p class="text-gray-600 text-sm">Distribua cartões para coordenadores operarem como multiplicadores no salão.</p>
                 </div>
                 <!-- Use Case 5 -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
-                    <i class="ph-fill ph-map-pin-line text-3xl text-brand-400 mb-4"></i>
+                <div class="bg-white p-6 rounded-xl border border-gray-200">
+                    <i class="ph-fill ph-map-pin-line text-3xl text-brand-600 mb-4"></i>
                     <h4 class="text-lg font-bold mb-2">Equipes regionais</h4>
-                    <p class="text-gray-400 text-sm">Padronize a divulgação e o discurso em diferentes cidades com uma única plataforma central.</p>
+                    <p class="text-gray-600 text-sm">Padronize a divulgação e o discurso em diferentes cidades com uma única plataforma central.</p>
                 </div>
                 <!-- Use Case 6 -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-800">
-                    <i class="ph-fill ph-car-profile text-3xl text-brand-400 mb-4"></i>
+                <div class="bg-white p-6 rounded-xl border border-gray-200">
+                    <i class="ph-fill ph-car-profile text-3xl text-brand-600 mb-4"></i>
                     <h4 class="text-lg font-bold mb-2">Veículos de campanha</h4>
-                    <p class="text-gray-400 text-sm">Utilize tags adesivas nos carros som ou veículos da equipe para acesso via QR Code.</p>
+                    <p class="text-gray-600 text-sm">Utilize tags adesivas nos carros som ou veículos da equipe para acesso via QR Code.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- COMPARAÇÃO -->
-    <section class="py-24 bg-black">
+    <section class="py-14 lg:py-24 bg-white">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-extrabold text-white mb-4">Compare os Recursos</h2>
-                <p class="text-gray-400">Entenda as diferenças estruturais para escolher a melhor opção.</p>
+            <div class="text-center mb-10 lg:mb-16">
+                <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Compare os Recursos</h2>
+                <p class="text-gray-600">Entenda as diferenças estruturais para escolher a melhor opção.</p>
             </div>
 
-            <div class="overflow-x-auto rounded-xl border border-gray-800 shadow-sm">
+            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-gray-900 border-b border-gray-800">
-                            <th class="py-4 px-6 font-semibold text-white w-2/5">Recursos</th>
-                            <th class="py-4 px-6 font-semibold text-white text-center">Municipal</th>
-                            <th class="py-4 px-6 font-semibold text-brand-400 text-center bg-brand-900/40">Estadual</th>
-                            <th class="py-4 px-6 font-semibold text-white text-center">Federal</th>
+                        <tr class="bg-blue-50 border-b border-gray-200">
+                            <th class="py-4 px-6 font-semibold text-blue-950 w-2/5">Recursos</th>
+                            <th class="py-4 px-6 font-semibold text-blue-950 text-center">Municipal</th>
+                            <th class="py-4 px-6 font-semibold text-white text-center bg-brand-600">Estadual</th>
+                            <th class="py-4 px-6 font-semibold text-blue-950 text-center">Federal</th>
                         </tr>
                     </thead>
-                    <tbody class="text-gray-400 text-sm">
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Cartões NFC Personalizados</td>
+                    <tbody class="text-gray-600 text-sm">
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Cartões NFC Personalizados</td>
                             <td class="py-4 px-6 text-center">25</td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20 font-bold text-white">50</td>
-                            <td class="py-4 px-6 text-center font-bold text-white">100</td>
+                            <td class="py-4 px-6 text-center bg-brand-50 font-bold text-blue-950">50</td>
+                            <td class="py-4 px-6 text-center font-bold text-blue-950">100</td>
                         </tr>
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Tags para Comitê</td>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Tags para Comitê</td>
                             <td class="py-4 px-6 text-center">3</td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20 font-bold text-white">10</td>
-                            <td class="py-4 px-6 text-center font-bold text-white">20</td>
+                            <td class="py-4 px-6 text-center bg-brand-50 font-bold text-blue-950">10</td>
+                            <td class="py-4 px-6 text-center font-bold text-blue-950">20</td>
                         </tr>
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Site Personalizado</td>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Site Personalizado</td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">QR Code Integrado</td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Formulário de Apoiadores</td>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">QR Code Integrado</td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Agenda de Eventos</td>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Formulário de Apoiadores</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Agenda de Eventos</td>
                             <td class="py-4 px-6 text-center text-gray-500">Opcional</td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
-                        <tr class="border-b border-gray-800 hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Relatório de Acessos</td>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Relatório de Acessos</td>
                             <td class="py-4 px-6 text-center text-gray-500">Opcional</td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
-                        <tr class="hover:bg-gray-900">
-                            <td class="py-4 px-6 font-medium text-white">Suporte Prioritário</td>
+                        <tr class="hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Suporte Prioritário</td>
                             <td class="py-4 px-6 text-center text-gray-500">-</td>
-                            <td class="py-4 px-6 text-center bg-brand-900/20 text-gray-500">Opcional</td>
+                            <td class="py-4 px-6 text-center bg-brand-50 text-gray-500">Opcional</td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
                     </tbody>
@@ -756,65 +834,65 @@
     </section>
 
     <!-- FAQ -->
-    <section id="duvidas" class="py-24 bg-black">
+    <section id="duvidas" class="py-14 lg:py-24 bg-white">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-extrabold text-white mb-4">Dúvidas Frequentes</h2>
-                <p class="text-gray-400">Respostas rápidas sobre a tecnologia e o serviço.</p>
+            <div class="text-center mb-8 lg:mb-12">
+                <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Dúvidas Frequentes</h2>
+                <p class="text-gray-600">Respostas rápidas sobre a tecnologia e o serviço.</p>
             </div>
 
             <div class="space-y-4">
                 <!-- FAQ Item 1 -->
-                <div class="faq-item border border-gray-800 rounded-xl overflow-hidden bg-gray-900">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-white flex justify-between items-center focus:outline-none hover:bg-gray-800">
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
                         O cartão NFC precisa de aplicativo?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-400"></i>
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
                     </button>
-                    <div class="faq-content px-6 text-gray-400 text-sm">
+                    <div class="faq-content px-6 text-gray-600 text-sm">
                         <p>Não. Basta aproximar o cartão de um smartphone compatível ou escanear o QR Code impresso no verso. A tecnologia é nativa na maioria dos celulares modernos.</p>
                     </div>
                 </div>
 
                 <!-- FAQ Item 2 -->
-                <div class="faq-item border border-gray-800 rounded-xl overflow-hidden bg-gray-900">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-white flex justify-between items-center focus:outline-none hover:bg-gray-800">
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
                         Os cartões são personalizados?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-400"></i>
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
                     </button>
-                    <div class="faq-content px-6 text-gray-400 text-sm">
+                    <div class="faq-content px-6 text-gray-600 text-sm">
                         <p>Sim. Os cartões são produzidos com a identidade visual completa da sua campanha, incluindo nome, número, partido, slogan e cores oficiais.</p>
                     </div>
                 </div>
 
                 <!-- FAQ Item 3 -->
-                <div class="faq-item border border-gray-800 rounded-xl overflow-hidden bg-gray-900">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-white flex justify-between items-center focus:outline-none hover:bg-gray-800">
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
                         Os cartões já chegam configurados?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-400"></i>
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
                     </button>
-                    <div class="faq-content px-6 text-gray-400 text-sm">
+                    <div class="faq-content px-6 text-gray-600 text-sm">
                         <p>Sim. Todos os cartões e tags são entregues programados, testados e prontos para utilização imediata pela sua equipe.</p>
                     </div>
                 </div>
 
                 <!-- FAQ Item 4 -->
-                <div class="faq-item border border-gray-800 rounded-xl overflow-hidden bg-gray-900">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-white flex justify-between items-center focus:outline-none hover:bg-gray-800">
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
                         É possível alterar as informações depois?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-400"></i>
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
                     </button>
-                    <div class="faq-content px-6 text-gray-400 text-sm">
+                    <div class="faq-content px-6 text-gray-600 text-sm">
                         <p>Sim. O conteúdo da página digital (propostas, agenda, links) pode ser atualizado a qualquer momento no painel, sem necessidade de substituir os cartões físicos.</p>
                     </div>
                 </div>
                 
                 <!-- FAQ Item 5 -->
-                <div class="faq-item border border-gray-800 rounded-xl overflow-hidden bg-gray-900">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-white flex justify-between items-center focus:outline-none hover:bg-gray-800">
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
                         O cartão funciona em todos os celulares?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-400"></i>
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
                     </button>
-                    <div class="faq-content px-6 text-gray-400 text-sm">
+                    <div class="faq-content px-6 text-gray-600 text-sm">
                         <p>A imensa maioria dos smartphones atuais (iPhones e Androids recentes) possui leitura NFC automática. Para aparelhos muito antigos, o QR Code no verso oferece a mesma experiência de acesso.</p>
                     </div>
                 </div>
@@ -823,27 +901,27 @@
     </section>
 
     <!-- CTA & FORMULÁRIO -->
-    <section id="contato" class="py-24 bg-brand-900 relative overflow-hidden">
+    <section id="contato" class="py-14 lg:py-24 bg-blue-50 relative overflow-hidden">
         <!-- Decoration -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-            <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-600 rounded-full blur-3xl opacity-30"></div>
-            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-500 rounded-full blur-3xl opacity-20"></div>
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-100 rounded-full blur-3xl opacity-70"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-100 rounded-full blur-3xl opacity-60"></div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
-                
+
                 <!-- CTA Text -->
-                <div class="text-white">
+                <div class="text-blue-950">
                     <h2 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">Prepare sua campanha para se conectar com mais eleitores</h2>
-                    <p class="text-xl text-brand-200 mb-8">Apresente suas propostas, fortaleça sua identidade e transforme cada membro da equipe em um canal de divulgação poderoso da candidatura.</p>
-                    
+                    <p class="text-xl text-gray-600 mb-8">Apresente suas propostas, fortaleça sua identidade e transforme cada membro da equipe em um canal de divulgação poderoso da candidatura.</p>
+
                     <div class="space-y-4 mb-10">
                         <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-xl text-green-400 backdrop-blur-sm"><i class="ph-fill ph-whatsapp-logo"></i></div>
+                            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-xl text-green-600 shadow-sm"><i class="ph-fill ph-whatsapp-logo"></i></div>
                             <div>
-                                <p class="text-sm text-brand-300">Prefere falar agora?</p>
-                                <a href="#" class="font-bold text-lg hover:text-green-400 transition-colors">Chamar no WhatsApp</a>
+                                <p class="text-sm text-gray-500">Prefere falar agora?</p>
+                                <a href="#" class="font-bold text-lg hover:text-green-600 transition-colors">Chamar no WhatsApp</a>
                             </div>
                         </div>
                     </div>
@@ -854,10 +932,10 @@
                 </div>
 
                 <!-- Form Box -->
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 relative">
-                    <h3 class="text-2xl font-bold text-white mb-6">Solicitar orçamento personalizado</h3>
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 md:p-8 relative">
+                    <h3 class="text-2xl font-bold text-blue-950 mb-6">Solicitar orçamento personalizado</h3>
 
-                    <div id="form-success" class="hidden bg-green-950/40 border border-green-800 text-green-300 rounded-lg p-6 text-center">
+                    <div id="form-success" class="hidden bg-green-50 border border-green-200 text-green-700 rounded-lg p-6 text-center">
                         <i class="ph-fill ph-check-circle text-4xl text-green-500 mb-2"></i>
                         <h4 class="text-lg font-bold mb-1">Solicitação Recebida!</h4>
                         <p class="text-sm">Recebemos as informações da sua campanha. Nossa equipe técnica entrará em contato em breve para apresentar a melhor solução.</p>
@@ -866,12 +944,12 @@
                     <form id="quote-form" class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Nome do Candidato</label>
-                                <input type="text" id="nome_candidato" required class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Candidato</label>
+                                <input type="text" id="nome_candidato" required class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Cargo Disputado</label>
-                                <select id="cargo_disputado" required class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Cargo Disputado</label>
+                                <select id="cargo_disputado" required class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                                     <option value="">Selecione...</option>
                                     <option value="Deputado Estadual">Deputado Estadual</option>
                                     <option value="Deputado Federal">Deputado Federal</option>
@@ -884,46 +962,46 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Estado</label>
-                                <input type="text" id="estado" required class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                                <input type="text" id="estado" required class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Partido / Número</label>
-                                <input type="text" id="partido_numero" placeholder="Ex: ABC - 00000" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Partido / Número</label>
+                                <input type="text" id="partido_numero" placeholder="Ex: ABC - 00000" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">E-mail</label>
-                                <input type="email" id="email" required class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                                <input type="email" id="email" required class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-1">Quantidade de Cartões NFC</label>
-                                <input type="number" id="quantidade_cartoes" min="1" placeholder="Ex: 25" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantidade de Cartões NFC</label>
+                                <input type="number" id="quantidade_cartoes" min="1" placeholder="Ex: 25" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all">
                             </div>
                         </div>
 
                         <div class="flex gap-6 pt-2">
-                            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                            <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                                 <input type="checkbox" id="possui_identidade" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
                                 Já possui Identidade Visual?
                             </label>
-                            <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                            <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                                 <input type="checkbox" id="possui_site" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
                                 Já possui site?
                             </label>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Observações</label>
-                            <textarea rows="2" id="observacoes" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all resize-none"></textarea>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Observações</label>
+                            <textarea rows="2" id="observacoes" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all resize-none"></textarea>
                         </div>
 
                         <button type="submit" class="w-full bg-brand-600 text-white font-bold py-4 rounded-xl hover:bg-brand-700 transition-colors shadow-lg flex items-center justify-center gap-2 text-lg mt-4">
                             Enviar Solicitação <i class="ph-bold ph-paper-plane-right"></i>
                         </button>
-                        <p class="text-xs text-center text-gray-400 mt-2">Seus dados estão seguros. Não enviamos spam.</p>
+                        <p class="text-xs text-center text-gray-500 mt-2">Seus dados estão seguros. Não enviamos spam.</p>
                     </form>
                 </div>
             </div>
@@ -931,44 +1009,44 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-gray-950 text-gray-400 py-12 border-t border-gray-900">
+    <footer class="bg-blue-50 text-gray-600 py-8 lg:py-12 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-gray-800 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-gray-200 pb-8">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
                         <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-8 w-auto">
-                        <span class="font-bold text-xl tracking-tight text-white">Saturno<span class="text-brand-500">NFC</span></span>
+                        <span class="font-bold text-xl tracking-tight text-blue-950">Saturno<span class="text-brand-500">NFC</span></span>
                     </div>
                     <p class="text-sm text-gray-500 max-w-sm mb-4">
                         Fornecemos tecnologia de ponta e materiais estruturados para modernizar a comunicação política de candidatos em todo o Brasil.
                     </p>
-                    <div class="p-3 bg-gray-900 border border-gray-800 rounded-lg inline-block">
+                    <div class="p-3 bg-white border border-gray-200 rounded-lg inline-block">
                         <p class="text-xs text-gray-500 flex items-start gap-2">
                             <i class="ph-fill ph-info text-brand-500 mt-0.5"></i>
                             A Saturno NFC é uma empresa fornecedora de tecnologia e materiais personalizados, não possuindo vínculo corporativo, ideológico ou financeiro com partidos políticos ou candidaturas específicas.
                         </p>
                     </div>
                 </div>
-                
+
                 <div>
-                    <h4 class="text-white font-bold mb-4">Contato</h4>
+                    <h4 class="text-blue-950 font-bold mb-4">Contato</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-white transition-colors"><i class="ph-bold ph-whatsapp-logo"></i> (31) 92006-7518</a></li>
-                        <li><a href="mailto:saturnonfc@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors"><i class="ph-bold ph-envelope-simple"></i> saturnonfc@gmail.com</a></li>
-                        <li><a href="https://www.instagram.com/saturnonfc" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-white transition-colors"><i class="ph-bold ph-instagram-logo"></i> @saturnonfc</a></li>
+                        <li><a href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-brand-600 transition-colors"><i class="ph-bold ph-whatsapp-logo"></i> (31) 92006-7518</a></li>
+                        <li><a href="mailto:saturnonfc@gmail.com" class="flex items-center gap-2 hover:text-brand-600 transition-colors"><i class="ph-bold ph-envelope-simple"></i> saturnonfc@gmail.com</a></li>
+                        <li><a href="https://www.instagram.com/saturnonfc" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-brand-600 transition-colors"><i class="ph-bold ph-instagram-logo"></i> @saturnonfc</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <h4 class="text-blue-950 font-bold mb-4">Legal</h4>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">Política de Privacidade</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Termos de Uso</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">Política de Privacidade</a></li>
+                        <li><a href="#" class="hover:text-brand-600 transition-colors">Termos de Uso</a></li>
                     </ul>
                 </div>
             </div>
-            
-            <div class="text-center text-xs text-gray-600 flex flex-col md:flex-row justify-between items-center gap-4">
+
+            <div class="text-center text-xs text-gray-500 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p>CNPJ: 67.786.048/0001-48</p>
                 <p>&copy; 2024 Saturno NFC. Todos os direitos reservados.</p>
                 <p>Tecnologia em prol da democracia.</p>
@@ -1029,6 +1107,43 @@
                     header.classList.remove('shadow-md');
                 }
             });
+
+            // --- Mobile Step/Benefit Carousels ---
+            function initCarousel(trackId, buttonId, intervalMs) {
+                const track = document.getElementById(trackId);
+                const button = document.getElementById(buttonId);
+                if (!track || !button) return;
+
+                let timer = null;
+
+                function advance() {
+                    if (window.innerWidth >= 768) return;
+                    const card = track.querySelector('.carousel-card');
+                    const step = card ? card.getBoundingClientRect().width + 16 : track.clientWidth * 0.8;
+                    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 10;
+                    if (atEnd) {
+                        track.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        track.scrollBy({ left: step, behavior: 'smooth' });
+                    }
+                }
+
+                function restartTimer() {
+                    if (timer) clearInterval(timer);
+                    timer = setInterval(advance, intervalMs);
+                }
+
+                button.addEventListener('click', () => {
+                    advance();
+                    restartTimer();
+                });
+
+                restartTimer();
+            }
+
+            initCarousel('planos-track', 'planos-next', 4000);
+            initCarousel('como-funciona-track', 'como-funciona-next', 4000);
+            initCarousel('solucoes-track', 'solucoes-next', 4000);
 
             // --- FAQ Accordion Logic ---
             const faqItems = document.querySelectorAll('.faq-item');
