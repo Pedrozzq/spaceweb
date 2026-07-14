@@ -140,6 +140,20 @@
             left: 125%;
         }
 
+        /* Page-turn effect for mobile carousels */
+        .carousel-wrap-3d {
+            perspective: 1300px;
+        }
+        .page-flip-track {
+            transform-style: preserve-3d;
+            transform-origin: left center;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+        }
+        .page-flip-track.flipping {
+            transform: rotateY(-7deg) scale(0.98);
+            box-shadow: -18px 0 30px -12px rgba(30, 58, 138, 0.3);
+        }
+
         /* Mobile step/benefit carousels */
         .no-scrollbar {
             scrollbar-width: none;
@@ -173,7 +187,10 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
                     <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-10 w-auto">
-                    <span class="font-bold text-2xl tracking-tight text-blue-900">Saturno<span class="text-brand-500">NFC</span></span>
+                    <div class="flex flex-col leading-none">
+                        <span class="font-bold text-xl sm:text-2xl tracking-tight text-blue-900">Saturno<span class="text-brand-500">NFC</span></span>
+                        <span class="text-[9px] sm:text-[10px] font-semibold text-gray-500 uppercase tracking-wide mt-0.5">Campanha política</span>
+                    </div>
                 </div>
 
                 <!-- Desktop Nav -->
@@ -289,7 +306,7 @@
                             <!-- Buttons -->
                             <div class="mt-1 sm:mt-5 space-y-1 sm:space-y-3 w-full px-1 z-10 flex-grow min-h-0">
                                 <div class="w-full bg-green-500 text-white rounded-lg sm:rounded-xl py-1 sm:py-3 px-2 sm:px-4 flex items-center justify-between shadow-sm">
-                                    <span class="font-semibold text-[8px] sm:text-sm">WhatsApp da Campanha</span>
+                                    <span class="font-semibold text-[8px] sm:text-sm">Grupo de Apoiadores</span>
                                     <i class="ph-fill ph-whatsapp-logo text-xs sm:text-xl"></i>
                                 </div>
                                 <div class="w-full bg-white border border-gray-200 text-gray-700 rounded-lg sm:rounded-xl py-1 sm:py-3 px-2 sm:px-4 flex items-center justify-between shadow-sm">
@@ -353,8 +370,8 @@
                 <p class="text-gray-600 text-lg">Pacotes completos incluindo cartões físicos configurados e plataforma digital. Sem mensalidades durante a campanha.</p>
             </div>
 
-            <div class="relative">
-            <div id="planos-track" class="flex md:grid md:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pt-4 pb-2 md:pt-0 -mx-4 px-4 md:mx-auto md:px-0 no-scrollbar">
+            <div class="relative carousel-wrap-3d">
+            <div id="planos-track" class="page-flip-track flex md:grid md:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pt-4 pb-2 md:pt-0 -mx-4 px-4 md:mx-auto md:px-0 no-scrollbar">
 
                 <!-- PLANO MUNICIPAL -->
                 <div class="carousel-card w-[86%] max-w-[86%] sm:w-[55%] sm:max-w-[55%] md:w-full md:max-w-none flex-shrink-0 md:flex-shrink snap-center break-words bg-white rounded-3xl shadow-lg border border-gray-200 p-5 sm:p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300">
@@ -512,8 +529,8 @@
                 <p class="text-gray-600 text-lg">Entregamos uma solução completa, desde o design dos cartões até a estrutura digital, pronta para sua equipe usar.</p>
             </div>
 
-            <div class="relative">
-            <div id="como-funciona-track" class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
+            <div class="relative carousel-wrap-3d">
+            <div id="como-funciona-track" class="page-flip-track flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
                 <!-- Connecting Line (Desktop) -->
                 <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-blue-100 z-0"></div>
 
@@ -586,8 +603,8 @@
                 </div>
             </div>
 
-            <div class="relative">
-            <div id="solucoes-track" class="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
+            <div class="relative carousel-wrap-3d">
+            <div id="solucoes-track" class="page-flip-track flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
                 <!-- Benefit Item -->
                 <div class="carousel-card w-[75%] max-w-[75%] sm:w-[45%] sm:max-w-[45%] md:w-full md:max-w-none flex-shrink-0 md:flex-shrink snap-center break-words flex gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
                     <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-lg sm:text-2xl">
@@ -781,20 +798,20 @@
                         </tr>
                         <tr class="border-b border-gray-200 hover:bg-blue-50">
                             <td class="py-4 px-6 font-medium text-blue-950">Agenda de Eventos</td>
-                            <td class="py-4 px-6 text-center text-gray-500">Opcional</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-x text-red-400 text-lg"></i></td>
                             <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
                         <tr class="border-b border-gray-200 hover:bg-blue-50">
                             <td class="py-4 px-6 font-medium text-blue-950">Relatório de Acessos</td>
-                            <td class="py-4 px-6 text-center text-gray-500">Opcional</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-x text-red-400 text-lg"></i></td>
                             <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
                         <tr class="hover:bg-blue-50">
                             <td class="py-4 px-6 font-medium text-blue-950">Suporte Prioritário</td>
                             <td class="py-4 px-6 text-center text-gray-500">-</td>
-                            <td class="py-4 px-6 text-center bg-brand-50 text-gray-500">Opcional</td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                             <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
                         </tr>
                     </tbody>
@@ -1093,11 +1110,17 @@
                     const gapValue = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
                     const step = card.getBoundingClientRect().width + gapValue;
                     const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-                    if (atEnd) {
-                        track.scrollTo({ left: 0, behavior: 'smooth' });
-                    } else {
-                        track.scrollBy({ left: step, behavior: 'smooth' });
-                    }
+
+                    // "Page turn" lift before sliding, like flipping a book page
+                    track.classList.add('flipping');
+                    setTimeout(() => {
+                        if (atEnd) {
+                            track.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            track.scrollBy({ left: step, behavior: 'smooth' });
+                        }
+                        track.classList.remove('flipping');
+                    }, 140);
                 }
 
                 function restartTimer() {
