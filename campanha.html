@@ -44,6 +44,7 @@
                         'wave': 'wave 2s linear infinite',
                         'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
                         'link-glow': 'linkGlow 2.5s ease-in-out infinite',
+                        'swipe-hint': 'swipeHint 1.6s ease-in-out infinite',
                     },
                     keyframes: {
                         float: {
@@ -61,6 +62,10 @@
                         linkGlow: {
                             '0%, 100%': { boxShadow: '0 0 0 0 rgba(37,99,235,0.35)' },
                             '50%': { boxShadow: '0 0 0 8px rgba(37,99,235,0)' },
+                        },
+                        swipeHint: {
+                            '0%, 100%': { transform: 'translateX(0)', opacity: '1' },
+                            '50%': { transform: 'translateX(8px)', opacity: '0.5' },
                         }
                     }
                 }
@@ -240,26 +245,23 @@
 
                 <!-- Text Content -->
                 <div class="lg:col-span-6 text-center lg:text-left mb-16 lg:mb-0 order-2 lg:order-1">
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-blue-950 mb-3 leading-tight">
-                        Transforme cada cartão em um <span class="tech-gradient-text">ponto digital</span> da sua campanha
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-blue-950 mb-5 sm:mb-8 leading-tight">
+                        Troque papéis esquecidos por <span class="tech-gradient-text">cartões que conectam</span> o eleitor à sua campanha
                     </h1>
-                    <p class="text-brand-600 font-semibold uppercase tracking-wide text-sm mb-4">Campanha política</p>
-                    <p class="text-lg sm:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        Leve suas propostas, redes sociais, agenda, WhatsApp e materiais oficiais diretamente para o celular dos eleitores com cartões NFC personalizados e uma página exclusiva para sua candidatura.
-                    </p>
                     <div class="flex flex-col gap-3.5 w-full max-w-md mx-auto lg:mx-0">
+                        <a href="#planos" class="linktree-btn cta-primary opacity-0 bg-brand-600 text-white px-6 py-5 rounded-full font-extrabold text-lg sm:text-xl ring-4 ring-brand-100 hover:bg-brand-700 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 w-full">
+                            Conhecer os planos <i class="ph-bold ph-arrow-right"></i>
+                        </a>
                         <div class="relative">
                             <span class="absolute -top-3 left-1/2 -translate-x-1/2 lg:left-6 lg:translate-x-0 bg-blue-900 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md z-10 whitespace-nowrap opacity-0 animate-fade-in-up" style="animation-delay: 0.35s;">Comece por aqui</span>
-                            <a href="#planos" class="linktree-btn cta-primary opacity-0 bg-brand-600 text-white px-6 py-5 rounded-full font-extrabold text-lg sm:text-xl ring-4 ring-brand-100 hover:bg-brand-700 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 w-full">
-                                Conhecer os planos <i class="ph-bold ph-arrow-right"></i>
+                            <a href="#como-funciona" class="linktree-btn opacity-0 animate-fade-in-up bg-white text-brand-700 border-2 border-brand-200 px-6 py-4 rounded-full font-bold text-base sm:text-lg hover:border-brand-500 hover:bg-blue-50 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full" style="animation-delay: 0.25s;">
+                                Entenda como funciona <i class="ph-bold ph-play-circle"></i>
                             </a>
                         </div>
-                        <a href="#como-funciona" class="linktree-btn opacity-0 animate-fade-in-up bg-white text-brand-700 border-2 border-brand-200 px-6 py-4 rounded-full font-bold text-base sm:text-lg hover:border-brand-500 hover:bg-blue-50 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full" style="animation-delay: 0.25s;">
-                            Entenda como funciona <i class="ph-bold ph-play-circle"></i>
-                        </a>
-                        <a href="#contato" class="linktree-btn opacity-0 animate-fade-in-up bg-white text-gray-700 border-2 border-gray-200 px-6 py-4 rounded-full font-bold text-base sm:text-lg hover:border-brand-500 hover:bg-gray-50 hover:scale-[1.03] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 shadow-sm hover:shadow-lg flex items-center justify-center gap-2 w-full" style="animation-delay: 0.4s;">
-                            Solicitar orçamento <i class="ph-bold ph-presentation-chart"></i>
-                        </a>
+                        <div class="flex items-center justify-center gap-2 text-gray-500 text-sm font-semibold py-2 opacity-0 animate-fade-in-up" style="animation-delay: 0.4s;">
+                            Deslize para o lado e conheça mais
+                            <i class="ph-bold ph-hand-swipe-right text-lg text-brand-500 animate-swipe-hint"></i>
+                        </div>
                     </div>
 
                     <!-- Small highlights -->
@@ -681,7 +683,7 @@
             <!-- Tags Section -->
             <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
                 <div class="mb-12 lg:mb-0 relative">
-                    <img src="https://i.imgur.com/PvVZ90b.png" alt="Tag NFC física para comitês e pontos de apoio" class="w-full aspect-square object-cover rounded-3xl shadow-xl">
+                    <img src="https://i.imgur.com/VnrUSMK.png" alt="Tag NFC física para comitês e pontos de apoio" class="w-full aspect-square object-cover rounded-3xl shadow-xl">
                 </div>
                 <div>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Transforme comitês e pontos de apoio em canais digitais</h2>
@@ -747,146 +749,6 @@
         </div>
     </section>
 
-    <!-- COMPARAÇÃO -->
-    <section class="py-14 lg:py-24 bg-white">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-10 lg:mb-16">
-                <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Compare os Recursos</h2>
-                <p class="text-gray-600">Entenda as diferenças estruturais para escolher a melhor opção.</p>
-            </div>
-
-            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-blue-50 border-b border-gray-200">
-                            <th class="py-4 px-6 font-semibold text-blue-950 w-2/5">Recursos</th>
-                            <th class="py-4 px-6 font-semibold text-blue-950 text-center">Municipal</th>
-                            <th class="py-4 px-6 font-semibold text-white text-center bg-brand-600">Estadual</th>
-                            <th class="py-4 px-6 font-semibold text-blue-950 text-center">Federal</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-600 text-sm">
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Cartões NFC Personalizados</td>
-                            <td class="py-4 px-6 text-center">25</td>
-                            <td class="py-4 px-6 text-center bg-brand-50 font-bold text-blue-950">50</td>
-                            <td class="py-4 px-6 text-center font-bold text-blue-950">100</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Tags para Comitê</td>
-                            <td class="py-4 px-6 text-center">3</td>
-                            <td class="py-4 px-6 text-center bg-brand-50 font-bold text-blue-950">10</td>
-                            <td class="py-4 px-6 text-center font-bold text-blue-950">20</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Site Personalizado</td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">QR Code Integrado</td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Formulário de Apoiadores</td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Agenda de Eventos</td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-x text-red-400 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Relatório de Acessos</td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-x text-red-400 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                        <tr class="hover:bg-blue-50">
-                            <td class="py-4 px-6 font-medium text-blue-950">Suporte Prioritário</td>
-                            <td class="py-4 px-6 text-center text-gray-500">-</td>
-                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="duvidas" class="py-14 lg:py-24 bg-white">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-8 lg:mb-12">
-                <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Dúvidas Frequentes</h2>
-                <p class="text-gray-600">Respostas rápidas sobre a tecnologia e o serviço.</p>
-            </div>
-
-            <div class="space-y-4">
-                <!-- FAQ Item 1 -->
-                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
-                        O cartão NFC precisa de aplicativo?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
-                    </button>
-                    <div class="faq-content px-6 text-gray-600 text-sm">
-                        <p>Não. Basta aproximar o cartão de um smartphone compatível ou escanear o QR Code impresso no verso. A tecnologia é nativa na maioria dos celulares modernos.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 2 -->
-                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
-                        Os cartões são personalizados?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
-                    </button>
-                    <div class="faq-content px-6 text-gray-600 text-sm">
-                        <p>Sim. Os cartões são produzidos com a identidade visual completa da sua campanha, incluindo nome, número, partido, slogan e cores oficiais.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 3 -->
-                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
-                        Os cartões já chegam configurados?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
-                    </button>
-                    <div class="faq-content px-6 text-gray-600 text-sm">
-                        <p>Sim. Todos os cartões e tags são entregues programados, testados e prontos para utilização imediata pela sua equipe.</p>
-                    </div>
-                </div>
-
-                <!-- FAQ Item 4 -->
-                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
-                        É possível alterar as informações depois?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
-                    </button>
-                    <div class="faq-content px-6 text-gray-600 text-sm">
-                        <p>Sim. O conteúdo da página digital (propostas, agenda, links) pode ser atualizado a qualquer momento no painel, sem necessidade de substituir os cartões físicos.</p>
-                    </div>
-                </div>
-                
-                <!-- FAQ Item 5 -->
-                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
-                        O cartão funciona em todos os celulares?
-                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
-                    </button>
-                    <div class="faq-content px-6 text-gray-600 text-sm">
-                        <p>A imensa maioria dos smartphones atuais (iPhones e Androids recentes) possui leitura NFC automática. Para aparelhos muito antigos, o QR Code no verso oferece a mesma experiência de acesso.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA & FORMULÁRIO -->
     <section id="contato" class="py-14 lg:py-24 bg-blue-50 relative overflow-hidden">
         <!-- Decoration -->
@@ -914,7 +776,7 @@
                     </div>
 
                     <div class="inline-block border-l-4 border-brand-500 pl-4 py-2">
-                        <p class="font-semibold text-lg italic tracking-wide">"Sua candidatura a um toque de distância."</p>
+                        <p class="font-semibold text-lg italic tracking-wide">O santinho informa. A Saturno NFC conecta, engaja e mobiliza.</p>
                     </div>
                 </div>
 
@@ -990,6 +852,152 @@
                         </button>
                         <p class="text-xs text-center text-gray-500 mt-2">Seus dados estão seguros. Não enviamos spam.</p>
                     </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARAÇÃO -->
+    <section class="py-14 lg:py-24 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10 lg:mb-16">
+                <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Compare os Recursos</h2>
+                <p class="text-gray-600">Entenda as diferenças estruturais para escolher a melhor opção.</p>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-blue-50 border-b border-gray-200">
+                            <th class="py-4 px-6 font-semibold text-blue-950 w-2/5">Recursos</th>
+                            <th class="py-4 px-6 font-semibold text-blue-950 text-center">Municipal</th>
+                            <th class="py-4 px-6 font-semibold text-white text-center bg-brand-600">Estadual</th>
+                            <th class="py-4 px-6 font-semibold text-blue-950 text-center">Federal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm">
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Cartões NFC Personalizados</td>
+                            <td class="py-4 px-6 text-center">25</td>
+                            <td class="py-4 px-6 text-center bg-brand-50 font-bold text-blue-950">50</td>
+                            <td class="py-4 px-6 text-center font-bold text-blue-950">100</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Tags para Comitê</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Site Personalizado</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">QR Code Integrado</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Formulário de Apoiadores</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Localização Comitê</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Agenda de Eventos</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-x text-red-400 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Relatório de Acessos</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-x text-red-400 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="py-4 px-6 font-medium text-blue-950">Suporte Prioritário</td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center bg-brand-50"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                            <td class="py-4 px-6 text-center"><i class="ph-bold ph-check text-green-500 text-lg"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="duvidas" class="py-14 lg:py-24 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8 lg:mb-12">
+                <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Dúvidas Frequentes</h2>
+                <p class="text-gray-600">Respostas rápidas sobre a tecnologia e o serviço.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
+                        O cartão NFC precisa de aplicativo?
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
+                    </button>
+                    <div class="faq-content px-6 text-gray-600 text-sm">
+                        <p>Não. Basta aproximar o cartão de um smartphone compatível ou escanear o QR Code impresso no verso. A tecnologia é nativa na maioria dos celulares modernos.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
+                        Os cartões são personalizados?
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
+                    </button>
+                    <div class="faq-content px-6 text-gray-600 text-sm">
+                        <p>Sim. Os cartões são produzidos com a identidade visual completa da sua campanha, incluindo nome, número, partido, slogan e cores oficiais.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
+                        Os cartões já chegam configurados?
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
+                    </button>
+                    <div class="faq-content px-6 text-gray-600 text-sm">
+                        <p>Sim. Todos os cartões e tags são entregues programados, testados e prontos para utilização imediata pela sua equipe.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
+                        É possível alterar as informações depois?
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
+                    </button>
+                    <div class="faq-content px-6 text-gray-600 text-sm">
+                        <p>Sim. O conteúdo da página digital (propostas, agenda, links) pode ser atualizado a qualquer momento no painel, sem necessidade de substituir os cartões físicos.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                    <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
+                        O cartão funciona em todos os celulares?
+                        <i class="ph-bold ph-caret-down faq-icon transition-transform duration-300 text-gray-500"></i>
+                    </button>
+                    <div class="faq-content px-6 text-gray-600 text-sm">
+                        <p>A imensa maioria dos smartphones atuais (iPhones e Androids recentes) possui leitura NFC automática. Para aparelhos muito antigos, o QR Code no verso oferece a mesma experiência de acesso.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1123,8 +1131,13 @@
                     }, 140);
                 }
 
-                function restartTimer() {
+                function stopTimer() {
                     if (timer) clearInterval(timer);
+                    timer = null;
+                }
+
+                function restartTimer() {
+                    stopTimer();
                     timer = setInterval(advance, intervalMs);
                 }
 
@@ -1133,7 +1146,20 @@
                     restartTimer();
                 });
 
-                restartTimer();
+                // Only start auto-advancing once the section scrolls into view,
+                // and reset to the first card so the user sees it from the start.
+                const section = track.closest('section');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            track.scrollTo({ left: 0, behavior: 'instant' });
+                            restartTimer();
+                        } else {
+                            stopTimer();
+                        }
+                    });
+                }, { threshold: 0.35 });
+                observer.observe(section || track);
             }
 
             initCarousel('planos-track', 'planos-next', 4000);
