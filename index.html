@@ -1198,15 +1198,15 @@
                 <div class="p-4 sm:p-5 flex flex-col gap-3">
                     <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Escolha seu plano</span>
                     <div class="flex flex-col gap-3 w-full">
-                        <button type="button" class="btn btn-saturno-white btn-plano-select" data-plano="Essencial" data-cartoes="4 Cartões NFC personalizados">
+                        <button type="button" class="btn btn-saturno-white btn-plano-select" data-plano="Essencial" data-cartoes="4 Cartões NFC personalizados" data-plan-index="0">
                             <span class="btn-plano-label">Essencial</span>
                             <span class="btn-plano-num">4<span class="btn-plano-unid">unidades</span></span>
                         </button>
-                        <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="10 Cartões NFC personalizados">
+                        <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="10 Cartões NFC personalizados" data-plan-index="1">
                             <span class="btn-plano-label">Profissional</span>
                             <span class="btn-plano-num">10<span class="btn-plano-unid">unidades</span></span>
                         </button>
-                        <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados">
+                        <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados" data-plan-index="2">
                             <span class="btn-plano-label">Fora de Órbita</span>
                             <span class="btn-plano-num">30<span class="btn-plano-unid">unidades</span></span>
                         </button>
@@ -1590,7 +1590,7 @@
                 <div id="plansGrid" class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
 
                     <!-- PLANO ESSENCIAL (Mais Vendido - Azul) -->
-                    <div class="plan-card card-saturno-white p-8 flex flex-col relative">
+                    <div id="plan-card-0" class="plan-card card-saturno-white p-8 flex flex-col relative">
                         <div class="badge-saturno-white absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
                             Mais Vendido
                         </div>
@@ -1619,7 +1619,7 @@
                     </div>
 
                     <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
-                    <div class="plan-card card-silver p-8 flex flex-col relative">
+                    <div id="plan-card-1" class="plan-card card-silver p-8 flex flex-col relative">
                         <div class="badge-saturno-silver absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
                             Custo Benefício
                         </div>
@@ -1647,7 +1647,7 @@
                     </div>
 
                     <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
-                    <div class="plan-card card-gold p-8 flex flex-col relative">
+                    <div id="plan-card-2" class="plan-card card-gold p-8 flex flex-col relative">
                         <div class="badge-saturno-gold absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
                             Para Grandes Empresas
                         </div>
@@ -2114,6 +2114,17 @@
             function next() { goTo(current + 1); }
             function prev() { goTo(current - 1); }
 
+            // Pula direto para um plano específico, sem a animação de alternância (warp/slide)
+            function jumpTo(index) {
+                current = (index + total) % total;
+                const prevTransition = grid.style.transition;
+                grid.style.transition = 'none';
+                render();
+                void grid.offsetWidth; // força reflow antes de restaurar a transição
+                grid.style.transition = prevTransition;
+            }
+            window.saturnoJumpToPlan = jumpTo;
+
             function startAuto() {
                 if (autoTimer || !isMobile()) return;
                 autoTimer = setInterval(next, 5000);
@@ -2261,13 +2272,12 @@
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
-        // --- "Quero meu Cartão NFC": abre box para escolher o plano e envia direto pro WhatsApp ---
+        // --- "Quero meu Cartão NFC": abre box para escolher o plano e leva o usuário até o card correspondente ---
         (function () {
             var btn = document.getElementById('btn-escolher-plano');
             var panel = document.getElementById('escolher-plano-panel');
             var caret = document.getElementById('escolher-plano-caret');
             if (!btn || !panel) return;
-            var phone = '5531920067518';
 
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -2279,8 +2289,11 @@
 
             panel.querySelectorAll('button[data-plano]').forEach(function (b) {
                 b.addEventListener('click', function () {
-                    var texto = 'Olá, tenho interesse no Plano ' + b.getAttribute('data-plano') + ' (' + b.getAttribute('data-cartoes') + ').';
-                    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(texto), '_blank');
+                    var idx = parseInt(b.getAttribute('data-plan-index'), 10);
+                    if (isNaN(idx)) return;
+                    if (typeof window.saturnoJumpToPlan === 'function') window.saturnoJumpToPlan(idx);
+                    var card = document.getElementById('plan-card-' + idx);
+                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             });
         })();
