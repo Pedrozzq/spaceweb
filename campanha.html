@@ -181,9 +181,63 @@
         .faq-item.active .faq-icon {
             transform: rotate(180deg);
         }
+
+        /* Scroll progress bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            z-index: 60;
+            transition: width 0.1s linear;
+        }
+
+        /* Scroll-reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-stagger.reveal-visible > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-stagger.reveal-visible > *:nth-child(1) { transition-delay: 0ms; }
+        .reveal-stagger.reveal-visible > *:nth-child(2) { transition-delay: 70ms; }
+        .reveal-stagger.reveal-visible > *:nth-child(3) { transition-delay: 140ms; }
+        .reveal-stagger.reveal-visible > *:nth-child(4) { transition-delay: 210ms; }
+        .reveal-stagger.reveal-visible > *:nth-child(5) { transition-delay: 280ms; }
+        .reveal-stagger.reveal-visible > *:nth-child(6) { transition-delay: 350ms; }
+
+        /* Active nav link */
+        .nav-link.active {
+            color: #2563eb;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .reveal-stagger > * {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            #scroll-progress { transition: none; }
+        }
     </style>
 </head>
 <body class="font-sans text-gray-600 antialiased bg-white overflow-x-hidden">
+
+    <div id="scroll-progress"></div>
 
     <!-- HEADER -->
     <header class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
@@ -200,10 +254,10 @@
 
                 <!-- Desktop Nav -->
                 <nav class="hidden md:flex space-x-8 items-center">
-                    <a href="#como-funciona" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Como funciona</a>
-                    <a href="#solucoes" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Soluções</a>
-                    <a href="#planos" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Planos</a>
-                    <a href="#duvidas" class="text-gray-600 hover:text-brand-500 font-medium transition-colors">Dúvidas</a>
+                    <a href="#como-funciona" class="nav-link text-gray-600 hover:text-brand-500 font-medium transition-colors">Como funciona</a>
+                    <a href="#solucoes" class="nav-link text-gray-600 hover:text-brand-500 font-medium transition-colors">Soluções</a>
+                    <a href="#planos" class="nav-link text-gray-600 hover:text-brand-500 font-medium transition-colors">Planos</a>
+                    <a href="#duvidas" class="nav-link text-gray-600 hover:text-brand-500 font-medium transition-colors">Dúvidas</a>
                     <a href="#contato" class="bg-brand-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-brand-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                         Quero fortalecer minha campanha
                     </a>
@@ -236,8 +290,8 @@
     <section class="relative pt-28 pb-12 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
         <!-- Background Tech Elements -->
         <div class="absolute inset-0 z-0">
-            <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-100 rounded-full blur-3xl opacity-70 transform translate-x-1/2 -translate-y-1/4"></div>
-            <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-100 rounded-full blur-3xl opacity-60 transform -translate-x-1/2 translate-y-1/4"></div>
+            <div class="parallax-blob absolute top-0 right-0 w-[800px] h-[800px] bg-brand-100 rounded-full blur-3xl opacity-70 transform translate-x-1/2 -translate-y-1/4" data-parallax-base="-25"></div>
+            <div class="parallax-blob absolute bottom-0 left-0 w-[600px] h-[600px] bg-brand-100 rounded-full blur-3xl opacity-60 transform -translate-x-1/2 translate-y-1/4" data-parallax-base="25" data-speed="-1"></div>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -286,12 +340,8 @@
 
                             <!-- Profile pic -->
                             <div class="w-9 h-9 sm:w-24 sm:h-24 rounded-full bg-white border-2 sm:border-4 border-white shadow-md mx-auto mt-2 sm:mt-8 z-10 flex items-center justify-center relative overflow-hidden flex-shrink-0">
-                                <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                                    <i class="ph-fill ph-user text-base sm:text-5xl"></i>
-                                </div>
-                                <!-- Photo badge -->
-                                <div class="absolute bottom-0 right-0 w-3 h-3 sm:w-7 sm:h-7 bg-brand-600 rounded-full border border-white sm:border-2 flex items-center justify-center">
-                                    <i class="ph-fill ph-camera text-white text-[6px] sm:text-xs"></i>
+                                <div class="w-full h-full bg-gray-200">
+                                    <img src="https://i.imgur.com/1XIfG0T.png" alt="Paulo Silva" class="w-full h-full object-cover">
                                 </div>
                             </div>
 
@@ -366,14 +416,14 @@
     <!-- COMO FUNCIONA -->
     <section id="como-funciona" class="py-14 lg:py-24 bg-white text-blue-950 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-16">
+            <div class="reveal text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Processo Simples</h2>
                 <h3 class="text-3xl md:text-4xl font-extrabold mb-4">Sua campanha na palma da mão do eleitor</h3>
                 <p class="text-gray-600 text-lg">Entregamos uma solução completa, desde o design dos cartões até a estrutura digital, pronta para sua equipe usar.</p>
             </div>
 
             <div class="relative carousel-wrap-3d">
-            <div id="como-funciona-track" class="page-flip-track flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
+            <div id="como-funciona-track" class="reveal-stagger page-flip-track flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
                 <!-- Connecting Line (Desktop) -->
                 <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-blue-100 z-0"></div>
 
@@ -436,7 +486,7 @@
     <!-- POR QUE USAR NFC -->
     <section class="py-14 lg:py-24 bg-white" id="solucoes">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-16">
+            <div class="reveal text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-500 font-bold tracking-wide uppercase text-sm mb-2">Benefícios Estratégicos</h2>
                 <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Mais alcance para sua campanha em cada encontro</h3>
                 <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl inline-block">
@@ -447,7 +497,7 @@
             </div>
 
             <div class="relative carousel-wrap-3d">
-            <div id="solucoes-track" class="page-flip-track flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
+            <div id="solucoes-track" class="reveal-stagger page-flip-track flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pb-2 -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar">
                 <!-- Benefit Item -->
                 <div class="carousel-card w-[75%] max-w-[75%] sm:w-[45%] sm:max-w-[45%] md:w-full md:max-w-none flex-shrink-0 md:flex-shrink snap-center break-words flex gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl hover:bg-blue-50 transition-colors border border-transparent hover:border-blue-100">
                     <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 text-brand-500 rounded-full flex items-center justify-center text-lg sm:text-2xl">
@@ -520,14 +570,14 @@
     <!-- PLANOS -->
     <section id="planos" class="py-14 lg:py-24 bg-blue-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-10 lg:mb-16">
+            <div class="reveal text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-500 font-bold tracking-wide uppercase text-sm mb-2">Investimento</h2>
                 <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-4">Escolha o plano ideal para sua campanha</h3>
                 <p class="text-gray-600 text-lg">Pacotes completos incluindo cartões físicos configurados e plataforma digital. Sem mensalidades durante a campanha.</p>
             </div>
 
             <div class="relative carousel-wrap-3d">
-            <div id="planos-track" class="page-flip-track flex md:grid md:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pt-4 pb-2 md:pt-0 -mx-4 px-4 md:mx-auto md:px-0 no-scrollbar">
+            <div id="planos-track" class="reveal-stagger page-flip-track flex md:grid md:grid-cols-3 gap-5 sm:gap-8 max-w-6xl mx-auto overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth pt-4 pb-2 md:pt-0 -mx-4 px-4 md:mx-auto md:px-0 no-scrollbar">
 
                 <!-- PLANO MUNICIPAL -->
                 <div class="carousel-card w-[86%] max-w-[86%] sm:w-[55%] sm:max-w-[55%] md:w-full md:max-w-none flex-shrink-0 md:flex-shrink snap-center break-words bg-white rounded-3xl shadow-lg border border-gray-200 p-5 sm:p-8 flex flex-col hover:-translate-y-1 transition-transform duration-300">
@@ -681,7 +731,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Tags Section -->
-            <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+            <div class="reveal-stagger lg:grid lg:grid-cols-2 lg:gap-16 items-center">
                 <div class="mb-12 lg:mb-0 relative">
                     <img src="https://i.imgur.com/ST3NYLJ.png" alt="Tag NFC física para comitês e pontos de apoio" class="w-full aspect-square object-cover rounded-3xl shadow-xl">
                 </div>
@@ -708,7 +758,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-8 lg:mb-12">Tecnologia preparada para acompanhar o candidato</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="reveal-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Use Case 1 -->
                 <div class="bg-white p-6 rounded-xl border border-gray-200">
                     <i class="ph-fill ph-steps text-3xl text-brand-600 mb-4"></i>
@@ -758,7 +808,7 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal-stagger grid lg:grid-cols-2 gap-16 items-center">
 
                 <!-- CTA Text -->
                 <div class="text-blue-950">
@@ -865,7 +915,7 @@
                 <p class="text-gray-600">Entenda as diferenças estruturais para escolher a melhor opção.</p>
             </div>
 
-            <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+            <div class="reveal overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-blue-50 border-b border-gray-200">
@@ -944,7 +994,7 @@
                 <p class="text-gray-600">Respostas rápidas sobre a tecnologia e o serviço.</p>
             </div>
 
-            <div class="space-y-4">
+            <div class="reveal-stagger space-y-4">
                 <!-- FAQ Item 1 -->
                 <div class="faq-item border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
                     <button class="faq-button w-full text-left px-6 py-4 font-semibold text-blue-950 flex justify-between items-center focus:outline-none hover:bg-blue-50">
@@ -1102,6 +1152,63 @@
                     header.classList.remove('shadow-md');
                 }
             });
+
+            // --- Scroll Progress Bar ---
+            const progressBar = document.getElementById('scroll-progress');
+            function updateProgressBar() {
+                const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+                const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+                progressBar.style.width = pct + '%';
+            }
+            window.addEventListener('scroll', updateProgressBar, { passive: true });
+            updateProgressBar();
+
+            // --- Hero Parallax Blobs ---
+            const parallaxBlobs = document.querySelectorAll('.parallax-blob');
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            function updateParallax() {
+                if (reduceMotion) return;
+                parallaxBlobs.forEach((blob) => {
+                    const base = parseFloat(blob.dataset.parallaxBase) || 0;
+                    const speed = parseFloat(blob.dataset.speed) || 1;
+                    const offset = window.scrollY * 0.06 * speed;
+                    blob.style.setProperty('--tw-translate-y', `calc(${base}% + ${offset}px)`);
+                });
+            }
+            window.addEventListener('scroll', updateParallax, { passive: true });
+            updateParallax();
+
+            // --- Scroll Reveal ---
+            const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+            revealEls.forEach((el) => revealObserver.observe(el));
+
+            // --- Scrollspy: highlight active nav link ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const spySections = [...navLinks]
+                .map((link) => document.querySelector(link.getAttribute('href')))
+                .filter(Boolean);
+            function updateActiveNavLink() {
+                let currentId = null;
+                spySections.forEach((section) => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= 120 && rect.bottom > 120) {
+                        currentId = section.id;
+                    }
+                });
+                navLinks.forEach((link) => {
+                    link.classList.toggle('active', currentId && link.getAttribute('href') === '#' + currentId);
+                });
+            }
+            window.addEventListener('scroll', updateActiveNavLink, { passive: true });
+            updateActiveNavLink();
 
             // --- Mobile Step/Benefit Carousels ---
             function initCarousel(trackId, buttonId, intervalMs) {
