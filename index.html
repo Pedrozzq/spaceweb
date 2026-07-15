@@ -815,6 +815,7 @@
 
         .icon-check { font-size: 1.1rem; color: #22c55e; margin-top: -1px; flex-shrink: 0; font-weight: bold; }
         .icon-star  { font-size: 1.1rem; color: #eab308; margin-top: -1px; flex-shrink: 0; }
+        .icon-bonus { font-size: 1.1rem; color: #a78bfa; margin-top: -1px; flex-shrink: 0; }
 
         /* ===================== SEÇÃO DE PORTFÓLIO ===================== */
         .portfolio-section { font-family: "Plus Jakarta Sans", sans-serif; }
@@ -851,6 +852,90 @@
         }
         .slider-arrow:hover { border-color: #FFB800; background: rgba(255, 184, 0, 0.15); }
         .slider-arrow:disabled { opacity: 0; pointer-events: none; }
+
+        /* ===================== CARROSSEL DE PLANOS (MOBILE) ===================== */
+        @media (max-width: 767px) {
+            #plansViewport { overflow: hidden; padding-top: 22px; }
+            #plansGrid {
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: flex-start;
+                gap: 0;
+                transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            }
+            #plansGrid .plan-card { flex: 0 0 100%; width: 100%; }
+        }
+
+        /* Setas do carrossel de planos: prata + pulsando */
+        #plansPrevBtn, #plansNextBtn {
+            border-color: rgba(192, 192, 192, 0.55);
+            color: #C0C0C0;
+            animation: plansArrowPulse 1.8s ease-in-out infinite;
+        }
+        #plansPrevBtn:hover, #plansNextBtn:hover {
+            border-color: #E8E8E8;
+            background: rgba(192, 192, 192, 0.18);
+        }
+        @keyframes plansArrowPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(192, 192, 192, 0.55); }
+            50%      { box-shadow: 0 0 0 9px rgba(192, 192, 192, 0); }
+        }
+
+        .plan-dot {
+            width: 8px; height: 8px; border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .plan-dot.active { width: 22px; background: #FFB800; box-shadow: 0 0 8px rgba(255, 184, 0, 0.6); }
+
+        /* Efeito "planeta / universo / órbita" durante a troca de planos */
+        #plansViewport .orbit-fx {
+            position: absolute; inset: 0; pointer-events: none; z-index: 5; overflow: hidden;
+        }
+        #plansViewport .orbit-glow {
+            position: absolute; inset: -25%;
+            background: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.28), rgba(255, 184, 0, 0.14) 45%, transparent 72%);
+            opacity: 0;
+        }
+        #plansViewport .orbit-stars {
+            position: absolute; inset: 0; opacity: 0;
+            background-image:
+                radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.9), transparent 60%),
+                radial-gradient(1.5px 1.5px at 75% 20%, rgba(255,255,255,0.8), transparent 60%),
+                radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.7), transparent 60%),
+                radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,0.8), transparent 60%),
+                radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,0.6), transparent 60%),
+                radial-gradient(1.5px 1.5px at 50% 45%, rgba(255,255,255,0.7), transparent 60%);
+        }
+        #plansViewport .orbit-planet {
+            position: absolute; top: 50%; left: 50%;
+            width: 78px; height: auto;
+            opacity: 0;
+            filter: drop-shadow(0 0 16px rgba(255, 200, 90, 0.55)) drop-shadow(0 0 26px rgba(139, 92, 246, 0.3));
+        }
+        #plansViewport .orbit-planet svg { display: block; width: 100%; height: auto; }
+        #plansViewport.warping .orbit-glow { animation: orbitGlowPulse 0.9s ease-out; }
+        #plansViewport.warping .orbit-stars { animation: orbitStarsPulse 0.9s ease-out; }
+        #plansViewport.warping .orbit-planet { animation: orbitFly 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes orbitGlowPulse {
+            0% { opacity: 0; }
+            35% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        @keyframes orbitStarsPulse {
+            0% { opacity: 0; }
+            25% { opacity: 1; }
+            75% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        @keyframes orbitFly {
+            0%   { opacity: 0; transform: translate(-160%, 35%) scale(0.55) rotate(-14deg); }
+            12%  { opacity: 1; }
+            50%  { opacity: 1; transform: translate(-50%, -55%) scale(1.05) rotate(0deg); }
+            88%  { opacity: 1; }
+            100% { opacity: 0; transform: translate(60%, 35%) scale(0.55) rotate(14deg); }
+        }
 
         /* ===================== CTA WHATSAPP PREMIUM ANIMADO ===================== */
         .btn-whatsapp-cta {
@@ -1404,7 +1489,105 @@
                 </header>
 
                 <!-- GRID DOS 3 PLANOS -->
-                <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-12">
+                <div id="plansViewport" class="w-full relative mb-6 md:mb-12">
+                    <div class="orbit-fx">
+                        <div class="orbit-glow"></div>
+                        <div class="orbit-stars"></div>
+                        <div class="orbit-planet">
+                            <svg viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <radialGradient id="planSphere" cx="34%" cy="30%" r="82%">
+                                        <stop offset="0%"  stop-color="#fff4da"/>
+                                        <stop offset="20%" stop-color="#f2cf88"/>
+                                        <stop offset="45%" stop-color="#d9a24f"/>
+                                        <stop offset="68%" stop-color="#b07a2f"/>
+                                        <stop offset="86%" stop-color="#7c531c"/>
+                                        <stop offset="100%" stop-color="#3f2a0d"/>
+                                    </radialGradient>
+                                    <radialGradient id="planShade" cx="33%" cy="29%" r="80%">
+                                        <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
+                                        <stop offset="52%"  stop-color="rgba(0,0,0,0)"/>
+                                        <stop offset="74%"  stop-color="rgba(45,24,4,0.20)"/>
+                                        <stop offset="90%"  stop-color="rgba(22,11,0,0.52)"/>
+                                        <stop offset="100%" stop-color="rgba(6,3,0,0.82)"/>
+                                    </radialGradient>
+                                    <radialGradient id="planSpec" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%"   stop-color="rgba(255,250,235,0.65)"/>
+                                        <stop offset="100%" stop-color="rgba(255,250,235,0)"/>
+                                    </radialGradient>
+                                    <linearGradient id="planRingB" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%"   stop-color="rgba(226,205,160,0.12)"/>
+                                        <stop offset="15%"  stop-color="rgba(236,216,175,0.92)"/>
+                                        <stop offset="50%"  stop-color="rgba(251,238,208,0.96)"/>
+                                        <stop offset="85%"  stop-color="rgba(236,216,175,0.92)"/>
+                                        <stop offset="100%" stop-color="rgba(226,205,160,0.12)"/>
+                                    </linearGradient>
+                                    <linearGradient id="planRingA" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%"   stop-color="rgba(200,180,145,0.08)"/>
+                                        <stop offset="18%"  stop-color="rgba(206,186,150,0.72)"/>
+                                        <stop offset="50%"  stop-color="rgba(222,202,167,0.82)"/>
+                                        <stop offset="82%"  stop-color="rgba(206,186,150,0.72)"/>
+                                        <stop offset="100%" stop-color="rgba(200,180,145,0.08)"/>
+                                    </linearGradient>
+                                    <linearGradient id="planRingC" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%"   stop-color="rgba(180,165,140,0)"/>
+                                        <stop offset="25%"  stop-color="rgba(186,171,146,0.38)"/>
+                                        <stop offset="75%"  stop-color="rgba(186,171,146,0.38)"/>
+                                        <stop offset="100%" stop-color="rgba(180,165,140,0)"/>
+                                    </linearGradient>
+                                    <clipPath id="planSphereClip"><circle cx="120" cy="85" r="42"/></clipPath>
+                                    <clipPath id="planFront"><rect x="0" y="85" width="240" height="85"/></clipPath>
+                                    <clipPath id="planShadowRing"><rect x="120" y="50" width="46" height="35"/></clipPath>
+                                    <filter id="planSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.1"/></filter>
+                                    <filter id="planShadowBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2"/></filter>
+                                </defs>
+                                <g transform="rotate(-20 120 85)">
+                                    <g>
+                                        <ellipse cx="120" cy="85" rx="66"  ry="19.8" fill="none" stroke="url(#planRingC)" stroke-width="11"/>
+                                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="url(#planRingB)" stroke-width="23"/>
+                                        <ellipse cx="120" cy="85" rx="100" ry="30"   fill="none" stroke="rgba(12,9,5,0.6)" stroke-width="4"/>
+                                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="url(#planRingA)" stroke-width="14"/>
+                                    </g>
+                                    <g clip-path="url(#planShadowRing)" filter="url(#planShadowBlur)">
+                                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="23"/>
+                                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="rgba(0,0,0,0.5)"  stroke-width="14"/>
+                                    </g>
+                                    <g>
+                                        <circle cx="120" cy="85" r="42" fill="url(#planSphere)"/>
+                                        <g clip-path="url(#planSphereClip)" filter="url(#planSoft)">
+                                            <rect x="78" y="49" width="84" height="4" fill="rgba(180,130,60,0.22)"/>
+                                            <rect x="78" y="59" width="84" height="6" fill="rgba(120,80,30,0.30)"/>
+                                            <rect x="78" y="70" width="84" height="4" fill="rgba(255,240,205,0.22)"/>
+                                            <rect x="78" y="79" width="84" height="7" fill="rgba(150,100,40,0.28)"/>
+                                            <rect x="78" y="91" width="84" height="5" fill="rgba(255,235,195,0.18)"/>
+                                            <rect x="78" y="99" width="84" height="6" fill="rgba(120,78,28,0.30)"/>
+                                            <rect x="78" y="109" width="84" height="5" fill="rgba(110,70,25,0.28)"/>
+                                        </g>
+                                        <circle cx="120" cy="85" r="42" fill="url(#planShade)"/>
+                                        <ellipse cx="105" cy="67" rx="16" ry="11" fill="url(#planSpec)" clip-path="url(#planSphereClip)"/>
+                                    </g>
+                                    <g clip-path="url(#planSphereClip)">
+                                        <ellipse cx="120" cy="90" rx="42" ry="6.5" fill="none" stroke="rgba(0,0,0,0.30)" stroke-width="6" filter="url(#planSoft)"/>
+                                    </g>
+                                    <g clip-path="url(#planFront)">
+                                        <ellipse cx="120" cy="85" rx="66"  ry="19.8" fill="none" stroke="url(#planRingC)" stroke-width="11"/>
+                                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="url(#planRingB)" stroke-width="23"/>
+                                        <ellipse cx="120" cy="85" rx="100" ry="30"   fill="none" stroke="rgba(12,9,5,0.6)" stroke-width="4"/>
+                                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="url(#planRingA)" stroke-width="14"/>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <button type="button" id="plansPrevBtn" aria-label="Plano anterior" class="slider-arrow md:hidden absolute left-1 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
+                        <i class="ph ph-caret-left text-lg"></i>
+                    </button>
+                    <button type="button" id="plansNextBtn" aria-label="Próximo plano" class="slider-arrow md:hidden absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
+                        <i class="ph ph-caret-right text-lg"></i>
+                    </button>
+
+                <div id="plansGrid" class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
 
                     <!-- PLANO ESSENCIAL (Mais Vendido - Azul) -->
                     <div class="plan-card card-saturno-white p-8 flex flex-col relative">
@@ -1422,12 +1605,15 @@
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 400</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">4 CARTÕES NFC PERSONALIZADOS</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE COM DOMÍNIO E IDENTIDADE DA SUA MARCA</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">BOTÕES ANIMADOS E EFEITOS VISUAIS LEVES</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">AGENDAMENTO E REDES SOCIAIS</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">BOTÃO CONVERSAR WHATSAPP, LOCALIZAÇÃO, SALVAR CONTATO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">VOCÊ RECEBE TUDO CONFIGURADO E FUNCIONANDO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">4 cartões NFC personalizados com a identidade da sua marca</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site exclusivo com domínio próprio</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Design profissional e adaptado para celulares</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Botões animados e efeitos visuais modernos</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">WhatsApp, localização, redes sociais e agendamento</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Opção para salvar seu contato com apenas um toque</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR Code integrado aos cartões</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 2 a 3 dias úteis</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Você recebe tudo configurado e funcionando</span></li>
                         </ul>
                         <a href="https://wa.link/304efy" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
@@ -1449,16 +1635,13 @@
                             <span class="text-saturno-silver block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$400,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">10 CARTÕES NFC PERSONALIZADOS</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">3 PLACAS FÍSICAS NFC: GOOGLE + WIFI + AGENDAMENTO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE EXCLUSIVO DESENVOLVIDO COM A IDENTIDADE DA SUA MARCA</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">ANIMAÇÕES AVANÇADAS COM EXPERIÊNCIA VISUAL PROFISSIONAL</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">DOMÍNIO PRÓPRIO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">BOTÃO CONVERSAR WHATSAPP, LOCALIZAÇÃO, SALVAR CONTATO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">FORMULÁRIO / BOTÃO DE CAPTAÇÃO DE CLIENTES</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">AGENDAMENTO E REDES SOCIAIS</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR CODE IMPRESSO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">VOCÊ RECEBE TUDO CONFIGURADO E FUNCIONANDO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">10 cartões NFC personalizados com a identidade da empresa</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">3 placas NFC para Google, Wi-Fi e agendamento</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-stack icon-bonus"></i><span class="list-text">Tudo do plano Essencial incluso</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site profissional com domínio próprio</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Animações avançadas e experiência visual diferenciada</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR Code impresso nos cartões</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 3 a 4 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
@@ -1480,22 +1663,28 @@
                             <span class="text-saturno-gold block text-xs font-bold mt-2 uppercase tracking-widest">Em até 4x sem juros de R$500,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">30 CARTÕES NFC PERSONALIZADOS</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">30 TAGS FÍSICAS MESA, CARDÁPIO, QUARTOS DE HOTEL</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">3 PLACAS FÍSICAS NFC: GOOGLE + WIFI + AGENDAMENTO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 CHAVEIRO NFC INSTAGRAM</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">SITE PROFISSIONAL, SEO E DOMÍNIO .COM.BR</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">ANIMAÇÕES EXCLUSIVAS COM EXPERIÊNCIA VISUAL IMERSIVA</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">CARDÁPIO, CATÁLOGO OU PÁGINA PERSONALIZADA</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">BOTÃO CONVERSAR WHATSAPP, LOCALIZAÇÃO, SALVAR CONTATO</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">FORMULÁRIO / BOTÃO DE CAPTAÇÃO DE CLIENTES</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">SEO LOCAL PARA GOOGLE</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">RELATÓRIO DE ACESSOS, CLIQUES E INTERAÇÕES DOS CLIENTES</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">VOCÊ RECEBE TUDO CONFIGURADO E FUNCIONANDO</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">30 cartões NFC personalizados</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">30 tags NFC para mesas, cardápios, quartos ou pontos de atendimento</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 chaveiro NFC direcionado para o Instagram</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-stack icon-bonus"></i><span class="list-text">Tudo do plano Profissional incluso</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site profissional sob medida, com identidade exclusiva e domínio próprio</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Animações imersivas e experiência visual premium</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Catálogo, cardápio ou página de apresentação personalizada</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR Code integrado aos materiais</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Relatório de acessos, cliques e interações</span></li>
+                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 4 a 5 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
 
+                </div>
+                </div>
+
+                <!-- Indicadores dos planos (somente mobile) -->
+                <div id="plansDots" class="md:hidden flex items-center justify-center gap-2 mb-12">
+                    <span class="plan-dot active" data-plan-index="0"></span>
+                    <span class="plan-dot" data-plan-index="1"></span>
+                    <span class="plan-dot" data-plan-index="2"></span>
                 </div>
 
                 <!-- ASSINATURA / GESTÃO SATURNO -->
@@ -1883,6 +2072,78 @@
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
+
+        // --- Carrossel de Planos (mobile): 1 plano por vez, com troca automática a cada 4s ---
+        (function () {
+            const section = document.getElementById('planos');
+            const viewport = document.getElementById('plansViewport');
+            const grid = document.getElementById('plansGrid');
+            const prevBtn = document.getElementById('plansPrevBtn');
+            const nextBtn = document.getElementById('plansNextBtn');
+            const dots = document.querySelectorAll('#plansDots .plan-dot');
+            if (!section || !viewport || !grid || !prevBtn || !nextBtn || !dots.length) return;
+
+            const total = dots.length;
+            let current = 0;
+            let autoTimer = null;
+            let warpTimer = null;
+            let userStopped = false;
+
+            const isMobile = () => window.innerWidth < 768;
+
+            function render() {
+                if (!isMobile()) { grid.style.transform = ''; return; }
+                grid.style.transform = `translateX(-${current * 100}%)`;
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
+            }
+
+            function triggerWarp() {
+                viewport.classList.remove('warping');
+                void viewport.offsetWidth; // força reflow para permitir repetir a animação
+                viewport.classList.add('warping');
+                clearTimeout(warpTimer);
+                warpTimer = setTimeout(() => viewport.classList.remove('warping'), 900);
+            }
+
+            function goTo(index) {
+                current = (index + total) % total;
+                triggerWarp();
+                render();
+            }
+
+            function next() { goTo(current + 1); }
+            function prev() { goTo(current - 1); }
+
+            function startAuto() {
+                if (autoTimer || !isMobile()) return;
+                autoTimer = setInterval(next, 5000);
+            }
+            function stopAuto() {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+            function restartAuto() {
+                stopAuto();
+                startAuto();
+            }
+
+            nextBtn.addEventListener('click', () => { next(); userStopped = true; stopAuto(); });
+            prevBtn.addEventListener('click', () => { prev(); userStopped = true; stopAuto(); });
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => { goTo(i); restartAuto(); });
+            });
+
+            const plansAutoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && isMobile() && !userStopped) startAuto();
+                    else stopAuto();
+                });
+            }, { threshold: 0.4 });
+            plansAutoObserver.observe(section);
+
+            window.addEventListener('resize', render);
+            render();
+        })();
 
         // --- Painéis "nome + iniciar conversa" (personalizado, dúvidas, atendimento agora) ---
         function buildWaPanelHTML(prefix) {
