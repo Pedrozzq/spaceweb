@@ -104,31 +104,34 @@
         .phone-mockup {
             border: 12px solid #1e293b;
             border-radius: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(15, 23, 42, 0.08);
             background-color: white;
             position: relative;
             overflow: hidden;
         }
-        
+
         .phone-notch {
             position: absolute;
-            top: 0;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 25px;
-            background-color: #1e293b;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
+            width: 90px;
+            height: 24px;
+            background-color: #0f172a;
+            border-radius: 9999px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
             z-index: 10;
         }
 
         @media (max-width: 639px) {
+            .phone-mockup {
+                border-width: 8px;
+                border-radius: 1.75rem;
+            }
             .phone-notch {
-                width: 90px;
-                height: 18px;
-                border-bottom-left-radius: 12px;
-                border-bottom-right-radius: 12px;
+                top: 6px;
+                width: 58px;
+                height: 15px;
             }
         }
 
@@ -294,7 +297,7 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-10 w-auto">
+                    <img src="img/logo-saturnonfc.webp" alt="Saturno NFC" class="h-10 w-auto">
                     <div class="flex flex-col leading-none">
                         <span class="font-bold text-xl sm:text-2xl tracking-tight text-blue-900">Saturno<span class="text-brand-500">NFC</span></span>
                         <span class="text-[9px] sm:text-[10px] font-semibold text-gray-500 uppercase tracking-wide mt-0.5">Campanha política</span>
@@ -377,10 +380,10 @@
                 </div>
 
                 <!-- Mockup Visual -->
-                <div class="order-1 lg:order-2 lg:col-span-6 relative h-[300px] sm:h-[570px] mb-4 sm:mb-24 lg:mb-0 flex justify-center items-center px-8 sm:px-0">
+                <div class="order-1 lg:order-2 lg:col-span-6 relative h-[270px] sm:h-[570px] mb-4 sm:mb-24 lg:mb-0 flex justify-center items-center px-8 sm:px-0">
 
                     <!-- Phone Mockup -->
-                    <div class="phone-mockup w-[152px] h-[298px] sm:w-[280px] sm:h-[550px] animate-float z-10 bg-gray-50 relative flex-shrink-0">
+                    <div class="phone-mockup w-[134px] h-[262px] sm:w-[280px] sm:h-[550px] animate-float z-10 bg-gray-50 relative flex-shrink-0">
                         <div class="phone-notch"></div>
                         <!-- Lock/home screen: phone waits here until the card approaches, then the page opens -->
                         <div class="phone-lock-overlay absolute inset-0 z-20 flex flex-col pointer-events-none overflow-hidden bg-gradient-to-br from-orange-400 via-pink-500 to-purple-700">
@@ -480,7 +483,7 @@
                             <!-- Profile pic -->
                             <div class="w-9 h-9 sm:w-24 sm:h-24 rounded-full bg-white border-2 sm:border-4 border-white shadow-md mx-auto mt-2 sm:mt-8 z-10 flex items-center justify-center relative overflow-hidden flex-shrink-0">
                                 <div class="w-full h-full bg-gray-200">
-                                    <img src="https://i.imgur.com/X1JkPbZ.png" alt="Paulo Silva" class="w-full h-full object-cover">
+                                    <img src="img/foto-candidato.webp" alt="Paulo Silva" class="w-full h-full object-cover">
                                 </div>
                             </div>
 
@@ -535,7 +538,7 @@
 
                             <!-- Foto do candidato (mesma foto do mockup do celular) -->
                             <div class="flex-shrink-0 w-8 h-8 sm:w-[72px] sm:h-[72px] rounded-full overflow-hidden ring-2 sm:ring-[3px] ring-white shadow-md z-10">
-                                <img src="https://i.imgur.com/X1JkPbZ.png" alt="Foto do candidato" class="w-full h-full object-cover">
+                                <img src="img/foto-candidato.webp" alt="Foto do candidato" class="w-full h-full object-cover">
                             </div>
 
                             <!-- Info -->
@@ -843,7 +846,7 @@
             <!-- Tags Section -->
             <div class="reveal-stagger lg:grid lg:grid-cols-2 lg:gap-16 items-center">
                 <div class="mb-12 lg:mb-0 relative">
-                    <img src="https://i.imgur.com/ST3NYLJ.png" alt="Tag NFC física para comitês e pontos de apoio" class="w-full aspect-square object-cover rounded-3xl shadow-xl">
+                    <img src="img/tag-nfc.webp" alt="Tag NFC física para comitês e pontos de apoio" class="w-full aspect-square object-cover rounded-3xl shadow-xl">
                 </div>
                 <div>
                     <h2 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Transforme comitês e pontos de apoio em canais digitais</h2>
@@ -1159,7 +1162,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-gray-200 pb-8">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="https://i.imgur.com/RqZd35M.png" alt="Saturno NFC" class="h-8 w-auto">
+                        <img src="img/logo-saturnonfc.webp" alt="Saturno NFC" class="h-8 w-auto">
                         <span class="font-bold text-xl tracking-tight text-blue-950">Saturno<span class="text-brand-500">NFC</span></span>
                     </div>
                     <p class="text-sm text-gray-500 max-w-sm mb-4">
