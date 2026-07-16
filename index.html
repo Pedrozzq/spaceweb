@@ -320,6 +320,17 @@
             box-shadow: 0 10px 40px -10px rgba(255, 235, 59, 0.7), 0 0 25px rgba(253, 216, 53, 0.5);
         }
 
+        /* Botão Campanha Política (Azul/Laranja) — animado por padrão, como o btn-highlight */
+        .btn-campanha {
+            --saturn-color-1: #3B82F6; --saturn-color-2: #FF7A1A;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        .btn-campanha::before { opacity: 0.7; animation: saturn-orbit 3.5s linear infinite; }
+        .btn-campanha:hover::before { animation: saturn-orbit 1.5s linear infinite; }
+        .btn-campanha:hover {
+            box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.6), 0 0 25px rgba(255, 122, 26, 0.5);
+        }
+
         /* Cores vibrantes únicas para cada link baseado no contexto */
         .link-btn[href*="wa.link"] { --saturn-color-1: #25D366; --saturn-color-2: #028A54; }
         .link-btn[href="nfc.html"] { --saturn-color-1: #9D4EDD; --saturn-color-2: #FF00FF; }
@@ -1229,7 +1240,7 @@
                 </div>
             </div>
 
-            <a href="campanha.html" id="btn-campanha-politica" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+            <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
