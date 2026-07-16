@@ -285,6 +285,42 @@
             }
             #scroll-progress { transition: none; }
         }
+
+        /* Subtle site-wide "voto" texture (checkmark-in-ballot pattern), layered over each section's own background color */
+        .pattern-voto {
+            background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='44'%20height='44'%20viewBox='0%200%2044%2044'%3E%3Ccircle%20cx='22'%20cy='22'%20r='9'%20fill='none'%20stroke='%231d4ed8'%20stroke-width='1.3'%20opacity='0.05'/%3E%3Cpath%20d='M17%2022l3.3%203.3L28%2017.5'%20fill='none'%20stroke='%231d4ed8'%20stroke-width='1.4'%20stroke-linecap='round'%20stroke-linejoin='round'%20opacity='0.05'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 44px 44px;
+        }
+
+        /* Decorative political/election iconography used as faint background motifs */
+        .decor-icon {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+            z-index: 0;
+        }
+
+        @keyframes slowDrift {
+            0%, 100% { transform: translateY(0) rotate(var(--decor-rot, 0deg)); }
+            50% { transform: translateY(-18px) rotate(calc(var(--decor-rot, 0deg) + 3deg)); }
+        }
+        .decor-drift {
+            animation: slowDrift 10s ease-in-out infinite;
+        }
+
+        @keyframes slowSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .decor-spin {
+            animation: slowSpin 40s linear infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .decor-drift, .decor-spin { animation: none; }
+        }
     </style>
 </head>
 <body class="font-sans text-gray-600 antialiased bg-white overflow-x-hidden">
@@ -339,7 +375,7 @@
     </header>
 
     <!-- HERO SECTION -->
-    <section class="relative pt-28 pb-12 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
+    <section class="relative pt-28 pb-12 lg:pt-48 lg:pb-32 overflow-hidden bg-white pattern-voto">
         <!-- Background Tech Elements -->
         <div class="absolute inset-0 z-0">
             <div class="parallax-blob absolute top-0 right-0 w-[800px] h-[800px] bg-brand-100 rounded-full blur-3xl opacity-70 transform translate-x-1/2 -translate-y-1/4" data-parallax-base="-25"></div>
@@ -554,8 +590,13 @@
     </section>
 
     <!-- COMO FUNCIONA -->
-    <section id="como-funciona" class="py-14 lg:py-24 bg-white text-blue-950 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="como-funciona" class="py-14 lg:py-24 bg-white text-blue-950 relative overflow-hidden pattern-voto">
+        <!-- Decorative political icons -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon decor-drift ph-fill ph-users-three text-brand-100 text-[220px] sm:text-[300px] -right-16 -top-10 sm:-top-16" style="--decor-rot:8deg; transform: rotate(8deg);"></i>
+            <i class="decor-icon ph-fill ph-check-circle text-brand-50 text-[140px] sm:text-[190px] -left-10 bottom-0" style="transform: rotate(-10deg);"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="reveal text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-600 font-bold tracking-wide uppercase text-sm mb-2">Processo Simples</h2>
                 <h3 class="text-3xl md:text-4xl font-extrabold mb-4">Sua campanha na palma da mão do eleitor</h3>
@@ -624,8 +665,13 @@
     </section>
 
     <!-- POR QUE USAR NFC -->
-    <section class="py-14 lg:py-24 bg-white" id="solucoes">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="py-14 lg:py-24 bg-white relative overflow-hidden pattern-voto" id="solucoes">
+        <!-- Decorative political icons -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon decor-drift ph-fill ph-megaphone-simple text-brand-100 text-[160px] sm:text-[220px] -right-10 top-44 sm:top-56" style="--decor-rot:-10deg; transform: rotate(-10deg);"></i>
+            <i class="decor-icon ph-bold ph-scales text-brand-50 text-[120px] sm:text-[160px] -left-8 -bottom-6" style="transform: rotate(8deg);"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="reveal text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-500 font-bold tracking-wide uppercase text-sm mb-2">Benefícios Estratégicos</h2>
                 <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-6">Mais alcance para sua campanha em cada encontro</h3>
@@ -708,11 +754,16 @@
     </section>
 
     <!-- PLANOS -->
-    <section id="planos" class="py-14 lg:py-24 bg-blue-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="planos" class="py-14 lg:py-24 bg-blue-50 relative overflow-hidden pattern-voto">
+        <!-- Decorative political icons -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon decor-drift ph-fill ph-flag-banner-fold text-brand-200/60 text-[180px] sm:text-[240px] -left-12 -top-10" style="--decor-rot:-8deg; transform: rotate(-8deg);"></i>
+            <i class="decor-icon decor-spin ph-fill ph-star-four text-brand-200/50 text-[110px] sm:text-[150px] -right-6 bottom-4"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="reveal text-center max-w-3xl mx-auto mb-10 lg:mb-16">
                 <h2 class="text-brand-500 font-bold tracking-wide uppercase text-sm mb-2">Investimento</h2>
-                <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-4">Escolha o plano ideal para sua campanha</h3>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-blue-950 mb-4">Escolha o plano ideal</h3>
                 <p class="text-gray-600 text-lg">Pacotes completos incluindo cartões físicos configurados e plataforma digital. Sem mensalidades durante a campanha.</p>
             </div>
 
@@ -828,8 +879,12 @@
     </section>
 
     <!-- TAGS PARA COMITÊS -->
-    <section class="py-14 lg:py-24 bg-white overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="py-14 lg:py-24 bg-white relative overflow-hidden pattern-voto">
+        <!-- Decorative political icons -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon decor-drift ph-fill ph-identification-badge text-brand-100 text-[180px] sm:text-[240px] -right-10 top-6 sm:top-10" style="--decor-rot:10deg; transform: rotate(10deg);"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
             <!-- Tags Section -->
             <div class="reveal-stagger lg:grid lg:grid-cols-2 lg:gap-16 items-center">
@@ -855,8 +910,13 @@
     </section>
 
     <!-- ONDE UTILIZAR -->
-    <section class="py-12 lg:py-20 bg-blue-50 text-blue-950">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="py-12 lg:py-20 bg-blue-50 text-blue-950 relative overflow-hidden pattern-voto">
+        <!-- Decorative political icons -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon decor-drift ph-fill ph-hands-clapping text-brand-200/50 text-[170px] sm:text-[220px] -left-10 -bottom-8" style="--decor-rot:-6deg; transform: rotate(-6deg);"></i>
+            <i class="decor-icon ph-fill ph-map-pin-line text-brand-200/40 text-[110px] sm:text-[150px] -right-4 top-2" style="transform: rotate(12deg);"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-8 lg:mb-12">Tecnologia preparada para acompanhar o candidato</h2>
 
             <div class="reveal-stagger grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -901,11 +961,12 @@
     </section>
 
     <!-- CTA & FORMULÁRIO -->
-    <section id="contato" class="py-14 lg:py-24 bg-blue-50 relative overflow-hidden">
+    <section id="contato" class="py-14 lg:py-24 bg-blue-50 relative overflow-hidden pattern-voto">
         <!-- Decoration -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
             <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-100 rounded-full blur-3xl opacity-70"></div>
             <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-100 rounded-full blur-3xl opacity-60"></div>
+            <i class="decor-icon decor-drift ph-fill ph-check-circle text-brand-200/40 text-[200px] sm:text-[260px] right-6 sm:right-24 bottom-0" style="--decor-rot:-6deg; transform: rotate(-6deg);" aria-hidden="true"></i>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1009,8 +1070,12 @@
     </section>
 
     <!-- COMPARAÇÃO -->
-    <section class="py-14 lg:py-24 bg-white">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="py-14 lg:py-24 bg-white relative overflow-hidden pattern-voto">
+        <!-- Decorative political icon -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon ph-bold ph-scales text-brand-50 text-[160px] sm:text-[210px] -right-8 top-6" style="transform: rotate(10deg);"></i>
+        </div>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-10 lg:mb-16">
                 <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Compare os Recursos</h2>
                 <p class="text-gray-600">Entenda as diferenças estruturais para escolher a melhor opção.</p>
@@ -1078,8 +1143,12 @@
     </section>
 
     <!-- FAQ -->
-    <section id="duvidas" class="py-14 lg:py-24 bg-white">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="duvidas" class="py-14 lg:py-24 bg-white relative overflow-hidden pattern-voto">
+        <!-- Decorative political icon -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon ph-fill ph-chat-circle-dots text-brand-50 text-[170px] sm:text-[220px] -right-10 -top-6" style="transform: rotate(-8deg);"></i>
+        </div>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center mb-8 lg:mb-12">
                 <h2 class="text-3xl font-extrabold text-blue-950 mb-4">Dúvidas Frequentes</h2>
                 <p class="text-gray-600">Respostas rápidas sobre a tecnologia e o serviço.</p>
@@ -1145,8 +1214,12 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="bg-blue-50 text-gray-600 py-8 lg:py-12 border-t border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer class="bg-blue-50 text-gray-600 py-8 lg:py-12 border-t border-gray-200 relative overflow-hidden pattern-voto">
+        <!-- Decorative political icon -->
+        <div class="absolute inset-0 z-0" aria-hidden="true">
+            <i class="decor-icon ph-fill ph-flag-banner-fold text-brand-200/30 text-[180px] sm:text-[240px] -right-14 -bottom-14" style="transform: rotate(-10deg);"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 border-b border-gray-200 pb-8">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-2 mb-4">
