@@ -132,6 +132,45 @@
             }
         }
 
+        /* Card approaching + tapping the phone, synced with the phone "waking up" */
+        @keyframes cardApproach {
+            0%, 20%  { transform: translate(55%, 10%) scale(0.8) rotate(-4deg); opacity: 0.85; }
+            42%      { transform: translate(6%, -4%) scale(1.06) rotate(-12deg); opacity: 1; }
+            52%      { transform: translate(0%, 0%) scale(1.08) rotate(-10deg); opacity: 1; }
+            78%      { transform: translate(0%, 0%) scale(1) rotate(-9deg); opacity: 1; }
+            100%     { transform: translate(55%, 10%) scale(0.8) rotate(-4deg); opacity: 0.85; }
+        }
+        .card-approach-anim {
+            animation: cardApproach 4.2s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes nfcWaveGate {
+            0%, 38%  { opacity: 0; }
+            48%, 74% { opacity: 1; }
+            88%, 100% { opacity: 0; }
+        }
+        .nfc-wave-gate {
+            animation: nfcWaveGate 4.2s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+        }
+
+        /* Phone "wakes up" and the page opens as the card taps it */
+        .phone-lock-overlay {
+            animation: phoneLock 4.2s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+        }
+        @keyframes phoneLock {
+            0%, 32%  { opacity: 1; }
+            48%, 90% { opacity: 0; }
+            100%     { opacity: 1; }
+        }
+        .phone-screen-content {
+            animation: phoneReveal 4.2s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+        }
+        @keyframes phoneReveal {
+            0%, 32%  { opacity: 0; transform: scale(0.96) translateY(8px); }
+            52%, 88% { opacity: 1; transform: scale(1) translateY(0); }
+            100%     { opacity: 0; transform: scale(0.96) translateY(8px); }
+        }
+
         /* Linktree-style animated buttons */
         .linktree-btn {
             position: relative;
@@ -343,8 +382,98 @@
                     <!-- Phone Mockup -->
                     <div class="phone-mockup w-[152px] h-[298px] sm:w-[280px] sm:h-[550px] animate-float z-10 bg-gray-50 relative flex-shrink-0">
                         <div class="phone-notch"></div>
+                        <!-- Lock/home screen: phone waits here until the card approaches, then the page opens -->
+                        <div class="phone-lock-overlay absolute inset-0 z-20 flex flex-col pointer-events-none overflow-hidden bg-gradient-to-br from-orange-400 via-pink-500 to-purple-700">
+                            <!-- Status bar -->
+                            <div class="flex items-center justify-between px-3 sm:px-6 pt-2 sm:pt-5 text-white text-[6px] sm:text-[11px] font-semibold z-10 flex-shrink-0">
+                                <span>9:41</span>
+                                <div class="flex items-center gap-0.5 sm:gap-1.5">
+                                    <i class="ph-fill ph-cell-signal-full text-[7px] sm:text-xs"></i>
+                                    <i class="ph-fill ph-wifi-high text-[7px] sm:text-xs"></i>
+                                    <i class="ph-fill ph-battery-full text-[7px] sm:text-xs"></i>
+                                </div>
+                            </div>
+
+                            <!-- App grid -->
+                            <div class="grid grid-cols-4 gap-x-1.5 gap-y-1.5 sm:gap-x-4 sm:gap-y-3.5 px-3 sm:px-6 mt-3 sm:mt-8 z-10">
+                                <!-- FaceTime -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-green-500 flex items-center justify-center shadow-sm"><i class="ph-fill ph-video-camera text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">FaceTime</span>
+                                </div>
+                                <!-- Calendário -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-white flex flex-col overflow-hidden shadow-sm">
+                                        <div class="h-[3px] sm:h-2.5 w-full bg-red-500 flex-shrink-0"></div>
+                                        <div class="flex-1 flex items-center justify-center text-red-600 font-extrabold text-[7px] sm:text-lg leading-none">16</div>
+                                    </div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Calendário</span>
+                                </div>
+                                <!-- Fotos -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-yellow-300 via-pink-500 to-purple-600 flex items-center justify-center shadow-sm"><i class="ph-fill ph-image text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Fotos</span>
+                                </div>
+                                <!-- Câmera -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gray-800 flex items-center justify-center shadow-sm"><i class="ph-fill ph-camera text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Câmera</span>
+                                </div>
+                                <!-- Mail -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center shadow-sm"><i class="ph-fill ph-envelope-simple text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Mail</span>
+                                </div>
+                                <!-- Relógio -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-black flex items-center justify-center shadow-sm"><i class="ph-fill ph-clock text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Relógio</span>
+                                </div>
+                                <!-- Mapas -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-emerald-100 to-sky-200 flex items-center justify-center shadow-sm"><i class="ph-fill ph-map-pin text-[8px] sm:text-lg text-red-500"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Mapas</span>
+                                </div>
+                                <!-- Tempo -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-sky-400 to-blue-700 flex items-center justify-center shadow-sm"><i class="ph-fill ph-cloud-sun text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Tempo</span>
+                                </div>
+                                <!-- Notas -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-yellow-100 flex items-center justify-center shadow-sm"><i class="ph-fill ph-note text-[8px] sm:text-lg text-amber-600"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Notas</span>
+                                </div>
+                                <!-- App Store -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-sky-400 to-blue-700 flex items-center justify-center shadow-sm"><i class="ph-fill ph-app-store-logo text-[8px] sm:text-lg text-white"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">App Store</span>
+                                </div>
+                                <!-- Ajustes -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gray-200 flex items-center justify-center shadow-sm"><i class="ph-fill ph-gear text-[8px] sm:text-lg text-gray-600"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Ajustes</span>
+                                </div>
+                                <!-- Saúde -->
+                                <div class="flex flex-col items-center gap-0.5 sm:gap-1">
+                                    <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-white flex items-center justify-center shadow-sm"><i class="ph-fill ph-heart text-[8px] sm:text-lg text-red-500"></i></div>
+                                    <span class="hidden sm:block text-white text-[8px] font-medium drop-shadow">Saúde</span>
+                                </div>
+                            </div>
+
+                            <!-- Dock -->
+                            <div class="mt-auto mb-2 sm:mb-5 mx-2 sm:mx-4 bg-white/20 backdrop-blur-md rounded-xl sm:rounded-2xl flex items-center justify-around py-1 sm:py-2.5 z-10 flex-shrink-0">
+                                <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-green-500 flex items-center justify-center"><i class="ph-fill ph-phone text-white text-[8px] sm:text-lg"></i></div>
+                                <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-white flex items-center justify-center"><i class="ph-fill ph-compass text-blue-500 text-[8px] sm:text-lg"></i></div>
+                                <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center"><i class="ph-fill ph-chat-circle-text text-white text-[8px] sm:text-lg"></i></div>
+                                <div class="w-5 h-5 sm:w-11 sm:h-11 rounded-[6px] sm:rounded-xl bg-gradient-to-br from-pink-500 to-red-500 flex items-center justify-center"><i class="ph-fill ph-music-notes text-white text-[8px] sm:text-lg"></i></div>
+                            </div>
+
+                            <!-- Home indicator -->
+                            <div class="h-1 bg-white/70 w-1/3 mx-auto rounded-full mb-1 sm:mb-2 flex-shrink-0 z-10"></div>
+                        </div>
                         <!-- Phone Screen Content (Simulated Profile) -->
-                        <div class="w-full h-full pt-5 sm:pt-10 px-2 sm:px-4 pb-2 sm:pb-4 flex flex-col relative overflow-hidden">
+                        <div class="phone-screen-content w-full h-full pt-5 sm:pt-10 px-2 sm:px-4 pb-2 sm:pb-4 flex flex-col relative overflow-hidden">
                             <!-- Header background -->
                             <div class="absolute top-0 left-0 w-full h-14 sm:h-32 bg-brand-600 rounded-b-[2rem]"></div>
 
@@ -394,34 +523,37 @@
                         </div>
                     </div>
 
-                    <!-- NFC Card Mockup (Hovering and approaching) - Cartão estilo santinho de campanha -->
-                    <div class="nfc-card-mockup absolute w-[100px] h-[64px] sm:w-[260px] sm:h-[160px] rounded-lg sm:rounded-2xl z-20 bottom-1 right-1 sm:bottom-auto sm:top-1/2 sm:right-auto sm:-right-4 lg:-right-12 sm:-translate-y-1/2 flex items-center gap-1.5 sm:gap-4 p-2 sm:p-5 animate-pulse-slow rotate-[-8deg] sm:rotate-[-10deg]">
-                        <!-- Corner accents (recortados para não vazar da borda do cartão) -->
-                        <div class="absolute inset-0 rounded-lg sm:rounded-2xl overflow-hidden pointer-events-none">
-                            <div class="absolute top-0 left-0 w-full h-[3px] sm:h-[5px] bg-orange-500"></div>
-                            <div class="nfc-card-corner bottom-0 right-0 bg-orange-500 opacity-90" style="clip-path: polygon(100% 100%, 100% 0, 0 100%);"></div>
-                        </div>
-
-                        <!-- Foto do candidato (mesma foto do mockup do celular) -->
-                        <div class="flex-shrink-0 w-8 h-8 sm:w-[72px] sm:h-[72px] rounded-full overflow-hidden ring-2 sm:ring-[3px] ring-white shadow-md z-10">
-                            <img src="https://i.imgur.com/X1JkPbZ.png" alt="Foto do candidato" class="w-full h-full object-cover">
-                        </div>
-
-                        <!-- Info -->
-                        <div class="min-w-0 flex-1 z-10">
-                            <div class="font-extrabold text-[7px] sm:text-lg tracking-wide leading-tight text-white truncate">PAULO SILVA</div>
-                            <div class="inline-block text-[6px] sm:text-sm font-extrabold text-orange-400 tracking-wide mb-0.5 sm:mb-1.5">Nº 00.000</div>
-                            <div class="flex items-center gap-0.5 sm:gap-1.5 text-orange-400">
-                                <i class="ph-bold ph-waves text-[8px] sm:text-lg flex-shrink-0"></i>
-                                <span class="text-[5px] sm:text-[11px] font-semibold text-blue-100 truncate">Deputado Federal</span>
+                    <!-- NFC Card Mockup wrapper (static position, vertically centered next to the phone on every breakpoint) -->
+                    <div class="absolute z-20 w-[100px] h-[64px] sm:w-[260px] sm:h-[160px] top-1/2 -translate-y-1/2 right-1 sm:-right-4 lg:-right-12">
+                        <!-- NFC Card Mockup (Approaching and tapping the phone) - Cartão estilo santinho de campanha -->
+                        <div class="nfc-card-mockup card-approach-anim w-full h-full rounded-lg sm:rounded-2xl flex items-center gap-1.5 sm:gap-4 p-2 sm:p-5">
+                            <!-- Corner accents (recortados para não vazar da borda do cartão) -->
+                            <div class="absolute inset-0 rounded-lg sm:rounded-2xl overflow-hidden pointer-events-none">
+                                <div class="absolute top-0 left-0 w-full h-[3px] sm:h-[5px] bg-orange-500"></div>
+                                <div class="nfc-card-corner bottom-0 right-0 bg-orange-500 opacity-90" style="clip-path: polygon(100% 100%, 100% 0, 0 100%);"></div>
                             </div>
-                        </div>
 
-                        <!-- NFC Waves Animation -->
-                        <div class="hidden sm:block absolute -left-8 sm:-left-12 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10">
-                            <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 0s;"></div>
-                            <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 0.5s;"></div>
-                            <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 1s;"></div>
+                            <!-- Foto do candidato (mesma foto do mockup do celular) -->
+                            <div class="flex-shrink-0 w-8 h-8 sm:w-[72px] sm:h-[72px] rounded-full overflow-hidden ring-2 sm:ring-[3px] ring-white shadow-md z-10">
+                                <img src="https://i.imgur.com/X1JkPbZ.png" alt="Foto do candidato" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Info -->
+                            <div class="min-w-0 flex-1 z-10">
+                                <div class="font-extrabold text-[7px] sm:text-lg tracking-wide leading-tight text-white truncate">PAULO SILVA</div>
+                                <div class="inline-block text-[6px] sm:text-sm font-extrabold text-orange-400 tracking-wide mb-0.5 sm:mb-1.5">Nº 00.000</div>
+                                <div class="flex items-center gap-0.5 sm:gap-1.5 text-orange-400">
+                                    <i class="ph-bold ph-waves text-[8px] sm:text-lg flex-shrink-0"></i>
+                                    <span class="text-[5px] sm:text-[11px] font-semibold text-blue-100 truncate">Deputado Federal</span>
+                                </div>
+                            </div>
+
+                            <!-- NFC Waves Animation (só aparece no momento do "toque") -->
+                            <div class="nfc-wave-gate hidden sm:block absolute -left-8 sm:-left-12 top-1/2 transform -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10">
+                                <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 0s;"></div>
+                                <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 0.5s;"></div>
+                                <div class="absolute inset-0 border-2 border-brand-500 rounded-full animate-wave" style="animation-delay: 1s;"></div>
+                            </div>
                         </div>
                     </div>
 
