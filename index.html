@@ -788,6 +788,21 @@
         }
         .btn-saturno-white:hover { box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); filter: brightness(1.05); }
 
+        /* Mini texto de destaque abaixo do botão "Escolher Plano" */
+        .mini-highlight {
+            animation: textShine 3s linear infinite, miniHighlightPulse 2.2s ease-in-out infinite;
+        }
+        .mini-highlight i {
+            animation: miniHighlightPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes miniHighlightPulse {
+            0%, 100% { opacity: 0.75; transform: scale(1); }
+            50%      { opacity: 1; transform: scale(1.08); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .mini-highlight, .mini-highlight i { animation: none; }
+        }
+
         /* ===================== EFEITO ATRÁS DA IMAGEM DOS PLANOS ===================== */
         .plan-img-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
         .plan-img-wrap img { position: relative; z-index: 1; }
@@ -1202,9 +1217,9 @@
                             <span class="btn-plano-label">Essencial</span>
                             <span class="btn-plano-num">4<span class="btn-plano-unid">unidades</span></span>
                         </button>
-                        <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="10 Cartões NFC personalizados" data-plan-index="1">
+                        <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="12 Cartões NFC personalizados" data-plan-index="1">
                             <span class="btn-plano-label">Profissional</span>
-                            <span class="btn-plano-num">10<span class="btn-plano-unid">unidades</span></span>
+                            <span class="btn-plano-num">12<span class="btn-plano-unid">unidades</span></span>
                         </button>
                         <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados" data-plan-index="2">
                             <span class="btn-plano-label">Fora de Órbita</span>
@@ -1616,6 +1631,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Você recebe tudo configurado e funcionando</span></li>
                         </ul>
                         <a href="https://wa.link/304efy" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-white text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Ter presença digital profissional
+                        </p>
                     </div>
 
                     <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
@@ -1644,6 +1662,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 3 a 4 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-silver text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Captar clientes e facilitar atendimentos
+                        </p>
                     </div>
 
                     <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
@@ -1675,6 +1696,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 4 a 5 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-gold text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Digitalizar toda a operação da empresa
+                        </p>
                     </div>
 
                 </div>
