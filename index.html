@@ -525,6 +525,22 @@
             box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
         }
 
+        /* Botões (seção 1) ficam presos no topo; o bloco "Deslize" + cartão 3D
+           (seção 2) desliza por cima deles ao rolar. Efeito isolado a esta seção. */
+        #linktree-buttons {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        #card-stack-front {
+            position: relative;
+            z-index: 2;
+            background: #050508;
+            border-radius: 1.75rem 1.75rem 0 0;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
+        }
+
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
         .text-gradient-blue {
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
@@ -961,9 +977,66 @@
             background: rgba(255, 255, 255, 0.05);
         }
         .marquee-card h4 { color: #ffffff; font-weight: 900; font-size: 11px; text-transform: uppercase; }
-        .marquee-card p { font-size: 9px; margin-top: 2px; font-weight: 600; color: #94a3b8; }
+        .marquee-card p { font-size: 9px; margin-top: 2px; font-weight: 600; }
         @media (prefers-reduced-motion: reduce) {
             .marquee-portfolio-track { animation: none; }
+        }
+
+        /* Título do Portfólio: efeito "máquina de escrever" (digitando...) ao entrar na tela */
+        .portfolio-title-wrap .typewriter-line {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: bottom;
+            width: 0;
+            border-right: 3px solid transparent;
+        }
+        .portfolio-title-wrap.active .typewriter-line-1 {
+            animation: typewriterLine1 1s steps(20, end) forwards;
+        }
+        .portfolio-title-wrap.active .typewriter-line-2 {
+            animation: typewriterLine2 1.2s steps(26, end) 1s forwards, typewriterCaret 0.8s step-end infinite 1s;
+        }
+        @keyframes typewriterLine1 {
+            0%   { width: 0; border-color: rgba(255, 184, 0, 0.85); }
+            95%  { border-color: rgba(255, 184, 0, 0.85); }
+            100% { width: 100%; border-color: transparent; }
+        }
+        @keyframes typewriterLine2 {
+            from { width: 0; }
+            to   { width: 100%; }
+        }
+        @keyframes typewriterCaret {
+            0%, 100% { border-color: rgba(255, 184, 0, 0.85); }
+            50% { border-color: transparent; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .portfolio-title-wrap .typewriter-line { width: auto; animation: none !important; border-color: transparent !important; }
+        }
+
+        /* Vantagens Exclusivas: pulso leve e sequencial (item 1, depois 2, ...) ao chegar na seção */
+        #vantagens-grid.active .glass-card { animation: vantagemPulse 0.7s ease; }
+        #vantagens-grid.active .glass-card:nth-child(1) { animation-delay: 0s; }
+        #vantagens-grid.active .glass-card:nth-child(2) { animation-delay: 0.15s; }
+        #vantagens-grid.active .glass-card:nth-child(3) { animation-delay: 0.3s; }
+        #vantagens-grid.active .glass-card:nth-child(4) { animation-delay: 0.45s; }
+        #vantagens-grid.active .glass-card:nth-child(5) { animation-delay: 0.6s; }
+        #vantagens-grid.active .glass-card:nth-child(6) { animation-delay: 0.75s; }
+        @keyframes vantagemPulse {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.06); box-shadow: 0 0 20px rgba(255, 184, 0, 0.35); }
+            100% { transform: scale(1); }
+        }
+
+        /* Planos: itens da lista (texto abaixo do valor) carregam em efeito cascata */
+        .plan-card ul.space-y-5 > li {
+            opacity: 0;
+            transform: translateX(-12px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .plan-card ul.space-y-5.active > li {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         /* ===================== CARROSSEL DE PLANOS (MOBILE) ===================== */
@@ -1295,7 +1368,7 @@
         </header>
 
         <!-- Linktree Buttons -->
-        <section class="w-full flex flex-col gap-3 mb-4 stagger-item" style="animation-delay: 0.4s;">
+        <section id="linktree-buttons" class="w-full flex flex-col gap-3 mb-4 stagger-item" style="animation-delay: 0.4s;">
 
             <a href="#planos" id="btn-escolher-plano" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
@@ -1371,14 +1444,17 @@
 
         </section>
 
-        <!-- Indicador "Deslize" logo após os botões -->
-        <a href="#pratica" class="flex flex-col items-center mt-2 mb-4 scroll-hint hover:opacity-80 transition-opacity">
-            <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
-            <i class="ph ph-caret-down text-brand-gold text-xl"></i>
-        </a>
+        <!-- STICKY STACK: este bloco (dica "Deslize" + cartão 3D) sobe por cima da
+             seção 1 (botões), que fica presa (position: sticky) durante a rolagem. -->
+        <div id="card-stack-front">
+            <!-- Indicador "Deslize" logo após os botões -->
+            <a href="#pratica" class="flex flex-col items-center pt-6 mb-4 scroll-hint hover:opacity-80 transition-opacity">
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
+                <i class="ph ph-caret-down text-brand-gold text-xl"></i>
+            </a>
 
-        <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
-        <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
+            <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
+            <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
             <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
                 
                 <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
@@ -1418,6 +1494,8 @@
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-[2rem] -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
             </div>
         </div>
+        </div>
+        <!-- /STICKY STACK (card-stack-front) -->
 
         <!-- Como Funciona Section -->
         <section id="como-funciona" class="w-full mb-16 stagger-item" style="animation-delay: 0.6s;">
@@ -1559,7 +1637,7 @@
         <section class="w-full mb-16 stagger-item" style="animation-delay: 0.7s;">
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
 
-            <div class="grid grid-cols-2 gap-3 md:gap-4">
+            <div id="vantagens-grid" class="grid grid-cols-2 gap-3 md:gap-4">
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-lightning text-brand-gold text-xl"></i>
                     <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
@@ -1870,8 +1948,9 @@
                             <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Trabalhos Concluídos
                         </div>
 
-                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
-                            NOSSO PORTFÓLIO COM <br/> <span class="text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
+                        <h2 class="portfolio-title-wrap text-3xl sm:text-4xl md:text-5xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
+                            <span class="typewriter-line typewriter-line-1">NOSSO PORTFÓLIO COM</span><br/>
+                            <span class="typewriter-line typewriter-line-2 text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
                         </h2>
 
                         <!-- Instrução para o usuário -->
@@ -2261,6 +2340,41 @@
         document.querySelectorAll('#como-funciona .glass-card, .saturno-reveal')
             .forEach(el => greenToggleObserver.observe(el));
 
+        // --- Portfólio: efeito "máquina de escrever" no título (dispara uma vez ao entrar na tela) ---
+        const typeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    typeObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('.portfolio-title-wrap').forEach(el => typeObserver.observe(el));
+
+        // --- Vantagens Exclusivas: pulso sequencial ao chegar na seção (dispara uma vez) ---
+        const vantagensObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    vantagensObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('#vantagens-grid').forEach(el => vantagensObserver.observe(el));
+
+        // --- Planos: lista de recursos (abaixo do valor) em efeito cascata, por card, ao chegar na seção ---
+        const planListObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll(':scope > li');
+                    items.forEach((li, i) => { li.style.transitionDelay = (i * 0.08) + 's'; });
+                    entry.target.classList.add('active');
+                    planListObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.plan-card ul.space-y-5').forEach(ul => planListObserver.observe(ul));
+
         // --- Carrossel de Planos (mobile): 1 plano por vez, com troca automática a cada 4s ---
         (function () {
             const section = document.getElementById('planos');
@@ -2358,9 +2472,9 @@
                         '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">' +
                             '<button type="button" class="wa-chip" data-frase="Quero fazer meu cartão personalizado">Quero fazer meu cartão personalizado</button>' +
                             '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
-                            '<button type="button" class="wa-chip" data-frase="Posso ver exemplos de cartões prontos?">Ver exemplos de cartões</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Quero meu cartão para campanha política">Quero meu cartão para campanha política</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
                             '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
-                            '<button type="button" class="wa-chip" data-frase="Vocês parcelam?">Vocês parcelam?</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
                             '<button type="button" class="wa-chip wa-chip-outro sm:col-span-2 flex items-center justify-between">Outro <i class="ph ph-caret-down text-xs transition-transform"></i></button>' +
                         '</div>' +
