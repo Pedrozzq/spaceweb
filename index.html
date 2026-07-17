@@ -364,7 +364,15 @@
 
         /* Passo 3 "Converta": pulso contínuo laranja para chamar atenção */
         .card-converta-pulse {
+            background: rgba(255, 145, 0, 0.16);
+            border-color: rgba(255, 145, 0, 0.5);
             animation: convertaPulseOrange 2.2s ease-in-out infinite;
+        }
+        /* Mais específico que a regra verde de .active: mantém o card 3 sempre laranja */
+        #como-funciona .glass-card.card-converta-pulse.active {
+            background: rgba(255, 145, 0, 0.24);
+            border-color: rgba(255, 145, 0, 0.7);
+            box-shadow: 0 10px 30px -10px rgba(255, 145, 0, 0.45);
         }
         @keyframes convertaPulseOrange {
             0%, 100% { box-shadow: 0 0 0 0 rgba(255, 145, 0, 0.35); }
@@ -620,6 +628,10 @@
             100% { transform: translateY(560px); opacity: 0; }
         }
         .animate-scan { animation: scan-line 3s infinite linear; }
+
+        /* Animações do mockup ficam pausadas até o usuário chegar na seção "Como Funciona na Prática" */
+        #pratica .pratica-anim { animation-play-state: paused !important; }
+        #pratica.pratica-in-view .pratica-anim { animation-play-state: running !important; }
 
         /* Cartão NFC aproximando do telefone */
         @keyframes cardApproach {
@@ -1079,7 +1091,7 @@
         .plan-card ul.space-y-5 > li {
             opacity: 0;
             transform: translateX(-12px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition: opacity 0.75s ease, transform 0.75s ease;
         }
         .plan-card ul.space-y-5.active > li {
             opacity: 1;
@@ -1584,11 +1596,11 @@
 
                         <!-- Telefone Físico -->
                         <div class="relative w-[280px] h-[580px] bg-[#090b10] border-[6px] border-slate-800 rounded-[3rem] shadow-[0_0_80px_rgba(0,210,255,0.12)] overflow-hidden flex flex-col z-10">
-                            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-brand-blue to-transparent shadow-[0_0_15px_rgba(0,210,255,0.8)] animate-scan z-40"></div>
+                            <div class="pratica-anim absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-brand-blue to-transparent shadow-[0_0_15px_rgba(0,210,255,0.8)] animate-scan z-40"></div>
                             <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
 
                             <!-- Ecrã Bloqueado -->
-                            <div class="absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
+                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
                                     <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
                                     <i class="ph ph-device-mobile text-2xl text-slate-500"></i>
@@ -1597,11 +1609,11 @@
                             </div>
 
                             <!-- Ecrã Desbloqueado — Imagem completa (mostra todo o conteúdo) -->
-                            <div id="phone-unlocked-screen" class="absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('img/mockup-tela-1.webp');"></div>
+                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('img/mockup-tela-1.webp');"></div>
                         </div>
 
                         <!-- Animação do Cartão NFC -->
-                        <div id="card-approach-anim" class="absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
+                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
                             <div class="w-full flex justify-end">
                                 <div class="w-3 h-3 rounded-full bg-slate-200"></div>
                             </div>
@@ -2364,6 +2376,18 @@
             initParticles();
         });
 
+        // --- Mockup "Como Funciona na Prática": só começa a animar quando a seção aparece ---
+        (function () {
+            const pratica = document.getElementById('pratica');
+            if (!pratica) return;
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    pratica.classList.toggle('pratica-in-view', entry.isIntersecting);
+                });
+            }, { threshold: 0.25 });
+            obs.observe(pratica);
+        })();
+
         // --- Sticky stack: a seção de trás vai apagando conforme a de frente sobe por cima dela ---
         function initStickyFade(backId, frontId) {
             const back = document.getElementById(backId);
@@ -2474,7 +2498,7 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const items = entry.target.querySelectorAll(':scope > li');
-                    items.forEach((li, i) => { li.style.transitionDelay = (i * 0.08) + 's'; });
+                    items.forEach((li, i) => { li.style.transitionDelay = (i * 0.16) + 's'; });
                     entry.target.classList.add('active');
                     planListObserver.unobserve(entry.target);
                 }
