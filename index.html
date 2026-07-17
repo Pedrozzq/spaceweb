@@ -546,6 +546,17 @@
             width: 100%;
         }
 
+        /* Botões da seção 1: cascata leve, disparada via JS quando o preloader some (não no page-load) */
+        #linktree-buttons .cascade-btn {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+        #linktree-buttons.buttons-ready .cascade-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
         .text-gradient-blue {
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
@@ -554,35 +565,6 @@
             -webkit-text-fill-color: transparent;
         }
         .italic-serif { font-family: serif; font-style: italic; }
-
-        /* Como Funciona na Prática (mobile): mockup reduzido, lado a lado com os textos */
-        @media (max-width: 1023px) {
-            #pratica .phone-mockup-wrap {
-                max-width: 168px;
-                height: 348px;
-                margin-bottom: 0;
-            }
-            #pratica .phone-mockup-inner {
-                transform: scale(0.6);
-                transform-origin: top center;
-            }
-            #pratica .pratica-row .card-interactive {
-                padding: 0.85rem;
-            }
-            #pratica .pratica-row .card-interactive h3 {
-                font-size: 0.78rem;
-                gap: 0.5rem;
-            }
-            #pratica .pratica-row .card-interactive p {
-                font-size: 9px;
-            }
-            #pratica .phone-mockup-wrap .animate-float-tag-1,
-            #pratica .phone-mockup-wrap .animate-float-tag-2,
-            #pratica .phone-mockup-wrap .animate-float-tag-3,
-            #pratica .phone-mockup-wrap .animate-float-tag-4 {
-                display: none;
-            }
-        }
 
         .card-interactive {
             background: rgba(255, 255, 255, 0.015);
@@ -1405,7 +1387,7 @@
         <div class="stack-wrap">
         <section id="linktree-buttons" class="w-full flex flex-col gap-3 mb-4">
 
-            <a href="#planos" id="btn-escolher-plano" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group stagger-item" style="animation-delay: 0.15s;">
+            <a href="#planos" id="btn-escolher-plano" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.1s;">
                 <div class="flex items-center gap-4">
                     <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20 z-10 relative">
                         <i class="ph ph-shopping-cart-simple text-xl"></i>
@@ -1435,7 +1417,7 @@
                 </div>
             </div>
 
-            <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group stagger-item" style="animation-delay: 0.28s;">
+            <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
@@ -1445,7 +1427,7 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
-            <a href="https://wa.link/0zpwgo" id="btn-wa-personalizado" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group stagger-item" style="animation-delay: 0.41s;">
+            <a href="https://wa.link/0zpwgo" id="btn-wa-personalizado" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.3s;">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors z-10 relative">
                         <i class="ph ph-whatsapp-logo text-xl"></i>
@@ -1457,7 +1439,7 @@
 
             <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
 
-            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group stagger-item" style="animation-delay: 0.54s;">
+            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.4s;">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors z-10 relative">
                         <i class="ph ph-info text-xl"></i>
@@ -1467,7 +1449,7 @@
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
-            <a href="#planos" class="link-btn btn-highlight-yellow magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group stagger-item" style="animation-delay: 0.67s;">
+            <a href="#planos" class="link-btn btn-highlight-yellow magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.5s;">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
                         <i class="ph ph-tag text-xl"></i>
@@ -1578,10 +1560,9 @@
                     <p class="mt-4 text-gray-400 text-sm max-w-2xl mx-auto italic-serif">Veja exatamente o que o seu cliente experiencia quando você apresenta o seu Cartão NFC.</p>
                 </div>
 
-                <div class="pratica-row flex flex-row items-center justify-center gap-4 sm:gap-8 lg:gap-24">
+                <div class="flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-24">
                     <!-- Mockup do telefone -->
-                    <div class="phone-mockup-wrap relative w-full max-w-[320px] flex justify-center mx-auto shrink-0 reveal-node mb-6 lg:mb-0">
-                      <div class="phone-mockup-inner relative">
+                    <div class="relative w-full max-w-[320px] flex justify-center mx-auto shrink-0 reveal-node mb-6 lg:mb-0">
 
                         <!-- Telefone Físico -->
                         <div class="relative w-[280px] h-[580px] bg-[#090b10] border-[6px] border-slate-800 rounded-[3rem] shadow-[0_0_80px_rgba(0,210,255,0.12)] overflow-hidden flex flex-col z-10">
@@ -1638,7 +1619,6 @@
                                 <span class="text-white text-[9px] font-black uppercase tracking-[0.2em]">WhatsApp</span>
                             </div>
                         </div>
-                      </div>
                     </div>
 
                     <!-- Cards de texto -->
@@ -1990,7 +1970,7 @@
                             <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Trabalhos Concluídos
                         </div>
 
-                        <h2 class="portfolio-title-wrap text-3xl sm:text-4xl md:text-5xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
+                        <h2 class="portfolio-title-wrap text-xl sm:text-2xl md:text-3xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
                             <span class="typewriter-line typewriter-line-1">NOSSO PORTFÓLIO COM</span><br/>
                             <span class="typewriter-line typewriter-line-2 text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
                         </h2>
@@ -2263,6 +2243,10 @@
                 preloader.classList.add('hidden');
                 document.body.classList.remove('loading');
                 setTimeout(() => preloader.remove(), 900); // remove do DOM após o fade
+
+                // Dispara a cascata dos botões da seção 1 só agora, depois do preloader
+                const linktree = document.getElementById('linktree-buttons');
+                if (linktree) linktree.classList.add('buttons-ready');
             }
 
             // Tempo mínimo de exibição para a animação ser percebida (ms)
@@ -2402,8 +2386,12 @@
             function update() {
                 const centerY = window.innerHeight / 2;
                 targets.forEach(el => {
-                    const r = el.getBoundingClientRect();
-                    el.classList.toggle('active', r.top <= centerY && r.bottom >= centerY);
+                    // Latch: uma vez que o topo do item atinja o meio da tela, fica marcado.
+                    // Evita perder o "gatilho" quando o item fica preso (position: sticky)
+                    // antes de cruzar totalmente o centro (ex.: dentro de #como-funciona).
+                    if (!el.classList.contains('active') && el.getBoundingClientRect().top <= centerY) {
+                        el.classList.add('active');
+                    }
                 });
                 ticking = false;
             }
