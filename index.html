@@ -362,6 +362,15 @@
             box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.35);
         }
 
+        /* Passo 3 "Converta": pulso contínuo laranja para chamar atenção */
+        .card-converta-pulse {
+            animation: convertaPulseOrange 2.2s ease-in-out infinite;
+        }
+        @keyframes convertaPulseOrange {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 145, 0, 0.35); }
+            50%      { box-shadow: 0 0 25px 4px rgba(255, 145, 0, 0.45); }
+        }
+
         /* Gestão Saturno: mesmo padrão IO + toggle .active nos textos do bloco */
         .saturno-reveal {
             border-radius: 0.5rem;
@@ -532,6 +541,12 @@
             z-index: 1;
             margin-bottom: 0;
         }
+        /* Enquanto um painel expansível (ex.: "Receber atendimento personalizado") está
+           aberto, desativa o sticky para o usuário conseguir rolar e ver todo o conteúdo,
+           sem que a seção seguinte cubra o painel no meio da leitura. */
+        #linktree-buttons.panel-expanded {
+            position: static;
+        }
         #card-stack-front {
             position: relative;
             z-index: 2;
@@ -565,6 +580,16 @@
             -webkit-text-fill-color: transparent;
         }
         .italic-serif { font-family: serif; font-style: italic; }
+
+        /* Tags flutuantes ao redor do mockup: só no desktop (poluem a versão mobile) */
+        @media (max-width: 1023px) {
+            #pratica .animate-float-tag-1,
+            #pratica .animate-float-tag-2,
+            #pratica .animate-float-tag-3,
+            #pratica .animate-float-tag-4 {
+                display: none;
+            }
+        }
 
         .card-interactive {
             background: rgba(255, 255, 255, 0.015);
@@ -1037,13 +1062,13 @@
         }
 
         /* Vantagens Exclusivas: pulso leve e sequencial (item 1, depois 2, ...) ao chegar na seção */
-        #vantagens-grid.active .glass-card { animation: vantagemPulse 0.7s ease; }
+        #vantagens-grid.active .glass-card { animation: vantagemPulse 1.4s ease; }
         #vantagens-grid.active .glass-card:nth-child(1) { animation-delay: 0s; }
-        #vantagens-grid.active .glass-card:nth-child(2) { animation-delay: 0.15s; }
-        #vantagens-grid.active .glass-card:nth-child(3) { animation-delay: 0.3s; }
-        #vantagens-grid.active .glass-card:nth-child(4) { animation-delay: 0.45s; }
-        #vantagens-grid.active .glass-card:nth-child(5) { animation-delay: 0.6s; }
-        #vantagens-grid.active .glass-card:nth-child(6) { animation-delay: 0.75s; }
+        #vantagens-grid.active .glass-card:nth-child(2) { animation-delay: 0.4s; }
+        #vantagens-grid.active .glass-card:nth-child(3) { animation-delay: 0.8s; }
+        #vantagens-grid.active .glass-card:nth-child(4) { animation-delay: 1.2s; }
+        #vantagens-grid.active .glass-card:nth-child(5) { animation-delay: 1.6s; }
+        #vantagens-grid.active .glass-card:nth-child(6) { animation-delay: 2s; }
         @keyframes vantagemPulse {
             0%   { transform: scale(1); }
             50%  { transform: scale(1.06); box-shadow: 0 0 20px rgba(255, 184, 0, 0.35); }
@@ -1534,7 +1559,7 @@
                 </div>
 
                 <!-- Passo 3 -->
-                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
+                <div class="glass-card card-converta-pulse rounded-2xl p-6 text-center flex flex-col items-center">
                     <div class="w-12 h-12 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center mb-4 border border-brand-gold/30">
                         <i class="ph ph-rocket-launch text-2xl"></i>
                     </div>
@@ -2184,11 +2209,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="w-full text-center pb-8 border-t border-white/5 pt-8 stagger-item" style="animation-delay: 0.8s;">
-            <div class="w-24 mx-auto mb-4 opacity-50">
-                <img src="img/logo.webp" alt="Saturno NFC Logo" class="w-full h-auto grayscale">
-            </div>
-
+        <footer class="w-full text-center pb-8 border-t border-white/5 pt-4 stagger-item" style="animation-delay: 0.8s;">
             <p class="text-gray-400 text-sm mb-6">Tecnologia que aproxima marcas e pessoas.</p>
 
             <!-- Botão CTA Final -->
@@ -2369,25 +2390,32 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- Como Funciona o Cartão NFC: os 3 passos entram em cascata assim que a seção
-        // aparece na tela. Não usa "cruzar o meio da tela" aqui porque a seção é sticky
-        // (position: sticky) e fica presa/congelada antes que o último card ("Converta")
-        // consiga cruzar o centro, sendo coberta por "Como Funciona na Prática" antes disso. ---
+        // --- Como Funciona o Cartão NFC: cada box fica verde ao atingir 50% da tela.
+        // Como a seção é sticky (fica presa), os cards param de se mover uma vez presos
+        // e podem nunca cruzar o centro antes de "Como Funciona na Prática" cobri-los —
+        // por isso há uma rede de segurança: se a cobertura já está avançada, ativa
+        // o card mesmo assim, garantindo que o último ("Converta") também acenda. ---
         (function () {
-            const section = document.getElementById('como-funciona');
             const cards = document.querySelectorAll('#como-funciona .glass-card');
-            if (!section || !cards.length) return;
-            const obs = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        cards.forEach((card, i) => {
-                            setTimeout(() => card.classList.add('active'), i * 150);
-                        });
-                        obs.disconnect();
-                    }
+            const front = document.getElementById('pratica');
+            if (!cards.length || !front) return;
+            let ticking = false;
+            function update() {
+                const centerY = window.innerHeight / 2;
+                const coverTop = front.getBoundingClientRect().top;
+                const coveringSoon = coverTop <= window.innerHeight * 0.6;
+                cards.forEach(card => {
+                    if (card.classList.contains('active')) return;
+                    const reachedCenter = card.getBoundingClientRect().top <= centerY;
+                    if (reachedCenter || coveringSoon) card.classList.add('active');
                 });
-            }, { threshold: 0.15 });
-            obs.observe(section);
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+            window.addEventListener('resize', update);
+            update();
         })();
 
         // --- Toggle class ao cruzar o meio da tela -> fundo verde (Gestão Saturno) ---
@@ -2538,6 +2566,14 @@
         })();
 
         // --- Painéis "nome + iniciar conversa" (personalizado, dúvidas, atendimento agora) ---
+        // Desativa o sticky de #linktree-buttons enquanto algum painel dentro dela
+        // estiver aberto, para o usuário conseguir rolar e ler o conteúdo todo.
+        function syncLinktreeStickyState() {
+            var lb = document.getElementById('linktree-buttons');
+            if (!lb) return;
+            lb.classList.toggle('panel-expanded', !!lb.querySelector('.wa-panel-open'));
+        }
+
         function buildWaPanelHTML(prefix) {
             return '' +
                 '<div class="p-4 sm:p-5 flex flex-col gap-4">' +
@@ -2580,6 +2616,7 @@
                 e.preventDefault();
                 var abrindo = !panel.classList.contains('wa-panel-open');
                 panel.classList.toggle('wa-panel-open');
+                syncLinktreeStickyState();
                 if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
                 if (abrindo) {
                     setTimeout(function () {
@@ -2648,6 +2685,7 @@
                 e.preventDefault();
                 var abrindo = !panel.classList.contains('wa-panel-open');
                 panel.classList.toggle('wa-panel-open');
+                syncLinktreeStickyState();
                 if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
                 if (abrindo) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 250);
             });
