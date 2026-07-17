@@ -999,6 +999,12 @@
         }
 
         /* Título do Portfólio: efeito "máquina de escrever" (digitando...) ao entrar na tela */
+        .portfolio-title-wrap {
+            /* Tamanho fluido (vw): cresce em telas grandes e encolhe proporcionalmente
+               em telas estreitas, para nunca ultrapassar a largura da tela (nowrap).
+               Mínimo calculado para caber mesmo em telas bem pequenas (~300px). */
+            font-size: clamp(1.05rem, 5vw, 3rem);
+        }
         .portfolio-title-wrap .typewriter-line {
             display: inline-block;
             overflow: hidden;
@@ -1217,19 +1223,6 @@
             25%      { transform: translateX(-6px); }
             75%      { transform: translateX(6px); }
         }
-        .wa-outro-box {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: max-height .4s ease, opacity .3s ease, margin-top .3s ease;
-        }
-        .wa-outro-box.wa-outro-open {
-            max-height: 220px;
-            opacity: 1;
-            margin-top: .25rem;
-        }
-        #wa-chip-outro .ph-caret-down { transition: transform .3s ease; }
-        #wa-chip-outro.wa-outro-active .ph-caret-down { transform: rotate(180deg); }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-purple selection:text-white loading">
@@ -1970,7 +1963,7 @@
                             <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Trabalhos Concluídos
                         </div>
 
-                        <h2 class="portfolio-title-wrap text-xl sm:text-2xl md:text-3xl font-black text-white mb-10 tracking-tighter uppercase leading-none">
+                        <h2 class="portfolio-title-wrap font-black text-white mb-10 tracking-tighter uppercase leading-none">
                             <span class="typewriter-line typewriter-line-1">NOSSO PORTFÓLIO COM</span><br/>
                             <span class="typewriter-line typewriter-line-2 text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
                         </h2>
@@ -2376,11 +2369,31 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- Toggle class ao cruzar o meio da tela -> fundo verde ---
-        // "Como funciona o Cartão NFC?" (os 3 passos) e os textos de "Gestão Saturno".
+        // --- Como Funciona o Cartão NFC: os 3 passos entram em cascata assim que a seção
+        // aparece na tela. Não usa "cruzar o meio da tela" aqui porque a seção é sticky
+        // (position: sticky) e fica presa/congelada antes que o último card ("Converta")
+        // consiga cruzar o centro, sendo coberta por "Como Funciona na Prática" antes disso. ---
+        (function () {
+            const section = document.getElementById('como-funciona');
+            const cards = document.querySelectorAll('#como-funciona .glass-card');
+            if (!section || !cards.length) return;
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        cards.forEach((card, i) => {
+                            setTimeout(() => card.classList.add('active'), i * 150);
+                        });
+                        obs.disconnect();
+                    }
+                });
+            }, { threshold: 0.15 });
+            obs.observe(section);
+        })();
+
+        // --- Toggle class ao cruzar o meio da tela -> fundo verde (Gestão Saturno) ---
         // Cálculo manual via scroll (mais confiável entre navegadores que rootMargin ±50%).
         (function () {
-            const targets = document.querySelectorAll('#como-funciona .glass-card, .saturno-reveal');
+            const targets = document.querySelectorAll('.saturno-reveal');
             if (!targets.length) return;
             let ticking = false;
             function update() {
@@ -2534,7 +2547,12 @@
                         '<p id="' + prefix + '-erro" class="hidden text-[11px] font-semibold text-red-400 mt-2">Digite seu nome antes de escolher uma opção.</p>' +
                     '</div>' +
                     '<div class="flex flex-col gap-2">' +
-                        '<span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Iniciar conversa sobre</span>' +
+                        '<span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Escreva sua mensagem</span>' +
+                        '<textarea rows="3" placeholder="Escreva sua mensagem..." class="wa-outro-texto w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#25D366] transition-colors resize-none"></textarea>' +
+                        '<button type="button" class="wa-chip wa-outro-enviar w-full flex items-center justify-center gap-2 text-center">Enviar mensagem <i class="ph ph-paper-plane-tilt"></i></button>' +
+                    '</div>' +
+                    '<div class="flex flex-col gap-2">' +
+                        '<span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Ou escolha uma sugestão</span>' +
                         '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">' +
                             '<button type="button" class="wa-chip" data-frase="Quero fazer meu cartão personalizado">Quero fazer meu cartão personalizado</button>' +
                             '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
@@ -2542,11 +2560,6 @@
                             '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
                             '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
-                            '<button type="button" class="wa-chip wa-chip-outro sm:col-span-2 flex items-center justify-between">Outro <i class="ph ph-caret-down text-xs transition-transform"></i></button>' +
-                        '</div>' +
-                        '<div class="wa-outro-box flex flex-col gap-2">' +
-                            '<textarea rows="3" placeholder="Escreva sua mensagem..." class="wa-outro-texto w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#25D366] transition-colors resize-none"></textarea>' +
-                            '<button type="button" class="wa-chip wa-outro-enviar w-full flex items-center justify-center gap-2 text-center">Enviar mensagem <i class="ph ph-paper-plane-tilt"></i></button>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -2603,24 +2616,8 @@
                 });
             });
 
-            var chipOutro = panel.querySelector('.wa-chip-outro');
-            var outroBox = panel.querySelector('.wa-outro-box');
             var outroTexto = panel.querySelector('.wa-outro-texto');
             var outroEnviar = panel.querySelector('.wa-outro-enviar');
-
-            if (chipOutro && outroBox && outroTexto) {
-                chipOutro.addEventListener('click', function () {
-                    var abrindo = !outroBox.classList.contains('wa-outro-open');
-                    outroBox.classList.toggle('wa-outro-open');
-                    chipOutro.classList.toggle('wa-outro-active');
-                    if (abrindo) {
-                        setTimeout(function () {
-                            outroTexto.focus();
-                            outroBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        }, 250);
-                    }
-                });
-            }
 
             if (outroEnviar && outroTexto) {
                 outroEnviar.addEventListener('click', function () {
