@@ -352,6 +352,28 @@
             box-shadow: 0 10px 30px -10px rgba(138, 43, 226, 0.2);
         }
 
+        /* Intersection Observer + toggle class: quando o passo entra na tela, .active
+           é adicionada via JS e o fundo do card muda para verde. */
+        #como-funciona .glass-card {
+            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        #como-funciona .glass-card.active {
+            background: rgba(34, 197, 94, 0.18);
+            border-color: rgba(34, 197, 94, 0.55);
+            box-shadow: 0 10px 30px -10px rgba(34, 197, 94, 0.35);
+        }
+
+        /* Gestão Saturno: mesmo padrão IO + toggle .active nos textos do bloco */
+        .saturno-reveal {
+            border-radius: 0.5rem;
+            transition: background-color 0.6s ease, box-shadow 0.6s ease;
+        }
+        .saturno-reveal.active {
+            background: rgba(34, 197, 94, 0.16);
+            box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3) inset;
+        }
+        div.saturno-reveal.active { padding: 0.35rem 0.5rem; margin: -0.35rem -0.5rem; }
+
         /* Elementos de Animação de Entrada */
         .stagger-item {
             opacity: 0;
@@ -484,6 +506,23 @@
         @keyframes badgeGlow {
             0%, 100% { box-shadow: 0 0 10px rgba(255, 184, 0, 0.12); border-color: rgba(255, 184, 0, 0.30); }
             50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
+        }
+
+        /* ===================== STACKING SECTIONS (STICKY STACK) =====================
+           "Como funciona o Cartão NFC?" fica presa no topo (position: sticky) enquanto
+           "Como Funciona na Prática" continua no fluxo normal e desliza por cima dela. */
+        #como-funciona {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        #pratica {
+            z-index: 2;
+            background: #050508;
+            border-radius: 1.75rem 1.75rem 0 0;
+            padding-top: 2.5rem;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
         }
 
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
@@ -878,6 +917,54 @@
         }
         .slider-arrow:hover { border-color: #FFB800; background: rgba(255, 184, 0, 0.15); }
         .slider-arrow:disabled { opacity: 0; pointer-events: none; }
+
+        /* ===================== MARQUEE INFINITO DO PORTFÓLIO (MOBILE) =====================
+           Ticker/logo-slider: @keyframes com translateX rodando em loop contínuo,
+           mostrando todos os projetos concluídos numa única seção sem precisar rolar. */
+        .marquee-portfolio-wrap {
+            width: 100%;
+            overflow: hidden;
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        }
+        .marquee-portfolio-track {
+            display: flex;
+            width: max-content;
+            gap: 1rem;
+            animation: portfolioMarquee 24s linear infinite;
+        }
+        .marquee-portfolio-wrap.paused .marquee-portfolio-track {
+            animation-play-state: paused;
+        }
+        @keyframes portfolioMarquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+        .marquee-card {
+            flex: 0 0 auto;
+            width: 160px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0.65rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: border-color 0.3s ease;
+        }
+        .marquee-card:hover { border-color: rgba(255, 122, 0, 0.4); }
+        .marquee-card img {
+            width: 100%;
+            height: 88px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .marquee-card h4 { color: #ffffff; font-weight: 900; font-size: 11px; text-transform: uppercase; }
+        .marquee-card p { font-size: 9px; margin-top: 2px; font-weight: 600; color: #94a3b8; }
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-portfolio-track { animation: none; }
+        }
 
         /* ===================== CARROSSEL DE PLANOS (MOBILE) ===================== */
         @media (max-width: 767px) {
@@ -1734,13 +1821,13 @@
                                 Manutenção, suporte, alterações, melhorias, acompanhamento, dados de acesso, atualizações e evolução do projeto.
                             </p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 text-left">
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Alterações ilimitadas na página NFC</span></div>
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Atualização de links, produtos e informações</span></div>
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Relatórios completos enviados semanalmente</span></div>
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Acompanhamento de acessos e desempenho</span></div>
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Estatísticas de cliques, visualizações e conversões</span></div>
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Suporte prioritário via WhatsApp</span></div>
-                                <div class="flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Backup e monitoramento da página</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Alterações ilimitadas na página NFC</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Atualização de links, produtos e informações</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Relatórios completos enviados semanalmente</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Acompanhamento de acessos e desempenho</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Estatísticas de cliques, visualizações e conversões</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Suporte prioritário via WhatsApp</span></div>
+                                <div class="saturno-reveal flex items-start gap-2"><i class="ph ph-check icon-check"></i><span class="list-text">Backup e monitoramento da página</span></div>
                             </div>
                         </div>
                         <div class="w-full md:w-auto flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-10 shrink-0">
@@ -1793,8 +1880,64 @@
                             <span>Clique em um projeto para <span class="text-orange-400 font-bold">visualizá-lo</span></span>
                         </div>
 
-                        <!-- SLIDER -->
-                        <div class="relative w-full max-w-4xl mx-auto mb-8 px-6 sm:px-0">
+                        <!-- MARQUEE (mobile): loop infinito e contínuo dos projetos concluídos,
+                             tudo em uma única seção, sem precisar rolar para ver os projetos. -->
+                        <div class="marquee-portfolio-wrap md:hidden mb-8">
+                            <div class="marquee-portfolio-track">
+                                <a href="https://maiaprodutor.site" target="_blank" class="marquee-card">
+                                    <img src="img/portfolio-maia-produtor.webp" alt="Maia Produtor" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Maia Produtor</h4><p class="text-red-500">Produção e divulgação de eventos</p></div>
+                                </a>
+                                <a href="https://primemoveis.site" target="_blank" class="marquee-card">
+                                    <img src="img/portfolio-prime-moveis.webp" alt="Prime Móveis" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Prime Móveis</h4><p class="text-blue-500">Móveis Planejados</p></div>
+                                </a>
+                                <a href="https://jpjoiasbrasil.com" target="_blank" class="marquee-card">
+                                    <img src="img/portfolio-jp-joias.webp" alt="JP Joias" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>JP Joias</h4><p style="color:#FFB800">Joalheria</p></div>
+                                </a>
+                                <a href="https://venusdistribuidora.com" target="_blank" class="marquee-card">
+                                    <img src="img/portfolio-venus-distribuidora.webp" alt="Vênus Distribuidora" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Vênus Distribuidora</h4><p class="text-purple-500">Distribuidora de cosméticos</p></div>
+                                </a>
+                                <a href="https://www.ouropack.site" target="_blank" class="marquee-card">
+                                    <img src="img/portfolio-ouropack.webp" alt="OuroPack" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>OuroPack</h4><p style="color:#C08A52">Caixas de Papelão</p></div>
+                                </a>
+                                <a href="https://www.formamaxima.site" target="_blank" class="marquee-card">
+                                    <img src="img/portfolio-forma-maxima.webp" alt="Forma Máxima" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Forma Máxima</h4><p class="text-red-500">Consultoria de Musculação</p></div>
+                                </a>
+                                <!-- Clones (aria-hidden) para o loop ficar contínuo/infinito sem "salto" -->
+                                <a href="https://maiaprodutor.site" target="_blank" class="marquee-card" aria-hidden="true" tabindex="-1">
+                                    <img src="img/portfolio-maia-produtor.webp" alt="" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Maia Produtor</h4><p class="text-red-500">Produção e divulgação de eventos</p></div>
+                                </a>
+                                <a href="https://primemoveis.site" target="_blank" class="marquee-card" aria-hidden="true" tabindex="-1">
+                                    <img src="img/portfolio-prime-moveis.webp" alt="" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Prime Móveis</h4><p class="text-blue-500">Móveis Planejados</p></div>
+                                </a>
+                                <a href="https://jpjoiasbrasil.com" target="_blank" class="marquee-card" aria-hidden="true" tabindex="-1">
+                                    <img src="img/portfolio-jp-joias.webp" alt="" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>JP Joias</h4><p style="color:#FFB800">Joalheria</p></div>
+                                </a>
+                                <a href="https://venusdistribuidora.com" target="_blank" class="marquee-card" aria-hidden="true" tabindex="-1">
+                                    <img src="img/portfolio-venus-distribuidora.webp" alt="" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Vênus Distribuidora</h4><p class="text-purple-500">Distribuidora de cosméticos</p></div>
+                                </a>
+                                <a href="https://www.ouropack.site" target="_blank" class="marquee-card" aria-hidden="true" tabindex="-1">
+                                    <img src="img/portfolio-ouropack.webp" alt="" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>OuroPack</h4><p style="color:#C08A52">Caixas de Papelão</p></div>
+                                </a>
+                                <a href="https://www.formamaxima.site" target="_blank" class="marquee-card" aria-hidden="true" tabindex="-1">
+                                    <img src="img/portfolio-forma-maxima.webp" alt="" loading="lazy" decoding="async">
+                                    <div class="text-left"><h4>Forma Máxima</h4><p class="text-red-500">Consultoria de Musculação</p></div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- SLIDER (desktop/tablet) -->
+                        <div class="hidden md:block relative w-full max-w-4xl mx-auto mb-8 px-6 sm:px-0">
 
                             <!-- Viewport -->
                             <div id="portfolio-viewport" class="overflow-hidden">
@@ -1926,7 +2069,7 @@
                         </div>
 
                         <!-- Indicadores (bolinhas) -->
-                        <div class="flex items-center justify-center gap-2 mb-12">
+                        <div class="hidden md:flex items-center justify-center gap-2 mb-12">
                             <span class="dot w-2 h-2 rounded-full bg-orange-500 transition-all"></span>
                             <span class="dot w-2 h-2 rounded-full bg-white/20 transition-all"></span>
                         </div>
@@ -2107,6 +2250,16 @@
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
+
+        // --- Intersection Observer + toggle class: box entra na tela -> .active -> fundo verde ---
+        // "Como funciona o Cartão NFC?" (os 3 passos) e os textos de "Gestão Saturno"
+        const greenToggleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('active', entry.isIntersecting);
+            });
+        }, { threshold: 0.4 });
+        document.querySelectorAll('#como-funciona .glass-card, .saturno-reveal')
+            .forEach(el => greenToggleObserver.observe(el));
 
         // --- Carrossel de Planos (mobile): 1 plano por vez, com troca automática a cada 4s ---
         (function () {
@@ -2429,6 +2582,22 @@
                 }, 400);
             }, 4000);
         }
+
+        // --- MARQUEE DO PORTFÓLIO (mobile): pausa a animação ao tocar/segurar um card ---
+        (function () {
+            const wrap = document.querySelector('.marquee-portfolio-wrap');
+            if (!wrap) return;
+            let resumeTimer;
+            function pause() { wrap.classList.add('paused'); }
+            function scheduleResume() {
+                clearTimeout(resumeTimer);
+                resumeTimer = setTimeout(() => wrap.classList.remove('paused'), 2500);
+            }
+            wrap.addEventListener('touchstart', pause, { passive: true });
+            wrap.addEventListener('touchend', scheduleResume, { passive: true });
+            wrap.addEventListener('mouseenter', pause);
+            wrap.addEventListener('mouseleave', scheduleResume);
+        })();
 
         // --- 7. SLIDER DO PORTFÓLIO (setas para navegar entre as páginas) ---
         (function () {
