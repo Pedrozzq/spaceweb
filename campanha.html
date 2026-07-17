@@ -241,15 +241,30 @@
             display: flex;
             width: max-content;
             gap: 1rem;
-            animation: marqueeScroll 26s linear infinite;
+            /* Posição controlada via JS (transform inline) para permitir tanto o
+               auto-scroll contínuo quanto o avanço manual pelas setas. */
+            will-change: transform;
         }
-        .marquee-wrap.paused .marquee-track {
-            animation-play-state: paused;
+        .marquee-arrow-wrap { position: relative; }
+        .marquee-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgb(219, 234, 254);
+            color: #1d4ed8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
         }
-        @keyframes marqueeScroll {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-50%); }
-        }
+        .marquee-arrow:active { transform: translateY(-50%) scale(0.94); }
+        .marquee-arrow-left { left: -4px; }
+        .marquee-arrow-right { right: -4px; }
         .marquee-step-card, .marquee-benefit-card {
             flex: 0 0 auto;
             width: 220px;
@@ -282,8 +297,31 @@
             justify-content: center;
             font-size: 1rem;
         }
+
+        /* Efeito "máquina de escrever" na citação "O santinho informa..." */
+        .typewriter-quote-wrap { white-space: normal; }
+        .typewriter-quote {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 100%;
+            vertical-align: bottom;
+            width: 0;
+            border-right: 2px solid transparent;
+        }
+        .typewriter-quote.active {
+            animation: typewriterQuote 1.8s steps(40, end) forwards, typewriterQuoteCaret 0.8s step-end infinite;
+        }
+        @keyframes typewriterQuote {
+            from { width: 0; }
+            to   { width: var(--type-w, 100%); }
+        }
+        @keyframes typewriterQuoteCaret {
+            0%, 100% { border-color: rgba(29, 78, 216, 0.75); }
+            50%      { border-color: transparent; }
+        }
         @media (prefers-reduced-motion: reduce) {
-            .marquee-track { animation: none; }
+            .typewriter-quote { width: auto; animation: none !important; border-color: transparent !important; }
         }
 
         /* FAQ Accordion Transition */
@@ -670,7 +708,10 @@
             </div>
 
             <!-- Marquee infinito (mobile) -->
-            <div class="marquee-wrap md:hidden">
+            <div class="marquee-arrow-wrap md:hidden">
+                <button type="button" class="marquee-arrow marquee-arrow-left" aria-label="Passo anterior" data-marquee-target="como-funciona-marquee"><i class="ph-bold ph-caret-left"></i></button>
+                <button type="button" class="marquee-arrow marquee-arrow-right" aria-label="Próximo passo" data-marquee-target="como-funciona-marquee"><i class="ph-bold ph-caret-right"></i></button>
+                <div id="como-funciona-marquee" class="marquee-wrap">
                 <div class="marquee-track">
                     <div class="marquee-step-card">
                         <div class="marquee-step-icon bg-brand-600 border-brand-500"><i class="ph-fill ph-palette"></i></div>
@@ -721,6 +762,7 @@
                         <h4 class="font-bold text-sm mb-1">Sua equipe divulga</h4>
                         <p class="text-gray-600 text-xs leading-snug">Cabos eleitorais aproximam o cartão e compartilham a campanha.</p>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -804,7 +846,10 @@
             </div>
 
             <!-- Marquee infinito (mobile) -->
-            <div class="marquee-wrap md:hidden">
+            <div class="marquee-arrow-wrap md:hidden">
+                <button type="button" class="marquee-arrow marquee-arrow-left" aria-label="Benefício anterior" data-marquee-target="solucoes-marquee"><i class="ph-bold ph-caret-left"></i></button>
+                <button type="button" class="marquee-arrow marquee-arrow-right" aria-label="Próximo benefício" data-marquee-target="solucoes-marquee"><i class="ph-bold ph-caret-right"></i></button>
+                <div id="solucoes-marquee" class="marquee-wrap">
                 <div class="marquee-track">
                     <div class="marquee-benefit-card">
                         <div class="marquee-benefit-icon bg-blue-50 text-brand-500"><i class="ph-fill ph-lightning"></i></div>
@@ -891,6 +936,7 @@
                             <p class="text-gray-600 text-xs leading-snug">Saiba quantas vezes os cartões foram acessados.</p>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -1200,7 +1246,7 @@
                     </div>
 
                     <div class="inline-block border-l-4 border-brand-500 pl-4 py-2">
-                        <p class="font-semibold text-lg italic tracking-wide">O santinho informa. A Saturno NFC conecta, engaja e mobiliza.</p>
+                        <p class="font-semibold text-lg italic tracking-wide typewriter-quote-wrap"><span class="typewriter-quote">O santinho informa. A Saturno NFC conecta, engaja e mobiliza.</span></p>
                     </div>
                 </div>
 
@@ -1649,19 +1695,106 @@
             // "como-funciona-track" e "solucoes-track" agora usam marquee infinito no
             // mobile (o carrossel/botão deles só existe para telas md+, onde ficam ocultos).
 
-            // --- Marquees: pausa a animação ao tocar/segurar para facilitar a leitura ---
-            document.querySelectorAll('.marquee-wrap').forEach((wrap) => {
-                let resumeTimer;
-                function pause() { wrap.classList.add('paused'); }
-                function scheduleResume() {
-                    clearTimeout(resumeTimer);
-                    resumeTimer = setTimeout(() => wrap.classList.remove('paused'), 2500);
+            // --- Citação "O santinho informa...": efeito máquina de escrever ao entrar na tela ---
+            (function () {
+                const quote = document.querySelector('.typewriter-quote');
+                if (!quote) return;
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            quote.style.setProperty('--type-w', quote.scrollWidth + 'px');
+                            quote.classList.add('active');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.4 });
+                obs.observe(quote);
+            })();
+
+            // --- Marquees: auto-scroll contínuo (rAF) + setas para avançar/voltar manualmente ---
+            function initMarquee(wrapId) {
+                const wrap = document.getElementById(wrapId);
+                if (!wrap) return;
+                const track = wrap.querySelector('.marquee-track');
+                if (!track) return;
+
+                const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const speed = 34; // px por segundo
+                let offset = 0;
+                let started = false;
+                let userPaused = false;
+                let lastTime = null;
+                let resumeTimer = null;
+
+                function halfWidth() {
+                    return track.scrollWidth / 2; // conteúdo duplicado: metade = um conjunto completo
                 }
-                wrap.addEventListener('touchstart', pause, { passive: true });
-                wrap.addEventListener('touchend', scheduleResume, { passive: true });
-                wrap.addEventListener('mouseenter', pause);
-                wrap.addEventListener('mouseleave', scheduleResume);
-            });
+
+                function wrapOffset() {
+                    const hw = halfWidth();
+                    if (hw <= 0) return;
+                    if (offset <= -hw) offset += hw;
+                    if (offset > 0) offset -= hw;
+                }
+
+                function render() {
+                    track.style.transform = 'translateX(' + offset + 'px)';
+                }
+
+                function frame(t) {
+                    if (lastTime === null) lastTime = t;
+                    const dt = (t - lastTime) / 1000;
+                    lastTime = t;
+                    if (started && !userPaused && !reduceMotion) {
+                        offset -= speed * dt;
+                        wrapOffset();
+                        render();
+                    }
+                    requestAnimationFrame(frame);
+                }
+                requestAnimationFrame(frame);
+
+                function pauseTemporarily() {
+                    userPaused = true;
+                    clearTimeout(resumeTimer);
+                    resumeTimer = setTimeout(() => { userPaused = false; }, 2500);
+                }
+
+                function step(direction) {
+                    const card = track.querySelector('.marquee-step-card, .marquee-benefit-card');
+                    if (!card) return;
+                    const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+                    const cardStep = card.getBoundingClientRect().width + gap;
+                    offset += direction === 'next' ? -cardStep : cardStep;
+                    wrapOffset();
+                    render();
+                    pauseTemporarily();
+                }
+
+                wrap.addEventListener('touchstart', () => { userPaused = true; }, { passive: true });
+                wrap.addEventListener('touchend', pauseTemporarily, { passive: true });
+                wrap.addEventListener('mouseenter', () => { userPaused = true; });
+                wrap.addEventListener('mouseleave', pauseTemporarily);
+
+                // Só começa a mover quando o usuário rolar até a seção (30% visível)
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            started = true;
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                obs.observe(wrap);
+
+                document.querySelectorAll('[data-marquee-target="' + wrapId + '"]').forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        step(btn.classList.contains('marquee-arrow-right') ? 'next' : 'prev');
+                    });
+                });
+            }
+            initMarquee('como-funciona-marquee');
+            initMarquee('solucoes-marquee');
 
             // --- FAQ Accordion Logic ---
             const faqItems = document.querySelectorAll('.faq-item');
