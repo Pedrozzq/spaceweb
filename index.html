@@ -1392,7 +1392,7 @@
 
             <!-- Indicador "Entenda como funciona" -->
             <a href="#como-funciona" class="flex flex-col items-center mb-8 scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.3s;">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Entenda como funciona</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Nossos serviços</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
         </header>
@@ -1460,13 +1460,13 @@
         <div id="card-stack-front">
             <!-- Indicador "Deslize" logo após os botões -->
             <a href="#pratica" class="flex flex-col items-center pt-6 mb-4 scroll-hint hover:opacity-80 transition-opacity">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Conheça a tecnologia</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
 
             <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
             <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
-            <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
+            <div class="relative w-56 h-[360px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
                 
                 <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
                     
@@ -1509,6 +1509,38 @@
         <!-- /STICKY STACK (card-stack-front) -->
         </div>
         <!-- /stack-wrap -->
+
+        <!-- Como Funciona Section (sem título, subida para debaixo do cartão) -->
+        <section id="como-funciona" class="w-full mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Passo 1 -->
+                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center mb-4 border border-brand-blue/30">
+                        <i class="ph ph-wifi-high text-2xl rotate-90"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">1. Aproxime</h3>
+                    <p class="text-sm text-gray-400">Basta aproximar o cartão NFC do celular.</p>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mb-4 border border-brand-purple/30">
+                        <i class="ph ph-device-mobile text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">2. Acesse</h3>
+                    <p class="text-sm text-gray-400">O link personalizado abre automaticamente no navegador.</p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="glass-card card-converta-pulse rounded-2xl p-6 text-center flex flex-col items-center">
+                    <div class="w-12 h-12 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center mb-4 border border-brand-gold/30">
+                        <i class="ph ph-rocket-launch text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">3. Converta</h3>
+                    <p class="text-sm text-gray-400">O cliente chama no WhatsApp, salva contato ou segue no Instagram.</p>
+                </div>
+            </div>
+        </section>
 
         <!-- Como Funciona na Prática -->
         <section id="pratica" class="w-full mb-16 relative">
@@ -1604,12 +1636,6 @@
                 </div>
             </div>
 
-            <!-- Selo Aproxime. Conecte. Converta. movido para o final da seção -->
-            <div class="w-full flex justify-center mt-14 mb-4 reveal-node">
-                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
-                    <span>Aproxime. Conecte. Converta.</span>
-                </div>
-            </div>
         </section>
 
         <!-- Benefícios Section -->
@@ -1640,6 +1666,13 @@
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-recycle text-[#25D366] text-xl"></i>
                     <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
+                </div>
+            </div>
+
+            <!-- Selo Aproxime. Conecte. Converta. (movido para abaixo de Vantagens Exclusivas) -->
+            <div class="w-full flex justify-center mt-10 reveal-node">
+                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                    <span>Aproxime. Conecte. Converta.</span>
                 </div>
             </div>
         </section>
@@ -1912,40 +1945,6 @@
                     <div id="wa-duvidas-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md mt-3"></div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- Como Funciona Section (movido para abaixo de Gestão Saturno) -->
-        <section id="como-funciona" class="w-full mb-16">
-            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona a tecnologia?</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Passo 1 -->
-                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
-                    <div class="w-12 h-12 rounded-full bg-brand-blue/20 text-brand-blue flex items-center justify-center mb-4 border border-brand-blue/30">
-                        <i class="ph ph-wifi-high text-2xl rotate-90"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">1. Aproxime</h3>
-                    <p class="text-sm text-gray-400">Basta aproximar o cartão NFC do celular.</p>
-                </div>
-
-                <!-- Passo 2 -->
-                <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
-                    <div class="w-12 h-12 rounded-full bg-brand-purple/20 text-brand-purple flex items-center justify-center mb-4 border border-brand-purple/30">
-                        <i class="ph ph-device-mobile text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">2. Acesse</h3>
-                    <p class="text-sm text-gray-400">O link personalizado abre automaticamente no navegador.</p>
-                </div>
-
-                <!-- Passo 3 -->
-                <div class="glass-card card-converta-pulse rounded-2xl p-6 text-center flex flex-col items-center">
-                    <div class="w-12 h-12 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center mb-4 border border-brand-gold/30">
-                        <i class="ph ph-rocket-launch text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-lg mb-2">3. Converta</h3>
-                    <p class="text-sm text-gray-400">O cliente chama no WhatsApp, salva contato ou segue no Instagram.</p>
-                </div>
             </div>
         </section>
 
@@ -2374,17 +2373,21 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- Como Funciona o Cartão NFC: cada box fica verde ao atingir 50% da tela. ---
+        // --- Como Funciona o Cartão NFC: cada box fica colorido ao atingir uma linha da tela.
+        // "Aproxime" e "Acesse" seguem a mesma lógica de "Converta" (3º box), só que este
+        // usa 40% da altura da tela como gatilho, em vez de 50%. ---
         (function () {
             const cards = document.querySelectorAll('#como-funciona .glass-card');
             if (!cards.length) return;
             let ticking = false;
             function update() {
                 const centerY = window.innerHeight / 2;
-                cards.forEach(card => {
+                const convertaY = window.innerHeight * 0.4;
+                cards.forEach((card, i) => {
                     if (card.classList.contains('active')) return;
-                    const reachedCenter = card.getBoundingClientRect().top <= centerY;
-                    if (reachedCenter) card.classList.add('active');
+                    const triggerY = card.classList.contains('card-converta-pulse') ? convertaY : centerY;
+                    const reachedTrigger = card.getBoundingClientRect().top <= triggerY;
+                    if (reachedTrigger) card.classList.add('active');
                 });
                 ticking = false;
             }
@@ -2571,8 +2574,6 @@
                             '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero meu cartão para campanha política">Quero meu cartão para campanha política</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
-                            '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
-                            '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
