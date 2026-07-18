@@ -83,12 +83,14 @@
         html {
             overflow-x: hidden;
             max-width: 100%;
+            touch-action: pan-y;
         }
         body {
             background-color: #050508;
             color: #ffffff;
             max-width: 100%;
             scroll-behavior: smooth;
+            touch-action: pan-y;
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -606,8 +608,8 @@
         .animate-scan { animation: scan-line 3s infinite linear; }
 
         /* Animações do mockup ficam pausadas até o usuário chegar na seção "Como Funciona na Prática" */
-        #pratica .pratica-anim { animation-play-state: paused; }
-        #pratica.pratica-in-view .pratica-anim { animation-play-state: running; }
+        #pratica .pratica-anim { animation-play-state: paused !important; }
+        #pratica.pratica-in-view .pratica-anim { animation-play-state: running !important; }
 
         /* Cartão NFC aproximando do telefone */
         @keyframes cardApproach {
@@ -1553,7 +1555,7 @@
                             <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
 
                             <!-- Ecrã Bloqueado -->
-                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
+                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 2.8s infinite ease-in-out;">
                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
                                     <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
                                     <i class="ph ph-device-mobile text-2xl text-slate-500"></i>
@@ -1562,11 +1564,11 @@
                             </div>
 
                             <!-- Ecrã Desbloqueado — Imagem completa (mostra todo o conteúdo) -->
-                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('img/mockup-tela-0.webp');"></div>
+                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 2.8s infinite ease-out; background-image: url('img/mockup-tela-0.webp');"></div>
                         </div>
 
                         <!-- Animação do Cartão NFC -->
-                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
+                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 2.8s infinite ease-out;">
                             <div class="w-full flex justify-end">
                                 <div class="w-3 h-3 rounded-full bg-slate-200"></div>
                             </div>
@@ -1791,7 +1793,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-white text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Essencial</h3>
-                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença digital profissional para você conquistar seus primeiros clientes.</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ter presença digital profissional</p>
                         </div>
                         <div class="plan-img-wrap glow-white mb-6">
                             <img src="img/plano-essencial.webp" alt="Cartão NFC - Plano Essencial" class="w-32 md:w-40 h-auto">
@@ -1811,9 +1813,6 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Você recebe tudo configurado e funcionando</span></li>
                         </ul>
                         <a href="https://wa.link/304efy" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
-                        <p class="mini-highlight text-saturno-white text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
-                            <i class="ph-fill ph-sparkle"></i> Ter presença digital profissional
-                        </p>
                     </div>
 
                     <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
@@ -1823,7 +1822,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-silver text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Profissional</h3>
-                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença completa com identidade visual e funções avançadas.</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Captar clientes e facilitar atendimentos</p>
                         </div>
                         <div class="plan-img-wrap glow-silver mb-6">
                             <img src="img/plano-profissional.webp" alt="Cartão NFC - Plano Profissional" class="w-32 md:w-40 h-auto">
@@ -1842,9 +1841,6 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 3 a 4 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
-                        <p class="mini-highlight text-saturno-silver text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
-                            <i class="ph-fill ph-sparkle"></i> Captar clientes e facilitar atendimentos
-                        </p>
                     </div>
 
                     <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
@@ -1854,7 +1850,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-gold text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Fora de Órbita</h3>
-                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ideal para: eventos, restaurantes, hoteis, cafeterias, pousadas</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Digitalizar toda a operação da empresa</p>
                         </div>
                         <div class="plan-img-wrap glow-gold mb-6">
                             <img src="img/plano-fora-de-orbita.webp" alt="Cartão NFC - Plano Fora de Órbita" class="w-32 md:w-40 h-auto">
@@ -1876,9 +1872,6 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 4 a 5 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
-                        <p class="mini-highlight text-saturno-gold text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
-                            <i class="ph-fill ph-sparkle"></i> Digitalizar toda a operação da empresa
-                        </p>
                     </div>
 
                 </div>
@@ -2328,13 +2321,18 @@
             initParticles();
         });
 
-        // --- Mockup "Como Funciona na Prática": só começa a animar quando a seção aparece ---
+        // --- Mockup "Como Funciona na Prática": começa a animar quando a seção aparece pela
+        // primeira vez e continua rodando depois disso (não pausa mais ao rolar para fora),
+        // para o usuário conseguir ver as 6 imagens do ciclo completo. ---
         (function () {
             const pratica = document.getElementById('pratica');
             if (!pratica) return;
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    pratica.classList.toggle('pratica-in-view', entry.isIntersecting);
+                    if (entry.isIntersecting) {
+                        pratica.classList.add('pratica-in-view');
+                        obs.unobserve(entry.target);
+                    }
                 });
             }, { threshold: 0.25 });
             obs.observe(pratica);
