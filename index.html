@@ -547,6 +547,22 @@
             width: 100%;
         }
 
+        /* Segundo par sticky-stack: "Vantagens Exclusivas" (seção 1) fica presa
+           enquanto "Como Funciona na Prática" (seção 2) desliza por cima dela. */
+        #vantagens-exclusivas {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        #pratica {
+            z-index: 2;
+            background: #050508;
+            border-radius: 1.75rem 1.75rem 0 0;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
+            padding-top: 2.5rem;
+        }
+
         /* Botões da seção 1: cascata leve, disparada via JS quando o preloader some (não no page-load) */
         #linktree-buttons .cascade-btn {
             opacity: 0;
@@ -556,6 +572,136 @@
         #linktree-buttons.buttons-ready .cascade-btn {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* ===================== WIDGET DE CHAT FLUTUANTE ===================== */
+        #chat-widget {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 70;
+        }
+        .chat-widget-btn {
+            position: relative;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 9999px;
+            background: #0f0f16;
+            border: 1px solid rgba(37, 99, 235, 0.45);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .chat-widget-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+        }
+        .chat-widget-btn img {
+            width: 2.5rem;
+            height: 2.5rem;
+            object-fit: contain;
+        }
+        .chat-widget-btn::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 9999px;
+            border: 1.5px solid rgba(37, 99, 235, 0.5);
+            opacity: 0;
+            animation: chatWidgetPulse 3.2s ease-out infinite;
+        }
+        @keyframes chatWidgetPulse {
+            0%   { transform: scale(0.85); opacity: 0.6; }
+            70%  { transform: scale(1.18); opacity: 0; }
+            100% { transform: scale(1.18); opacity: 0; }
+        }
+        /* Selo "político" no botão: identifica o assunto (campanha) sem perder a logo da marca */
+        .chat-widget-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border: 2px solid #0f0f16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.7rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .chat-widget-bubble {
+            position: absolute;
+            bottom: calc(100% + 0.9rem);
+            right: 0;
+            max-width: 220px;
+            background: #0f0f16;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-left: 3px solid #2563eb;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            line-height: 1.35;
+            padding: 0.75rem 1.6rem 0.75rem 1rem;
+            border-radius: 1rem;
+            border-bottom-right-radius: 0.3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .chat-widget-bubble .ph-megaphone {
+            color: #60a5fa;
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .chat-widget-bubble.chat-widget-bubble-visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .chat-widget-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 1.6rem;
+            width: 12px;
+            height: 12px;
+            background: #0f0f16;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+        }
+        .chat-widget-bubble-close {
+            position: absolute;
+            top: 0.4rem;
+            right: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 0.65rem;
+            line-height: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .chat-widget-bubble-close:hover { color: #fff; }
+        @media (prefers-reduced-motion: reduce) {
+            .chat-widget-btn::before { animation: none; }
+            .chat-widget-bubble { transition: none; }
         }
 
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
@@ -1386,7 +1532,6 @@
 
             <!-- Indicador "Entenda como funciona" -->
             <a href="#como-funciona" class="flex flex-col items-center mb-8 scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.3s;">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Nossos serviços</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
         </header>
@@ -1400,7 +1545,7 @@
                     <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20 z-10 relative">
                         <i class="ph ph-shopping-cart-simple text-xl"></i>
                     </div>
-                    <span class="font-bold text-white text-base md:text-lg z-10 relative">Cartão NFC para sua empresa</span>
+                    <span class="font-bold text-white text-base md:text-lg z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Cartão NFC para sua empresa</span>
                 </div>
                 <i id="escolher-plano-caret" class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all z-10 relative"></i>
             </a>
@@ -1424,28 +1569,6 @@
                     </div>
                 </div>
             </div>
-
-            <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
-                        <i class="ph ph-megaphone text-xl"></i>
-                    </div>
-                    <span class="font-bold text-white z-10 relative">Cartão NFC para campanha política</span>
-                </div>
-                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
-            </a>
-
-            <a href="https://wa.link/0zpwgo" id="btn-wa-personalizado" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.3s;">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors z-10 relative">
-                        <i class="ph ph-whatsapp-logo text-xl"></i>
-                    </div>
-                    <span class="font-bold text-white z-10 relative">Receber atendimento personalizado</span>
-                </div>
-                <i id="wa-personalizado-caret" class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
-            </a>
-
-            <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
 
         </section>
 
@@ -1536,6 +1659,48 @@
             </div>
         </section>
 
+        <!-- STICKY STACK: Vantagens Exclusivas fica presa enquanto Como Funciona
+             na Prática desliza por cima dela ao rolar. -->
+        <div class="stack-wrap">
+        <!-- Benefícios Section -->
+        <section id="vantagens-exclusivas" class="w-full stagger-item" style="animation-delay: 0.7s;">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
+
+            <div id="vantagens-grid" class="grid grid-cols-2 gap-3 md:gap-4">
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-lightning text-brand-gold text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-chats-circle text-brand-blue text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais conversões no WhatsApp</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-users text-brand-purple text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Instagram</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-star text-brand-gold text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais avaliações no Google</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-briefcase text-gray-300 text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Aparência profissional</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-recycle text-[#25D366] text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
+                </div>
+            </div>
+
+            <!-- Selo Aproxime. Conecte. Converta. -->
+            <div class="w-full flex justify-center mt-10 reveal-node">
+                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                    <span>Aproxime. Conecte. Converta.</span>
+                </div>
+            </div>
+        </section>
+
         <!-- Como Funciona na Prática -->
         <section id="pratica" class="w-full mb-16 relative">
             <div class="relative z-10">
@@ -1555,7 +1720,7 @@
                             <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
 
                             <!-- Ecrã Bloqueado -->
-                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 4s infinite ease-in-out;">
+                            <div id="phone-lock-overlay" class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 4s infinite ease-in-out;">
                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
                                     <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
                                     <i class="ph ph-device-mobile text-2xl text-slate-500"></i>
@@ -1631,45 +1796,8 @@
             </div>
 
         </section>
-
-        <!-- Benefícios Section -->
-        <section class="w-full mb-16 stagger-item" style="animation-delay: 0.7s;">
-            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
-
-            <div id="vantagens-grid" class="grid grid-cols-2 gap-3 md:gap-4">
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-lightning text-brand-gold text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-chats-circle text-brand-blue text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais conversões no WhatsApp</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-users text-brand-purple text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Instagram</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-star text-brand-gold text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais avaliações no Google</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-briefcase text-gray-300 text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Aparência profissional</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-recycle text-[#25D366] text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
-                </div>
-            </div>
-
-            <!-- Selo Aproxime. Conecte. Converta. (movido para abaixo de Vantagens Exclusivas) -->
-            <div class="w-full flex justify-center mt-10 reveal-node">
-                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
-                    <span>Aproxime. Conecte. Converta.</span>
-                </div>
-            </div>
-        </section>
+        </div>
+        <!-- /stack-wrap (Vantagens Exclusivas + Como Funciona na Prática) -->
 
         <!-- ===================== SEÇÃO DE PLANOS ===================== -->
         <section id="planos" class="plans-section px-4 mt-8 mb-20" style="width: 100vw; max-width: 100vw;">
@@ -1930,6 +2058,19 @@
                     <div id="wa-duvidas-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md mt-3"></div>
                 </div>
 
+                <!-- Cartão NFC para campanha política -->
+                <div class="w-full max-w-md mx-auto mt-4 reveal-node">
+                    <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
+                                <i class="ph ph-megaphone text-xl"></i>
+                            </div>
+                            <span class="font-bold text-white z-10 relative">Cartão NFC para campanha política</span>
+                        </div>
+                        <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+                    </a>
+                </div>
+
             </div>
         </section>
 
@@ -2152,7 +2293,7 @@
 
                         <div class="flex flex-col gap-4 w-full justify-center items-center">
                             <a href="#planos" class="btn-white-glow px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px]">
-                                Solicitar meu Cartão NFC
+                                Comprar Cartão NFC para sua empresa
                             </a>
                             <a href="https://wa.link/0zpwgo" id="btn-wa-agora" target="_blank" class="btn-outline px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px] group">
                                 Receber atendimento agora
@@ -2197,6 +2338,21 @@
         </footer>
 
     </main>
+
+    <!-- Widget de Chat Flutuante: Tecnologia NFC para campanhas políticas -->
+    <div id="chat-widget">
+        <div id="chat-widget-bubble" class="chat-widget-bubble">
+            <i class="ph-fill ph-megaphone"></i>
+            <span>Tecnologia NFC para campanhas políticas</span>
+            <button type="button" id="chat-widget-bubble-close" class="chat-widget-bubble-close" aria-label="Fechar">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+        <a href="https://wa.me/5531920067518?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20cart%C3%B5es%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" id="chat-widget-btn" class="chat-widget-btn" aria-label="Falar sobre Tecnologia NFC para campanhas políticas">
+            <img src="img/logo.webp" alt="Saturno NFC">
+            <span class="chat-widget-badge" aria-hidden="true"><i class="ph-fill ph-megaphone"></i></span>
+        </a>
+    </div>
 
     <!-- Scripts de Interatividade -->
     <script>
@@ -2356,6 +2512,29 @@
             update();
         }
         initStickyFade('linktree-buttons', 'card-stack-front');
+        initStickyFade('vantagens-exclusivas', 'pratica');
+
+        // --- Widget de Chat: mostra o balão "Tecnologia NFC para campanhas políticas"
+        // acima do botão assim que o usuário começa a rolar a página. ---
+        (function () {
+            const bubble = document.getElementById('chat-widget-bubble');
+            const closeBtn = document.getElementById('chat-widget-bubble-close');
+            if (!bubble) return;
+            let shown = false;
+            let dismissed = false;
+            function reveal() {
+                if (shown || dismissed) return;
+                shown = true;
+                bubble.classList.add('chat-widget-bubble-visible');
+            }
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) reveal();
+            }, { passive: true });
+            closeBtn?.addEventListener('click', () => {
+                dismissed = true;
+                bubble.classList.remove('chat-widget-bubble-visible');
+            });
+        })();
 
         // --- 4. COMO FUNCIONA NA PRÁTICA: revelar elementos ao rolar ---
         const revealObserver = new IntersectionObserver((entries) => {
@@ -2634,7 +2813,6 @@
             }
         }
 
-        initWaPanel({ btnId: 'btn-wa-personalizado', panelId: 'wa-personalizado-panel', caretId: 'wa-personalizado-caret', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
@@ -2680,14 +2858,25 @@
 
         let screenImageIndex = 0;
         const phoneUnlockedScreen = document.getElementById('phone-unlocked-screen');
+        const phoneLockOverlay = document.getElementById('phone-lock-overlay');
 
-        if (phoneUnlockedScreen) {
-            // Troca a imagem no próprio elemento da tela (opacidade 0 nesse instante do seu ciclo),
-            // evitando depender da sincronia com a animação do cartão (o que causava o conflito visual).
-            phoneUnlockedScreen.addEventListener('animationiteration', () => {
-                screenImageIndex = (screenImageIndex + 1) % screenImages.length;
-                phoneUnlockedScreen.style.backgroundImage = `url('${screenImages[screenImageIndex]}')`;
-            });
+        if (phoneUnlockedScreen && phoneLockOverlay) {
+            // Em vez de confiar no evento "animationiteration" (que pode disparar fora de fase
+            // e trocar a imagem com a tela ainda visível, causando o conflito/repique), monitora
+            // a opacidade real do ecrã bloqueado e só troca a imagem quando ele está totalmente
+            // cobrindo a tela — assim a troca nunca fica visível.
+            let wasCovered = false;
+            function watchLockOverlay() {
+                const opacity = parseFloat(getComputedStyle(phoneLockOverlay).opacity) || 0;
+                const isCovered = opacity > 0.95;
+                if (isCovered && !wasCovered) {
+                    screenImageIndex = (screenImageIndex + 1) % screenImages.length;
+                    phoneUnlockedScreen.style.backgroundImage = `url('${screenImages[screenImageIndex]}')`;
+                }
+                wasCovered = isCovered;
+                requestAnimationFrame(watchLockOverlay);
+            }
+            requestAnimationFrame(watchLockOverlay);
         }
 
         // --- 6. CARTÃO 3D INTERATIVO (Lógica Importada) ---
