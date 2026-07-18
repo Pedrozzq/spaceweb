@@ -2728,8 +2728,18 @@
             if (!back || !front) return;
             let ticking = false;
             function update() {
-                const vh = window.innerHeight || document.documentElement.clientHeight;
-                const progress = Math.max(0, Math.min(1, front.getBoundingClientRect().top / vh));
+                // Só começa a apagar quando a seção realmente ficou "presa" no topo
+                // (position: sticky ativo). Antes disso, ela tem que ficar 100% visível —
+                // calcular a partir da altura da tela inteira fazia os botões nascerem
+                // já semitransparentes em telas onde o conteúdo acima não enche 1 vh.
+                const isStuck = back.getBoundingClientRect().top <= 0;
+                if (!isStuck) {
+                    back.style.opacity = 1;
+                    ticking = false;
+                    return;
+                }
+                const backHeight = back.offsetHeight || 1;
+                const progress = Math.max(0, Math.min(1, front.getBoundingClientRect().top / backHeight));
                 back.style.opacity = progress;
                 ticking = false;
             }
