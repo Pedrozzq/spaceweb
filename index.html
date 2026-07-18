@@ -415,22 +415,22 @@
             z-index: 0;
         }
         .orbit-ring-1 {
-            width: 132%;
-            height: 230%;
+            width: 112%;
+            height: 155%;
             border: 1.5px solid rgba(255, 215, 0, 0.55);
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.22);
             animation: orbitSpin1 6s linear infinite;
         }
         .orbit-ring-2 {
-            width: 158%;
-            height: 270%;
+            width: 122%;
+            height: 175%;
             border: 1.5px solid rgba(0, 210, 255, 0.4);
-            box-shadow: 0 0 12px rgba(0, 210, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.18);
             animation: orbitSpin2 9s linear infinite reverse;
         }
         .orbit-ring-3 {
-            width: 184%;
-            height: 310%;
+            width: 132%;
+            height: 195%;
             border: 1px solid rgba(138, 43, 226, 0.35);
             animation: orbitSpin3 13s linear infinite;
         }
@@ -2742,11 +2742,11 @@
         initStickyFade('vantagens-exclusivas', 'pratica');
 
         // --- Widget de Chat: mostra o balão "Tecnologia NFC para campanhas políticas"
-        // acima do botão quando 50% da seção "Conquista Instantânea" estiver visível. ---
+        // acima do botão assim que o usuário rolar para além (abaixo) da seção "Planos". ---
         (function () {
             const bubble = document.getElementById('chat-widget-bubble');
             const closeBtn = document.getElementById('chat-widget-bubble-close');
-            const trigger = document.getElementById('card-conquista-instantanea');
+            const trigger = document.getElementById('planos');
             if (!bubble || !trigger) return;
             let dismissed = false;
             function reveal() {
@@ -2759,10 +2759,11 @@
             }
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) reveal();
+                    const scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+                    if (scrolledPast) reveal();
                     else hide();
                 });
-            }, { threshold: 0.5 });
+            }, { threshold: 0 });
             observer.observe(trigger);
             closeBtn?.addEventListener('click', () => {
                 dismissed = true;
@@ -2807,12 +2808,9 @@
             function update() {
                 const centerY = window.innerHeight / 2;
                 targets.forEach(el => {
-                    // Latch: uma vez que o topo do item atinja o meio da tela, fica marcado.
-                    // Evita perder o "gatilho" quando o item fica preso (position: sticky)
-                    // antes de cruzar totalmente o centro (ex.: dentro de #como-funciona).
-                    if (!el.classList.contains('active') && el.getBoundingClientRect().top <= centerY) {
-                        el.classList.add('active');
-                    }
+                    // Bidirecional: marca ao descer e cruzar o meio da tela, e desmarca
+                    // (volta ao normal) ao subir de volta para antes do meio da tela.
+                    el.classList.toggle('active', el.getBoundingClientRect().top <= centerY);
                 });
                 ticking = false;
             }
@@ -3082,10 +3080,7 @@
         const screenImages = [
             "img/mockup-tela-0.webp",
             "img/mockup-tela-1.webp",
-            "img/mockup-tela-2.webp",
-            "img/mockup-tela-3.webp",
-            "img/mockup-tela-4.webp",
-            "img/mockup-tela-5.webp"
+            "img/mockup-tela-2.webp"
         ];
 
         // Pré-carrega as imagens para a troca ocorrer sem piscar
