@@ -526,6 +526,7 @@
             top: 0;
             z-index: 1;
             margin-bottom: 0;
+            padding-bottom: 2rem;
         }
         /* Enquanto um painel expansível (ex.: "Receber atendimento personalizado") está
            aberto, desativa o sticky para o usuário conseguir rolar e ver todo o conteúdo,
@@ -571,6 +572,20 @@
         }
         #linktree-buttons.buttons-ready .cascade-btn {
             transform: translateY(0);
+        }
+
+        /* Botões da seção 1: fundo e borda mais sólidos/brilhantes (estavam
+           parecendo apagados/transparentes por causa da opacidade baixa do
+           glassmorphism padrão do .link-btn). */
+        #linktree-buttons .link-btn {
+            background: rgba(28, 26, 36, 0.82);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+        #linktree-buttons .link-btn::after {
+            background: rgba(20, 19, 27, 0.85);
+        }
+        #linktree-buttons .link-btn::before {
+            opacity: 0.9;
         }
 
         /* ===================== WIDGET DE CHAT FLUTUANTE ===================== */
@@ -1543,8 +1558,8 @@
 
             <a href="#planos" id="btn-escolher-plano" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.1s;">
                 <div class="flex items-center gap-4">
-                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20 z-10 relative">
-                        <i class="ph ph-shopping-cart-simple text-xl"></i>
+                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/25 flex items-center justify-center transition-colors group-hover:bg-brand-gold/35 z-10 relative">
+                        <i class="ph ph-shopping-cart-simple text-xl text-brand-gold"></i>
                     </div>
                     <span class="font-bold text-white text-base md:text-lg z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para sua empresa</span>
                 </div>
@@ -1573,12 +1588,12 @@
 
             <a href="campanha.html" id="btn-campanha-politica-top" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/25 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/35 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
                     </div>
                     <span class="font-bold text-white z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para campanha política</span>
                 </div>
-                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+                <i class="ph ph-caret-right text-gray-300 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
         </section>
@@ -2376,7 +2391,7 @@
             </button>
         </div>
         <a href="https://wa.me/5531920067518?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20cart%C3%B5es%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" id="chat-widget-btn" class="chat-widget-btn" aria-label="Falar sobre Tecnologia NFC para campanhas políticas">
-            <img src="img/logo.webp" alt="Saturno NFC">
+            <img src="img/urna-eletronica.png" alt="Campanha política">
             <span class="chat-widget-badge" aria-hidden="true"><i class="ph-fill ph-credit-card"></i></span>
         </a>
     </div>
