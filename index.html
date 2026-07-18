@@ -62,6 +62,9 @@
                         'float-delayed': 'float 6s ease-in-out 3s infinite',
                         'spin-slow': 'spin 20s linear infinite',
                         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'sim-phone': 'simPhoneMove 6s infinite ease-in-out',
+                        'sim-screen': 'simScreenFade 6s infinite ease-in-out',
+                        'sim-ripple': 'simNfcRipple 6s infinite ease-out',
                     },
                     keyframes: {
                         float: {
@@ -71,6 +74,23 @@
                         pulseGlow: {
                             '0%, 100%': { opacity: '0.8', filter: 'brightness(1)' },
                             '50%': { opacity: '1', filter: 'brightness(1.3)' },
+                        },
+                        simPhoneMove: {
+                            '0%, 10%': { transform: 'translateY(50px)' },
+                            '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' },
+                            '25%, 95%': { transform: 'translateY(50px)' },
+                            '100%': { transform: 'translateY(50px)' },
+                        },
+                        simScreenFade: {
+                            '0%, 22%': { opacity: '0' },
+                            '25%, 90%': { opacity: '1' },
+                            '95%, 100%': { opacity: '0' },
+                        },
+                        simNfcRipple: {
+                            '0%, 14%': { transform: 'scale(0.5)', opacity: '0' },
+                            '15%': { transform: 'scale(0.5)', opacity: '1' },
+                            '25%': { transform: 'scale(2.5)', opacity: '0' },
+                            '100%': { transform: 'scale(2.5)', opacity: '0' },
                         }
                     }
                 }
@@ -383,6 +403,52 @@
             box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3) inset;
         }
         div.saturno-reveal.active { padding: 0.35rem 0.5rem; margin: -0.35rem -0.5rem; }
+
+        /* ===================== BOTÃO "ASSINAR AGORA" — ANÉIS ORBITANDO ===================== */
+        .assinar-orbit-wrap { isolation: isolate; }
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orbit-ring-1 {
+            width: 132%;
+            height: 230%;
+            border: 1.5px solid rgba(255, 215, 0, 0.55);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);
+            animation: orbitSpin1 6s linear infinite;
+        }
+        .orbit-ring-2 {
+            width: 158%;
+            height: 270%;
+            border: 1.5px solid rgba(0, 210, 255, 0.4);
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.2);
+            animation: orbitSpin2 9s linear infinite reverse;
+        }
+        .orbit-ring-3 {
+            width: 184%;
+            height: 310%;
+            border: 1px solid rgba(138, 43, 226, 0.35);
+            animation: orbitSpin3 13s linear infinite;
+        }
+        @keyframes orbitSpin1 {
+            from { transform: translate(-50%, -50%) rotate(8deg); }
+            to   { transform: translate(-50%, -50%) rotate(368deg); }
+        }
+        @keyframes orbitSpin2 {
+            from { transform: translate(-50%, -50%) rotate(-14deg); }
+            to   { transform: translate(-50%, -50%) rotate(346deg); }
+        }
+        @keyframes orbitSpin3 {
+            from { transform: translate(-50%, -50%) rotate(22deg); }
+            to   { transform: translate(-50%, -50%) rotate(382deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .orbit-ring-1, .orbit-ring-2, .orbit-ring-3 { animation: none; }
+        }
 
         /* Elementos de Animação de Entrada */
         .stagger-item {
@@ -896,6 +962,74 @@
         @media (min-width: 768px) {
             .btn-plano-select { min-height: 52px; }
         }
+
+        /* ===================== BOTÕES "ESCOLHER PLANO" — DESTAQUE PREMIUM ===================== */
+        .btn-plano-select {
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(10px) scale(0.97);
+            transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
+        }
+        .wa-panel-open .btn-plano-select {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .wa-panel-open .btn-plano-select:nth-of-type(1) { transition-delay: 0.05s; }
+        .wa-panel-open .btn-plano-select:nth-of-type(2) { transition-delay: 0.15s; }
+        .wa-panel-open .btn-plano-select:nth-of-type(3) { transition-delay: 0.25s; }
+
+        /* Brilho de varredura contínua, como um reflexo de vidro premium */
+        .btn-plano-select::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -60%;
+            width: 35%; height: 100%;
+            background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+            transform: skewX(-20deg);
+            animation: planoBtnSweep 3.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes planoBtnSweep {
+            0%   { left: -60%; }
+            45%, 100% { left: 130%; }
+        }
+
+        /* Respiração/pulso do brilho em repouso, uma cor por plano */
+        .btn-saturno-white.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowWhite 2.6s ease-in-out infinite; }
+        .btn-saturno-silver.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowSilver 2.6s ease-in-out infinite; }
+        .btn-saturno-gold.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowGold 2.6s ease-in-out infinite; }
+
+        @keyframes planoGlowWhite {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+            50%      { box-shadow: 0 0 26px rgba(255, 255, 255, 0.6); }
+        }
+        @keyframes planoGlowSilver {
+            0%, 100% { box-shadow: 0 0 15px rgba(200, 205, 214, 0.3); }
+            50%      { box-shadow: 0 0 26px rgba(220, 225, 232, 0.65); }
+        }
+        @keyframes planoGlowGold {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 160, 23, 0.3); }
+            50%      { box-shadow: 0 0 26px rgba(245, 214, 122, 0.7); }
+        }
+
+        .btn-plano-select:hover {
+            transform: translateY(-4px) scale(1.035);
+            filter: brightness(1.1);
+        }
+        .btn-plano-select:active {
+            transform: translateY(-1px) scale(0.985);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .btn-plano-select::after,
+            .btn-saturno-white.btn-plano-select,
+            .btn-saturno-silver.btn-plano-select,
+            .btn-saturno-gold.btn-plano-select {
+                animation: none;
+            }
+        }
+
         .btn-purple { background: linear-gradient(90deg, #b062ff, #9b40f5); color: #ffffff; }
         .btn-purple:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); filter: brightness(1.1); }
         .btn-orange { background: linear-gradient(90deg, #ff7a1a, #f96300); color: #ffffff; }
@@ -1601,6 +1735,11 @@
         <!-- STICKY STACK: este bloco (dica "Deslize" + cartão 3D) sobe por cima da
              seção 1 (botões), que fica presa (position: sticky) durante a rolagem. -->
         <div id="card-stack-front">
+            <!-- Descrição de impacto, logo acima do indicador "Conheça a tecnologia" -->
+            <p class="text-center text-gray-400 text-sm md:text-base leading-relaxed max-w-xl mx-auto px-4 pt-8 stagger-item" style="animation-delay: 0.3s;">
+                Mais impacto no primeiro contato, mais chamadas no WhatsApp, mais avaliações no Google e uma presença digital forte e de fácil acesso.
+            </p>
+
             <!-- Indicador "Deslize" logo após os botões -->
             <a href="#pratica" class="flex flex-col items-center pt-6 mb-4 scroll-hint hover:opacity-80 transition-opacity">
                 <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Conheça a tecnologia</span>
@@ -1630,8 +1769,8 @@
                                     <i data-lucide="trending-up" id="card-chip-icon" class="w-6 h-6 sm:w-8 sm:h-8 text-gray-500"></i>
                                 </div>
                                 
-                                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="niche-rotator">Restaurante</h3>
-                                <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6">Sua Empresa</p>
+                                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="card-company-title">Sua Empresa</h3>
+                                <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6" id="niche-rotator">Restaurante</p>
                                 
                                 <div class="w-8 h-6 sm:w-10 sm:h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-3 sm:mb-4 opacity-50 relative overflow-hidden">
                                     <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
@@ -2078,9 +2217,72 @@
                         <div class="w-full md:w-auto flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-10 shrink-0">
                             <div class="text-4xl font-black text-white tracking-tight">R$ 69,90</div>
                             <div class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">por mês</div>
-                            <a href="https://buy.stripe.com/00w6oB8FAgMC7RLcY42Ry0a" target="_blank" rel="noopener noreferrer" class="btn btn-white w-full md:w-auto px-10 py-4 rounded-full text-center whitespace-nowrap">
-                                Assinar agora
-                            </a>
+                            <div class="assinar-orbit-wrap relative w-full md:w-auto flex justify-center">
+                                <span class="orbit-ring orbit-ring-1" aria-hidden="true"></span>
+                                <span class="orbit-ring orbit-ring-2" aria-hidden="true"></span>
+                                <span class="orbit-ring orbit-ring-3" aria-hidden="true"></span>
+                                <a href="https://buy.stripe.com/00w6oB8FAgMC7RLcY42Ry0a" target="_blank" rel="noopener noreferrer" class="btn btn-white assinar-orbit-btn w-full md:w-auto px-10 py-4 rounded-full text-center whitespace-nowrap relative z-[1]">
+                                    Assinar agora
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AÇÃO E REAÇÃO — AVALIAÇÃO GOOGLE (importado da página NFC) -->
+                <div class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
+                    <div class="mb-6 text-center">
+                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Tag Avaliação Google</span>
+                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">5 Estrelas Sem Pesquisa</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Aumente em 80% suas avaliações dentro do Google.</p>
+                    </div>
+
+                    <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
+                        <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
+
+                        <div class="absolute top-0 flex flex-col items-center z-10">
+                            <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple"></div>
+                            <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
+                                <i class="ph-fill ph-star text-2xl text-amber-400 drop-shadow-lg"></i>
+                            </div>
+                        </div>
+
+                        <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone">
+                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
+
+                            <div class="absolute inset-0 bg-white animate-sim-screen flex flex-col">
+                                <div class="h-12 border-b border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
+                                    <span class="font-black text-[12px] tracking-tighter">
+                                        <span class="text-blue-500">G</span><span class="text-red-500">o</span><span class="text-yellow-500">o</span><span class="text-blue-500">g</span><span class="text-green-500">l</span><span class="text-red-500">e</span> Maps
+                                    </span>
+                                </div>
+                                <div class="p-4 flex-1 flex flex-col items-center text-center">
+                                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-3 overflow-hidden">
+                                        <i class="ph ph-buildings text-lg text-gray-500"></i>
+                                    </div>
+                                    <h4 class="text-black font-bold text-[12px] mb-1">Sua Empresa</h4>
+                                    <p class="text-[9px] text-gray-500 mb-5 leading-tight">Avalie a sua experiência neste local.</p>
+
+                                    <div class="flex gap-1 mb-6">
+                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                    </div>
+
+                                    <div class="w-full bg-gray-100 rounded-lg h-16 border border-gray-200 p-2 text-left mb-4">
+                                        <span class="text-[8px] text-gray-400">Descreva a sua experiência...</span>
+                                    </div>
+
+                                    <button type="button" class="w-full py-2.5 bg-blue-600 text-white rounded-full font-bold text-[10px] shadow-md mt-auto">Postar Avaliação</button>
+                                </div>
+                            </div>
+
+                            <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
+                                <i class="ph ph-lock text-lg text-slate-700 mb-2"></i>
+                                <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2098,19 +2300,6 @@
                         <i class="ph ph-arrow-right text-[#25D366] text-xl ml-auto group-hover:translate-x-1 transition-transform"></i>
                     </a>
                     <div id="wa-duvidas-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md mt-3"></div>
-                </div>
-
-                <!-- Tecnologia NFC para campanha política -->
-                <div class="w-full max-w-md mx-auto mt-4 reveal-node">
-                    <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
-                                <i class="ph ph-megaphone text-xl"></i>
-                            </div>
-                            <span class="font-bold text-white z-10 relative">Tecnologia NFC para campanha política</span>
-                        </div>
-                        <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
-                    </a>
                 </div>
 
             </div>
@@ -2334,9 +2523,6 @@
                         </div>
 
                         <div class="flex flex-col gap-4 w-full justify-center items-center">
-                            <a href="#planos" class="btn-white-glow px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px]">
-                                Comprar Tecnologia NFC para sua empresa
-                            </a>
                             <a href="https://wa.link/0zpwgo" id="btn-wa-agora" target="_blank" class="btn-outline px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px] group">
                                 Receber atendimento agora
                                 <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
@@ -2932,18 +3118,19 @@
         const niches = [
             { name: "Restaurante", icon: "utensils", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
             { name: "Clínica", icon: "stethoscope", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-            { name: "Sua Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
+            { name: "Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
             { name: "Barbearia", icon: "scissors", color: "text-amber-700", bg: "bg-amber-700/10", border: "border-amber-700/30" },
             { name: "Advocacia", icon: "scale", color: "text-slate-600", bg: "bg-slate-600/10", border: "border-slate-600/30" },
             { name: "Imóveis", icon: "home", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
-            { name: "Sua Empresa", icon: "briefcase", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
+            { name: "Petshop", icon: "paw-print", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
         ];
-        
+
         let nicheIndex = 0;
         let isBlackCard = false;
-        
+
         const cardInner = document.getElementById('card-inner-flip');
         const cardBg = document.getElementById('hero-3d-card-bg');
+        const cardTitleEl = document.getElementById('card-company-title');
         const nicheEl = document.getElementById('niche-rotator');
         const iconContainer = document.getElementById('card-dynamic-icon');
         const wifiIcon = document.getElementById('card-wifi-icon');
@@ -2952,7 +3139,7 @@
         const cardLine1 = document.getElementById('card-line-1');
         const cardLine2 = document.getElementById('card-line-2');
 
-        if (cardInner && nicheEl && iconContainer) {
+        if (cardInner && cardTitleEl && nicheEl && iconContainer) {
             setInterval(() => {
                 // Fase 1: Inicia o giro
                 cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
@@ -2965,7 +3152,7 @@
 
                     if(isBlackCard) {
                         cardBg.className = "absolute inset-0 bg-gradient-to-br from-zinc-900 to-black rounded-[2rem] border border-zinc-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden backface-hidden";
-                        nicheEl.classList.replace('text-gray-900', 'text-white');
+                        cardTitleEl.classList.replace('text-gray-900', 'text-white');
                         wifiIcon.classList.replace('text-gray-400', 'text-zinc-500');
                         cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-zinc-800/80 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-zinc-600 flex items-center justify-center overflow-hidden shadow-sm";
                         cardChipIcon.classList.replace('text-gray-500', 'text-zinc-400');
@@ -2973,7 +3160,7 @@
                         cardLine2.classList.replace('bg-gray-300', 'bg-zinc-700');
                     } else {
                         cardBg.className = "absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden";
-                        nicheEl.classList.replace('text-white', 'text-gray-900');
+                        cardTitleEl.classList.replace('text-white', 'text-gray-900');
                         wifiIcon.classList.replace('text-zinc-500', 'text-gray-400');
                         cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm";
                         cardChipIcon.classList.replace('text-zinc-400', 'text-gray-500');
@@ -2984,6 +3171,7 @@
                     nicheIndex = (nicheIndex + 1) % niches.length;
                     const comp = niches[nicheIndex];
                     nicheEl.innerText = comp.name;
+                    nicheEl.className = `text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6 ${comp.color}`;
                     iconContainer.innerHTML = `<i data-lucide="${comp.icon}" class="w-6 h-6 sm:w-7 sm:h-7 ${comp.color}"></i>`;
                     iconContainer.className = `w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl shadow-lg border ${comp.bg} ${comp.border}`;
                     if (typeof lucide !== 'undefined') lucide.createIcons();
