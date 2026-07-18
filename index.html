@@ -565,12 +565,11 @@
 
         /* Botões da seção 1: cascata leve, disparada via JS quando o preloader some (não no page-load) */
         #linktree-buttons .cascade-btn {
-            opacity: 0;
+            opacity: 1;
             transform: translateY(16px);
-            transition: opacity 0.55s ease, transform 0.55s ease;
+            transition: transform 0.55s ease;
         }
         #linktree-buttons.buttons-ready .cascade-btn {
-            opacity: 1;
             transform: translateY(0);
         }
 
@@ -1576,7 +1575,7 @@
                     <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
                     </div>
-                    <span class="font-bold text-white z-10 relative">Tecnologia NFC para campanha política</span>
+                    <span class="font-bold text-white z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para campanha política</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
