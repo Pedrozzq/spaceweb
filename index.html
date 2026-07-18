@@ -524,6 +524,22 @@
             50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
         }
 
+        /* ===================== STACKING SECTIONS (STICKY STACK) =====================
+           "Como funciona o Cartão NFC?" fica presa no topo (position: sticky) enquanto
+           "Como Funciona na Prática" continua no fluxo normal e desliza por cima dela. */
+        #como-funciona {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        #pratica {
+            z-index: 2;
+            background: #050508;
+            border-radius: 1.75rem 1.75rem 0 0;
+            padding-top: 2.5rem;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
+        }
 
         /* Botões (seção 1) ficam presos no topo; o bloco "Deslize" + cartão 3D
            (seção 2) desliza por cima deles ao rolar. Efeito isolado a esta seção. */
@@ -1392,7 +1408,7 @@
 
             <!-- Indicador "Entenda como funciona" -->
             <a href="#como-funciona" class="flex flex-col items-center mb-8 scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.3s;">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Nossos serviços</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Entenda como funciona</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
         </header>
@@ -1453,6 +1469,26 @@
 
             <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
 
+            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.4s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors z-10 relative">
+                        <i class="ph ph-info text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Ver como funciona</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
+
+            <a href="#planos" class="link-btn btn-highlight-yellow magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.5s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
+                        <i class="ph ph-tag text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Planos e Valores</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
+
         </section>
 
         <!-- STICKY STACK: este bloco (dica "Deslize" + cartão 3D) sobe por cima da
@@ -1460,13 +1496,13 @@
         <div id="card-stack-front">
             <!-- Indicador "Deslize" logo após os botões -->
             <a href="#pratica" class="flex flex-col items-center pt-6 mb-4 scroll-hint hover:opacity-80 transition-opacity">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Conheça a tecnologia</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
 
             <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
             <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
-            <div class="relative w-56 h-[360px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
+            <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
                 
                 <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
                     
@@ -1510,8 +1546,11 @@
         </div>
         <!-- /stack-wrap -->
 
-        <!-- Como Funciona Section (sem título, subida para debaixo do cartão) -->
+        <div class="stack-wrap">
+        <!-- Como Funciona Section -->
         <section id="como-funciona" class="w-full mb-16">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona o Cartão NFC?</h2>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Passo 1 -->
                 <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
@@ -1636,7 +1675,15 @@
                 </div>
             </div>
 
+            <!-- Selo Aproxime. Conecte. Converta. movido para o final da seção -->
+            <div class="w-full flex justify-center mt-14 mb-4 reveal-node">
+                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                    <span>Aproxime. Conecte. Converta.</span>
+                </div>
+            </div>
         </section>
+        </div>
+        <!-- /stack-wrap -->
 
         <!-- Benefícios Section -->
         <section class="w-full mb-16 stagger-item" style="animation-delay: 0.7s;">
@@ -1666,13 +1713,6 @@
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-recycle text-[#25D366] text-xl"></i>
                     <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
-                </div>
-            </div>
-
-            <!-- Selo Aproxime. Conecte. Converta. (movido para abaixo de Vantagens Exclusivas) -->
-            <div class="w-full flex justify-center mt-10 reveal-node">
-                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
-                    <span>Aproxime. Conecte. Converta.</span>
                 </div>
             </div>
         </section>
@@ -2365,6 +2405,7 @@
             }, { passive: true });
             update();
         }
+        initStickyFade('como-funciona', 'pratica');
         initStickyFade('linktree-buttons', 'card-stack-front');
 
         // --- 4. COMO FUNCIONA NA PRÁTICA: revelar elementos ao rolar ---
@@ -2373,21 +2414,24 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- Como Funciona o Cartão NFC: cada box fica colorido ao atingir uma linha da tela.
-        // "Aproxime" e "Acesse" seguem a mesma lógica de "Converta" (3º box), só que este
-        // usa 40% da altura da tela como gatilho, em vez de 50%. ---
+        // --- Como Funciona o Cartão NFC: cada box fica verde ao atingir 50% da tela.
+        // Como a seção é sticky (fica presa), os cards param de se mover uma vez presos
+        // e podem nunca cruzar o centro antes de "Como Funciona na Prática" cobri-los —
+        // por isso há uma rede de segurança: se a cobertura já está avançada, ativa
+        // o card mesmo assim, garantindo que o último ("Converta") também acenda. ---
         (function () {
             const cards = document.querySelectorAll('#como-funciona .glass-card');
-            if (!cards.length) return;
+            const front = document.getElementById('pratica');
+            if (!cards.length || !front) return;
             let ticking = false;
             function update() {
                 const centerY = window.innerHeight / 2;
-                const convertaY = window.innerHeight * 0.4;
-                cards.forEach((card, i) => {
+                const coverTop = front.getBoundingClientRect().top;
+                const coveringSoon = coverTop <= window.innerHeight * 0.6;
+                cards.forEach(card => {
                     if (card.classList.contains('active')) return;
-                    const triggerY = card.classList.contains('card-converta-pulse') ? convertaY : centerY;
-                    const reachedTrigger = card.getBoundingClientRect().top <= triggerY;
-                    if (reachedTrigger) card.classList.add('active');
+                    const reachedCenter = card.getBoundingClientRect().top <= centerY;
+                    if (reachedCenter || coveringSoon) card.classList.add('active');
                 });
                 ticking = false;
             }
@@ -2574,6 +2618,8 @@
                             '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero meu cartão para campanha política">Quero meu cartão para campanha política</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
