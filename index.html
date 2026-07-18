@@ -614,9 +614,9 @@
             box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
         }
         .chat-widget-btn img {
-            width: 2.5rem;
-            height: 2.5rem;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .chat-widget-btn::before {
             content: '';
@@ -2390,8 +2390,8 @@
                 <i class="ph ph-x"></i>
             </button>
         </div>
-        <a href="https://wa.me/5531920067518?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20cart%C3%B5es%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" id="chat-widget-btn" class="chat-widget-btn" aria-label="Falar sobre Tecnologia NFC para campanhas políticas">
-            <img src="img/urna-eletronica.png" alt="Campanha política">
+        <a href="campanha.html" id="chat-widget-btn" class="chat-widget-btn" aria-label="Tecnologia NFC para campanhas políticas">
+            <img src="img/logo.webp" alt="Saturno NFC" class="chat-widget-logo">
             <span class="chat-widget-badge" aria-hidden="true"><i class="ph-fill ph-credit-card"></i></span>
         </a>
     </div>
@@ -3000,7 +3000,7 @@
                     cardInner.style.filter = 'brightness(1)';
                     
                 }, 400);
-            }, 4000);
+            }, 3000);
         }
 
         // --- MARQUEE DO PORTFÓLIO (mobile): pausa a animação ao tocar/segurar um card ---
