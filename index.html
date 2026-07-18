@@ -83,14 +83,12 @@
         html {
             overflow-x: hidden;
             max-width: 100%;
-            touch-action: pan-y;
         }
         body {
             background-color: #050508;
             color: #ffffff;
             max-width: 100%;
             scroll-behavior: smooth;
-            touch-action: pan-y;
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -365,12 +363,20 @@
         }
 
         /* Passo 3 "Converta": pulso contínuo laranja para chamar atenção */
-        /* Antes de ativar, o card "Converta" fica igual aos outros (sem cor própria).
-           Só quando .active é adicionado (ao rolar até 50%) é que fica laranja. */
+        .card-converta-pulse {
+            background: rgba(255, 145, 0, 0.16);
+            border-color: rgba(255, 145, 0, 0.5);
+            animation: convertaPulseOrange 2.2s ease-in-out infinite;
+        }
+        /* Mais específico que a regra verde de .active: mantém o card 3 sempre laranja */
         #como-funciona .glass-card.card-converta-pulse.active {
-            background: rgba(255, 145, 0, 0.18);
-            border-color: rgba(255, 145, 0, 0.55);
-            box-shadow: 0 10px 30px -10px rgba(255, 145, 0, 0.35);
+            background: rgba(255, 145, 0, 0.24);
+            border-color: rgba(255, 145, 0, 0.7);
+            box-shadow: 0 10px 30px -10px rgba(255, 145, 0, 0.45);
+        }
+        @keyframes convertaPulseOrange {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 145, 0, 0.35); }
+            50%      { box-shadow: 0 0 25px 4px rgba(255, 145, 0, 0.45); }
         }
 
         /* Gestão Saturno: mesmo padrão IO + toggle .active nos textos do bloco */
@@ -518,6 +524,22 @@
             50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
         }
 
+        /* ===================== STACKING SECTIONS (STICKY STACK) =====================
+           "Como funciona o Cartão NFC?" fica presa no topo (position: sticky) enquanto
+           "Como Funciona na Prática" continua no fluxo normal e desliza por cima dela. */
+        #como-funciona {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        #pratica {
+            z-index: 2;
+            background: #050508;
+            border-radius: 1.75rem 1.75rem 0 0;
+            padding-top: 2.5rem;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
+        }
 
         /* Botões (seção 1) ficam presos no topo; o bloco "Deslize" + cartão 3D
            (seção 2) desliza por cima deles ao rolar. Efeito isolado a esta seção. */
@@ -608,8 +630,8 @@
         .animate-scan { animation: scan-line 3s infinite linear; }
 
         /* Animações do mockup ficam pausadas até o usuário chegar na seção "Como Funciona na Prática" */
-        #pratica .pratica-anim { animation-play-state: paused !important; }
-        #pratica.pratica-in-view .pratica-anim { animation-play-state: running !important; }
+        #pratica .pratica-anim { animation-play-state: paused; }
+        #pratica.pratica-in-view .pratica-anim { animation-play-state: running; }
 
         /* Cartão NFC aproximando do telefone */
         @keyframes cardApproach {
@@ -1386,7 +1408,7 @@
 
             <!-- Indicador "Entenda como funciona" -->
             <a href="#como-funciona" class="flex flex-col items-center mb-8 scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.3s;">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Nossos serviços</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Entenda como funciona</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
         </header>
@@ -1430,7 +1452,7 @@
                     <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
                     </div>
-                    <span class="font-semibold text-white z-10 relative">Cartão NFC para campanha política</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Cartão NFC para campanha política</span>
                 </div>
                 <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
@@ -1440,12 +1462,32 @@
                     <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors z-10 relative">
                         <i class="ph ph-whatsapp-logo text-xl"></i>
                     </div>
-                    <span class="font-semibold text-white z-10 relative">Receber atendimento personalizado</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Receber atendimento personalizado</span>
                 </div>
                 <i id="wa-personalizado-caret" class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
             <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
+
+            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.4s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors z-10 relative">
+                        <i class="ph ph-info text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Ver como funciona</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
+
+            <a href="#planos" class="link-btn btn-highlight-yellow magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.5s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
+                        <i class="ph ph-tag text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Planos e Valores</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
 
         </section>
 
@@ -1454,13 +1496,13 @@
         <div id="card-stack-front">
             <!-- Indicador "Deslize" logo após os botões -->
             <a href="#pratica" class="flex flex-col items-center pt-6 mb-4 scroll-hint hover:opacity-80 transition-opacity">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Conheça a tecnologia</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
 
             <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
             <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
-            <div class="relative w-56 h-[360px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
+            <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
                 
                 <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
                     
@@ -1504,8 +1546,11 @@
         </div>
         <!-- /stack-wrap -->
 
-        <!-- Como Funciona Section (sem título, subida para debaixo do cartão) -->
+        <div class="stack-wrap">
+        <!-- Como Funciona Section -->
         <section id="como-funciona" class="w-full mb-16">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona o Cartão NFC?</h2>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Passo 1 -->
                 <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
@@ -1555,7 +1600,7 @@
                             <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
 
                             <!-- Ecrã Bloqueado -->
-                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 2.8s infinite ease-in-out;">
+                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
                                     <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
                                     <i class="ph ph-device-mobile text-2xl text-slate-500"></i>
@@ -1564,11 +1609,11 @@
                             </div>
 
                             <!-- Ecrã Desbloqueado — Imagem completa (mostra todo o conteúdo) -->
-                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 2.8s infinite ease-out; background-image: url('img/mockup-tela-0.webp');"></div>
+                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('img/mockup-tela-1.webp');"></div>
                         </div>
 
                         <!-- Animação do Cartão NFC -->
-                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 2.8s infinite ease-out;">
+                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
                             <div class="w-full flex justify-end">
                                 <div class="w-3 h-3 rounded-full bg-slate-200"></div>
                             </div>
@@ -1630,7 +1675,15 @@
                 </div>
             </div>
 
+            <!-- Selo Aproxime. Conecte. Converta. movido para o final da seção -->
+            <div class="w-full flex justify-center mt-14 mb-4 reveal-node">
+                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                    <span>Aproxime. Conecte. Converta.</span>
+                </div>
+            </div>
         </section>
+        </div>
+        <!-- /stack-wrap -->
 
         <!-- Benefícios Section -->
         <section class="w-full mb-16 stagger-item" style="animation-delay: 0.7s;">
@@ -1660,13 +1713,6 @@
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-recycle text-[#25D366] text-xl"></i>
                     <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
-                </div>
-            </div>
-
-            <!-- Selo Aproxime. Conecte. Converta. (movido para abaixo de Vantagens Exclusivas) -->
-            <div class="w-full flex justify-center mt-10 reveal-node">
-                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
-                    <span>Aproxime. Conecte. Converta.</span>
                 </div>
             </div>
         </section>
@@ -1793,7 +1839,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-white text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Essencial</h3>
-                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ter presença digital profissional</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença digital profissional para você conquistar seus primeiros clientes.</p>
                         </div>
                         <div class="plan-img-wrap glow-white mb-6">
                             <img src="img/plano-essencial.webp" alt="Cartão NFC - Plano Essencial" class="w-32 md:w-40 h-auto">
@@ -1813,6 +1859,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Você recebe tudo configurado e funcionando</span></li>
                         </ul>
                         <a href="https://wa.link/304efy" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-white text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Ter presença digital profissional
+                        </p>
                     </div>
 
                     <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
@@ -1822,7 +1871,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-silver text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Profissional</h3>
-                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Captar clientes e facilitar atendimentos</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença completa com identidade visual e funções avançadas.</p>
                         </div>
                         <div class="plan-img-wrap glow-silver mb-6">
                             <img src="img/plano-profissional.webp" alt="Cartão NFC - Plano Profissional" class="w-32 md:w-40 h-auto">
@@ -1841,6 +1890,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 3 a 4 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-silver text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Captar clientes e facilitar atendimentos
+                        </p>
                     </div>
 
                     <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
@@ -1850,7 +1902,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-gold text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Fora de Órbita</h3>
-                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Digitalizar toda a operação da empresa</p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ideal para: eventos, restaurantes, hoteis, cafeterias, pousadas</p>
                         </div>
                         <div class="plan-img-wrap glow-gold mb-6">
                             <img src="img/plano-fora-de-orbita.webp" alt="Cartão NFC - Plano Fora de Órbita" class="w-32 md:w-40 h-auto">
@@ -1872,6 +1924,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 4 a 5 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-gold text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Digitalizar toda a operação da empresa
+                        </p>
                     </div>
 
                 </div>
@@ -2321,18 +2376,13 @@
             initParticles();
         });
 
-        // --- Mockup "Como Funciona na Prática": começa a animar quando a seção aparece pela
-        // primeira vez e continua rodando depois disso (não pausa mais ao rolar para fora),
-        // para o usuário conseguir ver as 6 imagens do ciclo completo. ---
+        // --- Mockup "Como Funciona na Prática": só começa a animar quando a seção aparece ---
         (function () {
             const pratica = document.getElementById('pratica');
             if (!pratica) return;
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        pratica.classList.add('pratica-in-view');
-                        obs.unobserve(entry.target);
-                    }
+                    pratica.classList.toggle('pratica-in-view', entry.isIntersecting);
                 });
             }, { threshold: 0.25 });
             obs.observe(pratica);
@@ -2355,6 +2405,7 @@
             }, { passive: true });
             update();
         }
+        initStickyFade('como-funciona', 'pratica');
         initStickyFade('linktree-buttons', 'card-stack-front');
 
         // --- 4. COMO FUNCIONA NA PRÁTICA: revelar elementos ao rolar ---
@@ -2363,17 +2414,24 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- Como Funciona o Cartão NFC: cada box fica colorido ao atingir 50% da tela. ---
+        // --- Como Funciona o Cartão NFC: cada box fica verde ao atingir 50% da tela.
+        // Como a seção é sticky (fica presa), os cards param de se mover uma vez presos
+        // e podem nunca cruzar o centro antes de "Como Funciona na Prática" cobri-los —
+        // por isso há uma rede de segurança: se a cobertura já está avançada, ativa
+        // o card mesmo assim, garantindo que o último ("Converta") também acenda. ---
         (function () {
             const cards = document.querySelectorAll('#como-funciona .glass-card');
-            if (!cards.length) return;
+            const front = document.getElementById('pratica');
+            if (!cards.length || !front) return;
             let ticking = false;
             function update() {
                 const centerY = window.innerHeight / 2;
+                const coverTop = front.getBoundingClientRect().top;
+                const coveringSoon = coverTop <= window.innerHeight * 0.6;
                 cards.forEach(card => {
                     if (card.classList.contains('active')) return;
                     const reachedCenter = card.getBoundingClientRect().top <= centerY;
-                    if (reachedCenter) card.classList.add('active');
+                    if (reachedCenter || coveringSoon) card.classList.add('active');
                 });
                 ticking = false;
             }
@@ -2560,6 +2618,8 @@
                             '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero meu cartão para campanha política">Quero meu cartão para campanha política</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -2667,7 +2727,6 @@
 
         // --- 5. MOCKUP: troca a imagem a cada aproximação do cartão NFC ---
         const screenImages = [
-            "img/mockup-tela-0.webp",
             "img/mockup-tela-1.webp",
             "img/mockup-tela-2.webp",
             "img/mockup-tela-3.webp",
