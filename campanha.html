@@ -324,6 +324,28 @@
             .typewriter-quote { width: auto; animation: none !important; border-color: transparent !important; }
         }
 
+        /* No mobile a animação por largura (nowrap) cortava a frase, pois ela é medida
+           para caber numa única linha. Abaixo de 640px a frase quebra normalmente e
+           aparece com um fade simples em vez do efeito de "digitação". */
+        @media (max-width: 640px) {
+            .typewriter-quote {
+                display: inline;
+                white-space: normal;
+                width: auto !important;
+                max-width: 100%;
+                overflow: visible;
+                border-right: none;
+                opacity: 0;
+                transform: translateY(4px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            .typewriter-quote.active {
+                opacity: 1;
+                transform: translateY(0);
+                animation: none !important;
+            }
+        }
+
         /* FAQ Accordion Transition */
         .faq-content {
             transition: max-height 0.3s ease-out, padding 0.3s ease;
@@ -1228,12 +1250,12 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="reveal-stagger grid lg:grid-cols-2 gap-16 items-center">
+            <div class="reveal-stagger grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
                 <!-- CTA Text -->
                 <div class="text-blue-950">
-                    <h2 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">Prepare sua campanha para se conectar com mais eleitores</h2>
-                    <p class="text-xl text-gray-600 mb-8">Apresente suas propostas, fortaleça sua identidade e transforme cada membro da equipe em um canal de divulgação poderoso da candidatura.</p>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4 sm:mb-6">Prepare sua campanha para se conectar com mais eleitores</h2>
+                    <p class="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8">Apresente suas propostas, fortaleça sua identidade e transforme cada membro da equipe em um canal de divulgação poderoso da candidatura.</p>
 
                     <div class="space-y-4 mb-10">
                         <div class="flex items-center gap-3">
@@ -1251,8 +1273,8 @@
                 </div>
 
                 <!-- Form Box -->
-                <div class="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 md:p-8 relative">
-                    <h3 class="text-2xl font-bold text-blue-950 mb-6">Solicitar orçamento personalizado</h3>
+                <div class="bg-white border border-gray-200 rounded-2xl shadow-2xl p-5 sm:p-6 md:p-8 relative">
+                    <h3 class="text-xl sm:text-2xl font-bold text-blue-950 mb-4 sm:mb-6">Solicitar orçamento personalizado</h3>
 
                     <div id="form-success" class="hidden bg-green-50 border border-green-200 text-green-700 rounded-lg p-6 text-center">
                         <i class="ph-fill ph-check-circle text-4xl text-green-500 mb-2"></i>
@@ -1301,7 +1323,7 @@
                             </div>
                         </div>
 
-                        <div class="flex gap-6 pt-2">
+                        <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 pt-2">
                             <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                                 <input type="checkbox" id="possui_identidade" class="rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
                                 Já possui Identidade Visual?
@@ -1522,7 +1544,7 @@
     </footer>
 
     <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/5531920067518?text=Ol%C3%A1%2C%20vim%20pelo%20site%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20cart%C3%B5es%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center text-3xl shadow-2xl hover:bg-green-600 transition-transform transform hover:scale-110 z-50">
+    <a href="https://wa.me/5531920067518?text=Ol%C3%A1%2C%20quero%20pedir%20meu%20cart%C3%A3o%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center text-3xl shadow-2xl hover:bg-green-600 transition-transform transform hover:scale-110 z-50">
         <i class="ph-fill ph-whatsapp-logo"></i>
     </a>
 
