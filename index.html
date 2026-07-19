@@ -1720,15 +1720,33 @@
                 </div>
             </div>
 
-            <a href="campanha.html" id="btn-campanha-politica-top" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
+            <a href="#" id="btn-campanha-politica-top" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 rounded-full bg-brand-blue/25 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/35 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
                     </div>
                     <span class="font-bold text-white z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para campanha política</span>
                 </div>
-                <i class="ph ph-caret-right text-gray-300 group-hover:text-white transition-colors z-10 relative"></i>
+                <i id="campanha-politica-caret" class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
             </a>
+
+            <div id="campanha-politica-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md">
+                <div class="p-4 sm:p-5 flex flex-col gap-3">
+                    <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Campanhas Políticas</span>
+                    <div class="flex flex-col gap-3 w-full">
+                        <a href="campanha.html" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center gap-2">
+                            <i class="ph ph-megaphone text-lg"></i>
+                            Conhecer Tecnologia para Campanhas Políticas
+                        </a>
+                        <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20pedir%20meu%20cart%C3%A3o%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta w-full rounded-2xl p-4 flex items-center justify-center gap-3 group">
+                            <span class="wa-icon w-9 h-9 rounded-full flex items-center justify-center shrink-0">
+                                <i class="ph-fill ph-whatsapp-logo text-xl text-[#25D366]"></i>
+                            </span>
+                            <span class="text-[#25D366] font-black text-sm uppercase tracking-wide">Pedir cartão para campanha política</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
         </section>
 
@@ -1737,7 +1755,7 @@
         <div id="card-stack-front">
             <!-- Descrição de impacto, logo acima do indicador "Conheça a tecnologia" -->
             <p class="text-center text-gray-400 text-sm md:text-base leading-relaxed max-w-xl mx-auto px-4 pt-8 stagger-item" style="animation-delay: 0.3s;">
-                Mais impacto no primeiro contato, mais chamadas no WhatsApp, mais avaliações no Google e uma presença digital forte e de fácil acesso.
+                Transforme cada contato físico em uma oportunidade:<br>atraia mais clientes para o WhatsApp, conquiste mais avaliações no Google e tenha uma presença digital forte e de fácil acesso!
             </p>
 
             <!-- Indicador "Deslize" logo após os botões -->
@@ -2230,7 +2248,7 @@
                 </div>
 
                 <!-- AÇÃO E REAÇÃO — AVALIAÇÃO GOOGLE (importado da página NFC) -->
-                <div class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
+                <div id="tag-google" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
                     <div class="mb-6 text-center">
                         <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Tag Avaliação Google</span>
                         <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">5 Estrelas Sem Pesquisa</h3>
@@ -2277,6 +2295,39 @@
 
                                     <button type="button" class="w-full py-2.5 bg-blue-600 text-white rounded-full font-bold text-[10px] shadow-md mt-auto">Postar Avaliação</button>
                                 </div>
+                            </div>
+
+                            <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
+                                <i class="ph ph-lock text-lg text-slate-700 mb-2"></i>
+                                <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tag Cardápio Digital: aproximação do celular abrindo o cardápio premium -->
+                <div id="tag-cardapio" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
+                    <div class="mb-6 text-center">
+                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Tag Cardápio Digital</span>
+                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">Cardápio Premium Sem Contato</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Aproxime o celular e o cardápio abre na hora.</p>
+                    </div>
+
+                    <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
+                        <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
+
+                        <div class="absolute top-0 flex flex-col items-center z-10">
+                            <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple"></div>
+                            <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
+                                <i class="ph-fill ph-fork-knife text-2xl text-amber-400 drop-shadow-lg"></i>
+                            </div>
+                        </div>
+
+                        <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone">
+                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
+
+                            <div class="absolute inset-0 bg-[#12100c] animate-sim-screen overflow-hidden">
+                                <img src="img/mockup-rest.png" alt="Cardápio Digital" class="w-full h-full object-cover object-top">
                             </div>
 
                             <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
@@ -2752,11 +2803,11 @@
         initStickyFade('vantagens-exclusivas', 'pratica');
 
         // --- Widget de Chat: mostra o balão "Tecnologia NFC para campanhas políticas"
-        // acima do botão assim que o usuário rolar para além (abaixo) da seção "Planos". ---
+        // acima do botão assim que o usuário chegar na seção "Tag Avaliação Google". ---
         (function () {
             const bubble = document.getElementById('chat-widget-bubble');
             const closeBtn = document.getElementById('chat-widget-bubble-close');
-            const trigger = document.getElementById('planos');
+            const trigger = document.getElementById('tag-google');
             if (!bubble || !trigger) return;
             let dismissed = false;
             function reveal() {
@@ -2769,11 +2820,15 @@
             }
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    const scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-                    if (scrolledPast) reveal();
+                    // Dispara quando metade da seção já saiu por cima da tela
+                    // (não precisa esperar ela sumir 100%).
+                    const leavingFromTop = entry.boundingClientRect.top < 0;
+                    const halfOrLessVisible = entry.intersectionRatio <= 0.5;
+                    const scrolledPastHalf = leavingFromTop && halfOrLessVisible;
+                    if (scrolledPastHalf) reveal();
                     else hide();
                 });
-            }, { threshold: 0 });
+            }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
             observer.observe(trigger);
             closeBtn?.addEventListener('click', () => {
                 dismissed = true;
@@ -3083,6 +3138,23 @@
                     var card = document.getElementById('plan-card-' + idx);
                     if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
+            });
+        })();
+
+        // --- Painel "Tecnologia NFC para campanha política": abre/fecha igual ao painel de planos ---
+        (function () {
+            var btn = document.getElementById('btn-campanha-politica-top');
+            var panel = document.getElementById('campanha-politica-panel');
+            var caret = document.getElementById('campanha-politica-caret');
+            if (!btn || !panel) return;
+
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                var abrindo = !panel.classList.contains('wa-panel-open');
+                panel.classList.toggle('wa-panel-open');
+                syncLinktreeStickyState();
+                if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
+                if (abrindo) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 250);
             });
         })();
 
