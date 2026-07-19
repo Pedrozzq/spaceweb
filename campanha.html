@@ -1776,7 +1776,7 @@
                 wrap.addEventListener('mouseenter', () => { userPaused = true; });
                 wrap.addEventListener('mouseleave', pauseTemporarily);
 
-                // Só começa a mover quando o usuário rolar até a seção (30% visível)
+                // Só começa a mover quando o usuário rolar até a seção (50% visível)
                 const obs = new IntersectionObserver((entries) => {
                     entries.forEach((entry) => {
                         if (entry.isIntersecting) {
@@ -1784,7 +1784,7 @@
                             obs.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.3 });
+                }, { threshold: 0.5 });
                 obs.observe(wrap);
 
                 document.querySelectorAll('[data-marquee-target="' + wrapId + '"]').forEach((btn) => {
