@@ -62,9 +62,6 @@
                         'float-delayed': 'float 6s ease-in-out 3s infinite',
                         'spin-slow': 'spin 20s linear infinite',
                         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-                        'sim-phone': 'simPhoneMove 6s infinite ease-in-out',
-                        'sim-screen': 'simScreenFade 6s infinite ease-in-out',
-                        'sim-ripple': 'simNfcRipple 6s infinite ease-out',
                     },
                     keyframes: {
                         float: {
@@ -74,23 +71,6 @@
                         pulseGlow: {
                             '0%, 100%': { opacity: '0.8', filter: 'brightness(1)' },
                             '50%': { opacity: '1', filter: 'brightness(1.3)' },
-                        },
-                        simPhoneMove: {
-                            '0%, 10%': { transform: 'translateY(50px)' },
-                            '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' },
-                            '25%, 95%': { transform: 'translateY(50px)' },
-                            '100%': { transform: 'translateY(50px)' },
-                        },
-                        simScreenFade: {
-                            '0%, 22%': { opacity: '0' },
-                            '25%, 90%': { opacity: '1' },
-                            '95%, 100%': { opacity: '0' },
-                        },
-                        simNfcRipple: {
-                            '0%, 14%': { transform: 'scale(0.5)', opacity: '0' },
-                            '15%': { transform: 'scale(0.5)', opacity: '1' },
-                            '25%': { transform: 'scale(2.5)', opacity: '0' },
-                            '100%': { transform: 'scale(2.5)', opacity: '0' },
                         }
                     }
                 }
@@ -103,14 +83,12 @@
         html {
             overflow-x: hidden;
             max-width: 100%;
-            touch-action: pan-y;
         }
         body {
             background-color: #050508;
             color: #ffffff;
             max-width: 100%;
             scroll-behavior: smooth;
-            touch-action: pan-y;
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -385,12 +363,20 @@
         }
 
         /* Passo 3 "Converta": pulso contínuo laranja para chamar atenção */
-        /* Antes de ativar, o card "Converta" fica igual aos outros (sem cor própria).
-           Só quando .active é adicionado (ao rolar até 50%) é que fica laranja. */
+        .card-converta-pulse {
+            background: rgba(255, 145, 0, 0.16);
+            border-color: rgba(255, 145, 0, 0.5);
+            animation: convertaPulseOrange 2.2s ease-in-out infinite;
+        }
+        /* Mais específico que a regra verde de .active: mantém o card 3 sempre laranja */
         #como-funciona .glass-card.card-converta-pulse.active {
-            background: rgba(255, 145, 0, 0.18);
-            border-color: rgba(255, 145, 0, 0.55);
-            box-shadow: 0 10px 30px -10px rgba(255, 145, 0, 0.35);
+            background: rgba(255, 145, 0, 0.24);
+            border-color: rgba(255, 145, 0, 0.7);
+            box-shadow: 0 10px 30px -10px rgba(255, 145, 0, 0.45);
+        }
+        @keyframes convertaPulseOrange {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 145, 0, 0.35); }
+            50%      { box-shadow: 0 0 25px 4px rgba(255, 145, 0, 0.45); }
         }
 
         /* Gestão Saturno: mesmo padrão IO + toggle .active nos textos do bloco */
@@ -403,52 +389,6 @@
             box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.3) inset;
         }
         div.saturno-reveal.active { padding: 0.35rem 0.5rem; margin: -0.35rem -0.5rem; }
-
-        /* ===================== BOTÃO "ASSINAR AGORA" — ANÉIS ORBITANDO ===================== */
-        .assinar-orbit-wrap { isolation: isolate; }
-        .orbit-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .orbit-ring-1 {
-            width: 112%;
-            height: 155%;
-            border: 1.5px solid rgba(255, 215, 0, 0.55);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.22);
-            animation: orbitSpin1 6s linear infinite;
-        }
-        .orbit-ring-2 {
-            width: 122%;
-            height: 175%;
-            border: 1.5px solid rgba(0, 210, 255, 0.4);
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.18);
-            animation: orbitSpin2 9s linear infinite reverse;
-        }
-        .orbit-ring-3 {
-            width: 132%;
-            height: 195%;
-            border: 1px solid rgba(138, 43, 226, 0.35);
-            animation: orbitSpin3 13s linear infinite;
-        }
-        @keyframes orbitSpin1 {
-            from { transform: translate(-50%, -50%) rotate(8deg); }
-            to   { transform: translate(-50%, -50%) rotate(368deg); }
-        }
-        @keyframes orbitSpin2 {
-            from { transform: translate(-50%, -50%) rotate(-14deg); }
-            to   { transform: translate(-50%, -50%) rotate(346deg); }
-        }
-        @keyframes orbitSpin3 {
-            from { transform: translate(-50%, -50%) rotate(22deg); }
-            to   { transform: translate(-50%, -50%) rotate(382deg); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .orbit-ring-1, .orbit-ring-2, .orbit-ring-3 { animation: none; }
-        }
 
         /* Elementos de Animação de Entrada */
         .stagger-item {
@@ -584,6 +524,22 @@
             50%      { box-shadow: 0 0 22px rgba(255, 215, 0, 0.40); border-color: rgba(255, 215, 0, 0.60); }
         }
 
+        /* ===================== STACKING SECTIONS (STICKY STACK) =====================
+           "Como funciona o Cartão NFC?" fica presa no topo (position: sticky) enquanto
+           "Como Funciona na Prática" continua no fluxo normal e desliza por cima dela. */
+        #como-funciona {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        #pratica {
+            z-index: 2;
+            background: #050508;
+            border-radius: 1.75rem 1.75rem 0 0;
+            padding-top: 2.5rem;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
+        }
 
         /* Botões (seção 1) ficam presos no topo; o bloco "Deslize" + cartão 3D
            (seção 2) desliza por cima deles ao rolar. Efeito isolado a esta seção. */
@@ -592,7 +548,6 @@
             top: 0;
             z-index: 1;
             margin-bottom: 0;
-            padding-bottom: 2rem;
         }
         /* Enquanto um painel expansível (ex.: "Receber atendimento personalizado") está
            aberto, desativa o sticky para o usuário conseguir rolar e ver todo o conteúdo,
@@ -614,174 +569,15 @@
             width: 100%;
         }
 
-        /* Segundo par sticky-stack: "Vantagens Exclusivas" (seção 1) fica presa
-           enquanto "Como Funciona na Prática" (seção 2) desliza por cima dela. */
-        #vantagens-exclusivas {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            margin-bottom: 0;
-        }
-        #pratica {
-            z-index: 2;
-            background: #050508;
-            border-radius: 1.75rem 1.75rem 0 0;
-            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7);
-            padding-top: 2.5rem;
-        }
-
         /* Botões da seção 1: cascata leve, disparada via JS quando o preloader some (não no page-load) */
         #linktree-buttons .cascade-btn {
-            opacity: 1;
+            opacity: 0;
             transform: translateY(16px);
-            transition: transform 0.55s ease;
+            transition: opacity 0.55s ease, transform 0.55s ease;
         }
         #linktree-buttons.buttons-ready .cascade-btn {
-            transform: translateY(0);
-        }
-
-        /* Botões da seção 1: fundo e borda mais sólidos/brilhantes (estavam
-           parecendo apagados/transparentes por causa da opacidade baixa do
-           glassmorphism padrão do .link-btn). */
-        #linktree-buttons .link-btn {
-            background: rgba(28, 26, 36, 0.82);
-            border-color: rgba(255, 255, 255, 0.16);
-        }
-        #linktree-buttons .link-btn::after {
-            background: rgba(20, 19, 27, 0.85);
-        }
-        #linktree-buttons .link-btn::before {
-            opacity: 0.9;
-        }
-
-        /* ===================== WIDGET DE CHAT FLUTUANTE ===================== */
-        #chat-widget {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            z-index: 70;
-        }
-        .chat-widget-btn {
-            position: relative;
-            width: 4rem;
-            height: 4rem;
-            border-radius: 9999px;
-            background: #0f0f16;
-            border: 1px solid rgba(37, 99, 235, 0.45);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-        }
-        .chat-widget-btn:hover {
-            transform: scale(1.06);
-            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
-        }
-        .chat-widget-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .chat-widget-btn::before {
-            content: '';
-            position: absolute;
-            inset: -6px;
-            border-radius: 9999px;
-            border: 1.5px solid rgba(37, 99, 235, 0.5);
-            opacity: 0;
-            animation: chatWidgetPulse 3.2s ease-out infinite;
-        }
-        @keyframes chatWidgetPulse {
-            0%   { transform: scale(0.85); opacity: 0.6; }
-            70%  { transform: scale(1.18); opacity: 0; }
-            100% { transform: scale(1.18); opacity: 0; }
-        }
-        /* Selo "político" no botão: identifica o assunto (campanha) sem perder a logo da marca */
-        .chat-widget-badge {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            width: 1.5rem;
-            height: 1.5rem;
-            border-radius: 9999px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border: 2px solid #0f0f16;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 0.7rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-        }
-        .chat-widget-bubble {
-            position: absolute;
-            bottom: calc(100% + 0.9rem);
-            right: 0;
-            max-width: 220px;
-            background: #0f0f16;
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            border-left: 3px solid #2563eb;
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 700;
-            line-height: 1.35;
-            padding: 0.75rem 1.6rem 0.75rem 1rem;
-            border-radius: 1rem;
-            border-bottom-right-radius: 0.3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(10px);
-            pointer-events: none;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-        .chat-widget-bubble .ph-megaphone {
-            color: #60a5fa;
-            font-size: 1rem;
-            flex-shrink: 0;
-            margin-top: 0.1rem;
-        }
-        .chat-widget-bubble.chat-widget-bubble-visible {
             opacity: 1;
             transform: translateY(0);
-            pointer-events: auto;
-        }
-        .chat-widget-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            right: 1.6rem;
-            width: 12px;
-            height: 12px;
-            background: #0f0f16;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transform: rotate(45deg);
-        }
-        .chat-widget-bubble-close {
-            position: absolute;
-            top: 0.4rem;
-            right: 0.5rem;
-            width: 1rem;
-            height: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #9ca3af;
-            font-size: 0.65rem;
-            line-height: 1;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .chat-widget-bubble-close:hover { color: #fff; }
-        @media (prefers-reduced-motion: reduce) {
-            .chat-widget-btn::before { animation: none; }
-            .chat-widget-bubble { transition: none; }
         }
 
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
@@ -834,8 +630,8 @@
         .animate-scan { animation: scan-line 3s infinite linear; }
 
         /* Animações do mockup ficam pausadas até o usuário chegar na seção "Como Funciona na Prática" */
-        #pratica .pratica-anim { animation-play-state: paused !important; }
-        #pratica.pratica-in-view .pratica-anim { animation-play-state: running !important; }
+        #pratica .pratica-anim { animation-play-state: paused; }
+        #pratica.pratica-in-view .pratica-anim { animation-play-state: running; }
 
         /* Cartão NFC aproximando do telefone */
         @keyframes cardApproach {
@@ -951,85 +747,16 @@
             letter-spacing: normal;
         }
         .btn-plano-select .btn-plano-unid {
-            font-size: 0.6rem;
+            font-size: 0.55em;
             font-weight: 700;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-            opacity: 0.85;
-            white-space: normal;
-            margin-left: 6px;
+            letter-spacing: normal;
+            text-transform: lowercase;
+            opacity: 0.8;
+            margin-left: 4px;
         }
         @media (min-width: 768px) {
             .btn-plano-select { min-height: 52px; }
         }
-
-        /* ===================== BOTÕES "ESCOLHER PLANO" — DESTAQUE PREMIUM ===================== */
-        .btn-plano-select {
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            transform: translateY(10px) scale(0.97);
-            transition: opacity 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease;
-        }
-        .wa-panel-open .btn-plano-select {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-        .wa-panel-open .btn-plano-select:nth-of-type(1) { transition-delay: 0.05s; }
-        .wa-panel-open .btn-plano-select:nth-of-type(2) { transition-delay: 0.15s; }
-        .wa-panel-open .btn-plano-select:nth-of-type(3) { transition-delay: 0.25s; }
-
-        /* Brilho de varredura contínua, como um reflexo de vidro premium */
-        .btn-plano-select::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -60%;
-            width: 35%; height: 100%;
-            background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
-            transform: skewX(-20deg);
-            animation: planoBtnSweep 3.2s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes planoBtnSweep {
-            0%   { left: -60%; }
-            45%, 100% { left: 130%; }
-        }
-
-        /* Respiração/pulso do brilho em repouso, uma cor por plano */
-        .btn-saturno-white.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowWhite 2.6s ease-in-out infinite; }
-        .btn-saturno-silver.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowSilver 2.6s ease-in-out infinite; }
-        .btn-saturno-gold.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowGold 2.6s ease-in-out infinite; }
-
-        @keyframes planoGlowWhite {
-            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
-            50%      { box-shadow: 0 0 26px rgba(255, 255, 255, 0.6); }
-        }
-        @keyframes planoGlowSilver {
-            0%, 100% { box-shadow: 0 0 15px rgba(200, 205, 214, 0.3); }
-            50%      { box-shadow: 0 0 26px rgba(220, 225, 232, 0.65); }
-        }
-        @keyframes planoGlowGold {
-            0%, 100% { box-shadow: 0 0 15px rgba(212, 160, 23, 0.3); }
-            50%      { box-shadow: 0 0 26px rgba(245, 214, 122, 0.7); }
-        }
-
-        .btn-plano-select:hover {
-            transform: translateY(-4px) scale(1.035);
-            filter: brightness(1.1);
-        }
-        .btn-plano-select:active {
-            transform: translateY(-1px) scale(0.985);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .btn-plano-select::after,
-            .btn-saturno-white.btn-plano-select,
-            .btn-saturno-silver.btn-plano-select,
-            .btn-saturno-gold.btn-plano-select {
-                animation: none;
-            }
-        }
-
         .btn-purple { background: linear-gradient(90deg, #b062ff, #9b40f5); color: #ffffff; }
         .btn-purple:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); filter: brightness(1.1); }
         .btn-orange { background: linear-gradient(90deg, #ff7a1a, #f96300); color: #ffffff; }
@@ -1681,7 +1408,7 @@
 
             <!-- Indicador "Entenda como funciona" -->
             <a href="#como-funciona" class="flex flex-col items-center mb-8 scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.3s;">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Nossos serviços</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Entenda como funciona</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
         </header>
@@ -1692,10 +1419,10 @@
 
             <a href="#planos" id="btn-escolher-plano" class="link-btn btn-highlight magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.1s;">
                 <div class="flex items-center gap-4">
-                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/25 flex items-center justify-center transition-colors group-hover:bg-brand-gold/35 z-10 relative">
-                        <i class="ph ph-shopping-cart-simple text-xl text-brand-gold"></i>
+                    <div class="icon-wrapper w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center transition-colors group-hover:bg-brand-gold/20 z-10 relative">
+                        <i class="ph ph-shopping-cart-simple text-xl"></i>
                     </div>
-                    <span class="font-bold text-white text-base md:text-lg z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para sua empresa</span>
+                    <span class="font-semibold text-white text-base md:text-lg z-10 relative">Cartão NFC para sua empresa</span>
                 </div>
                 <i id="escolher-plano-caret" class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all z-10 relative"></i>
             </a>
@@ -1706,67 +1433,76 @@
                     <div class="flex flex-col gap-3 w-full">
                         <button type="button" class="btn btn-saturno-white btn-plano-select" data-plano="Essencial" data-cartoes="4 Cartões NFC personalizados" data-plan-index="0">
                             <span class="btn-plano-label">Essencial</span>
-                            <span class="btn-plano-num">4<span class="btn-plano-unid">Cartões NFC + Página Digital</span></span>
+                            <span class="btn-plano-num">4<span class="btn-plano-unid">unidades</span></span>
                         </button>
                         <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="12 Cartões NFC personalizados" data-plan-index="1">
                             <span class="btn-plano-label">Profissional</span>
-                            <span class="btn-plano-num">12<span class="btn-plano-unid">Cartões NFC + Site Profissional</span></span>
+                            <span class="btn-plano-num">12<span class="btn-plano-unid">unidades</span></span>
                         </button>
                         <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados" data-plan-index="2">
                             <span class="btn-plano-label">Fora de Órbita</span>
-                            <span class="btn-plano-num">30<span class="btn-plano-unid">Cartões NFC + Site Premium</span></span>
+                            <span class="btn-plano-num">30<span class="btn-plano-unid">unidades</span></span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <a href="#" id="btn-campanha-politica-top" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
+            <a href="campanha.html" id="btn-campanha-politica" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.2s;">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-brand-blue/25 flex items-center justify-center text-brand-blue group-hover:bg-brand-blue/35 transition-colors z-10 relative">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
                         <i class="ph ph-megaphone text-xl"></i>
                     </div>
-                    <span class="font-bold text-white z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para campanha política</span>
+                    <span class="font-medium text-gray-100 z-10 relative">Cartão NFC para campanha política</span>
                 </div>
-                <i id="campanha-politica-caret" class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
             </a>
 
-            <div id="campanha-politica-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md">
-                <div class="p-4 sm:p-5 flex flex-col gap-3">
-                    <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Campanhas Políticas</span>
-                    <div class="flex flex-col gap-3 w-full">
-                        <a href="campanha.html" class="link-btn btn-campanha magnetic-btn w-full rounded-2xl px-4 py-4 flex items-center justify-center gap-3 text-center">
-                            <i class="ph-fill ph-megaphone text-xl text-brand-blue shrink-0"></i>
-                            <span class="font-bold text-white text-[13px] sm:text-sm leading-snug uppercase tracking-wide" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Conhecer Tecnologia para Campanhas Políticas</span>
-                        </a>
-                        <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20pedir%20meu%20cart%C3%A3o%20NFC%20para%20campanha%20pol%C3%ADtica." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-cta w-full rounded-2xl p-4 flex items-center justify-center gap-3 group">
-                            <span class="wa-icon w-9 h-9 rounded-full flex items-center justify-center shrink-0">
-                                <i class="ph-fill ph-whatsapp-logo text-xl text-[#25D366]"></i>
-                            </span>
-                            <span class="text-[#25D366] font-black text-sm uppercase tracking-wide">Pedir cartão para campanha política</span>
-                        </a>
+            <a href="https://wa.link/0zpwgo" id="btn-wa-personalizado" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.3s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366]/20 transition-colors z-10 relative">
+                        <i class="ph ph-whatsapp-logo text-xl"></i>
                     </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Receber atendimento personalizado</span>
                 </div>
-            </div>
+                <i id="wa-personalizado-caret" class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
+
+            <div id="wa-personalizado-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md"></div>
+
+            <a href="#como-funciona" class="link-btn magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.4s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-purple/10 flex items-center justify-center text-brand-purple group-hover:bg-brand-purple/20 transition-colors z-10 relative">
+                        <i class="ph ph-info text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Ver como funciona</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
+
+            <a href="#planos" class="link-btn btn-highlight-yellow magnetic-btn w-full rounded-2xl p-4 flex items-center justify-between group cascade-btn" style="transition-delay: 0.5s;">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold group-hover:bg-brand-gold/20 transition-colors z-10 relative">
+                        <i class="ph ph-tag text-xl"></i>
+                    </div>
+                    <span class="font-medium text-gray-100 z-10 relative">Planos e Valores</span>
+                </div>
+                <i class="ph ph-caret-right text-gray-500 group-hover:text-white transition-colors z-10 relative"></i>
+            </a>
 
         </section>
 
         <!-- STICKY STACK: este bloco (dica "Deslize" + cartão 3D) sobe por cima da
              seção 1 (botões), que fica presa (position: sticky) durante a rolagem. -->
         <div id="card-stack-front">
-            <!-- Descrição de impacto, logo acima do indicador "Conheça a tecnologia" -->
-            <p class="text-center text-gray-400 text-sm md:text-base leading-relaxed max-w-xl mx-auto px-4 pt-8 stagger-item" style="animation-delay: 0.3s;">
-                Transforme cada contato físico em uma oportunidade:<br>Atraia mais clientes para o WhatsApp, conquiste mais avaliações no Google e tenha uma presença digital forte e de fácil acesso!
-            </p>
-
             <!-- Indicador "Deslize" logo após os botões -->
             <a href="#pratica" class="flex flex-col items-center pt-6 mb-4 scroll-hint hover:opacity-80 transition-opacity">
-                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Conheça a tecnologia</span>
+                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Deslize</span>
                 <i class="ph ph-caret-down text-brand-gold text-xl"></i>
             </a>
 
             <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
             <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
-            <div class="relative w-56 h-[360px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
+            <div class="relative w-56 h-[320px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
                 
                 <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
                     
@@ -1787,8 +1523,8 @@
                                     <i data-lucide="trending-up" id="card-chip-icon" class="w-6 h-6 sm:w-8 sm:h-8 text-gray-500"></i>
                                 </div>
                                 
-                                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="card-company-title">Sua Empresa</h3>
-                                <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6" id="niche-rotator">Restaurante</p>
+                                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="niche-rotator">Restaurante</h3>
+                                <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6">Sua Empresa</p>
                                 
                                 <div class="w-8 h-6 sm:w-10 sm:h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-3 sm:mb-4 opacity-50 relative overflow-hidden">
                                     <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
@@ -1810,8 +1546,11 @@
         </div>
         <!-- /stack-wrap -->
 
-        <!-- Como Funciona Section (sem título, subida para debaixo do cartão) -->
+        <div class="stack-wrap">
+        <!-- Como Funciona Section -->
         <section id="como-funciona" class="w-full mb-16">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Como funciona o Cartão NFC?</h2>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Passo 1 -->
                 <div class="glass-card rounded-2xl p-6 text-center flex flex-col items-center">
@@ -1842,48 +1581,6 @@
             </div>
         </section>
 
-        <!-- STICKY STACK: Vantagens Exclusivas fica presa enquanto Como Funciona
-             na Prática desliza por cima dela ao rolar. -->
-        <div class="stack-wrap">
-        <!-- Benefícios Section -->
-        <section id="vantagens-exclusivas" class="w-full stagger-item" style="animation-delay: 0.7s;">
-            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
-
-            <div id="vantagens-grid" class="grid grid-cols-2 gap-3 md:gap-4">
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-lightning text-brand-gold text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-chats-circle text-brand-blue text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais conversões no WhatsApp</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-users text-brand-purple text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Instagram</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-star text-brand-gold text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Mais avaliações no Google</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-briefcase text-gray-300 text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Aparência profissional</span>
-                </div>
-                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
-                    <i class="ph ph-recycle text-[#25D366] text-xl"></i>
-                    <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
-                </div>
-            </div>
-
-            <!-- Selo Aproxime. Conecte. Converta. -->
-            <div class="w-full flex justify-center mt-10 reveal-node">
-                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
-                    <span>Aproxime. Conecte. Converta.</span>
-                </div>
-            </div>
-        </section>
-
         <!-- Como Funciona na Prática -->
         <section id="pratica" class="w-full mb-16 relative">
             <div class="relative z-10">
@@ -1903,7 +1600,7 @@
                             <div class="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-40"></div>
 
                             <!-- Ecrã Bloqueado -->
-                            <div id="phone-lock-overlay" class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 4s infinite ease-in-out;">
+                            <div class="pratica-anim absolute inset-0 bg-[#0B0E14] z-30 flex flex-col items-center justify-center" style="animation: phoneLockFade 5.5s infinite ease-in-out;">
                                 <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 relative">
                                     <div class="absolute inset-0 rounded-full border-2 border-slate-700 animate-ping opacity-30"></div>
                                     <i class="ph ph-device-mobile text-2xl text-slate-500"></i>
@@ -1912,11 +1609,11 @@
                             </div>
 
                             <!-- Ecrã Desbloqueado — Imagem completa (mostra todo o conteúdo) -->
-                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 4s infinite ease-out; background-image: url('img/mockup-tela-0.webp');"></div>
+                            <div id="phone-unlocked-screen" class="pratica-anim absolute inset-0 z-20 bg-contain bg-center bg-no-repeat bg-[#0B0E14]" style="animation: phoneUnlock 5.5s infinite ease-out; background-image: url('img/mockup-tela-1.webp');"></div>
                         </div>
 
                         <!-- Animação do Cartão NFC -->
-                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 4s infinite ease-out;">
+                        <div id="card-approach-anim" class="pratica-anim absolute z-50 w-24 h-36 bg-gray-50 rounded-xl shadow-[0_20px_50px_rgba(255,255,255,0.2)] border border-gray-300 flex flex-col items-center justify-between p-3 pointer-events-none" style="right: -20px; top: 150px; animation: cardApproach 5.5s infinite ease-out;">
                             <div class="w-full flex justify-end">
                                 <div class="w-3 h-3 rounded-full bg-slate-200"></div>
                             </div>
@@ -1956,7 +1653,7 @@
 
                     <!-- Cards de texto -->
                     <div class="flex-1 space-y-6 w-full max-w-xl">
-                        <div id="card-conquista-instantanea" class="card-interactive p-6 reveal-node border-l-4 border-l-brand-gold bg-brand-gold/5 rounded-r-xl">
+                        <div class="card-interactive p-6 reveal-node border-l-4 border-l-brand-gold bg-brand-gold/5 rounded-r-xl">
                             <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
                                 <div class="p-2 bg-brand-gold/20 rounded-lg"><i class="ph ph-target text-xl text-brand-gold"></i></div>
                                 Conquista Instantânea
@@ -1978,9 +1675,47 @@
                 </div>
             </div>
 
+            <!-- Selo Aproxime. Conecte. Converta. movido para o final da seção -->
+            <div class="w-full flex justify-center mt-14 mb-4 reveal-node">
+                <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                    <span>Aproxime. Conecte. Converta.</span>
+                </div>
+            </div>
         </section>
         </div>
-        <!-- /stack-wrap (Vantagens Exclusivas + Como Funciona na Prática) -->
+        <!-- /stack-wrap -->
+
+        <!-- Benefícios Section -->
+        <section class="w-full mb-16 stagger-item" style="animation-delay: 0.7s;">
+            <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
+
+            <div id="vantagens-grid" class="grid grid-cols-2 gap-3 md:gap-4">
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-lightning text-brand-gold text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-chats-circle text-brand-blue text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais conversões no WhatsApp</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-users text-brand-purple text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais seguidores no Instagram</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-star text-brand-gold text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Mais avaliações no Google</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-briefcase text-gray-300 text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Aparência profissional</span>
+                </div>
+                <div class="glass-card rounded-xl p-4 flex items-center gap-3">
+                    <i class="ph ph-recycle text-[#25D366] text-xl"></i>
+                    <span class="text-sm font-medium text-gray-200">Substitui papel comum</span>
+                </div>
+            </div>
+        </section>
 
         <!-- ===================== SEÇÃO DE PLANOS ===================== -->
         <section id="planos" class="plans-section px-4 mt-8 mb-20" style="width: 100vw; max-width: 100vw;">
@@ -2104,19 +1839,13 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-white text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Essencial</h3>
-                            <p class="flex items-center gap-2 max-w-full">
-                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/10 border border-white/25 shrink-0" style="box-shadow: 0 0 8px rgba(255,255,255,0.35);">
-                                    <i class="ph-fill ph-sparkle text-[11px] text-white"></i>
-                                </span>
-                                <span class="text-saturno-white text-[10px] md:text-xs font-black uppercase tracking-wide truncate min-w-0">Ter presença digital profissional</span>
-                            </p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença digital profissional para você conquistar seus primeiros clientes.</p>
                         </div>
                         <div class="plan-img-wrap glow-white mb-6">
                             <img src="img/plano-essencial.webp" alt="Cartão NFC - Plano Essencial" class="w-32 md:w-40 h-auto">
                         </div>
                         <div class="mb-8">
                             <span class="text-4xl md:text-5xl font-black text-white">R$ 400</span>
-                            <span class="text-saturno-white block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$200,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">4 cartões NFC personalizados</span></li>
@@ -2130,6 +1859,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Você recebe tudo configurado e funcionando</span></li>
                         </ul>
                         <a href="https://wa.link/304efy" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-white text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Ter presença digital profissional
+                        </p>
                     </div>
 
                     <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
@@ -2139,12 +1871,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-silver text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Profissional</h3>
-                            <p class="flex items-center gap-2 max-w-full">
-                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#c0c5ce]/10 border border-[#c0c5ce]/30 shrink-0" style="box-shadow: 0 0 8px rgba(200,205,214,0.4);">
-                                    <i class="ph-fill ph-target text-[11px] text-[#dfe3e8]"></i>
-                                </span>
-                                <span class="text-saturno-silver text-[10px] md:text-xs font-black uppercase tracking-wide truncate min-w-0">Captar clientes e facilitar atendimentos</span>
-                            </p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Presença completa com identidade visual e funções avançadas.</p>
                         </div>
                         <div class="plan-img-wrap glow-silver mb-6">
                             <img src="img/plano-profissional.webp" alt="Cartão NFC - Plano Profissional" class="w-32 md:w-40 h-auto">
@@ -2163,6 +1890,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 3 a 4 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-silver text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Captar clientes e facilitar atendimentos
+                        </p>
                     </div>
 
                     <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
@@ -2172,12 +1902,7 @@
                         </div>
                         <div class="mb-6 mt-2">
                             <h3 class="text-saturno-gold text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Fora de Órbita</h3>
-                            <p class="flex items-center gap-2 max-w-full">
-                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand-gold/10 border border-brand-gold/30 shrink-0" style="box-shadow: 0 0 8px rgba(255,184,0,0.4);">
-                                    <i class="ph-fill ph-rocket-launch text-[11px] text-brand-gold"></i>
-                                </span>
-                                <span class="text-saturno-gold text-[10px] md:text-xs font-black uppercase tracking-wide truncate min-w-0">Digitalizar toda a operação da empresa</span>
-                            </p>
+                            <p class="text-[10px] md:text-xs text-gray-500 font-bold uppercase tracking-wider min-h-[40px] leading-relaxed">Ideal para: eventos, restaurantes, hoteis, cafeterias, pousadas</p>
                         </div>
                         <div class="plan-img-wrap glow-gold mb-6">
                             <img src="img/plano-fora-de-orbita.webp" alt="Cartão NFC - Plano Fora de Órbita" class="w-32 md:w-40 h-auto">
@@ -2199,6 +1924,9 @@
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 4 a 5 dias úteis</span></li>
                         </ul>
                         <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                        <p class="mini-highlight text-saturno-gold text-center text-xs md:text-sm font-black uppercase tracking-wider mt-4 flex items-center justify-center gap-2">
+                            <i class="ph-fill ph-sparkle"></i> Digitalizar toda a operação da empresa
+                        </p>
                     </div>
 
                 </div>
@@ -2235,105 +1963,9 @@
                         <div class="w-full md:w-auto flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-white/10 pt-8 md:pt-0 md:pl-10 shrink-0">
                             <div class="text-4xl font-black text-white tracking-tight">R$ 69,90</div>
                             <div class="text-gray-500 text-xs font-bold uppercase tracking-widest mb-6">por mês</div>
-                            <div class="assinar-orbit-wrap relative w-full md:w-auto flex justify-center">
-                                <span class="orbit-ring orbit-ring-1" aria-hidden="true"></span>
-                                <span class="orbit-ring orbit-ring-2" aria-hidden="true"></span>
-                                <span class="orbit-ring orbit-ring-3" aria-hidden="true"></span>
-                                <a href="https://buy.stripe.com/00w6oB8FAgMC7RLcY42Ry0a" target="_blank" rel="noopener noreferrer" class="btn btn-white assinar-orbit-btn w-full md:w-auto px-10 py-4 rounded-full text-center whitespace-nowrap relative z-[1]">
-                                    Assinar agora
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AÇÃO E REAÇÃO — AVALIAÇÃO GOOGLE (importado da página NFC) -->
-                <div id="tag-google" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
-                    <div class="mb-6 text-center">
-                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Tag Avaliação Google</span>
-                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">5 Estrelas Sem Pesquisa</h3>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Aumente em 80% suas avaliações dentro do Google.</p>
-                    </div>
-
-                    <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                        <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
-
-                        <div class="absolute top-0 flex flex-col items-center z-10">
-                            <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple"></div>
-                            <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
-                                <i class="ph-fill ph-star text-2xl text-amber-400 drop-shadow-lg"></i>
-                            </div>
-                        </div>
-
-                        <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone">
-                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
-
-                            <div class="absolute inset-0 bg-white animate-sim-screen flex flex-col">
-                                <div class="h-12 border-b border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
-                                    <span class="font-black text-[12px] tracking-tighter">
-                                        <span class="text-blue-500">G</span><span class="text-red-500">o</span><span class="text-yellow-500">o</span><span class="text-blue-500">g</span><span class="text-green-500">l</span><span class="text-red-500">e</span> Maps
-                                    </span>
-                                </div>
-                                <div class="p-4 flex-1 flex flex-col items-center text-center">
-                                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-3 overflow-hidden">
-                                        <i class="ph ph-buildings text-lg text-gray-500"></i>
-                                    </div>
-                                    <h4 class="text-black font-bold text-[12px] mb-1">Sua Empresa</h4>
-                                    <p class="text-[9px] text-gray-500 mb-5 leading-tight">Avalie a sua experiência neste local.</p>
-
-                                    <div class="flex gap-1 mb-6">
-                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
-                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
-                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
-                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
-                                        <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
-                                    </div>
-
-                                    <div class="w-full bg-gray-100 rounded-lg h-16 border border-gray-200 p-2 text-left mb-4">
-                                        <span class="text-[8px] text-gray-400">Descreva a sua experiência...</span>
-                                    </div>
-
-                                    <button type="button" class="w-full py-2.5 bg-blue-600 text-white rounded-full font-bold text-[10px] shadow-md mt-auto">Postar Avaliação</button>
-                                </div>
-                            </div>
-
-                            <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
-                                <i class="ph ph-lock text-lg text-slate-700 mb-2"></i>
-                                <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tag Cardápio Digital: aproximação do celular abrindo o cardápio premium -->
-                <div id="tag-cardapio" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
-                    <div class="mb-6 text-center">
-                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Tag Cardápio Digital</span>
-                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">Cardápio Premium Sem Contato</h3>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Aproxime o celular e o cardápio abre na hora.</p>
-                    </div>
-
-                    <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                        <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
-
-                        <div class="absolute top-0 flex flex-col items-center z-10">
-                            <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple"></div>
-                            <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
-                                <i class="ph-fill ph-fork-knife text-2xl text-amber-400 drop-shadow-lg"></i>
-                            </div>
-                        </div>
-
-                        <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone">
-                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
-
-                            <div class="absolute inset-0 bg-[#12100c] animate-sim-screen overflow-hidden">
-                                <img src="img/mockup-rest.png" alt="Cardápio Digital" class="w-full h-full object-cover object-top">
-                            </div>
-
-                            <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
-                                <i class="ph ph-lock text-lg text-slate-700 mb-2"></i>
-                                <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
-                            </div>
+                            <a href="https://buy.stripe.com/00w6oB8FAgMC7RLcY42Ry0a" target="_blank" rel="noopener noreferrer" class="btn btn-white w-full md:w-auto px-10 py-4 rounded-full text-center whitespace-nowrap">
+                                Assinar agora
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -2574,6 +2206,9 @@
                         </div>
 
                         <div class="flex flex-col gap-4 w-full justify-center items-center">
+                            <a href="#planos" class="btn-white-glow px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px]">
+                                Solicitar meu Cartão NFC
+                            </a>
                             <a href="https://wa.link/0zpwgo" id="btn-wa-agora" target="_blank" class="btn-outline px-8 sm:px-10 py-5 flex items-center justify-center gap-4 w-full max-w-[320px] uppercase tracking-widest text-[12px] group">
                                 Receber atendimento agora
                                 <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
@@ -2617,20 +2252,6 @@
         </footer>
 
     </main>
-
-    <!-- Widget de Chat Flutuante: Tecnologia NFC para campanhas políticas -->
-    <div id="chat-widget">
-        <div id="chat-widget-bubble" class="chat-widget-bubble">
-            <i class="ph-fill ph-megaphone"></i>
-            <span>Tecnologia NFC para campanhas políticas</span>
-            <button type="button" id="chat-widget-bubble-close" class="chat-widget-bubble-close" aria-label="Fechar">
-                <i class="ph ph-x"></i>
-            </button>
-        </div>
-        <a href="campanha.html" id="chat-widget-btn" class="chat-widget-btn" aria-label="Tecnologia NFC para campanhas políticas">
-            <img src="img/logo.webp" alt="Saturno NFC" class="chat-widget-logo">
-        </a>
-    </div>
 
     <!-- Scripts de Interatividade -->
     <script>
@@ -2755,18 +2376,13 @@
             initParticles();
         });
 
-        // --- Mockup "Como Funciona na Prática": começa a animar quando a seção aparece pela
-        // primeira vez e continua rodando depois disso (não pausa mais ao rolar para fora),
-        // para o usuário conseguir ver as 6 imagens do ciclo completo. ---
+        // --- Mockup "Como Funciona na Prática": só começa a animar quando a seção aparece ---
         (function () {
             const pratica = document.getElementById('pratica');
             if (!pratica) return;
             const obs = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        pratica.classList.add('pratica-in-view');
-                        obs.unobserve(entry.target);
-                    }
+                    pratica.classList.toggle('pratica-in-view', entry.isIntersecting);
                 });
             }, { threshold: 0.25 });
             obs.observe(pratica);
@@ -2779,18 +2395,8 @@
             if (!back || !front) return;
             let ticking = false;
             function update() {
-                // Só começa a apagar quando a seção realmente ficou "presa" no topo
-                // (position: sticky ativo). Antes disso, ela tem que ficar 100% visível —
-                // calcular a partir da altura da tela inteira fazia os botões nascerem
-                // já semitransparentes em telas onde o conteúdo acima não enche 1 vh.
-                const isStuck = back.getBoundingClientRect().top <= 0;
-                if (!isStuck) {
-                    back.style.opacity = 1;
-                    ticking = false;
-                    return;
-                }
-                const backHeight = back.offsetHeight || 1;
-                const progress = Math.max(0, Math.min(1, front.getBoundingClientRect().top / backHeight));
+                const vh = window.innerHeight || document.documentElement.clientHeight;
+                const progress = Math.max(0, Math.min(1, front.getBoundingClientRect().top / vh));
                 back.style.opacity = progress;
                 ticking = false;
             }
@@ -2799,43 +2405,8 @@
             }, { passive: true });
             update();
         }
+        initStickyFade('como-funciona', 'pratica');
         initStickyFade('linktree-buttons', 'card-stack-front');
-        initStickyFade('vantagens-exclusivas', 'pratica');
-
-        // --- Widget de Chat: mostra o balão "Tecnologia NFC para campanhas políticas"
-        // acima do botão assim que o usuário chegar na seção "Tag Avaliação Google". ---
-        (function () {
-            const bubble = document.getElementById('chat-widget-bubble');
-            const closeBtn = document.getElementById('chat-widget-bubble-close');
-            const trigger = document.getElementById('tag-google');
-            if (!bubble || !trigger) return;
-            let dismissed = false;
-            function reveal() {
-                if (dismissed) return;
-                bubble.classList.add('chat-widget-bubble-visible');
-            }
-            function hide() {
-                if (dismissed) return;
-                bubble.classList.remove('chat-widget-bubble-visible');
-            }
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    // Dispara quando metade da seção já saiu por cima da tela
-                    // (não precisa esperar ela sumir 100%).
-                    const leavingFromTop = entry.boundingClientRect.top < 0;
-                    const halfOrLessVisible = entry.intersectionRatio <= 0.5;
-                    const scrolledPastHalf = leavingFromTop && halfOrLessVisible;
-                    if (scrolledPastHalf) reveal();
-                    else hide();
-                });
-            }, { threshold: [0, 0.25, 0.5, 0.75, 1] });
-            observer.observe(trigger);
-            closeBtn?.addEventListener('click', () => {
-                dismissed = true;
-                bubble.classList.remove('chat-widget-bubble-visible');
-                observer.disconnect();
-            });
-        })();
 
         // --- 4. COMO FUNCIONA NA PRÁTICA: revelar elementos ao rolar ---
         const revealObserver = new IntersectionObserver((entries) => {
@@ -2843,17 +2414,24 @@
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
         document.querySelectorAll('.reveal-node').forEach(el => revealObserver.observe(el));
 
-        // --- Como Funciona o Cartão NFC: cada box fica colorido ao atingir 50% da tela. ---
+        // --- Como Funciona o Cartão NFC: cada box fica verde ao atingir 50% da tela.
+        // Como a seção é sticky (fica presa), os cards param de se mover uma vez presos
+        // e podem nunca cruzar o centro antes de "Como Funciona na Prática" cobri-los —
+        // por isso há uma rede de segurança: se a cobertura já está avançada, ativa
+        // o card mesmo assim, garantindo que o último ("Converta") também acenda. ---
         (function () {
             const cards = document.querySelectorAll('#como-funciona .glass-card');
-            if (!cards.length) return;
+            const front = document.getElementById('pratica');
+            if (!cards.length || !front) return;
             let ticking = false;
             function update() {
                 const centerY = window.innerHeight / 2;
+                const coverTop = front.getBoundingClientRect().top;
+                const coveringSoon = coverTop <= window.innerHeight * 0.6;
                 cards.forEach(card => {
                     if (card.classList.contains('active')) return;
                     const reachedCenter = card.getBoundingClientRect().top <= centerY;
-                    if (reachedCenter) card.classList.add('active');
+                    if (reachedCenter || coveringSoon) card.classList.add('active');
                 });
                 ticking = false;
             }
@@ -2873,9 +2451,12 @@
             function update() {
                 const centerY = window.innerHeight / 2;
                 targets.forEach(el => {
-                    // Bidirecional: marca ao descer e cruzar o meio da tela, e desmarca
-                    // (volta ao normal) ao subir de volta para antes do meio da tela.
-                    el.classList.toggle('active', el.getBoundingClientRect().top <= centerY);
+                    // Latch: uma vez que o topo do item atinja o meio da tela, fica marcado.
+                    // Evita perder o "gatilho" quando o item fica preso (position: sticky)
+                    // antes de cruzar totalmente o centro (ex.: dentro de #como-funciona).
+                    if (!el.classList.contains('active') && el.getBoundingClientRect().top <= centerY) {
+                        el.classList.add('active');
+                    }
                 });
                 ticking = false;
             }
@@ -3037,6 +2618,8 @@
                             '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero meu cartão para campanha política">Quero meu cartão para campanha política</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Qual o prazo de entrega do cartão?">Prazo de entrega</button>' +
+                            '<button type="button" class="wa-chip" data-frase="Quero orçamento para minha empresa">Quero orçamento para minha empresa</button>' +
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -3111,6 +2694,7 @@
             }
         }
 
+        initWaPanel({ btnId: 'btn-wa-personalizado', panelId: 'wa-personalizado-panel', caretId: 'wa-personalizado-caret', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
@@ -3141,73 +2725,45 @@
             });
         })();
 
-        // --- Painel "Tecnologia NFC para campanha política": abre/fecha igual ao painel de planos ---
-        (function () {
-            var btn = document.getElementById('btn-campanha-politica-top');
-            var panel = document.getElementById('campanha-politica-panel');
-            var caret = document.getElementById('campanha-politica-caret');
-            if (!btn || !panel) return;
-
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                var abrindo = !panel.classList.contains('wa-panel-open');
-                panel.classList.toggle('wa-panel-open');
-                syncLinktreeStickyState();
-                if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
-                if (abrindo) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 250);
-            });
-        })();
-
         // --- 5. MOCKUP: troca a imagem a cada aproximação do cartão NFC ---
         const screenImages = [
-            "img/mockup-tela-0.webp",
             "img/mockup-tela-1.webp",
-            "img/mockup-tela-2.webp"
+            "img/mockup-tela-2.webp",
+            "img/mockup-tela-3.webp",
+            "img/mockup-tela-4.webp",
+            "img/mockup-tela-5.webp"
         ];
 
         // Pré-carrega as imagens para a troca ocorrer sem piscar
         screenImages.forEach(src => { const img = new Image(); img.src = src; });
 
         let screenImageIndex = 0;
+        const cardApproachAnim = document.getElementById('card-approach-anim');
         const phoneUnlockedScreen = document.getElementById('phone-unlocked-screen');
-        const phoneLockOverlay = document.getElementById('phone-lock-overlay');
 
-        if (phoneUnlockedScreen && phoneLockOverlay) {
-            // Em vez de confiar no evento "animationiteration" (que pode disparar fora de fase
-            // e trocar a imagem com a tela ainda visível, causando o conflito/repique), monitora
-            // a opacidade real do ecrã bloqueado e só troca a imagem quando ele está totalmente
-            // cobrindo a tela — assim a troca nunca fica visível.
-            let wasCovered = false;
-            function watchLockOverlay() {
-                const opacity = parseFloat(getComputedStyle(phoneLockOverlay).opacity) || 0;
-                const isCovered = opacity > 0.95;
-                if (isCovered && !wasCovered) {
-                    screenImageIndex = (screenImageIndex + 1) % screenImages.length;
-                    phoneUnlockedScreen.style.backgroundImage = `url('${screenImages[screenImageIndex]}')`;
-                }
-                wasCovered = isCovered;
-                requestAnimationFrame(watchLockOverlay);
-            }
-            requestAnimationFrame(watchLockOverlay);
+        if (cardApproachAnim && phoneUnlockedScreen) {
+            cardApproachAnim.addEventListener('animationiteration', () => {
+                screenImageIndex = (screenImageIndex + 1) % screenImages.length;
+                phoneUnlockedScreen.style.backgroundImage = `url('${screenImages[screenImageIndex]}')`;
+            });
         }
 
         // --- 6. CARTÃO 3D INTERATIVO (Lógica Importada) ---
         const niches = [
             { name: "Restaurante", icon: "utensils", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
             { name: "Clínica", icon: "stethoscope", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-            { name: "Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
+            { name: "Sua Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
             { name: "Barbearia", icon: "scissors", color: "text-amber-700", bg: "bg-amber-700/10", border: "border-amber-700/30" },
             { name: "Advocacia", icon: "scale", color: "text-slate-600", bg: "bg-slate-600/10", border: "border-slate-600/30" },
             { name: "Imóveis", icon: "home", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
-            { name: "Petshop", icon: "paw-print", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
+            { name: "Sua Empresa", icon: "briefcase", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
         ];
-
+        
         let nicheIndex = 0;
         let isBlackCard = false;
-
+        
         const cardInner = document.getElementById('card-inner-flip');
         const cardBg = document.getElementById('hero-3d-card-bg');
-        const cardTitleEl = document.getElementById('card-company-title');
         const nicheEl = document.getElementById('niche-rotator');
         const iconContainer = document.getElementById('card-dynamic-icon');
         const wifiIcon = document.getElementById('card-wifi-icon');
@@ -3216,7 +2772,7 @@
         const cardLine1 = document.getElementById('card-line-1');
         const cardLine2 = document.getElementById('card-line-2');
 
-        if (cardInner && cardTitleEl && nicheEl && iconContainer) {
+        if (cardInner && nicheEl && iconContainer) {
             setInterval(() => {
                 // Fase 1: Inicia o giro
                 cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
@@ -3229,7 +2785,7 @@
 
                     if(isBlackCard) {
                         cardBg.className = "absolute inset-0 bg-gradient-to-br from-zinc-900 to-black rounded-[2rem] border border-zinc-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden backface-hidden";
-                        cardTitleEl.classList.replace('text-gray-900', 'text-white');
+                        nicheEl.classList.replace('text-gray-900', 'text-white');
                         wifiIcon.classList.replace('text-gray-400', 'text-zinc-500');
                         cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-zinc-800/80 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-zinc-600 flex items-center justify-center overflow-hidden shadow-sm";
                         cardChipIcon.classList.replace('text-gray-500', 'text-zinc-400');
@@ -3237,7 +2793,7 @@
                         cardLine2.classList.replace('bg-gray-300', 'bg-zinc-700');
                     } else {
                         cardBg.className = "absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden";
-                        cardTitleEl.classList.replace('text-white', 'text-gray-900');
+                        nicheEl.classList.replace('text-white', 'text-gray-900');
                         wifiIcon.classList.replace('text-zinc-500', 'text-gray-400');
                         cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm";
                         cardChipIcon.classList.replace('text-zinc-400', 'text-gray-500');
@@ -3248,7 +2804,6 @@
                     nicheIndex = (nicheIndex + 1) % niches.length;
                     const comp = niches[nicheIndex];
                     nicheEl.innerText = comp.name;
-                    nicheEl.className = `text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6 ${comp.color}`;
                     iconContainer.innerHTML = `<i data-lucide="${comp.icon}" class="w-6 h-6 sm:w-7 sm:h-7 ${comp.color}"></i>`;
                     iconContainer.className = `w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl shadow-lg border ${comp.bg} ${comp.border}`;
                     if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -3264,7 +2819,7 @@
                     cardInner.style.filter = 'brightness(1)';
                     
                 }, 400);
-            }, 3000);
+            }, 4000);
         }
 
         // --- MARQUEE DO PORTFÓLIO (mobile): pausa a animação ao tocar/segurar um card ---
