@@ -2310,6 +2310,27 @@
                     </div>
                 </div>
 
+                <!-- VÍDEO: Entenda como funciona a tecnologia NFC -->
+                <div id="video-como-funciona" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
+                    <div class="mb-6 text-center">
+                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Veja Na Prática</span>
+                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">Entenda como funciona a tecnologia NFC</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Assista ao vídeo direto no seu celular.</p>
+                    </div>
+
+                    <div class="relative w-[240px] sm:w-[280px] flex justify-center">
+                        <div class="relative z-10 w-full bg-slate-900 border-[6px] border-slate-800 rounded-[2.2rem] shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden p-1.5">
+                            <div class="absolute top-1.5 left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-full z-30"></div>
+                            <div class="w-full aspect-[9/16] bg-black rounded-[1.6rem] overflow-hidden">
+                                <video id="video-nfc-demo" class="w-full h-full object-cover" controls playsinline muted preload="metadata">
+                                    <source src="video/video.mp4" type="video/mp4">
+                                    Seu navegador não suporta vídeo HTML5.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- AÇÃO E REAÇÃO — AVALIAÇÃO GOOGLE (importado da página NFC) -->
                 <div id="tag-google" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
                     <div class="mb-6 text-center">
@@ -2882,6 +2903,23 @@
         }
         initStickyFade('linktree-buttons', 'card-stack-front');
         initStickyFade('vantagens-exclusivas', 'pratica');
+
+        // --- Vídeo "Entenda como funciona a tecnologia NFC": toca automaticamente
+        // assim que a seção entra na tela e pausa ao sair. ---
+        (function () {
+            const video = document.getElementById('video-nfc-demo');
+            if (!video) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(video);
+        })();
 
         // --- Widget de Chat: mostra o balão "Atendimento personalizado"
         // assim que o usuário começar a rolar a página (scroll). ---
