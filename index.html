@@ -798,9 +798,53 @@
             cursor: pointer;
         }
         .chat-widget-bubble-close:hover { color: #fff; }
+
+        /* Popup do widget flutuante: nome + mensagem, enviado direto pro WhatsApp */
+        .chat-widget-form {
+            position: absolute;
+            bottom: calc(100% + 0.9rem);
+            right: 0;
+            width: min(310px, calc(100vw - 2.5rem));
+            background: #0f0f16;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 1.1rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+            padding: 1.4rem 1.2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .chat-widget-form.chat-widget-form-open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .chat-widget-form-title { color: #fff; font-weight: 800; font-size: 0.95rem; margin: 0; padding-right: 1.5rem; }
+        .chat-widget-form-subtitle { color: #9ca3af; font-size: 0.75rem; line-height: 1.4; margin: 0 0 0.3rem; }
+        .chat-widget-form-label { color: #9ca3af; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+        .chat-widget-form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.7rem;
+            padding: 0.65rem 0.85rem;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .chat-widget-form-input::placeholder { color: #6b7280; }
+        .chat-widget-form-input:focus { border-color: #25D366; }
+        .chat-widget-form-textarea { resize: none; }
+
         @media (prefers-reduced-motion: reduce) {
             .chat-widget-btn::before { animation: none; }
             .chat-widget-bubble { transition: none; }
+            .chat-widget-form { transition: none; }
         }
 
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
@@ -2637,18 +2681,36 @@
 
     </main>
 
-    <!-- Widget de Chat Flutuante: Tecnologia NFC para campanhas políticas -->
+    <!-- Widget de Chat Flutuante: Atendimento personalizado via WhatsApp -->
     <div id="chat-widget">
         <div id="chat-widget-bubble" class="chat-widget-bubble">
-            <i class="ph-fill ph-megaphone"></i>
-            <span>Tecnologia NFC para campanhas políticas</span>
+            <i class="ph-fill ph-whatsapp-logo"></i>
+            <span>Atendimento personalizado</span>
             <button type="button" id="chat-widget-bubble-close" class="chat-widget-bubble-close" aria-label="Fechar">
                 <i class="ph ph-x"></i>
             </button>
         </div>
-        <a href="campanha.html" id="chat-widget-btn" class="chat-widget-btn" aria-label="Tecnologia NFC para campanhas políticas">
-            <img src="img/logo.webp" alt="Saturno NFC" class="chat-widget-logo">
-        </a>
+
+        <!-- Popup: nome + mensagem, enviado direto pro WhatsApp -->
+        <div id="chat-widget-form" class="chat-widget-form">
+            <button type="button" id="chat-widget-form-close" class="chat-widget-bubble-close" aria-label="Fechar" style="top: 0.9rem; right: 0.9rem;">
+                <i class="ph ph-x"></i>
+            </button>
+            <p class="chat-widget-form-title">Atendimento personalizado</p>
+            <p class="chat-widget-form-subtitle">Preencha seus dados e fale direto com a gente no WhatsApp.</p>
+            <label for="chat-widget-nome" class="chat-widget-form-label">Seu nome</label>
+            <input id="chat-widget-nome" type="text" placeholder="Digite seu nome" autocomplete="name" class="chat-widget-form-input">
+            <label for="chat-widget-mensagem" class="chat-widget-form-label">Sua mensagem</label>
+            <textarea id="chat-widget-mensagem" rows="3" placeholder="Escreva sua mensagem..." class="chat-widget-form-input chat-widget-form-textarea"></textarea>
+            <p id="chat-widget-form-erro" class="hidden text-[11px] font-semibold text-red-400 -mt-1">Preencha nome e mensagem antes de enviar.</p>
+            <button type="button" id="chat-widget-form-enviar" class="wa-chip w-full flex items-center justify-center gap-2 text-center">
+                Enviar no WhatsApp <i class="ph ph-whatsapp-logo"></i>
+            </button>
+        </div>
+
+        <button type="button" id="chat-widget-btn" class="chat-widget-btn" aria-label="Atendimento personalizado via WhatsApp">
+            <i class="ph-fill ph-whatsapp-logo" style="font-size: 2.1rem; color: #25D366;"></i>
+        </button>
     </div>
 
     <!-- Scripts de Interatividade -->
@@ -2821,7 +2883,7 @@
         initStickyFade('linktree-buttons', 'card-stack-front');
         initStickyFade('vantagens-exclusivas', 'pratica');
 
-        // --- Widget de Chat: mostra o balão "Tecnologia NFC para campanhas políticas"
+        // --- Widget de Chat: mostra o balão "Atendimento personalizado"
         // acima do botão assim que o usuário chegar na seção "Tag Avaliação Google". ---
         (function () {
             const bubble = document.getElementById('chat-widget-bubble');
@@ -2853,6 +2915,68 @@
                 dismissed = true;
                 bubble.classList.remove('chat-widget-bubble-visible');
                 observer.disconnect();
+            });
+        })();
+
+        // --- Widget de Chat: popup "nome + mensagem" enviado direto pro WhatsApp ---
+        (function () {
+            const WHATSAPP_PHONE = '5531920067518';
+
+            const btn = document.getElementById('chat-widget-btn');
+            const form = document.getElementById('chat-widget-form');
+            const closeBtn = document.getElementById('chat-widget-form-close');
+            const nomeInput = document.getElementById('chat-widget-nome');
+            const mensagemInput = document.getElementById('chat-widget-mensagem');
+            const erroMsg = document.getElementById('chat-widget-form-erro');
+            const enviarBtn = document.getElementById('chat-widget-form-enviar');
+            if (!btn || !form || !nomeInput || !mensagemInput || !enviarBtn) return;
+
+            function openForm() {
+                form.classList.add('chat-widget-form-open');
+                setTimeout(() => nomeInput.focus(), 200);
+            }
+            function closeForm() {
+                form.classList.remove('chat-widget-form-open');
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                form.classList.contains('chat-widget-form-open') ? closeForm() : openForm();
+            });
+            closeBtn?.addEventListener('click', closeForm);
+            document.addEventListener('click', (e) => {
+                if (form.classList.contains('chat-widget-form-open') && !form.contains(e.target) && !btn.contains(e.target)) {
+                    closeForm();
+                }
+            });
+
+            [nomeInput, mensagemInput].forEach((input) => {
+                input.addEventListener('input', () => {
+                    if (erroMsg && nomeInput.value.trim() && mensagemInput.value.trim()) {
+                        erroMsg.classList.add('hidden');
+                        input.classList.remove('wa-input-error');
+                    }
+                });
+            });
+
+            enviarBtn.addEventListener('click', () => {
+                const nome = nomeInput.value.trim();
+                const mensagem = mensagemInput.value.trim();
+                if (!nome || !mensagem) {
+                    if (!nome) nomeInput.classList.add('wa-input-error');
+                    if (!mensagem) mensagemInput.classList.add('wa-input-error');
+                    erroMsg?.classList.remove('hidden');
+                    (nome ? mensagemInput : nomeInput).focus();
+                    setTimeout(() => {
+                        nomeInput.classList.remove('wa-input-error');
+                        mensagemInput.classList.remove('wa-input-error');
+                    }, 600);
+                    return;
+                }
+                erroMsg?.classList.add('hidden');
+                const texto = 'Olá, meu nome é ' + nome + '. ' + mensagem;
+                window.open('https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(texto), '_blank');
+                closeForm();
             });
         })();
 
