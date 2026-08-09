@@ -1416,6 +1416,127 @@
             .portfolio-title-wrap .typewriter-line { width: auto; animation: none !important; border-color: transparent !important; }
         }
 
+        /* ===================== HERO SCROLL-MORPH (JS/CSS puro) =====================
+           Cartões dos projetos: espalhados -> linha -> círculo -> arco no rodapé,
+           controlado pelo scroll (wheel/touch). Recriação em vanilla JS do efeito
+           React "scroll-morph-hero", sem framer-motion/React/TypeScript. */
+        .morph-hero {
+            position: relative;
+            width: 100%;
+            height: clamp(480px, 72vh, 720px);
+            overflow: hidden;
+            touch-action: none;
+        }
+        .morph-stage {
+            position: absolute;
+            inset: 0;
+        }
+        .morph-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: var(--morph-card-w, 84px);
+            height: var(--morph-card-h, 59px);
+            margin-left: calc(var(--morph-card-w, 84px) / -2);
+            margin-top: calc(var(--morph-card-h, 59px) / -2);
+            perspective: 1000px;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+            will-change: transform;
+            cursor: pointer;
+        }
+        .morph-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .morph-card:hover .morph-card-inner,
+        .morph-card.is-flipped .morph-card-inner {
+            transform: rotateY(180deg);
+        }
+        .morph-card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 0.65rem;
+            overflow: hidden;
+            backface-visibility: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .morph-card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: rgba(255,255,255,0.05);
+        }
+        .morph-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(150deg, #14141c, #0a0a10);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4px;
+        }
+        .morph-card-back p:first-child {
+            font-size: 6px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #FFB800;
+            margin-bottom: 2px;
+        }
+        .morph-card-back p:last-child {
+            font-size: 8px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .morph-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none;
+            width: 90%;
+            max-width: 560px;
+            transition: opacity 0.6s ease, filter 0.6s ease;
+        }
+        .morph-intro-text h3 {
+            font-size: clamp(1.1rem, 4vw, 2rem);
+            font-weight: 700;
+            color: #fff;
+        }
+        .morph-intro-text p {
+            margin-top: 0.75rem;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #FFB800;
+        }
+        .morph-content-text {
+            top: 12%;
+            transform: translate(-50%, 0);
+        }
+        .morph-content-text h3 {
+            font-size: clamp(1.3rem, 4.5vw, 2.4rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .morph-content-text p {
+            margin-top: 0.75rem;
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .morph-card { transition: none; }
+        }
+
         /* Vantagens Exclusivas: pulso leve e sequencial (item 1, depois 2, ...) ao chegar na seção */
         #vantagens-grid.active .glass-card { animation: vantagemPulse 1.4s ease; }
         #vantagens-grid.active .glass-card:nth-child(1) { animation-delay: 0s; }
@@ -2224,7 +2345,7 @@
                             <span class="text-saturno-silver block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$400,00</span>
                         </div>
                         <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site profissional com domínio próprio</span></li>
+                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site profissional com animações avançadas</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">12 cartões NFC personalizados</span></li>
                             <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">3 placas NFC para Google, Wi-Fi e agendamento</span></li>
                             <li class="flex items-start gap-3"><i class="ph-fill ph-stack icon-bonus"></i><span class="list-text">Tudo do plano Essencial incluso</span></li>
@@ -2340,6 +2461,22 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ===================== HERO SCROLL-MORPH (vitrine animada do portfólio,
+                     entre "Entenda como funciona" e "5 Estrelas Sem Pesquisa") ===================== -->
+                <section class="morph-hero" id="morph-hero" style="width: 100vw; max-width: 100vw;" aria-label="Nossos projetos em destaque">
+                    <div class="morph-stage" id="morph-stage"></div>
+
+                    <div class="morph-text morph-intro-text" id="morph-intro-text">
+                        <h3>Cada marca. Uma experiência única.</h3>
+                        <p>Role para explorar</p>
+                    </div>
+
+                    <div class="morph-text morph-content-text" id="morph-content-text" style="opacity: 0;">
+                        <h3 class="text-gradient">Nosso Portfólio com Trabalhos Já Concluídos</h3>
+                        <p>Cada cartão é uma marca real que já conectou pessoas com a tecnologia Saturno NFC. Continue rolando para ver todos.</p>
+                    </div>
+                </section>
 
                 <!-- AÇÃO E REAÇÃO — AVALIAÇÃO GOOGLE (importado da página NFC) -->
                 <div id="tag-google" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
@@ -2461,11 +2598,6 @@
                         <div class="inline-flex items-center gap-3 px-3 py-1 bg-orange-500/10 border-l-4 border-orange-500 text-orange-400 text-[9px] font-bold mb-8 uppercase tracking-[0.4em]">
                             <i data-lucide="briefcase" class="w-3.5 h-3.5"></i> Trabalhos Concluídos
                         </div>
-
-                        <h2 class="portfolio-title-wrap font-black text-white mb-10 tracking-tighter uppercase leading-none">
-                            <span class="typewriter-line typewriter-line-1">NOSSO PORTFÓLIO COM</span><br/>
-                            <span class="typewriter-line typewriter-line-2 text-gradient">TRABALHOS JÁ CONCLUÍDOS.</span>
-                        </h2>
 
                         <!-- Instrução para o usuário -->
                         <div class="flex items-center justify-center gap-2 mb-6 text-slate-400 text-[11px] md:text-xs uppercase tracking-wider">
@@ -3491,6 +3623,195 @@
             prevBtn.addEventListener('click', () => { if (index > 0) { index--; update(); } });
 
             update();
+        })();
+
+        // ===================== HERO SCROLL-MORPH (vanilla JS) =====================
+        // Recriação sem React/framer-motion do efeito "scroll-morph-hero": cartões
+        // saem espalhados (invisíveis) -> alinham numa linha -> formam um círculo ->
+        // ao rolar (wheel/touch), o círculo se transforma num arco no rodapé da seção,
+        // que gira conforme o usuário continua rolando (soltando o scroll da página
+        // ao chegar no início/fim, para não prender o visitante dentro da seção).
+        (function () {
+            const heroEl = document.getElementById('morph-hero');
+            const stage = document.getElementById('morph-stage');
+            const introEl = document.getElementById('morph-intro-text');
+            const contentEl = document.getElementById('morph-content-text');
+            if (!heroEl || !stage) return;
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+            const lerp = (a, b, t) => a * (1 - t) + b * t;
+
+            const PROJECTS = [
+                { name: 'Maia Produtor', img: 'img/portfolio-maia-produtor.webp', link: 'https://maiaprodutor.site' },
+                { name: 'Prime Móveis', img: 'img/portfolio-prime-moveis.webp', link: 'https://primemoveis.site' },
+                { name: 'JP Joias', img: 'img/portfolio-jp-joias.webp', link: 'https://jpjoiasbrasil.com' },
+                { name: 'Vênus Distribuidora', img: 'img/portfolio-venus-distribuidora.webp', link: 'https://venusdistribuidora.com' },
+                { name: 'OuroPack', img: 'img/portfolio-ouropack.webp', link: 'https://www.ouropack.site' },
+                { name: 'Forma Máxima', img: 'img/portfolio-forma-maxima.webp', link: 'https://www.formamaxima.site' },
+            ];
+            const CARDS = [].concat(PROJECTS, PROJECTS, PROJECTS); // 18 cartões (6 projetos reais x3)
+            const TOTAL = CARDS.length;
+            const MAX_SCROLL = 3000;
+
+            const isCoarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+            const cardEls = CARDS.map((p) => {
+                const a = document.createElement('a');
+                a.href = p.link;
+                a.target = '_blank';
+                a.rel = 'noopener';
+                a.className = 'morph-card';
+                a.setAttribute('aria-label', 'Ver projeto ' + p.name);
+                a.innerHTML =
+                    '<div class="morph-card-inner">' +
+                        '<div class="morph-card-face morph-card-front"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy" decoding="async"></div>' +
+                        '<div class="morph-card-face morph-card-back"><p>Ver</p><p>Projeto</p></div>' +
+                    '</div>';
+                if (isCoarsePointer) {
+                    a.addEventListener('click', (e) => {
+                        if (!a.classList.contains('is-flipped')) {
+                            e.preventDefault();
+                            cardEls.forEach((other) => { if (other !== a) other.classList.remove('is-flipped'); });
+                            a.classList.add('is-flipped');
+                        }
+                    });
+                }
+                stage.appendChild(a);
+                return a;
+            });
+
+            if (isCoarsePointer) {
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.morph-card')) {
+                        cardEls.forEach((c) => c.classList.remove('is-flipped'));
+                    }
+                });
+            }
+
+            const scatterPositions = CARDS.map(() => ({
+                x: (Math.random() - 0.5) * 900,
+                y: (Math.random() - 0.5) * 500,
+                rotation: (Math.random() - 0.5) * 180,
+            }));
+
+            let phase = reducedMotion ? 'circle' : 'scatter';
+            let containerSize = { width: 0, height: 0 };
+            let virtualScroll = 0;
+            let parallaxValue = 0;
+
+            function measure() {
+                const rect = heroEl.getBoundingClientRect();
+                containerSize = { width: rect.width, height: rect.height };
+            }
+
+            function applyFrame() {
+                const isMobile = containerSize.width < 768;
+                const minDim = Math.min(containerSize.width, containerSize.height);
+                const circleRadius = Math.min(minDim * 0.35, 350);
+                const morphValue = clamp(virtualScroll / 600, 0, 1);
+                const scrollProgress = clamp((virtualScroll - 600) / (MAX_SCROLL - 600), 0, 1);
+
+                const baseRadius = Math.min(containerSize.width, containerSize.height * 1.5);
+                const arcRadius = baseRadius * (isMobile ? 1.4 : 1.1);
+                const arcApexY = containerSize.height * (isMobile ? 0.35 : 0.25);
+                const arcCenterY = arcApexY + arcRadius;
+                const spreadAngle = isMobile ? 100 : 130;
+                const startAngle = -90 - spreadAngle / 2;
+                const step = spreadAngle / (TOTAL - 1);
+                const maxRotation = spreadAngle * 0.8;
+                const boundedRotation = -scrollProgress * maxRotation;
+
+                cardEls.forEach((el, i) => {
+                    let x, y, rotation, scale = 1, opacity = 1;
+
+                    if (phase === 'scatter') {
+                        const s = scatterPositions[i];
+                        x = s.x; y = s.y; rotation = s.rotation; scale = 0.6; opacity = 0;
+                    } else if (phase === 'line') {
+                        const spacing = 58;
+                        const totalW = TOTAL * spacing;
+                        x = i * spacing - totalW / 2; y = 0; rotation = 0; scale = 1; opacity = 1;
+                    } else {
+                        const angle = (i / TOTAL) * 360;
+                        const rad = (angle * Math.PI) / 180;
+                        const cx = Math.cos(rad) * circleRadius;
+                        const cy = Math.sin(rad) * circleRadius;
+                        const crot = angle + 90;
+
+                        const curArcAngle = startAngle + i * step + boundedRotation;
+                        const arad = (curArcAngle * Math.PI) / 180;
+                        const ax = Math.cos(arad) * arcRadius + parallaxValue;
+                        const ay = Math.sin(arad) * arcRadius + arcCenterY;
+                        const arot = curArcAngle + 90;
+                        const ascale = isMobile ? 1.4 : 1.8;
+
+                        x = lerp(cx, ax, morphValue);
+                        y = lerp(cy, ay, morphValue);
+                        rotation = lerp(crot, arot, morphValue);
+                        scale = lerp(1, ascale, morphValue);
+                        opacity = 1;
+                    }
+
+                    el.style.transform = 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px) rotate(' + rotation.toFixed(1) + 'deg) scale(' + scale.toFixed(2) + ')';
+                    el.style.opacity = opacity;
+                });
+
+                if (introEl) introEl.style.opacity = phase === 'circle' ? clamp(1 - morphValue * 2, 0, 1) : 0;
+                if (contentEl) contentEl.style.opacity = clamp((morphValue - 0.8) / 0.2, 0, 1);
+            }
+
+            let frameQueued = false;
+            function scheduleUpdate() {
+                if (frameQueued) return;
+                frameQueued = true;
+                requestAnimationFrame(() => { frameQueued = false; applyFrame(); });
+            }
+
+            measure();
+            applyFrame();
+            if (!reducedMotion) {
+                setTimeout(() => { phase = 'line'; applyFrame(); }, 500);
+                setTimeout(() => { phase = 'circle'; applyFrame(); }, 2500);
+            }
+
+            heroEl.addEventListener('wheel', (e) => {
+                if (phase !== 'circle') return;
+                const goingDown = e.deltaY > 0;
+                const atMax = virtualScroll >= MAX_SCROLL;
+                const atMin = virtualScroll <= 0;
+                if ((goingDown && atMax) || (!goingDown && atMin)) return;
+                e.preventDefault();
+                virtualScroll = clamp(virtualScroll + e.deltaY, 0, MAX_SCROLL);
+                scheduleUpdate();
+            }, { passive: false });
+
+            let touchStartY = 0;
+            heroEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+            heroEl.addEventListener('touchmove', (e) => {
+                if (phase !== 'circle') return;
+                const touchY = e.touches[0].clientY;
+                const deltaY = touchStartY - touchY;
+                const goingDown = deltaY > 0;
+                const atMax = virtualScroll >= MAX_SCROLL;
+                const atMin = virtualScroll <= 0;
+                if ((goingDown && atMax) || (!goingDown && atMin)) return;
+                e.preventDefault();
+                touchStartY = touchY;
+                virtualScroll = clamp(virtualScroll + deltaY, 0, MAX_SCROLL);
+                scheduleUpdate();
+            }, { passive: false });
+
+            heroEl.addEventListener('mousemove', (e) => {
+                const rect = heroEl.getBoundingClientRect();
+                const relativeX = e.clientX - rect.left;
+                const normalizedX = (relativeX / rect.width) * 2 - 1;
+                parallaxValue = normalizedX * 100;
+                scheduleUpdate();
+            });
+            heroEl.addEventListener('mouseleave', () => { parallaxValue = 0; scheduleUpdate(); });
+
+            window.addEventListener('resize', () => { measure(); scheduleUpdate(); });
         })();
 
         // Garante que os ícones Lucide da seção de portfólio sejam renderizados
