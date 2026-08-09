@@ -1420,12 +1420,24 @@
            Cartões dos projetos: espalhados -> linha -> círculo -> arco no rodapé,
            controlado pelo scroll (wheel/touch). Recriação em vanilla JS do efeito
            React "scroll-morph-hero", sem framer-motion/React/TypeScript. */
-        .morph-hero {
+        /* O wrapper é mais alto que a seção (altura definida via JS = altura da
+           seção + intervalo de rolagem do efeito) para dar "corda" ao scroll:
+           a seção fica grudada (sticky) no topo enquanto o wrapper desliza por
+           baixo dela, então a animação segue a posição real da rolagem da
+           página (inércia do trackpad/touch incluída) em vez de depender de
+           eventos wheel/touchmove individuais, que a rolagem por inércia não
+           dispara — era por isso que às vezes era preciso clicar/tocar de novo
+           para o efeito "acordar". */
+        .morph-hero-wrapper {
             position: relative;
+            width: 100%;
+        }
+        .morph-hero {
+            position: sticky;
+            top: 0;
             width: 100%;
             height: clamp(480px, 72vh, 720px);
             overflow: hidden;
-            touch-action: none;
         }
         .morph-stage {
             position: absolute;
@@ -2462,19 +2474,21 @@
 
                 <!-- ===================== HERO SCROLL-MORPH (vitrine animada do portfólio,
                      entre "Entenda como funciona" e "5 Estrelas Sem Pesquisa") ===================== -->
-                <section class="morph-hero" id="morph-hero" style="width: 100vw; max-width: 100vw;" aria-label="Nossos projetos em destaque">
-                    <div class="morph-stage" id="morph-stage"></div>
+                <div class="morph-hero-wrapper" id="morph-hero-wrapper" style="width: 100vw; max-width: 100vw;">
+                    <section class="morph-hero" id="morph-hero" aria-label="Nossos projetos em destaque">
+                        <div class="morph-stage" id="morph-stage"></div>
 
-                    <div class="morph-text morph-intro-text" id="morph-intro-text">
-                        <h3>Cada marca. Uma experiência única.</h3>
-                        <p>Role para explorar</p>
-                    </div>
+                        <div class="morph-text morph-intro-text" id="morph-intro-text">
+                            <h3>Cada marca. Uma experiência única.</h3>
+                            <p>Role para explorar</p>
+                        </div>
 
-                    <div class="morph-text morph-content-text" id="morph-content-text" style="opacity: 0;">
-                        <h3 class="text-gradient">Nosso Portfólio com Trabalhos Já Concluídos</h3>
-                        <p>Cada cartão é uma marca real que já conectou pessoas com a tecnologia Saturno NFC. Continue rolando para ver todos.</p>
-                    </div>
-                </section>
+                        <div class="morph-text morph-content-text" id="morph-content-text" style="opacity: 0;">
+                            <h3 class="text-gradient">Nosso Portfólio com Trabalhos Já Concluídos</h3>
+                            <p>Cada cartão é uma marca real que já conectou pessoas com a tecnologia Saturno NFC. Continue rolando para ver todos.</p>
+                        </div>
+                    </section>
+                </div>
 
                 <!-- AÇÃO E REAÇÃO — AVALIAÇÃO GOOGLE (importado da página NFC) -->
                 <div id="tag-google" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
@@ -3403,15 +3417,18 @@
         // ===================== HERO SCROLL-MORPH (vanilla JS) =====================
         // Recriação sem React/framer-motion do efeito "scroll-morph-hero": cartões
         // saem espalhados (invisíveis) -> alinham numa linha -> formam um círculo ->
-        // ao rolar (wheel/touch), o círculo se transforma num arco no rodapé da seção,
-        // que gira conforme o usuário continua rolando (soltando o scroll da página
-        // ao chegar no início/fim, para não prender o visitante dentro da seção).
+        // ao rolar, o círculo se transforma num arco no rodapé da seção, que gira
+        // conforme o usuário continua rolando. A seção fica "grudada" (sticky) num
+        // wrapper mais alto e o progresso é lido direto da posição de rolagem da
+        // página (scroll nativo), não de eventos wheel/touchmove — assim a rolagem
+        // por inércia do trackpad/touch também anima o efeito normalmente.
         (function () {
+            const wrapperEl = document.getElementById('morph-hero-wrapper');
             const heroEl = document.getElementById('morph-hero');
             const stage = document.getElementById('morph-stage');
             const introEl = document.getElementById('morph-intro-text');
             const contentEl = document.getElementById('morph-content-text');
-            if (!heroEl || !stage) return;
+            if (!wrapperEl || !heroEl || !stage) return;
 
             const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
@@ -3479,20 +3496,23 @@
             function measure() {
                 const rect = heroEl.getBoundingClientRect();
                 containerSize = { width: rect.width, height: rect.height };
+                // Wrapper = altura da seção (parte "grudada") + intervalo de rolagem do
+                // efeito, para dar espaço de scroll suficiente para o círculo virar arco.
+                wrapperEl.style.height = (rect.height + MAX_SCROLL) + 'px';
             }
 
             function applyFrame() {
                 const isMobile = containerSize.width < 768;
                 const minDim = Math.min(containerSize.width, containerSize.height);
-                const circleRadius = Math.min(minDim * 0.35, 350);
+                const circleRadius = Math.min(minDim * 0.4, 380);
                 const morphValue = clamp(virtualScroll / 600, 0, 1);
                 const scrollProgress = clamp((virtualScroll - 600) / (MAX_SCROLL - 600), 0, 1);
 
                 const baseRadius = Math.min(containerSize.width, containerSize.height * 1.5);
-                const arcRadius = baseRadius * (isMobile ? 1.4 : 1.1);
+                const arcRadius = baseRadius * (isMobile ? 1.5 : 1.2);
                 const arcApexY = containerSize.height * (isMobile ? 0.35 : 0.25);
                 const arcCenterY = arcApexY + arcRadius;
-                const spreadAngle = isMobile ? 100 : 130;
+                const spreadAngle = isMobile ? 120 : 150;
                 const startAngle = -90 - spreadAngle / 2;
                 const step = spreadAngle / (TOTAL - 1);
                 const maxRotation = spreadAngle * 0.8;
@@ -3559,39 +3579,27 @@
                 if (rafId === null) rafId = requestAnimationFrame(animate);
             }
 
+            // Progresso do efeito = posição real de rolagem dentro do wrapper (0 ao
+            // entrar, MAX_SCROLL ao sair), lida a cada evento "scroll" nativo — funciona
+            // com mouse wheel, trackpad (incluindo rolagem por inércia) e touch por igual,
+            // sem precisar interceptar/"prevenir" o scroll da página.
+            function updateScrollProgress() {
+                if (phase !== 'circle') return;
+                const wrapperRect = wrapperEl.getBoundingClientRect();
+                targetScroll = clamp(-wrapperRect.top, 0, MAX_SCROLL);
+                scheduleUpdate();
+            }
+
             measure();
             applyFrame();
             if (!reducedMotion) {
                 setTimeout(() => { phase = 'line'; applyFrame(); }, 500);
-                setTimeout(() => { phase = 'circle'; applyFrame(); }, 2500);
+                setTimeout(() => { phase = 'circle'; applyFrame(); updateScrollProgress(); }, 2500);
+            } else {
+                updateScrollProgress();
             }
 
-            heroEl.addEventListener('wheel', (e) => {
-                if (phase !== 'circle') return;
-                const goingDown = e.deltaY > 0;
-                const atMax = targetScroll >= MAX_SCROLL;
-                const atMin = targetScroll <= 0;
-                if ((goingDown && atMax) || (!goingDown && atMin)) return;
-                e.preventDefault();
-                targetScroll = clamp(targetScroll + e.deltaY, 0, MAX_SCROLL);
-                scheduleUpdate();
-            }, { passive: false });
-
-            let touchStartY = 0;
-            heroEl.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
-            heroEl.addEventListener('touchmove', (e) => {
-                if (phase !== 'circle') return;
-                const touchY = e.touches[0].clientY;
-                const deltaY = touchStartY - touchY;
-                const goingDown = deltaY > 0;
-                const atMax = targetScroll >= MAX_SCROLL;
-                const atMin = targetScroll <= 0;
-                if ((goingDown && atMax) || (!goingDown && atMin)) return;
-                e.preventDefault();
-                touchStartY = touchY;
-                targetScroll = clamp(targetScroll + deltaY, 0, MAX_SCROLL);
-                scheduleUpdate();
-            }, { passive: false });
+            window.addEventListener('scroll', updateScrollProgress, { passive: true });
 
             heroEl.addEventListener('mousemove', (e) => {
                 const rect = heroEl.getBoundingClientRect();
@@ -3602,7 +3610,7 @@
             });
             heroEl.addEventListener('mouseleave', () => { parallaxValue = 0; scheduleUpdate(); });
 
-            window.addEventListener('resize', () => { measure(); applyFrame(); });
+            window.addEventListener('resize', () => { measure(); applyFrame(); updateScrollProgress(); });
         })();
 
         // Garante que os ícones Lucide da seção de portfólio sejam renderizados
