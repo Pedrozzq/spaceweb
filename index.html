@@ -1443,14 +1443,24 @@
             position: absolute;
             inset: 0;
         }
+        /* A caixa do cartão é renderizada já no maior tamanho que ele chega a
+           ocupar na tela (fase "arco" no desktop, ~1.8x do tamanho na fase
+           círculo/linha). O JS reduz (nunca amplia) a partir daí via scale()
+           para as fases menores — reduzir uma imagem já renderizada nunca
+           perde nitidez, mas ampliar o raster de uma caixa pequena sim, e
+           era isso que deixava os cartões com aparência de baixa qualidade
+           no arco. Todo valor fixo (não em %) dos filhos abaixo foi
+           multiplicado por esse mesmo 1.8x para compensar e manter o
+           tamanho aparente idêntico ao de antes em cada fase — só a
+           resolução de renderização mudou. */
         .morph-card {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: var(--morph-card-w, 84px);
-            height: var(--morph-card-h, 59px);
-            margin-left: calc(var(--morph-card-w, 84px) / -2);
-            margin-top: calc(var(--morph-card-h, 59px) / -2);
+            width: var(--morph-card-w, 151.2px);
+            height: var(--morph-card-h, 106.2px);
+            margin-left: calc(var(--morph-card-w, 151.2px) / -2);
+            margin-top: calc(var(--morph-card-h, 106.2px) / -2);
             perspective: 1000px;
             transition: opacity 0.5s ease;
             will-change: transform;
@@ -1470,11 +1480,11 @@
         .morph-card-face {
             position: absolute;
             inset: 0;
-            border-radius: 0.65rem;
+            border-radius: 1.17rem;
             overflow: hidden;
             backface-visibility: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.45);
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 14.4px 36px rgba(0,0,0,0.45);
+            border: 1.8px solid rgba(255,255,255,0.1);
         }
         .morph-card-front img {
             width: 100%;
@@ -1491,18 +1501,18 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 4px;
+            padding: 7.2px;
         }
         .morph-card-back p:first-child {
-            font-size: 6px;
+            font-size: 10.8px;
             font-weight: 800;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: #FFB800;
-            margin-bottom: 2px;
+            margin-bottom: 3.6px;
         }
         .morph-card-back p:last-child {
-            font-size: 8px;
+            font-size: 14.4px;
             font-weight: 600;
             color: #fff;
         }
@@ -3501,6 +3511,14 @@
                 wrapperEl.style.height = (rect.height + MAX_SCROLL) + 'px';
             }
 
+            // A caixa do cartão (.morph-card) é 1.8x maior que antes (ver CSS) para
+            // renderizar nitidamente na maior fase (arco desktop). RENDER_SCALE
+            // converte os multiplicadores de escala "aparente" de antes (0.6, 1,
+            // ascale) para a nova base — resultado final idêntico em cada fase, só
+            // que agora reduzindo (nítido) em vez de ampliando (borrado) a partir
+            // dessa caixa maior.
+            const RENDER_SCALE = 1.8;
+
             function applyFrame() {
                 const isMobile = containerSize.width < 768;
                 const minDim = Math.min(containerSize.width, containerSize.height);
@@ -3523,11 +3541,11 @@
 
                     if (phase === 'scatter') {
                         const s = scatterPositions[i];
-                        x = s.x; y = s.y; rotation = s.rotation; scale = 0.6; opacity = 0;
+                        x = s.x; y = s.y; rotation = s.rotation; scale = 0.6 / RENDER_SCALE; opacity = 0;
                     } else if (phase === 'line') {
                         const spacing = 58;
                         const totalW = TOTAL * spacing;
-                        x = i * spacing - totalW / 2; y = 0; rotation = 0; scale = 1; opacity = 1;
+                        x = i * spacing - totalW / 2; y = 0; rotation = 0; scale = 1 / RENDER_SCALE; opacity = 1;
                     } else {
                         const angle = (i / TOTAL) * 360;
                         const rad = (angle * Math.PI) / 180;
@@ -3545,7 +3563,7 @@
                         x = lerp(cx, ax, morphValue);
                         y = lerp(cy, ay, morphValue);
                         rotation = lerp(crot, arot, morphValue);
-                        scale = lerp(1, ascale, morphValue);
+                        scale = lerp(1 / RENDER_SCALE, ascale / RENDER_SCALE, morphValue);
                         opacity = 1;
                     }
 
