@@ -11,6 +11,24 @@
 </script>
 
 <head>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2272002663632377');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2272002663632377&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saturno NFC | Cartões Inteligentes</title>
@@ -3639,5 +3657,24 @@
         if (typeof lucide !== 'undefined') lucide.createIcons();
 
     </script>
+
+    <!-- Meta Pixel - Evento Lead em cliques de WhatsApp -->
+    <script>
+    (function () {
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        if (!/(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|whatsapp:\/\/)/i.test(href)) return;
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead', {
+            content_name: (a.innerText || 'WhatsApp').trim().slice(0, 80),
+            source: 'whatsapp_click'
+          });
+        }
+      }, true);
+    })();
+    </script>
+    <!-- End Meta Pixel - Lead -->
 </body>
 </html>
