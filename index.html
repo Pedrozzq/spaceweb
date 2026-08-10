@@ -3531,7 +3531,7 @@
                 const scrollProgress = clamp((virtualScroll - 600) / (MAX_SCROLL - 600), 0, 1);
 
                 const baseRadius = Math.min(containerSize.width, containerSize.height * 1.5);
-                const arcRadius = baseRadius * (isMobile ? 1.5 : 1.2);
+                const arcRadius = baseRadius * (isMobile ? 1.9 : 1.6);
                 const arcApexY = containerSize.height * (isMobile ? 0.35 : 0.25);
                 const arcCenterY = arcApexY + arcRadius;
                 const spreadAngle = isMobile ? 120 : 150;
