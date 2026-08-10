@@ -11,6 +11,7 @@
 </script>
 
 <head>
+    <meta charset="UTF-8">
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -29,7 +30,6 @@
     /></noscript>
     <!-- End Meta Pixel Code -->
 
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Saturno NFC | Cartões Inteligentes</title>
   
@@ -3661,17 +3661,34 @@
     <!-- Meta Pixel - Evento Lead em cliques de WhatsApp -->
     <script>
     (function () {
+      var WA_RE = /(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|whatsapp:\/\/)/i;
+      var last = 0;
+      function fireLead(label) {
+        var now = Date.now();
+        if (now - last < 1000) return; // evita duplicidade
+        last = now;
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead', {
+            content_name: String(label || 'WhatsApp').trim().slice(0, 80),
+            source: 'whatsapp_click'
+          });
+        }
+      }
+
+      // 1) CTAs que abrem o WhatsApp via window.open(...)
+      var _open = window.open;
+      window.open = function (url) {
+        if (url && WA_RE.test(String(url))) fireLead('WhatsApp CTA');
+        return _open.apply(window, arguments);
+      };
+
+      // 2) Links <a href="https://wa.me/...">
       document.addEventListener('click', function (e) {
         var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
         if (!a) return;
         var href = a.getAttribute('href') || '';
-        if (!/(wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|whatsapp:\/\/)/i.test(href)) return;
-        if (typeof fbq === 'function') {
-          fbq('track', 'Lead', {
-            content_name: (a.innerText || 'WhatsApp').trim().slice(0, 80),
-            source: 'whatsapp_click'
-          });
-        }
+        if (!WA_RE.test(href)) return;
+        fireLead(a.innerText || 'WhatsApp');
       }, true);
     })();
     </script>
