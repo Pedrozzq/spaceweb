@@ -1928,7 +1928,7 @@
                     </div>
                     <span class="font-bold text-white text-base md:text-lg z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Tecnologia NFC para sua empresa</span>
                 </div>
-                <i id="escolher-plano-caret" class="ph ph-arrow-right text-brand-gold opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all z-10 relative"></i>
+                <i id="escolher-plano-caret" class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
             </a>
 
             <div id="escolher-plano-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md">
@@ -1997,43 +1997,17 @@
 
             <!-- CARTÃO 3D INTERATIVO (Injetado após os botões) -->
             <div class="perspective-1000 flex justify-center w-full my-12 stagger-item" style="animation-delay: 0.5s;" id="card-3d-wrapper">
-            <div class="relative w-56 h-[360px] sm:w-80 sm:h-[480px] preserve-3d animate-float nfc-3d-card">
-                
+            <div class="relative w-[17rem] h-[172px] sm:w-[24rem] sm:h-[243px] preserve-3d animate-float nfc-3d-card">
+
                 <div id="card-inner-flip" class="w-full h-full relative preserve-3d">
-                    
-                    <div id="hero-3d-card-bg" class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-600/20 blur-3xl rounded-full"></div>
-                        <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-600/20 blur-3xl rounded-full"></div>
 
-                        <div class="p-5 sm:p-8 flex flex-col justify-between h-full relative z-10">
-                            <div class="flex justify-between items-start">
-                                <div id="card-dynamic-icon" class="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center bg-orange-500/10 text-orange-400 rounded-2xl shadow-lg border border-orange-500/30">
-                                    <i data-lucide="utensils" class="w-6 h-6 sm:w-7 sm:h-7"></i>
-                                </div>
-                                <i data-lucide="wifi" id="card-wifi-icon" class="text-gray-400 rotate-90 w-6 h-6 sm:w-8 sm:h-8"></i>
-                            </div>
-                            
-                            <div class="mt-auto">
-                                <div id="card-chip" class="w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm">
-                                    <i data-lucide="trending-up" id="card-chip-icon" class="w-6 h-6 sm:w-8 sm:h-8 text-gray-500"></i>
-                                </div>
-                                
-                                <h3 class="text-xl sm:text-2xl font-black text-gray-900 mb-1 tracking-tighter uppercase" id="card-company-title">Sua Empresa</h3>
-                                <p class="text-orange-500 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6" id="niche-rotator">Restaurante</p>
-                                
-                                <div class="w-8 h-6 sm:w-10 sm:h-8 rounded border border-orange-500/30 bg-orange-500/10 mb-3 sm:mb-4 opacity-50 relative overflow-hidden">
-                                    <div class="absolute inset-0 bg-[linear-gradient(90deg,transparent_2px,#ea580c_2px,#ea580c_3px,transparent_3px)] bg-[length:4px_100%] opacity-30"></div>
-                                </div>
-
-                                <div id="card-line-1" class="w-full h-px bg-gray-300 mb-3"></div>
-                                <div id="card-line-2" class="w-2/3 h-px bg-gray-300"></div>
-                            </div>
-                        </div>
+                    <div id="hero-3d-card-bg" class="absolute inset-0 rounded-[1.25rem] border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.55)] overflow-hidden backface-hidden bg-black">
+                        <img id="hero-3d-card-img" src="cartoes/maia.png" alt="Cartão NFC produzido pela Saturno" class="absolute inset-0 w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-orange-500/30 rounded-[2rem] -z-10 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-[2rem] -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-orange-500/30 rounded-[1.25rem] -z-10 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-blue-500/10 rounded-[1.5rem] -z-20 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite_1.5s]"></div>
             </div>
         </div>
         </div>
@@ -2067,8 +2041,8 @@
                     <div class="w-12 h-12 rounded-full bg-brand-gold/20 text-brand-gold flex items-center justify-center mb-4 border border-brand-gold/30">
                         <i class="ph ph-rocket-launch text-2xl"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2">3. Converta</h3>
-                    <p class="text-sm text-gray-400">O cliente chama no WhatsApp, salva contato ou segue no Instagram.</p>
+                    <h3 class="font-bold text-lg mb-2">3. Converta e Venda</h3>
+                    <p class="text-sm text-gray-400">O cliente chama no WhatsApp, salva contato, segue no Instagram e fecha a venda na hora.</p>
                 </div>
             </div>
         </section>
@@ -3327,77 +3301,47 @@
         }
 
         // --- 6. CARTÃO 3D INTERATIVO (Lógica Importada) ---
-        const niches = [
-            { name: "Restaurante", icon: "utensils", color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
-            { name: "Clínica", icon: "stethoscope", color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-            { name: "Loja", icon: "shopping-bag", color: "text-pink-500", bg: "bg-pink-500/10", border: "border-pink-500/30" },
-            { name: "Barbearia", icon: "scissors", color: "text-amber-700", bg: "bg-amber-700/10", border: "border-amber-700/30" },
-            { name: "Advocacia", icon: "scale", color: "text-slate-600", bg: "bg-slate-600/10", border: "border-slate-600/30" },
-            { name: "Imóveis", icon: "home", color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
-            { name: "Petshop", icon: "paw-print", color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" }
+        // --- Cartão 3D do topo: alterna entre os cartões já produzidos (mesma animação de giro) ---
+        const heroCards = [
+            'cartoes/maia.png',
+            'cartoes/jpjpj.png',
+            'cartoes/Saturno%20NFC.png',
+            'cartoes/forma.png',
+            'cartoes/C%C3%B3pia%20de%20C%C3%B3pia%20de%20Saturno%20NFC.png',
+            'cartoes/dddddd.png',
+            'cartoes/panoramaaa.png',
+            'cartoes/carolfariaa.png',
+            'cartoes/venus.png',
+            'cartoes/8.png',
+            'cartoes/3.png'
         ];
-
-        let nicheIndex = 0;
-        let isBlackCard = false;
+        heroCards.forEach(src => { const i = new Image(); i.src = src; });
 
         const cardInner = document.getElementById('card-inner-flip');
-        const cardBg = document.getElementById('hero-3d-card-bg');
-        const cardTitleEl = document.getElementById('card-company-title');
-        const nicheEl = document.getElementById('niche-rotator');
-        const iconContainer = document.getElementById('card-dynamic-icon');
-        const wifiIcon = document.getElementById('card-wifi-icon');
-        const cardChip = document.getElementById('card-chip');
-        const cardChipIcon = document.getElementById('card-chip-icon');
-        const cardLine1 = document.getElementById('card-line-1');
-        const cardLine2 = document.getElementById('card-line-2');
+        const cardImg = document.getElementById('hero-3d-card-img');
 
-        if (cardInner && cardTitleEl && nicheEl && iconContainer) {
+        if (cardInner && cardImg) {
+            let heroCardIndex = 0;
             setInterval(() => {
                 // Fase 1: Inicia o giro
                 cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
                 cardInner.style.transform = 'rotateY(90deg) scale(1.05)';
                 cardInner.style.filter = 'brightness(1.5)';
-                
+
                 setTimeout(() => {
-                    // Fase 2: Ponto cego / Troca do conteúdo
-                    isBlackCard = !isBlackCard;
-
-                    if(isBlackCard) {
-                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-zinc-900 to-black rounded-[2rem] border border-zinc-700 shadow-[0_20px_50px_rgba(0,0,0,0.8)] overflow-hidden backface-hidden";
-                        cardTitleEl.classList.replace('text-gray-900', 'text-white');
-                        wifiIcon.classList.replace('text-gray-400', 'text-zinc-500');
-                        cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-zinc-800/80 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-zinc-600 flex items-center justify-center overflow-hidden shadow-sm";
-                        cardChipIcon.classList.replace('text-gray-500', 'text-zinc-400');
-                        cardLine1.classList.replace('bg-gray-300', 'bg-zinc-700');
-                        cardLine2.classList.replace('bg-gray-300', 'bg-zinc-700');
-                    } else {
-                        cardBg.className = "absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200 rounded-[2rem] border border-white/60 shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden backface-hidden";
-                        cardTitleEl.classList.replace('text-white', 'text-gray-900');
-                        wifiIcon.classList.replace('text-zinc-500', 'text-gray-400');
-                        cardChip.className = "w-12 h-12 sm:w-16 sm:h-16 bg-white/40 backdrop-blur-md rounded-full mb-3 sm:mb-5 border border-white/60 flex items-center justify-center overflow-hidden shadow-sm";
-                        cardChipIcon.classList.replace('text-zinc-400', 'text-gray-500');
-                        cardLine1.classList.replace('bg-zinc-700', 'bg-gray-300');
-                        cardLine2.classList.replace('bg-zinc-700', 'bg-gray-300');
-                    }
-
-                    nicheIndex = (nicheIndex + 1) % niches.length;
-                    const comp = niches[nicheIndex];
-                    nicheEl.innerText = comp.name;
-                    nicheEl.className = `text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] mb-3 sm:mb-6 ${comp.color}`;
-                    iconContainer.innerHTML = `<i data-lucide="${comp.icon}" class="w-6 h-6 sm:w-7 sm:h-7 ${comp.color}"></i>`;
-                    iconContainer.className = `w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl shadow-lg border ${comp.bg} ${comp.border}`;
-                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                    // Fase 2: Ponto cego / troca a imagem do cartão
+                    heroCardIndex = (heroCardIndex + 1) % heroCards.length;
+                    cardImg.src = heroCards[heroCardIndex];
 
                     cardInner.style.transition = 'none';
                     cardInner.style.transform = 'rotateY(-90deg) scale(1.05)';
-                    
+
                     void cardInner.offsetWidth; // Force Reflow
 
                     // Fase 3: Volta até 0 graus
                     cardInner.style.transition = 'transform 0.4s ease-out, filter 0.4s ease-out';
                     cardInner.style.transform = 'rotateY(0deg) scale(1)';
                     cardInner.style.filter = 'brightness(1)';
-                    
                 }, 400);
             }, 3000);
         }
@@ -3465,16 +3409,17 @@
             const lerp = (a, b, t) => a * (1 - t) + b * t;
 
             const PROJECTS = [
-                { name: 'Maia Produtor', img: 'img/portfolio-maia-produtor.webp', link: 'https://maiaprodutor.site' },
-                { name: 'Prime Móveis', img: 'img/portfolio-prime-moveis.webp', link: 'https://primemoveis.site' },
-                { name: 'JP Joias', img: 'img/portfolio-jp-joias.webp', link: 'https://jpjoiasbrasil.com' },
-                { name: 'Vênus Distribuidora', img: 'img/portfolio-venus-distribuidora.webp', link: 'https://venusdistribuidora.com' },
-                { name: 'OuroPack', img: 'img/portfolio-ouropack.webp', link: 'https://www.ouropack.site' },
-                { name: 'Forma Máxima', img: 'img/portfolio-forma-maxima.webp', link: 'https://www.formamaxima.site' },
-                { name: 'Kidestino', img: 'img/portfolio-kidestino.webp', link: 'https://kidestinoop.com.br' },
-                { name: 'The Jolly Washer', img: 'img/portfolio-jolly-washer.webp', link: 'https://thejollywasher.site' },
-                { name: 'Panorama Mercados', img: 'img/portfolio-panorama-mercados.webp', link: 'https://www.panoramamercados.com' },
-                { name: 'Carol Faria', img: 'img/portfolio-carol-faria.webp', link: 'https://carolfaria.site' },
+                { name: 'Maia Produtor', img: 'cartoes/maia.png', link: 'https://maiaprodutor.site' },
+                { name: 'JP Joias', img: 'cartoes/jpjpj.png', link: 'https://jpjoiasbrasil.com' },
+                { name: 'OuroPack', img: 'cartoes/Saturno%20NFC.png', link: 'https://www.ouropack.site' },
+                { name: 'Forma Máxima', img: 'cartoes/forma.png', link: 'https://www.formamaxima.site' },
+                { name: 'Kidestino', img: 'cartoes/C%C3%B3pia%20de%20C%C3%B3pia%20de%20Saturno%20NFC.png', link: 'https://kidestinoop.com.br' },
+                { name: 'The Jolly Washer', img: 'cartoes/dddddd.png', link: 'https://thejollywasher.site' },
+                { name: 'Panorama Mercados', img: 'cartoes/panoramaaa.png', link: 'https://www.panoramamercados.com' },
+                { name: 'Carol Faria', img: 'cartoes/carolfariaa.png', link: 'https://carolfaria.site' },
+                { name: 'Vênus Distribuidora', img: 'cartoes/venus.png', link: 'https://venusdistribuidora.com' },
+                { name: 'PorElas Sem Glúten', img: 'cartoes/8.png', link: 'https://wa.me/5531920067518' },
+                { name: "Comfort Transport's", img: 'cartoes/3.png', link: 'https://wa.me/5531920067518' },
             ];
             const CARDS = [].concat(PROJECTS, PROJECTS, PROJECTS); // 30 cartões (10 projetos reais x3)
             const TOTAL = CARDS.length;
