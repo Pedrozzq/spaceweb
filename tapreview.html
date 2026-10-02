@@ -472,14 +472,6 @@
         .tap-scene.done .tap-caption { opacity: 1; transform: none; }
         .tap-caption .stars { color: #FBBC05; letter-spacing: 0.15em; font-size: 14px; }
 
-        @media (prefers-reduced-motion: reduce) {
-            .tap-scene { height: auto; }
-            .tap-stage { position: relative; height: auto; padding: 4rem 0 6rem; }
-            .tap-ripple, .ip-flash, .tap-hint, .ip-lock { display: none; }
-            .ip-google { opacity: 1; transform: none; }
-            .tap-caption { opacity: 1; transform: none; bottom: 1.5rem; }
-            .ip-google .box .caret { animation: none; }
-        }
         /* ===================== BOTÃO "QUERO MEU TAPREVIEW" (tecnológico) =====================
            Borda de luz girando (azul/verde Google), fundo azul escuro com grade fina,
            feixe de luz atravessando, brilho pulsando e ondas NFC ao lado do texto. */
@@ -968,7 +960,8 @@
                 var pr = phone.getBoundingClientRect();
                 card.style.transform = 'translate(-50%, -50%) translate(' + (-pr.width * 0.62) + 'px,' + (pr.height * 0.3) + 'px) rotate(-12deg)';
             }
-            if (reduce) { finalState(); return; }
+            // roda mesmo com "reduzir movimento" ativo: a cena só anda quando a pessoa rola
+            // (no Windows, efeitos de animação desligados faziam ela ficar parada no PC).
 
             var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
             var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
