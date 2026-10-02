@@ -28,8 +28,8 @@
     /></noscript>
     <!-- End Meta Pixel Code -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartão TapReview do Google | Saturno NFC</title>
-    <meta name="description" content="Cartão de avaliação do Google por NFC: o cliente aproxima o celular e a página de avaliação da sua empresa abre em segundos. Já vem configurado.">
+    <title>TapReview | Saturno NFC</title>
+    <meta name="description" content="TapReview, avaliação do Google por NFC: o cliente aproxima o celular e a página de avaliação da sua empresa abre em segundos. Já vem configurado.">
     <link rel="icon" type="image/webp" href="img/favicon.webp">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -553,6 +553,29 @@
             .tap-img.float img { animation: none; }
             #particles-canvas { display: none; }
         }
+
+        /* ===== Formulário TapReview (abre o WhatsApp já com o pedido) ===== */
+        .tr-modal { position: fixed; inset: 0; z-index: 100; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); }
+        .tr-modal.open { display: flex; }
+        @media (min-width: 640px) { .tr-modal { align-items: center; } }
+        .tr-sheet { width: 100%; max-width: 440px; max-height: 92vh; overflow-y: auto; background: #0b0d14; border: 1px solid rgba(110,168,255,.25); border-radius: 22px 22px 0 0; padding: 22px 18px 18px; box-shadow: 0 -10px 40px rgba(66,133,244,.15); }
+        @media (min-width: 640px) { .tr-sheet { border-radius: 22px; } }
+        .tr-sheet h3 { color: #fff; font-weight: 900; text-transform: uppercase; letter-spacing: -.02em; font-size: 1.25rem; }
+        .tr-sheet p.tr-sub { color: #9aa3b5; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; margin-top: 4px; }
+        .tr-label { display: block; color: #b9d3ff; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; margin: 14px 0 6px; }
+        .tr-input { width: 100%; background: #12151f; border: 1px solid rgba(255,255,255,.1); color: #fff; border-radius: 12px; padding: 12px 14px; font-size: 15px; outline: none; transition: border-color .2s; }
+        .tr-input:focus { border-color: #4285F4; }
+        .tr-input.invalid { border-color: #ea4335; }
+        .tr-hint { color: #6b7385; font-size: 10px; margin-top: 5px; }
+        .tr-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .tr-choice input { position: absolute; opacity: 0; pointer-events: none; }
+        .tr-choice span { display: block; text-align: center; padding: 11px 8px; border-radius: 12px; border: 1px solid rgba(255,255,255,.1); background: #12151f; color: #d7dbe5; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; transition: all .2s; }
+        .tr-choice span small { display: block; color: #6ea8ff; font-size: 11px; margin-top: 2px; letter-spacing: 0; }
+        .tr-choice input:checked + span { border-color: #4285F4; background: rgba(66,133,244,.15); color: #fff; }
+        .tr-total { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: rgba(66,133,244,.08); border: 1px solid rgba(66,133,244,.25); color: #fff; font-weight: 800; font-size: 13px; display: flex; justify-content: space-between; text-transform: uppercase; letter-spacing: .06em; }
+        .tr-send { margin-top: 16px; width: 100%; border: 0; border-radius: 14px; padding: 15px; background: linear-gradient(135deg,#25D366,#128C7E); color: #fff; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; }
+        .tr-close { position: sticky; top: 0; float: right; background: none; border: 0; color: #9aa3b5; font-size: 22px; cursor: pointer; }
+        .tr-error { color: #ff8a80; font-size: 11px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body class="antialiased">
@@ -573,13 +596,13 @@
                 </header>
 
                 <div class="w-full text-center">
-                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.4em] text-[10px] stagger-item" style="animation-delay: 0.1s;">Cartão TapReview do Google</span>
+                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.4em] text-[10px] stagger-item" style="animation-delay: 0.1s;">TapReview</span>
                     <h1 class="title-highlight text-white uppercase text-3xl leading-tight mt-3 stagger-item" style="animation-delay: 0.25s;">Aproxime e abra a <span class="text-gradient-blue">avaliação</span></h1>
                     <p class="text-sm text-gray-400 leading-relaxed mt-3 stagger-item" style="animation-delay: 0.4s;">O cliente aproxima o celular e a página de avaliação da sua empresa no Google abre em segundos.</p>
                 </div>
 
                 <figure class="tap-img float w-full mt-2 stagger-item" style="animation-delay: 0.55s;">
-                    <img src="img/tapreview-sem-fundo.webp" alt="Cartão TapReview do Google ao lado de um celular com a página de avaliação aberta" width="936" height="1200" decoding="async" fetchpriority="high">
+                    <img src="img/tapreview-sem-fundo.webp" alt="TapReview ao lado de um celular com a página de avaliação aberta" width="936" height="1200" decoding="async" fetchpriority="high">
                 </figure>
 
                 <a href="#como-funciona" class="flex flex-col items-center scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.7s;">
@@ -609,7 +632,7 @@
                                 <div class="ip-lock">
                                     <span class="d">sexta-feira, 2 de outubro</span>
                                     <span class="t">9:41</span>
-                                    <span class="nfc"><i class="ph ph-wifi-high"></i>Aproxime o cartão</span>
+                                    <span class="nfc"><i class="ph ph-wifi-high"></i>Aproxime o TapReview</span>
                                 </div>
                                 <div class="ip-google">
                                     <div class="glogo"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b></div>
@@ -628,7 +651,7 @@
                         <span class="tap-ripple"></span><span class="tap-ripple"></span><span class="tap-ripple"></span>
 
                         <div class="tap-card-wrap">
-                            <img src="img/tapreview-card.webp" alt="Cartão TapReview do Google: aproxime seu celular para avaliar" width="535" height="765" decoding="async">
+                            <img src="img/tapreview-card.webp" alt="TapReview: aproxime seu celular para avaliar" width="535" height="765" decoding="async">
                             <div class="tap-glare" aria-hidden="true"></div>
                         </div>
 
@@ -645,14 +668,14 @@
                             <span class="card-icon"><i class="ph ph-link text-xl"></i></span>
                             Já vem configurado
                         </h3>
-                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">Envie o link da sua empresa após a compra. Nós gravamos no cartão antes do envio e você recebe pronto para usar.</p>
+                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">Envie o link da sua empresa após a compra. Nós gravamos no TapReview antes do envio e você recebe pronto para usar.</p>
                     </div>
                     <div class="card-interactive reveal-node p-6">
                         <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
                             <span class="card-icon"><i class="ph ph-wifi-high text-xl rotate-90"></i></span>
                             Sem aplicativo
                         </h3>
-                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">É só aproximar o celular do cartão. Nada para baixar e nada para digitar.</p>
+                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">É só aproximar o celular do TapReview. Nada para baixar e nada para digitar.</p>
                     </div>
                     <div class="card-interactive reveal-node p-6">
                         <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
@@ -664,7 +687,7 @@
                 </div>
 
                 <div class="w-full mt-10 reveal-node">
-                    <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20Cart%C3%A3o%20TapReview%20do%20Google." target="_blank" rel="noopener noreferrer" class="cta-tech magnetic-btn">
+                    <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20TapReview." target="_blank" rel="noopener noreferrer" class="cta-tech magnetic-btn">
                         <span class="cta-tech-inner">
                             <span class="cta-g"><i class="ph-bold ph-google-logo"></i></span>
                             Quero meu TapReview
@@ -744,7 +767,7 @@
         <div class="stack-wrap">
             <section class="stack-back w-full pt-4 pb-10" style="background: var(--bg);">
                 <div class="text-center mb-2 reveal-node">
-                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.3em] text-xs">Detalhes do cartão</span>
+                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.3em] text-xs">Detalhes do TapReview</span>
                     <h2 class="type-wrap title-highlight uppercase text-3xl leading-tight mt-2">
                         <span class="type-line text-white">Receba pronto</span><br>
                         <span class="type-after text-gradient-blue">para usar</span>
@@ -752,11 +775,11 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3 items-end">
                     <figure class="tap-img tap-img-zoom reveal-node">
-                        <img src="img/tapreview1-sem-fundo.webp" alt="Cartão TapReview com o chip NFC já gravado" width="936" height="1200" decoding="async">
+                        <img src="img/tapreview1-sem-fundo.webp" alt="TapReview com o chip NFC já gravado" width="936" height="1200" decoding="async">
                         <figcaption class="tap-cap">Chip NFC gravado com o link da sua empresa</figcaption>
                     </figure>
                     <figure class="tap-img reveal-node" style="transition-delay: 0.2s;">
-                        <img src="img/tapreview2-sem-fundo.webp" alt="Cartão TapReview com 7 cm de largura e 10 cm de altura" width="800" height="1200" decoding="async">
+                        <img src="img/tapreview2-sem-fundo.webp" alt="TapReview com 7 cm de largura e 10 cm de altura" width="800" height="1200" decoding="async">
                         <figcaption class="tap-cap">Tamanho: <b>7 × 10 cm</b></figcaption>
                     </figure>
                 </div>
@@ -770,7 +793,7 @@
 
                 <div class="reveal-node">
     <div class="w-full mb-5">
-                        <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20Cart%C3%A3o%20TapReview%20do%20Google." target="_blank" rel="noopener noreferrer" class="cta-tech magnetic-btn">
+                        <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20TapReview." target="_blank" rel="noopener noreferrer" class="cta-tech magnetic-btn">
                             <span class="cta-tech-inner">
                                 <span class="cta-g"><i class="ph-bold ph-google-logo"></i></span>
                                 Quero meu TapReview
@@ -1015,6 +1038,133 @@
             window.addEventListener('scroll', request, { passive: true });
             window.addEventListener('resize', request);
             render();
+        })();
+    </script>
+
+    <!-- ===== Formulário TapReview: o cliente preenche aqui e chega no WhatsApp com o pedido pronto ===== -->
+    <div class="tr-modal" id="trModal" role="dialog" aria-modal="true" aria-labelledby="trTitle">
+        <form class="tr-sheet" id="trForm" novalidate>
+            <button type="button" class="tr-close" id="trClose" aria-label="Fechar"><i class="ph ph-x"></i></button>
+            <h3 id="trTitle">Quero meu TapReview</h3>
+            <p class="tr-sub">Preencha e envie pelo WhatsApp · frete incluso</p>
+
+            <span class="tr-label">Quantidade</span>
+            <div class="tr-choices">
+                <label class="tr-choice"><input type="radio" name="qtd" value="1"><span>1 TapReview<small>R$ 60</small></span></label>
+                <label class="tr-choice"><input type="radio" name="qtd" value="2" checked><span>2 TapReview<small>R$ 100</small></span></label>
+            </div>
+
+            <label class="tr-label" for="trNome">Nome completo</label>
+            <input class="tr-input" id="trNome" name="nome" autocomplete="name" required>
+
+            <label class="tr-label" for="trGoogle">Link da sua empresa no Google</label>
+            <input class="tr-input" id="trGoogle" name="google" placeholder="Cole o link ou o nome da empresa no Maps" required>
+            <p class="tr-hint">Não achou o link? Escreva o nome exato da empresa como aparece no Google Maps.</p>
+
+            <label class="tr-label" for="trCep">CEP</label>
+            <input class="tr-input" id="trCep" name="cep" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000" required>
+
+            <label class="tr-label" for="trEnd">Endereço completo para entrega</label>
+            <input class="tr-input" id="trEnd" name="endereco" autocomplete="street-address" placeholder="Rua, número, complemento, bairro" required>
+
+            <label class="tr-label" for="trCidade">Cidade/Estado</label>
+            <input class="tr-input" id="trCidade" name="cidade" placeholder="Cidade/UF" required>
+
+            <span class="tr-label">Forma de pagamento</span>
+            <div class="tr-choices">
+                <label class="tr-choice"><input type="radio" name="pag" value="Pix" checked><span>Pix</span></label>
+                <label class="tr-choice"><input type="radio" name="pag" value="Crédito, débito ou boleto"><span>Crédito, débito ou boleto</span></label>
+            </div>
+
+            <div class="tr-total"><span>Total com frete</span><span id="trTotal">R$ 100</span></div>
+            <p class="tr-error" id="trError">Preencha os campos destacados.</p>
+
+            <button type="submit" class="tr-send"><i class="ph-bold ph-whatsapp-logo text-lg"></i> Enviar pedido no WhatsApp</button>
+        </form>
+    </div>
+
+    <script>
+        (function () {
+            var PHONE = '5531920067518';
+            var PRICES = { '1': 'R$ 60', '2': 'R$ 100' };
+            var modal = document.getElementById('trModal');
+            var form = document.getElementById('trForm');
+            var total = document.getElementById('trTotal');
+            var err = document.getElementById('trError');
+            var cep = document.getElementById('trCep');
+
+            function open(e) {
+                if (e) e.preventDefault();
+                modal.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                setTimeout(function () { document.getElementById('trNome').focus(); }, 50);
+                if (window.fbq) fbq('track', 'InitiateCheckout');
+                if (window.gtag) gtag('event', 'begin_checkout', { item_name: 'TapReview' });
+            }
+            function close() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+
+            // Todos os botões "Quero meu TapReview" abrem o formulário em vez do WhatsApp direto
+            document.querySelectorAll('a.cta-tech[href*="wa.me"]').forEach(function (a) { a.addEventListener('click', open); });
+            document.getElementById('trClose').addEventListener('click', close);
+            modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+
+            form.querySelectorAll('.tr-input').forEach(function (el) {
+                el.addEventListener('input', function () { el.classList.remove('invalid'); if (!form.querySelector('.tr-input.invalid')) err.style.display = 'none'; });
+            });
+            form.querySelectorAll('input[name="qtd"]').forEach(function (r) {
+                r.addEventListener('change', function () { total.textContent = PRICES[r.value]; });
+            });
+
+            // CEP: máscara + preenchimento automático do endereço (ViaCEP)
+            cep.addEventListener('input', function () {
+                var d = cep.value.replace(/\D/g, '').slice(0, 8);
+                cep.value = d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+                if (d.length === 8) {
+                    fetch('https://viacep.com.br/ws/' + d + '/json/').then(function (r) { return r.json(); }).then(function (j) {
+                        if (!j || j.erro) return;
+                        var end = document.getElementById('trEnd'), cid = document.getElementById('trCidade');
+                        if (!end.value) end.value = [j.logradouro, j.bairro].filter(Boolean).join(', ') + (j.logradouro ? ', nº ' : '');
+                        if (!cid.value) cid.value = j.localidade + '/' + j.uf;
+                        [end, cid].forEach(function (el) { el.dispatchEvent(new Event('input')); });
+                        end.focus();
+                    }).catch(function () {});
+                }
+            });
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var ok = true;
+                ['trNome', 'trGoogle', 'trCep', 'trEnd', 'trCidade'].forEach(function (id) {
+                    var el = document.getElementById(id);
+                    var bad = !el.value.trim() || (id === 'trCep' && el.value.replace(/\D/g, '').length !== 8);
+                    el.classList.toggle('invalid', bad);
+                    if (bad) ok = false;
+                });
+                err.style.display = ok ? 'none' : 'block';
+                if (!ok) return;
+
+                var f = new FormData(form);
+                var qtd = f.get('qtd');
+                var msg = [
+                    'Olá! Quero o TapReview.',
+                    '',
+                    '*Pedido TapReview pelo site*',
+                    'Quantidade: ' + qtd + ' (' + PRICES[qtd] + ', frete incluso)',
+                    'Nome completo: ' + f.get('nome').trim(),
+                    'Link da empresa no Google: ' + f.get('google').trim(),
+                    'CEP: ' + f.get('cep').trim(),
+                    'Endereço completo: ' + f.get('endereco').trim(),
+                    'Cidade/Estado: ' + f.get('cidade').trim(),
+                    'Forma de pagamento: ' + f.get('pag')
+                ].join('\n');
+
+                if (window.fbq) fbq('track', 'Lead', { content_name: 'TapReview', value: qtd === '2' ? 100 : 60, currency: 'BRL' });
+                if (window.gtag) gtag('event', 'generate_lead', { item_name: 'TapReview', value: qtd === '2' ? 100 : 60, currency: 'BRL' });
+
+                window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+                close();
+            });
         })();
     </script>
 </body>
