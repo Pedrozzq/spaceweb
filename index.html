@@ -30,7 +30,7 @@
     /></noscript>
     <!-- End Meta Pixel Code -->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Saturno NFC | Cartões Inteligentes</title>
   
   <!-- Favicon -->
@@ -123,6 +123,8 @@
             max-width: 100%;
             touch-action: pan-y;
         }
+        /* evita zoom por toque duplo em botões e links */
+        a, button, input, label, textarea, select { touch-action: manipulation; }
         body {
             background-color: #050508;
             color: #ffffff;
@@ -975,6 +977,27 @@
         .chat-widget-form-input::placeholder { color: #6b7280; }
         .chat-widget-form-input:focus { border-color: #25D366; }
         .chat-widget-form-textarea { resize: none; }
+        /* opções de interesse (cores iguais às dos planos) */
+        .cw-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; border-radius: 0.6rem; }
+        .cw-opt { position: relative; cursor: pointer; }
+        .cw-opt input { position: absolute; opacity: 0; pointer-events: none; }
+        .cw-opt span {
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            min-height: 2.1rem; padding: 0.35rem 0.4rem;
+            border-radius: 0.6rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: #d1d5db; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.15;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+        }
+        .cw-opt:hover span { border-color: rgba(255, 255, 255, 0.3); }
+        .cw-opt input:focus-visible + span { outline: 2px solid #25D366; outline-offset: 2px; }
+        .cw-opt input:checked + span { transform: scale(1.03); }
+        .cw-opt-essencial input:checked + span { background: #f3f4f6; border-color: #ffffff; color: #111827; box-shadow: 0 0 14px rgba(255, 255, 255, 0.35); }
+        .cw-opt-profissional input:checked + span { background: linear-gradient(135deg, #9aa3af, #e5e7eb); border-color: #e5e7eb; color: #1f2937; box-shadow: 0 0 14px rgba(200, 205, 214, 0.4); }
+        .cw-opt-orbita input:checked + span { background: linear-gradient(135deg, #b8860b, #FFD700); border-color: #FFD700; color: #2b1d00; box-shadow: 0 0 14px rgba(255, 184, 0, 0.45); }
+        .cw-opt-tapreview input:checked + span { background: linear-gradient(135deg, #1a56db, #4285F4); border-color: #6ea8ff; color: #ffffff; box-shadow: 0 0 14px rgba(66, 133, 244, 0.5); }
+        .cw-opts.wa-input-error { box-shadow: 0 0 0 1px #f87171; }
 
         @media (prefers-reduced-motion: reduce) {
             .chat-widget-btn::before { animation: none; }
@@ -2861,12 +2884,17 @@
                 <i class="ph ph-x"></i>
             </button>
             <p class="chat-widget-form-title">Atendimento personalizado</p>
-            <p class="chat-widget-form-subtitle">Preencha seus dados e fale direto com a gente no WhatsApp.</p>
+            <p class="chat-widget-form-subtitle">Diga seu nome, escolha o que procura e fale direto com a gente no WhatsApp.</p>
             <label for="chat-widget-nome" class="chat-widget-form-label">Seu nome</label>
             <input id="chat-widget-nome" type="text" placeholder="Digite seu nome" autocomplete="name" class="chat-widget-form-input">
-            <label for="chat-widget-mensagem" class="chat-widget-form-label">Sua mensagem</label>
-            <textarea id="chat-widget-mensagem" rows="2" placeholder="Escreva sua mensagem..." class="chat-widget-form-input chat-widget-form-textarea"></textarea>
-            <p id="chat-widget-form-erro" class="hidden text-[11px] font-semibold text-red-400 -mt-1">Preencha nome e mensagem antes de enviar.</p>
+            <span class="chat-widget-form-label" id="chat-widget-item-label">Tenho interesse em</span>
+            <div class="cw-opts" id="chat-widget-itens" role="radiogroup" aria-labelledby="chat-widget-item-label">
+                <label class="cw-opt cw-opt-essencial"><input type="radio" name="cw-item" value="Plano Essencial"><span>Essencial</span></label>
+                <label class="cw-opt cw-opt-profissional"><input type="radio" name="cw-item" value="Plano Profissional"><span>Profissional</span></label>
+                <label class="cw-opt cw-opt-orbita"><input type="radio" name="cw-item" value="Plano Fora de Órbita"><span>Fora de Órbita</span></label>
+                <label class="cw-opt cw-opt-tapreview"><input type="radio" name="cw-item" value="TapReview + Avaliações Google"><span>TapReview</span></label>
+            </div>
+            <p id="chat-widget-form-erro" class="hidden text-[11px] font-semibold text-red-400 -mt-1">Preencha seu nome e escolha uma opção.</p>
             <button type="button" id="chat-widget-form-enviar" class="wa-chip w-full flex items-center justify-center gap-2 text-center">
                 Enviar no WhatsApp <i class="ph ph-whatsapp-logo"></i>
             </button>
@@ -2881,6 +2909,26 @@
 
     <!-- Scripts de Interatividade -->
     <script>
+        // --- Sem zoom: pinça (iOS/Safari ignora user-scalable=no), toque duplo e Ctrl + roda do mouse ---
+        (function () {
+            ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
+                document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+            });
+            document.addEventListener('touchmove', function (e) {
+                if (e.touches && e.touches.length > 1) e.preventDefault();
+            }, { passive: false });
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (e) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) e.preventDefault();
+                lastTouchEnd = now;
+            }, { passive: false });
+            document.addEventListener('wheel', function (e) { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
+            document.addEventListener('keydown', function (e) {
+                if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].indexOf(e.key) !== -1) e.preventDefault();
+            });
+        })();
+
         // Inicializa ícones Lucide para o Cartão 3D Importado
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
@@ -3119,7 +3167,7 @@
             });
         })();
 
-        // --- Widget de Chat: popup "nome + mensagem" enviado direto pro WhatsApp ---
+        // --- Widget de Chat: popup "nome + item de interesse" enviado direto pro WhatsApp ---
         (function () {
             const WHATSAPP_PHONE = '5531920067518';
 
@@ -3127,10 +3175,11 @@
             const form = document.getElementById('chat-widget-form');
             const closeBtn = document.getElementById('chat-widget-form-close');
             const nomeInput = document.getElementById('chat-widget-nome');
-            const mensagemInput = document.getElementById('chat-widget-mensagem');
+            const itens = document.getElementById('chat-widget-itens');
             const erroMsg = document.getElementById('chat-widget-form-erro');
             const enviarBtn = document.getElementById('chat-widget-form-enviar');
-            if (!btn || !form || !nomeInput || !mensagemInput || !enviarBtn) return;
+            if (!btn || !form || !nomeInput || !itens || !enviarBtn) return;
+            const itemEscolhido = () => (itens.querySelector('input[name="cw-item"]:checked') || {}).value || '';
 
             function openForm() {
                 form.classList.add('chat-widget-form-open');
@@ -3151,31 +3200,28 @@
                 }
             });
 
-            [nomeInput, mensagemInput].forEach((input) => {
-                input.addEventListener('input', () => {
-                    if (erroMsg && nomeInput.value.trim() && mensagemInput.value.trim()) {
-                        erroMsg.classList.add('hidden');
-                        input.classList.remove('wa-input-error');
-                    }
-                });
-            });
+            function limparErro() {
+                if (erroMsg && nomeInput.value.trim() && itemEscolhido()) erroMsg.classList.add('hidden');
+            }
+            nomeInput.addEventListener('input', limparErro);
+            itens.addEventListener('change', limparErro);
 
             enviarBtn.addEventListener('click', () => {
                 const nome = nomeInput.value.trim();
-                const mensagem = mensagemInput.value.trim();
-                if (!nome || !mensagem) {
+                const item = itemEscolhido();
+                if (!nome || !item) {
                     if (!nome) nomeInput.classList.add('wa-input-error');
-                    if (!mensagem) mensagemInput.classList.add('wa-input-error');
+                    if (!item) itens.classList.add('wa-input-error');
                     erroMsg?.classList.remove('hidden');
-                    (nome ? mensagemInput : nomeInput).focus();
+                    if (!nome) nomeInput.focus();
                     setTimeout(() => {
                         nomeInput.classList.remove('wa-input-error');
-                        mensagemInput.classList.remove('wa-input-error');
+                        itens.classList.remove('wa-input-error');
                     }, 600);
                     return;
                 }
                 erroMsg?.classList.add('hidden');
-                const texto = 'Olá, meu nome é ' + nome + '. ' + mensagem;
+                const texto = 'Olá, meu nome é ' + nome + '. Tenho interesse no ' + item + '.';
                 window.open('https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(texto), '_blank');
                 closeForm();
             });
