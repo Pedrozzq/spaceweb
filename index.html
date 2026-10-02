@@ -1608,6 +1608,8 @@
         /* item TapReview na lista dos planos (azul) */
         /* texto do botão principal: encolhe com a tela para caber numa linha */
         .main-btn-text { font-size: clamp(12px, 3.6vw, 16px); }
+        /* subtexto pequeno dos botões da seção 1 */
+        .btn-subtext { font-size: clamp(10px, 2.7vw, 12px); font-weight: 500; line-height: 1.25; margin-top: 1px; opacity: 0.85; }
         .icon-google { font-size: 1.1rem; color: #4285F4; margin-top: -1px; flex-shrink: 0; }
         .list-text.list-google { color: #6ea8ff; font-weight: 800; }
 
@@ -2312,7 +2314,10 @@
                     <div class="icon-wrapper w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-full bg-brand-gold/25 flex items-center justify-center transition-colors group-hover:bg-brand-gold/35 z-10 relative">
                         <i class="ph ph-shopping-cart-simple text-lg text-brand-gold"></i>
                     </div>
-                    <span class="font-bold text-white main-btn-text tracking-tight whitespace-nowrap truncate z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">Site + Cartões NFC personalizados</span>
+                    <span class="flex flex-col min-w-0 text-left z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">
+                        <span class="font-bold text-white main-btn-text tracking-tight whitespace-nowrap truncate">Site + Cartão NFC</span>
+                        <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Presença digital completa para sua empresa</span>
+                    </span>
                 </div>
                 <i id="escolher-plano-caret" class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
             </a>
@@ -2349,7 +2354,10 @@
                         <div class="icon-wrapper w-8 h-8 shrink-0 rounded-full bg-[#4285F4]/25 flex items-center justify-center transition-colors group-hover:bg-[#4285F4]/35 z-10 relative">
                             <i class="ph ph-google-logo text-lg text-[#6ea8ff]"></i>
                         </div>
-                        <span class="font-bold text-white text-[13px] sm:text-sm md:text-base whitespace-nowrap truncate z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">TapReview + Avaliações Google</span>
+                        <span class="flex flex-col min-w-0 text-left z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">
+                            <span class="font-bold text-white text-[13px] sm:text-sm md:text-base whitespace-nowrap truncate">Avaliações Google por NFC</span>
+                            <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Mais avaliações com apenas uma aproximação</span>
+                        </span>
                     </div>
                     <i class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
                 </a>
