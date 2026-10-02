@@ -293,121 +293,192 @@
         }
         .back-link:hover { color: #ffffff; border-color: rgba(255, 255, 255, 0.3); }
 
-        /* ===================== CENA "UM TOQUE DO CELULAR" (scroll) =====================
-           O celular desce e toca, as ondas NFC se espalham e o cartão TapReview surge
-           do fundo em 3D (gira, ganha nitidez, reflexo de luz passando), mantendo um
-           parallax leve com a rolagem e o mouse. Tudo controlado pelo script da cena. */
-        .tap-scene { position: relative; height: 260vh; margin: 0 -1rem; }
+        /* ===================== CENA "COMO FUNCIONA NA PRÁTICA" (scroll) =====================
+           O cartão TapReview sobe rolando até o celular (mockup estilo iPhone 17 Pro Max),
+           encosta, as ondas NFC saem e a tela troca do bloqueio para a avaliação do Google:
+           estrelas preenchem, o texto se digita e o botão "Postar" acende.
+           Tudo controlado pelo script da cena a partir do quanto ela foi rolada. */
+        .tap-scene { position: relative; height: 300vh; margin: 0 -1rem; }
         .tap-stage {
             position: sticky; top: 0;
             height: 100vh; height: 100svh;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
-            perspective: 1100px;
+            perspective: 1200px;
         }
-        /* brilho azul no fundo da cena */
         .tap-stage::before {
-            content: ''; position: absolute; left: 50%; top: 50%;
-            width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%);
+            content: ''; position: absolute; left: 50%; top: 45%;
+            width: 130%; aspect-ratio: 1; transform: translate(-50%, -50%);
             background: radial-gradient(circle, rgba(66, 133, 244, 0.16) 0%, rgba(66, 133, 244, 0) 55%);
             pointer-events: none;
         }
-        .tap-flash {
-            position: absolute; left: 50%; top: 50%;
-            width: 70vmin; height: 70vmin; margin: -35vmin 0 0 -35vmin;
-            border-radius: 9999px;
-            background: radial-gradient(circle, rgba(185, 211, 255, 0.55) 0%, rgba(66, 133, 244, 0.25) 30%, rgba(66, 133, 244, 0) 65%);
-            opacity: 0; pointer-events: none;
+        .tap-hint {
+            position: absolute; left: 0; right: 0; top: 7%;
+            text-align: center; z-index: 6;
         }
+
+        /* ---------- mockup estilo iPhone 17 Pro Max ---------- */
+        .ip17 {
+            --ip-w: min(52vw, 215px);
+            position: relative;
+            width: var(--ip-w);
+            aspect-ratio: 9 / 19.5;
+            border-radius: calc(var(--ip-w) * 0.2);
+            padding: calc(var(--ip-w) * 0.035);
+            /* moldura de titânio */
+            background:
+                linear-gradient(145deg, #d7dce3 0%, #8a929d 18%, #3d434b 40%, #9aa2ad 62%, #e6e9ee 80%, #6b7380 100%);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.35),
+                inset 0 0 0 3px #1a1d22,
+                0 40px 70px -20px rgba(0, 0, 0, 0.85),
+                0 0 50px rgba(66, 133, 244, 0.22);
+            z-index: 3;
+            will-change: transform;
+        }
+        /* botões laterais */
+        .ip-btn { position: absolute; width: 3px; border-radius: 2px; background: linear-gradient(90deg, #6b7380, #c9ced6); }
+        .ip-btn.l1 { left: -3px; top: 17%; height: 5%; }
+        .ip-btn.l2 { left: -3px; top: 25%; height: 9%; }
+        .ip-btn.l3 { left: -3px; top: 36%; height: 9%; }
+        .ip-btn.r1 { right: -3px; top: 28%; height: 13%; background: linear-gradient(270deg, #6b7380, #c9ced6); }
+        .ip-btn.r2 { right: -3px; top: 55%; height: 8%; background: linear-gradient(270deg, #6b7380, #c9ced6); } /* controle da câmera */
+        .ip-screen {
+            position: relative;
+            width: 100%; height: 100%;
+            border-radius: calc(var(--ip-w) * 0.17);
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, "SF Pro Text", "Plus Jakarta Sans", sans-serif;
+        }
+        .ip-island {
+            position: absolute; top: 2.2%; left: 50%; transform: translateX(-50%);
+            width: 33%; height: 4.4%; border-radius: 9999px; background: #000; z-index: 6;
+        }
+        .ip-status {
+            position: absolute; top: 2.6%; left: 0; right: 0; z-index: 5;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 9%;
+            font-size: calc(var(--ip-w) * 0.052); font-weight: 600;
+            color: #fff; transition: color 0.3s ease;
+        }
+        .ip-status i { font-size: 1.05em; margin-left: 2px; }
+        .ip17.on-google .ip-status { color: #111; }
+
+        /* tela de bloqueio */
+        .ip-lock {
+            position: absolute; inset: 0;
+            background:
+                radial-gradient(120% 70% at 50% 0%, rgba(66, 133, 244, 0.55), transparent 60%),
+                linear-gradient(180deg, #0b1a3a 0%, #050814 100%);
+            color: #fff; text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+            padding-top: 18%;
+        }
+        .ip-lock .t { font-size: calc(var(--ip-w) * 0.27); font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+        .ip-lock .d { font-size: calc(var(--ip-w) * 0.055); opacity: 0.85; margin-bottom: 4px; }
+        .ip-lock .nfc {
+            position: absolute; bottom: 9%; left: 0; right: 0;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            font-size: calc(var(--ip-w) * 0.05); font-weight: 600; letter-spacing: 0.04em; opacity: 0.9;
+        }
+        .ip-lock .nfc i { font-size: calc(var(--ip-w) * 0.11); color: #6ea8ff; transform: rotate(90deg); }
+
+        /* página de avaliação do Google */
+        .ip-google {
+            position: absolute; inset: 0;
+            background: #fff; color: #202124;
+            padding: 17% 7% 6%;
+            display: flex; flex-direction: column; align-items: center;
+            font-size: calc(var(--ip-w) * 0.05);
+            opacity: 0; transform: translateY(12%);
+        }
+        .ip-google .glogo { font-size: calc(var(--ip-w) * 0.1); font-weight: 600; letter-spacing: -0.03em; font-family: "Product Sans", "Plus Jakarta Sans", Arial, sans-serif; }
+        .ip-google .glogo b:nth-child(1), .ip-google .glogo b:nth-child(4) { color: #4285F4; }
+        .ip-google .glogo b:nth-child(2), .ip-google .glogo b:nth-child(6) { color: #EA4335; }
+        .ip-google .glogo b:nth-child(3) { color: #FBBC05; }
+        .ip-google .glogo b:nth-child(5) { color: #34A853; }
+        .ip-google .glogo b { font-weight: 600; }
+        .ip-google .biz { display: flex; align-items: center; gap: 6%; width: 100%; margin-top: 8%; text-align: left; }
+        .ip-google .biz .ic {
+            width: calc(var(--ip-w) * 0.15); height: calc(var(--ip-w) * 0.15); flex-shrink: 0; border-radius: 9999px;
+            background: #e8f0fe; color: #1a73e8; display: flex; align-items: center; justify-content: center;
+            font-size: calc(var(--ip-w) * 0.08);
+        }
+        .ip-google .biz b { display: block; font-size: 1.05em; }
+        .ip-google .biz span { color: #5f6368; font-size: 0.85em; }
+        .ip-google .stars { display: flex; gap: 4%; justify-content: center; margin-top: 10%; width: 100%; }
+        .ip-google .stars i { font-size: calc(var(--ip-w) * 0.11); color: #dadce0; transition: color 0.2s ease, transform 0.25s ease; }
+        .ip-google .stars i.on { color: #FBBC05; transform: scale(1.12); }
+        .ip-google .box {
+            width: 100%; margin-top: 9%; min-height: 22%;
+            border: 1px solid #dadce0; border-radius: 8px;
+            padding: 5%; text-align: left; color: #202124; font-size: 0.9em; line-height: 1.35;
+        }
+        .ip-google .box.empty::before { content: 'Conte sua experiência (opcional)'; color: #80868b; }
+        .ip-google .box .caret { display: inline-block; width: 1px; height: 1em; background: #1a73e8; vertical-align: -2px; animation: ipCaret 0.8s step-end infinite; }
+        @keyframes ipCaret { 50% { opacity: 0; } }
+        .ip-google .post {
+            margin-top: auto; align-self: flex-end;
+            padding: 3% 9%; border-radius: 9999px;
+            background: #e8eaed; color: #80868b; font-weight: 600; font-size: 0.95em;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .ip-google .post.ready { background: #1a73e8; color: #fff; box-shadow: 0 4px 12px rgba(26, 115, 232, 0.45); }
+        .ip-flash {
+            position: absolute; inset: 0; z-index: 7; pointer-events: none;
+            background: radial-gradient(circle at 50% 18%, rgba(185, 211, 255, 0.95), rgba(66, 133, 244, 0.35) 35%, rgba(66, 133, 244, 0) 70%);
+            opacity: 0;
+        }
+
+        /* ondas NFC no ponto de contato */
         .tap-ripple {
             position: absolute; left: 50%; top: 50%;
-            width: 90px; height: 90px; margin: -45px 0 0 -45px;
+            width: 70px; height: 70px; margin: -35px 0 0 -35px;
             border-radius: 9999px;
-            border: 2px solid rgba(110, 168, 255, 0.9);
-            opacity: 0; pointer-events: none;
+            border: 2px solid rgba(110, 168, 255, 0.95);
+            opacity: 0; pointer-events: none; z-index: 5;
         }
-        .tap-scene.tapped .tap-ripple { animation: tapRipple 1.3s ease-out forwards; }
-        .tap-scene.tapped .tap-ripple:nth-of-type(2) { animation-delay: 0.18s; }
-        .tap-scene.tapped .tap-ripple:nth-of-type(3) { animation-delay: 0.36s; }
+        .tap-scene.tapped .tap-ripple { animation: tapRipple 1.2s ease-out forwards; }
+        .tap-scene.tapped .tap-ripple:nth-of-type(2) { animation-delay: 0.16s; }
+        .tap-scene.tapped .tap-ripple:nth-of-type(3) { animation-delay: 0.32s; }
         @keyframes tapRipple {
             0% { transform: scale(0.4); opacity: 1; }
-            100% { transform: scale(4.2); opacity: 0; }
+            100% { transform: scale(4); opacity: 0; }
         }
 
-        /* celular que desce e toca */
-        .tap-phone {
-            position: absolute; left: 50%; top: 50%;
-            width: 92px; height: 184px; margin: -92px 0 0 -46px;
-            border-radius: 1.4rem;
-            background: #0f172a;
-            border: 4px solid #1e293b;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(66, 133, 244, 0.25);
-            z-index: 4;
-            will-change: transform, opacity;
-            overflow: hidden;
-        }
-        .tap-phone::before {
-            content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
-            width: 30px; height: 8px; border-radius: 9999px; background: #000;
-        }
-        .tap-phone-screen {
-            position: absolute; inset: 3px; border-radius: 1.05rem;
-            background: linear-gradient(160deg, #0b1220, #101b33);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-            color: #6ea8ff; font-size: 26px;
-        }
-        .tap-phone-screen small {
-            font-size: 7px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: #94a3b8;
-        }
-
-        /* cartão 3D */
+        /* cartão que sobe até o celular */
         .tap-card-wrap {
-            position: relative;
-            width: min(60vw, 250px);
+            position: absolute; left: 50%; top: 50%;
+            width: min(40vw, 165px);
+            z-index: 4;
             will-change: transform, opacity, filter;
-            z-index: 3;
         }
         .tap-card-wrap img { display: block; width: 100%; height: auto; }
-        /* reflexo de luz passando pelo acrílico */
         .tap-glare {
             position: absolute; inset: 1.5%;
             border-radius: 5%;
-            background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 47%, rgba(255, 255, 255, 0.1) 53%, rgba(255, 255, 255, 0) 70%);
+            background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.5) 47%, rgba(255, 255, 255, 0.1) 53%, rgba(255, 255, 255, 0) 70%);
             background-size: 250% 250%;
             background-position: var(--glare, 100%) 50%;
             pointer-events: none;
         }
-        /* sombra no "chão" */
-        .tap-floor {
-            position: absolute; left: 50%; top: 50%;
-            width: min(56vw, 230px); height: 26px;
-            margin-left: calc(min(56vw, 230px) / -2);
-            border-radius: 50%;
-            background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
-            filter: blur(6px);
-            z-index: 1;
-            opacity: 0;
-        }
         .tap-caption {
-            position: absolute; left: 0; right: 0; bottom: 9%;
-            text-align: center; z-index: 5;
+            position: absolute; left: 0; right: 0; bottom: 4%;
+            text-align: center; z-index: 6;
             opacity: 0; transform: translateY(12px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
         .tap-scene.done .tap-caption { opacity: 1; transform: none; }
         .tap-caption .stars { color: #FBBC05; letter-spacing: 0.15em; font-size: 14px; }
-        .tap-hint {
-            position: absolute; left: 0; right: 0; top: 12%;
-            text-align: center; z-index: 5;
-            transition: opacity 0.4s ease;
-        }
 
         @media (prefers-reduced-motion: reduce) {
             .tap-scene { height: auto; }
-            .tap-stage { position: relative; height: auto; padding: 3rem 0 6rem; }
-            .tap-phone, .tap-ripple, .tap-flash, .tap-hint { display: none; }
+            .tap-stage { position: relative; height: auto; padding: 4rem 0 6rem; }
+            .tap-ripple, .ip-flash, .tap-hint, .ip-lock { display: none; }
+            .ip-google { opacity: 1; transform: none; }
             .tap-caption { opacity: 1; transform: none; bottom: 1.5rem; }
-            .tap-floor { opacity: 1; }
+            .ip-google .box .caret { animation: none; }
         }
         /* ===================== BOTÃO "QUERO MEU TAPREVIEW" (tecnológico) =====================
            Borda de luz girando (azul/verde Google), fundo azul escuro com grade fina,
@@ -524,20 +595,43 @@
                     <p class="mt-4 text-gray-400 text-sm italic-serif">Um toque do celular e o seu cliente já está na tela de avaliação.</p>
                 </div>
 
-                <!-- CENA: um toque do celular e o cartão TapReview surge em 3D -->
+                <!-- CENA: o cartão sobe até o celular e abre a avaliação do Google -->
                 <div class="tap-scene" id="tap-scene">
                     <div class="tap-stage">
                         <p class="tap-hint text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400">Role para aproximar <i class="ph ph-caret-down" style="color: var(--g-blue-soft);"></i></p>
-                        <div class="tap-flash"></div>
-                        <span class="tap-ripple"></span><span class="tap-ripple"></span><span class="tap-ripple"></span>
-                        <div class="tap-phone" aria-hidden="true">
-                            <div class="tap-phone-screen"><i class="ph ph-wifi-high rotate-90"></i><small>Aproximando</small></div>
+
+                        <div class="ip17" aria-hidden="true">
+                            <span class="ip-btn l1"></span><span class="ip-btn l2"></span><span class="ip-btn l3"></span>
+                            <span class="ip-btn r1"></span><span class="ip-btn r2"></span>
+                            <div class="ip-screen">
+                                <div class="ip-island"></div>
+                                <div class="ip-status"><span>9:41</span><span><i class="ph-fill ph-cell-signal-full"></i><i class="ph ph-wifi-high"></i><i class="ph-fill ph-battery-full"></i></span></div>
+                                <div class="ip-lock">
+                                    <span class="d">sexta-feira, 2 de outubro</span>
+                                    <span class="t">9:41</span>
+                                    <span class="nfc"><i class="ph ph-wifi-high"></i>Aproxime o cartão</span>
+                                </div>
+                                <div class="ip-google">
+                                    <div class="glogo"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b></div>
+                                    <div class="biz">
+                                        <span class="ic"><i class="ph-fill ph-storefront"></i></span>
+                                        <span><b>Sua Empresa</b><span>Avalie este lugar</span></span>
+                                    </div>
+                                    <div class="stars"><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i></div>
+                                    <div class="box empty"><span class="typed"></span><span class="caret"></span></div>
+                                    <span class="post">Postar</span>
+                                </div>
+                                <div class="ip-flash"></div>
+                            </div>
                         </div>
-                        <div class="tap-floor" aria-hidden="true"></div>
+
+                        <span class="tap-ripple"></span><span class="tap-ripple"></span><span class="tap-ripple"></span>
+
                         <div class="tap-card-wrap">
                             <img src="img/tapreview-card.webp" alt="Cartão TapReview do Google: aproxime seu celular para avaliar" width="535" height="765" decoding="async">
                             <div class="tap-glare" aria-hidden="true"></div>
                         </div>
+
                         <div class="tap-caption">
                             <div class="stars">★★★★★</div>
                             <p class="text-white font-black uppercase tracking-wide text-sm mt-1">Avaliação aberta em segundos</p>
@@ -816,35 +910,48 @@
             window.addEventListener('resize', function () { resize(); initParticles(); });
         })();
 
-        // Cena "um toque do celular": tudo calculado a partir do quanto a cena foi rolada.
-        //   0.00–0.22  celular desce até o centro
-        //   0.22–0.30  toque: ondas NFC + clarão
-        //   0.28–0.42  celular sobe e some
-        //   0.30–0.72  cartão surge do fundo em 3D (gira, cresce, ganha nitidez)
-        //   0.72–1.00  cartão parado com parallax leve + reflexo de luz; legenda aparece
+        // Cena "Como funciona na prática": tudo calculado pelo quanto a cena foi rolada.
+        //   0.00–0.40  cartão sobe (em 3D) do canto de baixo até encostar no topo do celular
+        //   0.40–0.48  toque: ondas NFC + clarão na tela
+        //   0.46–0.58  tela de bloqueio dá lugar à avaliação do Google; cartão se afasta
+        //   0.58–0.74  estrelas preenchem uma a uma
+        //   0.74–0.90  texto da avaliação se digita
+        //   0.90–1.00  botão "Postar" acende e a legenda aparece
         (function () {
             var scene = document.getElementById('tap-scene');
             if (!scene) return;
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            var phone = scene.querySelector('.tap-phone');
+            var phone = scene.querySelector('.ip17');
             var card = scene.querySelector('.tap-card-wrap');
             var glare = scene.querySelector('.tap-glare');
-            var floor = scene.querySelector('.tap-floor');
-            var flash = scene.querySelector('.tap-flash');
+            var flash = scene.querySelector('.ip-flash');
+            var lock = scene.querySelector('.ip-lock');
+            var google = scene.querySelector('.ip-google');
+            var stars = scene.querySelectorAll('.ip-google .stars i');
+            var box = scene.querySelector('.ip-google .box');
+            var typed = scene.querySelector('.ip-google .typed');
+            var post = scene.querySelector('.ip-google .post');
             var hint = scene.querySelector('.tap-hint');
-            if (reduce) {
-                card.style.transform = 'perspective(1100px) rotateX(6deg) rotateY(-6deg)';
-                card.style.filter = 'drop-shadow(0 30px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 30px rgba(66,133,244,0.35))';
-                floor.style.transform = 'translateY(' + (card.offsetHeight / 2 + 10) + 'px)';
-                return;
+            var ripples = scene.querySelectorAll('.tap-ripple');
+            var REVIEW = 'Atendimento excelente, recomendo!';
+            // data de hoje na tela de bloqueio (ex.: "quinta-feira, 1 de outubro")
+            try { scene.querySelector('.ip-lock .d').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }); } catch (e) {}
+
+            function finalState() {
+                phone.classList.add('on-google');
+                stars.forEach(function (s) { s.classList.add('on'); });
+                typed.textContent = REVIEW; box.classList.remove('empty');
+                post.classList.add('ready');
+                var pr = phone.getBoundingClientRect();
+                card.style.transform = 'translate(-50%, -50%) translate(' + (-pr.width * 0.62) + 'px,' + (pr.height * 0.3) + 'px) rotate(-12deg)';
             }
+            if (reduce) { finalState(); return; }
 
             var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
             var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
             var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
             var easeInOut = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
             var lerp = function (a, b, t) { return a + (b - a) * t; };
-            var mx = 0, my = 0, tmx = 0, tmy = 0;      // inclinação pelo mouse (desktop)
             var ticking = false;
 
             function render() {
@@ -853,61 +960,58 @@
                 var total = scene.offsetHeight - window.innerHeight;
                 var p = clamp(-r.top / total, 0, 1);
                 var vh = window.innerHeight;
+                var ph = phone.offsetHeight, pw = phone.offsetWidth;
 
-                // celular
-                var down = easeOut(seg(p, 0, 0.22));
-                var tapDip = Math.sin(seg(p, 0.22, 0.3) * Math.PI) * 14;
-                var up = easeInOut(seg(p, 0.28, 0.42));
-                var py = lerp(-vh * 0.55, -10, down) + tapDip - up * vh * 0.45;
-                phone.style.transform = 'translateY(' + py.toFixed(1) + 'px) rotate(' + lerp(-14, 0, down).toFixed(2) + 'deg) scale(' + lerp(0.9, 1, down) * lerp(1, 0.8, up) + ')';
-                phone.style.opacity = (seg(p, 0, 0.06) * (1 - up)).toFixed(3);
-                hint.style.opacity = (1 - seg(p, 0.05, 0.15)).toFixed(3);
+                hint.style.opacity = (1 - seg(p, 0.03, 0.12)).toFixed(3);
 
-                // toque: ondas + clarão
-                scene.classList.toggle('tapped', p >= 0.25);
-                flash.style.opacity = (Math.sin(seg(p, 0.24, 0.4) * Math.PI) * 0.9).toFixed(3);
+                // celular: leve entrada e inclinação 3D que se endireita ao receber o toque
+                var settle = easeOut(seg(p, 0, 0.4));
+                phone.style.transform = 'rotateY(' + lerp(-14, 0, settle).toFixed(2) + 'deg) rotateX(' + lerp(8, 0, settle).toFixed(2) + 'deg) translateY(' + lerp(16, 0, settle).toFixed(1) + 'px)';
 
-                // cartão surgindo
-                var e = easeOut(seg(p, 0.3, 0.72));
-                var hold = seg(p, 0.72, 1);
-                var rx = lerp(70, 6, e) + lerp(0, -8, hold) + my;
-                var ry = lerp(-40, -6, e) + lerp(0, 12, hold) + mx;
-                var rz = lerp(-12, 0, e);
-                var s = lerp(0.35, 1, e);
-                var ty = lerp(90, 0, e);
-                var tz = lerp(-420, 0, e);
-                card.style.transform = 'translate3d(0,' + ty.toFixed(1) + 'px,' + tz.toFixed(1) + 'px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) scale(' + s.toFixed(3) + ')';
-                card.style.opacity = seg(p, 0.3, 0.42).toFixed(3);
-                card.style.filter = 'blur(' + lerp(14, 0, e).toFixed(2) + 'px) brightness(' + lerp(0.4, 1, e).toFixed(3) + ') drop-shadow(0 30px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 30px rgba(66,133,244,' + (0.35 * e).toFixed(3) + '))';
-                glare.style.setProperty('--glare', lerp(110, -10, seg(p, 0.5, 1)).toFixed(1) + '%');
+                // cartão: sobe de baixo/esquerda até encostar no topo do celular, depois se afasta
+                var go = easeInOut(seg(p, 0, 0.4));
+                var back = easeOut(seg(p, 0.46, 0.62));
+                var contactX = -pw * 0.05, contactY = -ph * 0.3;     // ponto de contato (parte de cima do celular)
+                var startX = -pw * 0.75, startY = vh * 0.55;
+                var restX = -pw * 0.62, restY = ph * 0.3;
+                var x = lerp(lerp(startX, contactX, go), restX, back);
+                var y = lerp(lerp(startY, contactY, go), restY, back);
+                var rot = lerp(lerp(-28, -6, go), -12, back);
+                var rx = lerp(lerp(55, 18, go), 0, back);
+                var ry = lerp(lerp(25, -10, go), 0, back);
+                var sc = lerp(lerp(1.15, 0.8, go), 0.85, back);
+                var tap = Math.sin(seg(p, 0.4, 0.48) * Math.PI) * 8;   // encostada
+                card.style.transform = 'translate(-50%, -50%) translate(' + x.toFixed(1) + 'px,' + (y - tap).toFixed(1) + 'px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) rotate(' + rot.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
+                card.style.opacity = seg(p, 0, 0.06).toFixed(3);
+                card.style.filter = 'drop-shadow(0 30px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 26px rgba(66,133,244,0.35))';
+                card.style.zIndex = p < 0.44 ? 4 : 2;                 // depois do toque fica atrás do celular
+                glare.style.setProperty('--glare', lerp(110, -10, seg(p, 0.05, 0.5)).toFixed(1) + '%');
 
-                // sombra no chão acompanha o cartão
-                floor.style.transform = 'translateY(' + (card.offsetHeight / 2 + 14) + 'px) scale(' + (s * (1 - hold * 0.05)).toFixed(3) + ')';
-                floor.style.opacity = (e * 0.9).toFixed(3);
+                // toque: ondas no ponto de contato + clarão
+                ripples.forEach(function (rp) { rp.style.left = 'calc(50% + ' + contactX + 'px)'; rp.style.top = 'calc(50% + ' + contactY + 'px)'; });
+                scene.classList.toggle('tapped', p >= 0.42);
+                flash.style.opacity = (Math.sin(seg(p, 0.41, 0.52) * Math.PI) * 0.95).toFixed(3);
 
-                scene.classList.toggle('done', p >= 0.78);
+                // tela: bloqueio -> avaliação do Google
+                var g = easeOut(seg(p, 0.46, 0.58));
+                lock.style.opacity = (1 - g).toFixed(3);
+                google.style.opacity = g.toFixed(3);
+                google.style.transform = 'translateY(' + lerp(12, 0, g).toFixed(2) + '%)';
+                phone.classList.toggle('on-google', g > 0.5);
+
+                // estrelas uma a uma
+                var n = Math.floor(seg(p, 0.58, 0.74) * 5 + 0.0001);
+                stars.forEach(function (s, i) { s.classList.toggle('on', i < n); });
+
+                // texto se digitando
+                var chars = Math.round(seg(p, 0.74, 0.9) * REVIEW.length);
+                typed.textContent = REVIEW.slice(0, chars);
+                box.classList.toggle('empty', chars === 0 && p < 0.74);
+
+                post.classList.toggle('ready', p >= 0.9);
+                scene.classList.toggle('done', p >= 0.92);
             }
             function request() { if (!ticking) { ticking = true; requestAnimationFrame(render); } }
-
-            // parallax pelo mouse (suave)
-            scene.addEventListener('mousemove', function (ev) {
-                var r = scene.querySelector('.tap-stage').getBoundingClientRect();
-                tmx = ((ev.clientX - r.left) / r.width - 0.5) * 12;
-                tmy = -((ev.clientY - r.top) / r.height - 0.5) * 10;
-                easeMouse();
-            });
-            scene.addEventListener('mouseleave', function () { tmx = 0; tmy = 0; easeMouse(); });
-            var mouseRaf = null;
-            function easeMouse() {
-                if (mouseRaf) return;
-                (function step() {
-                    mx += (tmx - mx) * 0.12; my += (tmy - my) * 0.12;
-                    render();
-                    if (Math.abs(tmx - mx) > 0.05 || Math.abs(tmy - my) > 0.05) mouseRaf = requestAnimationFrame(step);
-                    else mouseRaf = null;
-                })();
-            }
-
             window.addEventListener('scroll', request, { passive: true });
             window.addEventListener('resize', request);
             render();
