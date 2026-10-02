@@ -39,7 +39,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } }
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    // mesmas animações do index.html (seção "Tag Avaliação Google")
+                    animation: {
+                        'sim-phone': 'simPhoneMove 6s infinite ease-in-out',
+                        'sim-screen': 'simScreenFade 6s infinite ease-in-out',
+                        'sim-ripple': 'simNfcRipple 6s infinite ease-out',
+                    },
+                    keyframes: {
+                        simPhoneMove: {
+                            '0%, 10%': { transform: 'translateY(50px)' },
+                            '15%, 20%': { transform: 'translateY(-5px) scale(0.95)' },
+                            '25%, 95%': { transform: 'translateY(50px)' },
+                            '100%': { transform: 'translateY(50px)' },
+                        },
+                        simScreenFade: {
+                            '0%, 22%': { opacity: '0' },
+                            '25%, 90%': { opacity: '1' },
+                            '95%, 100%': { opacity: '0' },
+                        },
+                        simNfcRipple: {
+                            '0%, 14%': { transform: 'scale(0.5)', opacity: '0' },
+                            '15%': { transform: 'scale(0.5)', opacity: '1' },
+                            '25%': { transform: 'scale(2.5)', opacity: '0' },
+                            '100%': { transform: 'scale(2.5)', opacity: '0' },
+                        }
+                    }
+                }
+            }
         }
     </script>
 
@@ -47,6 +76,7 @@
         :root {
             --g-blue: #4285F4;
             --g-blue-soft: #6ea8ff;
+            --g-blue-light: #b9d3ff;
             --g-green: #34A853;
             --bg: #050508;
         }
@@ -58,20 +88,88 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* céu com brilho azul suave */
+
+        /* ===================== FUNDO (igual ao index, em azul) ===================== */
+        .cosmic-bg {
+            position: fixed; inset: 0; z-index: -3;
+            background: radial-gradient(circle at 50% 0%, rgba(26, 30, 48, 0.55) 0%, rgba(5, 5, 8, 1) 60%);
+        }
         .page-glow {
-            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            position: fixed; inset: 0; z-index: -2; pointer-events: none;
             background:
                 radial-gradient(60% 40% at 50% 0%, rgba(66, 133, 244, 0.18), transparent 70%),
-                radial-gradient(40% 30% at 85% 60%, rgba(52, 168, 83, 0.08), transparent 70%);
+                radial-gradient(40% 30% at 85% 60%, rgba(52, 168, 83, 0.07), transparent 70%);
+        }
+        #particles-canvas {
+            position: fixed; inset: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none; opacity: 0.6;
         }
 
+        /* ===================== TÍTULOS (mesma estrutura do index) ===================== */
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: -200% 50%; }
+        }
         .eyebrow { color: var(--g-blue-soft); }
-        .title-blue {
-            background: linear-gradient(90deg, #ffffff, #b9d3ff 60%, var(--g-blue-soft));
-            -webkit-background-clip: text; background-clip: text; color: transparent;
+        .eyebrow-shine {
+            background-image: linear-gradient(90deg, #6ea8ff, #b9d3ff, #ffffff, #b9d3ff, #6ea8ff);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s linear infinite;
+        }
+        /* palavra-chave do título em azul brilhante (como "Plano"/"Prática" no index) */
+        .text-gradient-blue {
+            background-image: linear-gradient(90deg, #4285F4, #6ea8ff, #e3eeff, #6ea8ff, #4285F4);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s linear infinite;
+            filter: drop-shadow(0 0 12px rgba(66, 133, 244, 0.45));
+            display: inline-block;
+        }
+        .title-highlight { font-weight: 900; letter-spacing: -0.02em; }
+        .italic-serif { font-family: serif; font-style: italic; }
+
+        /* ===================== ENTRADAS E SCROLL (igual ao index) ===================== */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
+        }
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        .reveal-node {
+            opacity: 0;
+            filter: blur(15px);
+            transform: translateY(30px) scale(0.98);
+            transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal-node.active { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+
+        /* indicador "role para baixo" pulando */
+        .scroll-hint { animation: fadeUp 0.6s ease forwards, scrollBounce 1.8s ease-in-out 0.6s infinite; opacity: 0; }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
         }
 
+        /* Pilha "sticky": a seção de trás fica presa e a da frente desliza por cima
+           (mesmo efeito do index). O "top" da seção presa é calculado no script para
+           ela só prender quando o seu fim chega no fim da tela (nada fica escondido). */
+        .stack-wrap { width: 100%; }
+        .stack-back { position: sticky; top: 0; z-index: 1; }
+        .stack-front {
+            position: relative; z-index: 2;
+            background: var(--bg);
+            border-radius: 1.75rem 1.75rem 0 0;
+            box-shadow: 0 -40px 50px -25px rgba(0, 0, 0, 0.7), 0 -1px 0 rgba(66, 133, 244, 0.25);
+            padding-top: 2.5rem;
+        }
+
+        /* ===================== IMAGENS ===================== */
         .tap-img { position: relative; margin: 0; }
         .tap-img img { position: relative; z-index: 1; width: 100%; height: auto; display: block; }
         .tap-img::before {
@@ -94,30 +192,79 @@
         }
         .tap-cap b { color: #ffffff; }
 
-        .glass-card {
-            background: rgba(26, 26, 36, 0.35);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        /* ===================== CARDS ===================== */
+        /* Cards com borda lateral (como "Conquista Instantânea" do index), que
+           acendem em azul ao chegar no meio da tela */
+        .card-interactive {
+            background: rgba(66, 133, 244, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--g-blue);
+            border-radius: 0 0.75rem 0.75rem 0;
+            position: relative;
+            transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease,
+                        opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), filter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .step-icon {
-            width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: 9999px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--g-blue-soft); background: rgba(66, 133, 244, 0.15); border: 1px solid rgba(66, 133, 244, 0.35);
+        .card-interactive.lit {
+            background: rgba(66, 133, 244, 0.16);
+            border-color: rgba(66, 133, 244, 0.45);
+            border-left-color: var(--g-blue-soft);
+            box-shadow: 0 10px 30px -12px rgba(66, 133, 244, 0.55);
         }
-        .included {
-            background: rgba(66, 133, 244, 0.08); border: 1px solid rgba(66, 133, 244, 0.3);
+        .card-icon {
+            position: relative;
+            padding: 0.5rem; border-radius: 0.5rem;
+            background: rgba(66, 133, 244, 0.2); color: var(--g-blue-soft);
+            transition: background-color 0.6s ease, color 0.6s ease;
         }
+        .card-interactive.lit .card-icon { background: rgba(66, 133, 244, 0.5); color: #ffffff; }
+        .card-interactive.lit .card-icon::after {
+            content: ''; position: absolute; inset: -4px; border-radius: 0.7rem;
+            border: 1.5px solid rgba(110, 168, 255, 0.8);
+            animation: stepRing 1.8s ease-out infinite;
+        }
+        @keyframes stepRing {
+            0% { transform: scale(0.85); opacity: 0.9; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+
+        /* Selo (como "Aproxime. Conecte. Converta." do index), em azul */
+        .tagline-badge {
+            border: 1px solid rgba(66, 133, 244, 0.35);
+            background: linear-gradient(135deg, rgba(66, 133, 244, 0.12), rgba(52, 168, 83, 0.04));
+            animation: badgeGlow 3s ease-in-out infinite;
+        }
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(66, 133, 244, 0.15); border-color: rgba(66, 133, 244, 0.3); }
+            50% { box-shadow: 0 0 22px rgba(110, 168, 255, 0.45); border-color: rgba(110, 168, 255, 0.65); }
+        }
+
+        /* Título com efeito máquina de escrever (igual ao do portfólio do index) */
+        .type-wrap .type-line {
+            display: inline-block; overflow: hidden; white-space: nowrap;
+            vertical-align: bottom; width: 0;
+            border-right: 3px solid transparent;
+        }
+        .type-wrap.active .type-line { animation: typeLine 1s steps(16, end) forwards, typeCaret 0.8s step-end 5; }
+        .type-wrap .type-after { opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease 1s, transform 0.6s ease 1s; }
+        .type-wrap.active .type-after { opacity: 1; transform: none; }
+        @keyframes typeLine { to { width: var(--type-w, 100%); } }
+        @keyframes typeCaret {
+            0%, 100% { border-color: #6ea8ff; }
+            50% { border-color: transparent; }
+        }
+
+        /* Linhas dos planos em cascata (igual à lista dos planos do index) */
+        .included { background: rgba(66, 133, 244, 0.08); border: 1px solid rgba(66, 133, 244, 0.3); }
+        .cascade > * { opacity: 0; transform: translateY(12px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .cascade.active > * { opacity: 1; transform: none; }
+
         /* mesmas cores dos planos na seção de valores (index.html) */
-        @keyframes textShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: -200% 50%; }
-        }
         .text-saturno-silver, .text-saturno-gold {
             background-size: 200% auto;
             color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
+            -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: textShine 3s linear infinite;
         }
@@ -129,127 +276,641 @@
             background-image: linear-gradient(to right, #8a6a10, #FFB800, #FFD700, #fff7cc, #FFD700, #FFB800, #8a6a10);
             filter: drop-shadow(0 0 12px rgba(255, 184, 0, 0.35));
         }
+
+        /* ===================== BOTÕES ===================== */
         .cta {
             color: #ffffff; background: linear-gradient(135deg, var(--g-blue), #1a56db);
-            box-shadow: 0 10px 30px -10px rgba(66, 133, 244, 0.8);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: ctaGlow 2.6s ease-in-out infinite;
+            transition: transform 0.2s ease;
         }
-        .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -10px rgba(66, 133, 244, 1); }
+        @keyframes ctaGlow {
+            0%, 100% { box-shadow: 0 10px 30px -10px rgba(66, 133, 244, 0.8); }
+            50% { box-shadow: 0 10px 40px -6px rgba(66, 133, 244, 1), 0 0 22px rgba(52, 168, 83, 0.35); }
+        }
         .back-link {
             color: #9ca3af; border: 1px solid rgba(255, 255, 255, 0.12);
             transition: color 0.2s ease, border-color 0.2s ease;
         }
         .back-link:hover { color: #ffffff; border-color: rgba(255, 255, 255, 0.3); }
 
-        /* entrada suave ao rolar */
-        .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
-        .reveal.visible { opacity: 1; transform: none; }
+        /* ===================== CENA "UM TOQUE DO CELULAR" (scroll) =====================
+           O celular desce e toca, as ondas NFC se espalham e o cartão TapReview surge
+           do fundo em 3D (gira, ganha nitidez, reflexo de luz passando), mantendo um
+           parallax leve com a rolagem e o mouse. Tudo controlado pelo script da cena. */
+        .tap-scene { position: relative; height: 260vh; margin: 0 -1rem; }
+        .tap-stage {
+            position: sticky; top: 0;
+            height: 100vh; height: 100svh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            perspective: 1100px;
+        }
+        /* brilho azul no fundo da cena */
+        .tap-stage::before {
+            content: ''; position: absolute; left: 50%; top: 50%;
+            width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.16) 0%, rgba(66, 133, 244, 0) 55%);
+            pointer-events: none;
+        }
+        .tap-flash {
+            position: absolute; left: 50%; top: 50%;
+            width: 70vmin; height: 70vmin; margin: -35vmin 0 0 -35vmin;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(185, 211, 255, 0.55) 0%, rgba(66, 133, 244, 0.25) 30%, rgba(66, 133, 244, 0) 65%);
+            opacity: 0; pointer-events: none;
+        }
+        .tap-ripple {
+            position: absolute; left: 50%; top: 50%;
+            width: 90px; height: 90px; margin: -45px 0 0 -45px;
+            border-radius: 9999px;
+            border: 2px solid rgba(110, 168, 255, 0.9);
+            opacity: 0; pointer-events: none;
+        }
+        .tap-scene.tapped .tap-ripple { animation: tapRipple 1.3s ease-out forwards; }
+        .tap-scene.tapped .tap-ripple:nth-of-type(2) { animation-delay: 0.18s; }
+        .tap-scene.tapped .tap-ripple:nth-of-type(3) { animation-delay: 0.36s; }
+        @keyframes tapRipple {
+            0% { transform: scale(0.4); opacity: 1; }
+            100% { transform: scale(4.2); opacity: 0; }
+        }
+
+        /* celular que desce e toca */
+        .tap-phone {
+            position: absolute; left: 50%; top: 50%;
+            width: 92px; height: 184px; margin: -92px 0 0 -46px;
+            border-radius: 1.4rem;
+            background: #0f172a;
+            border: 4px solid #1e293b;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(66, 133, 244, 0.25);
+            z-index: 4;
+            will-change: transform, opacity;
+            overflow: hidden;
+        }
+        .tap-phone::before {
+            content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+            width: 30px; height: 8px; border-radius: 9999px; background: #000;
+        }
+        .tap-phone-screen {
+            position: absolute; inset: 3px; border-radius: 1.05rem;
+            background: linear-gradient(160deg, #0b1220, #101b33);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+            color: #6ea8ff; font-size: 26px;
+        }
+        .tap-phone-screen small {
+            font-size: 7px; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: #94a3b8;
+        }
+
+        /* cartão 3D */
+        .tap-card-wrap {
+            position: relative;
+            width: min(60vw, 250px);
+            will-change: transform, opacity, filter;
+            z-index: 3;
+        }
+        .tap-card-wrap img { display: block; width: 100%; height: auto; }
+        /* reflexo de luz passando pelo acrílico */
+        .tap-glare {
+            position: absolute; inset: 1.5%;
+            border-radius: 5%;
+            background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.55) 47%, rgba(255, 255, 255, 0.1) 53%, rgba(255, 255, 255, 0) 70%);
+            background-size: 250% 250%;
+            background-position: var(--glare, 100%) 50%;
+            pointer-events: none;
+        }
+        /* sombra no "chão" */
+        .tap-floor {
+            position: absolute; left: 50%; top: 50%;
+            width: min(56vw, 230px); height: 26px;
+            margin-left: calc(min(56vw, 230px) / -2);
+            border-radius: 50%;
+            background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+            filter: blur(6px);
+            z-index: 1;
+            opacity: 0;
+        }
+        .tap-caption {
+            position: absolute; left: 0; right: 0; bottom: 9%;
+            text-align: center; z-index: 5;
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .tap-scene.done .tap-caption { opacity: 1; transform: none; }
+        .tap-caption .stars { color: #FBBC05; letter-spacing: 0.15em; font-size: 14px; }
+        .tap-hint {
+            position: absolute; left: 0; right: 0; top: 12%;
+            text-align: center; z-index: 5;
+            transition: opacity 0.4s ease;
+        }
+
         @media (prefers-reduced-motion: reduce) {
-            .reveal { opacity: 1; transform: none; transition: none; }
+            .tap-scene { height: auto; }
+            .tap-stage { position: relative; height: auto; padding: 3rem 0 6rem; }
+            .tap-phone, .tap-ripple, .tap-flash, .tap-hint { display: none; }
+            .tap-caption { opacity: 1; transform: none; bottom: 1.5rem; }
+            .tap-floor { opacity: 1; }
+        }
+        /* ===================== BOTÃO "QUERO MEU TAPREVIEW" (tecnológico) =====================
+           Borda de luz girando (azul/verde Google), fundo azul escuro com grade fina,
+           feixe de luz atravessando, brilho pulsando e ondas NFC ao lado do texto. */
+        @property --cta-a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+        .cta-tech {
+            position: relative;
+            display: block;
+            padding: 2px;
+            border-radius: 9999px;
+            background: conic-gradient(from var(--cta-a), #4285F4, #b9d3ff 15%, #34A853 30%, #4285F4 45%, #0b1a3a 60%, #6ea8ff 80%, #4285F4);
+            animation: ctaSpin 3s linear infinite, ctaPulse 2.6s ease-in-out infinite;
+            text-decoration: none;
+            transition: transform 0.25s ease;
+        }
+        @keyframes ctaSpin { to { --cta-a: 360deg; } }
+        @keyframes ctaPulse {
+            0%, 100% { box-shadow: 0 0 18px rgba(66, 133, 244, 0.45), 0 12px 30px -12px rgba(66, 133, 244, 0.8); }
+            50% { box-shadow: 0 0 34px rgba(110, 168, 255, 0.75), 0 0 18px rgba(52, 168, 83, 0.35), 0 14px 36px -10px rgba(66, 133, 244, 1); }
+        }
+        .cta-tech-inner {
+            position: relative;
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+            padding: 1rem 1.25rem;
+            border-radius: 9999px;
+            color: #ffffff;
+            font-weight: 900; font-size: 0.875rem; letter-spacing: 0.08em; text-transform: uppercase;
+            background:
+                linear-gradient(rgba(185, 211, 255, 0.07) 1px, transparent 1px) 0 0 / 14px 14px,
+                linear-gradient(90deg, rgba(185, 211, 255, 0.07) 1px, transparent 1px) 0 0 / 14px 14px,
+                radial-gradient(120% 140% at 50% -40%, rgba(110, 168, 255, 0.55), transparent 60%),
+                linear-gradient(135deg, #0b1a3a 0%, #1a56db 55%, #4285F4 100%);
+            text-shadow: 0 0 12px rgba(185, 211, 255, 0.6);
+        }
+        /* feixe de luz atravessando */
+        .cta-tech-inner::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.15) 45%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.15) 55%, transparent 65%);
+            transform: translateX(-120%);
+            animation: ctaSheen 3.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes ctaSheen {
+            0%, 45% { transform: translateX(-120%); }
+            75%, 100% { transform: translateX(120%); }
+        }
+        .cta-tech-inner > * { position: relative; z-index: 1; }
+        .cta-tech .cta-g {
+            width: 1.9rem; height: 1.9rem; border-radius: 9999px;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.95); color: #4285F4; font-size: 1.05rem;
+            box-shadow: 0 0 14px rgba(185, 211, 255, 0.8);
+        }
+        .cta-tech .cta-nfc { font-size: 1.15rem; color: #b9d3ff; transform: rotate(90deg); animation: ctaNfc 1.4s ease-in-out infinite; }
+        @keyframes ctaNfc {
+            0%, 100% { opacity: 0.45; }
+            50% { opacity: 1; }
+        }
+        .cta-tech:hover { transform: translateY(-2px) scale(1.02); }
+        .cta-tech:active { transform: scale(0.98); }
+        @media (prefers-reduced-motion: reduce) {
+            .cta-tech, .cta-tech-inner::after, .cta-tech .cta-nfc { animation: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .stagger-item, .scroll-hint, .eyebrow-shine, .text-gradient-blue, .tagline-badge, .cta,
+            .text-saturno-silver, .text-saturno-gold { animation: none; opacity: 1; transform: none; }
+            .reveal-node, .cascade > *, .type-wrap .type-after { opacity: 1; filter: none; transform: none; transition: none; }
+            .type-wrap .type-line { width: auto; animation: none !important; }
+            .card-interactive.lit .card-icon::after { display: none; }
             .tap-img.float img { animation: none; }
+            #particles-canvas { display: none; }
         }
     </style>
 </head>
 <body class="antialiased">
+    <div class="cosmic-bg" aria-hidden="true"></div>
     <div class="page-glow" aria-hidden="true"></div>
+    <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
-    <main class="max-w-md mx-auto px-4 py-6 flex flex-col items-center">
+    <main class="max-w-md mx-auto px-4 pt-6 flex flex-col items-center">
 
-        <header class="w-full flex items-center justify-between mb-8">
-            <a href="index.html" class="back-link inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-2">
-                <i class="ph ph-caret-left"></i> Voltar
-            </a>
-            <a href="index.html"><img src="img/logo.webp" alt="Saturno NFC" class="h-10 w-auto"></a>
-        </header>
+        <!-- PILHA 1: topo fica preso enquanto "Como funciona" desliza por cima -->
+        <div class="stack-wrap">
+            <section class="stack-back w-full flex flex-col items-center pb-6">
+                <header class="w-full flex items-center justify-between mb-8 stagger-item">
+                    <a href="index.html" class="back-link inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-2">
+                        <i class="ph ph-caret-left"></i> Voltar
+                    </a>
+                    <a href="index.html"><img src="img/logo.webp" alt="Saturno NFC" class="h-10 w-auto"></a>
+                </header>
 
-        <!-- Topo -->
-        <section class="w-full text-center">
-            <span class="eyebrow font-bold uppercase tracking-[0.4em] text-[10px]">Cartão TapReview do Google</span>
-            <h1 class="title-blue font-black uppercase tracking-wide text-3xl leading-tight mt-3">Aproxime e abra a avaliação</h1>
-            <p class="text-sm text-gray-400 leading-relaxed mt-3">O cliente aproxima o celular e a página de avaliação da sua empresa no Google abre em segundos.</p>
-        </section>
-
-        <figure class="tap-img float w-full mt-2">
-            <img src="img/tapreview-sem-fundo.webp" alt="Cartão TapReview do Google ao lado de um celular com a página de avaliação aberta" width="936" height="1200" decoding="async" fetchpriority="high">
-        </figure>
-
-        <!-- Benefícios -->
-        <section class="w-full grid grid-cols-1 gap-3">
-            <div class="glass-card reveal rounded-2xl p-5 flex items-start gap-4">
-                <div class="step-icon"><i class="ph ph-link text-xl"></i></div>
-                <div>
-                    <h2 class="text-white font-black uppercase tracking-wide text-sm mb-1">Já vem configurado</h2>
-                    <p class="text-xs text-gray-400 leading-relaxed">Envie o link da sua empresa após a compra. Nós gravamos no cartão antes do envio e você recebe pronto para usar.</p>
+                <div class="w-full text-center">
+                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.4em] text-[10px] stagger-item" style="animation-delay: 0.1s;">Cartão TapReview do Google</span>
+                    <h1 class="title-highlight text-white uppercase text-3xl leading-tight mt-3 stagger-item" style="animation-delay: 0.25s;">Aproxime e abra a <span class="text-gradient-blue">avaliação</span></h1>
+                    <p class="text-sm text-gray-400 leading-relaxed mt-3 stagger-item" style="animation-delay: 0.4s;">O cliente aproxima o celular e a página de avaliação da sua empresa no Google abre em segundos.</p>
                 </div>
-            </div>
-            <div class="glass-card reveal rounded-2xl p-5 flex items-start gap-4">
-                <div class="step-icon"><i class="ph ph-wifi-high text-xl rotate-90"></i></div>
-                <div>
-                    <h2 class="text-white font-black uppercase tracking-wide text-sm mb-1">Sem aplicativo</h2>
-                    <p class="text-xs text-gray-400 leading-relaxed">É só aproximar o celular do cartão. Nada para baixar e nada para digitar.</p>
-                </div>
-            </div>
-            <div class="glass-card reveal rounded-2xl p-5 flex items-start gap-4">
-                <div class="step-icon"><i class="ph-fill ph-star text-xl"></i></div>
-                <div>
-                    <h2 class="text-white font-black uppercase tracking-wide text-sm mb-1">Mais avaliações 5 estrelas</h2>
-                    <p class="text-xs text-gray-400 leading-relaxed">Deixe no balcão, no caixa ou na mesa e peça a avaliação na hora em que o cliente está satisfeito.</p>
-                </div>
-            </div>
-        </section>
 
-        <!-- Detalhes do cartão -->
-        <section class="w-full mt-10 reveal">
-            <div class="text-center mb-2">
-                <span class="eyebrow font-bold uppercase tracking-[0.4em] text-[10px]">Detalhes do cartão</span>
-                <h2 class="text-white font-black uppercase tracking-wide text-lg mt-2">Receba pronto para usar</h2>
-            </div>
-            <div class="grid grid-cols-2 gap-3 items-end">
-                <figure class="tap-img tap-img-zoom">
-                    <img src="img/tapreview1-sem-fundo.webp" alt="Cartão TapReview com o chip NFC já gravado" width="936" height="1200" loading="lazy" decoding="async">
-                    <figcaption class="tap-cap">Chip NFC gravado com o link da sua empresa</figcaption>
+                <figure class="tap-img float w-full mt-2 stagger-item" style="animation-delay: 0.55s;">
+                    <img src="img/tapreview-sem-fundo.webp" alt="Cartão TapReview do Google ao lado de um celular com a página de avaliação aberta" width="936" height="1200" decoding="async" fetchpriority="high">
                 </figure>
-                <figure class="tap-img">
-                    <img src="img/tapreview2-sem-fundo.webp" alt="Cartão TapReview com 7 cm de largura e 10 cm de altura" width="800" height="1200" loading="lazy" decoding="async">
-                    <figcaption class="tap-cap">Tamanho: <b>7 × 10 cm</b></figcaption>
-                </figure>
+
+                <a href="#como-funciona" class="flex flex-col items-center scroll-hint hover:opacity-80 transition-opacity" style="animation-delay: 0.7s;">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400 mb-1">Como funciona</span>
+                    <i class="ph ph-caret-down text-xl" style="color: var(--g-blue-soft);"></i>
+                </a>
+            </section>
+
+            <section id="como-funciona" class="stack-front w-full pb-12">
+                <div class="text-center mb-10 reveal-node px-1">
+                    <span class="eyebrow font-bold uppercase tracking-[0.4em] text-[9px]">Avaliações no Google</span>
+                    <h2 class="text-2xl font-black text-white uppercase tracking-tighter mt-3">Como funciona na <span class="text-gradient-blue">Prática</span></h2>
+                    <p class="mt-4 text-gray-400 text-sm italic-serif">Um toque do celular e o seu cliente já está na tela de avaliação.</p>
+                </div>
+
+                <!-- CENA: um toque do celular e o cartão TapReview surge em 3D -->
+                <div class="tap-scene" id="tap-scene">
+                    <div class="tap-stage">
+                        <p class="tap-hint text-[10px] font-bold tracking-[0.3em] uppercase text-gray-400">Role para aproximar <i class="ph ph-caret-down" style="color: var(--g-blue-soft);"></i></p>
+                        <div class="tap-flash"></div>
+                        <span class="tap-ripple"></span><span class="tap-ripple"></span><span class="tap-ripple"></span>
+                        <div class="tap-phone" aria-hidden="true">
+                            <div class="tap-phone-screen"><i class="ph ph-wifi-high rotate-90"></i><small>Aproximando</small></div>
+                        </div>
+                        <div class="tap-floor" aria-hidden="true"></div>
+                        <div class="tap-card-wrap">
+                            <img src="img/tapreview-card.webp" alt="Cartão TapReview do Google: aproxime seu celular para avaliar" width="535" height="765" decoding="async">
+                            <div class="tap-glare" aria-hidden="true"></div>
+                        </div>
+                        <div class="tap-caption">
+                            <div class="stars">★★★★★</div>
+                            <p class="text-white font-black uppercase tracking-wide text-sm mt-1">Avaliação aberta em segundos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <div class="card-interactive reveal-node p-6">
+                        <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
+                            <span class="card-icon"><i class="ph ph-link text-xl"></i></span>
+                            Já vem configurado
+                        </h3>
+                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">Envie o link da sua empresa após a compra. Nós gravamos no cartão antes do envio e você recebe pronto para usar.</p>
+                    </div>
+                    <div class="card-interactive reveal-node p-6">
+                        <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
+                            <span class="card-icon"><i class="ph ph-wifi-high text-xl rotate-90"></i></span>
+                            Sem aplicativo
+                        </h3>
+                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">É só aproximar o celular do cartão. Nada para baixar e nada para digitar.</p>
+                    </div>
+                    <div class="card-interactive reveal-node p-6">
+                        <h3 class="text-white text-lg font-black uppercase tracking-tighter mb-2 flex items-center gap-3">
+                            <span class="card-icon"><i class="ph-fill ph-star text-xl"></i></span>
+                            Mais avaliações 5 estrelas
+                        </h3>
+                        <p class="text-gray-400 text-[11px] leading-relaxed uppercase tracking-widest font-bold">Deixe no balcão, no caixa ou na mesa e peça a avaliação na hora em que o cliente está satisfeito.</p>
+                    </div>
+                </div>
+
+                <div class="w-full mt-10 reveal-node">
+                    <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20Cart%C3%A3o%20TapReview%20do%20Google." target="_blank" rel="noopener noreferrer" class="cta-tech magnetic-btn">
+                        <span class="cta-tech-inner">
+                            <span class="cta-g"><i class="ph-bold ph-google-logo"></i></span>
+                            Quero meu TapReview
+                            <i class="ph ph-wifi-high cta-nfc"></i>
+                        </span>
+                    </a>
+                </div>
+
+            <!-- TAG AVALIAÇÃO GOOGLE (movida do index.html): celular aproxima e abre a avaliação -->
+            <div id="tag-google" class="w-full max-w-md mx-auto mt-14 flex flex-col items-center reveal-node">
+                <div class="mb-6 text-center">
+                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.4em] text-[9px]">Tag Avaliação Google</span>
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tighter mt-3">5 Estrelas <span class="text-gradient-blue">Sem Pesquisa</span></h3>
+                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mt-3">Transforme cada cliente satisfeito em uma nova avaliação 5 estrelas no Google.</p>
+                </div>
+
+                <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
+                    <div class="absolute bottom-10 w-40 h-40 bg-[#4285F4]/20 blur-[40px] rounded-full"></div>
+
+                    <div class="absolute top-0 flex flex-col items-center z-10">
+                        <div class="absolute w-20 h-20 border-[2px] border-[#6ea8ff] rounded-full animate-sim-ripple"></div>
+                        <div class="w-16 h-16 rounded-full border border-[#6ea8ff]/50 bg-[#4285F4]/15 flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
+                            <i class="ph-fill ph-star text-2xl text-[#6ea8ff] drop-shadow-lg"></i>
+                        </div>
+                    </div>
+
+                    <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone">
+                        <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
+
+                        <div class="absolute inset-0 bg-white animate-sim-screen flex flex-col">
+                            <div class="h-12 border-b border-gray-200 flex items-center justify-center bg-gray-50 shrink-0">
+                                <span class="font-black text-[12px] tracking-tighter">
+                                    <span class="text-blue-500">G</span><span class="text-red-500">o</span><span class="text-yellow-500">o</span><span class="text-blue-500">g</span><span class="text-green-500">l</span><span class="text-red-500">e</span> Maps
+                                </span>
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col items-center text-center">
+                                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center mb-3 overflow-hidden">
+                                    <i class="ph ph-buildings text-lg text-gray-500"></i>
+                                </div>
+                                <h4 class="text-black font-bold text-[12px] mb-1">Sua Empresa</h4>
+                                <p class="text-[9px] text-gray-500 mb-5 leading-tight">Avalie a sua experiência neste local.</p>
+
+                                <div class="flex gap-1 mb-6">
+                                    <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                    <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                    <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                    <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                    <i class="ph-fill ph-star text-2xl text-yellow-400"></i>
+                                </div>
+
+                                <div class="w-full bg-gray-100 rounded-lg h-16 border border-gray-200 p-2 text-left mb-4">
+                                    <span class="text-[8px] text-gray-400">Descreva a sua experiência...</span>
+                                </div>
+
+                                <button type="button" class="w-full py-2.5 bg-blue-600 text-white rounded-full font-bold text-[10px] shadow-md mt-auto">Postar Avaliação</button>
+                            </div>
+                        </div>
+
+                        <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
+                            <i class="ph ph-lock text-lg text-slate-700 mb-2"></i>
+                            <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <!-- Planos + CTA -->
-        <section class="w-full mt-10 reveal">
-            <div class="included w-full rounded-2xl p-4 text-center">
-                <p class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Incluso nos planos</p>
-                <p class="text-sm font-black uppercase tracking-wide mt-2"><span class="text-saturno-silver">Plano Profissional</span> <span class="text-white">· 1 TapReview</span></p>
-                <p class="text-sm font-black uppercase tracking-wide mt-1"><span class="text-saturno-gold">Plano Fora de Órbita</span> <span class="text-white">· 2 TapReview</span></p>
-                <a href="index.html#planos" class="inline-block text-[11px] font-bold uppercase tracking-widest mt-2 eyebrow hover:text-white transition-colors">Ver os planos <i class="ph ph-arrow-right"></i></a>
-            </div>
 
-            <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20Cart%C3%A3o%20TapReview%20do%20Google." target="_blank" rel="noopener noreferrer" class="cta w-full mt-4 py-4 rounded-full flex items-center justify-center gap-2 font-black uppercase tracking-wide text-sm">
-                <i class="ph ph-google-logo text-lg"></i> Quero meu TapReview
-            </a>
-        </section>
+                <div class="w-full flex justify-center mt-12 reveal-node">
+                    <div class="tagline-badge inline-block px-5 py-2 rounded-full text-xs font-bold tracking-widest uppercase">
+                        <span class="eyebrow-shine">Aproxime. Avalie. Cresça.</span>
+                    </div>
+                </div>
+            </section>
+        </div>
 
-        <footer class="w-full text-center mt-12 mb-4">
-            <a href="index.html"><img src="img/logo.webp" alt="Saturno NFC" class="h-8 w-auto mx-auto opacity-70"></a>
-            <p class="text-[10px] text-gray-600 uppercase tracking-widest mt-3">Saturno NFC · Aproxime. Conecte. Converta.</p>
-        </footer>
+        <!-- PILHA 2: "Detalhes do cartão" fica preso enquanto os planos deslizam por cima -->
+        <div class="stack-wrap">
+            <section class="stack-back w-full pt-4 pb-10" style="background: var(--bg);">
+                <div class="text-center mb-2 reveal-node">
+                    <span class="eyebrow-shine inline-block font-bold uppercase tracking-[0.3em] text-xs">Detalhes do cartão</span>
+                    <h2 class="type-wrap title-highlight uppercase text-3xl leading-tight mt-2">
+                        <span class="type-line text-white">Receba pronto</span><br>
+                        <span class="type-after text-gradient-blue">para usar</span>
+                    </h2>
+                </div>
+                <div class="grid grid-cols-2 gap-3 items-end">
+                    <figure class="tap-img tap-img-zoom reveal-node">
+                        <img src="img/tapreview1-sem-fundo.webp" alt="Cartão TapReview com o chip NFC já gravado" width="936" height="1200" decoding="async">
+                        <figcaption class="tap-cap">Chip NFC gravado com o link da sua empresa</figcaption>
+                    </figure>
+                    <figure class="tap-img reveal-node" style="transition-delay: 0.2s;">
+                        <img src="img/tapreview2-sem-fundo.webp" alt="Cartão TapReview com 7 cm de largura e 10 cm de altura" width="800" height="1200" decoding="async">
+                        <figcaption class="tap-cap">Tamanho: <b>7 × 10 cm</b></figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section class="stack-front w-full pb-6">
+                <header class="text-center w-full mb-8 flex flex-col items-center reveal-node">
+                    <p class="eyebrow-shine text-xs font-bold tracking-[0.3em] uppercase mb-3 inline-block">Maior crescimento e conversão</p>
+                    <h2 class="text-4xl title-highlight uppercase"><span class="text-white">Escolha Seu</span> <span class="text-gradient-blue">Plano</span></h2>
+                </header>
+
+                <div class="reveal-node">
+    <div class="w-full mb-5">
+                        <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20Cart%C3%A3o%20TapReview%20do%20Google." target="_blank" rel="noopener noreferrer" class="cta-tech magnetic-btn">
+                            <span class="cta-tech-inner">
+                                <span class="cta-g"><i class="ph-bold ph-google-logo"></i></span>
+                                Quero meu TapReview
+                                <i class="ph ph-wifi-high cta-nfc"></i>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="included cascade w-full rounded-2xl p-4 text-center">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Incluso nos planos</p>
+                        <p class="text-sm font-black uppercase tracking-wide mt-2"><span class="text-saturno-silver">Plano Profissional</span> <span class="text-white">· 1 TapReview</span></p>
+                        <p class="text-sm font-black uppercase tracking-wide mt-1"><span class="text-saturno-gold">Plano Fora de Órbita</span> <span class="text-white">· 2 TapReview</span></p>
+                        <a href="index.html#planos" class="inline-block text-[11px] font-bold uppercase tracking-widest mt-2 eyebrow hover:text-white transition-colors">Ver os planos <i class="ph ph-arrow-right"></i></a>
+                    </div>
+
+                </div>
+
+                <footer class="w-full text-center mt-12 mb-4 reveal-node">
+                    <a href="index.html"><img src="img/logo.webp" alt="Saturno NFC" class="h-8 w-auto mx-auto opacity-70"></a>
+                    <p class="text-[10px] text-gray-600 uppercase tracking-widest mt-3">Saturno NFC · Aproxime. Conecte. Converta.</p>
+                </footer>
+            </section>
+        </div>
     </main>
 
     <script>
-        // Revela os blocos ao entrar na tela
         (function () {
-            var items = document.querySelectorAll('.reveal');
-            if (!('IntersectionObserver' in window)) {
-                items.forEach(function (el) { el.classList.add('visible'); });
+            var hasIO = 'IntersectionObserver' in window;
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // 1. Revelar ao rolar (igual ao .reveal-node do index). Os cards entram
+            //    em cascata: 0,16s de atraso entre um e outro.
+            document.querySelectorAll('.card-interactive').forEach(function (el, i) {
+                var d = (i * 0.16) + 's';
+                el.style.transitionDelay = '0s, 0s, 0s, ' + d + ', ' + d + ', ' + d;
+            });
+            var reveals = document.querySelectorAll('.reveal-node');
+            if (hasIO) {
+                var revealObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) { entry.target.classList.add('active'); revealObserver.unobserve(entry.target); }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+                reveals.forEach(function (el) { revealObserver.observe(el); });
+            } else {
+                reveals.forEach(function (el) { el.classList.add('active'); });
+            }
+
+            // 2. Cards acendem em azul ao chegar no meio da tela e apagam ao subir
+            var cards = document.querySelectorAll('.card-interactive');
+            var ticking = false;
+            function updateCards() {
+                var centerY = window.innerHeight / 2;
+                cards.forEach(function (el) { el.classList.toggle('lit', el.getBoundingClientRect().top <= centerY); });
+                ticking = false;
+            }
+            window.addEventListener('scroll', function () {
+                if (!ticking) { requestAnimationFrame(updateCards); ticking = true; }
+            }, { passive: true });
+            updateCards();
+
+            // 3. Pilha sticky: a seção de trás só prende quando o fim dela chega
+            //    no fim da tela, para nenhum conteúdo dela ficar escondido.
+            function updateStacks() {
+                document.querySelectorAll('.stack-back').forEach(function (el) {
+                    el.style.top = Math.min(0, window.innerHeight - el.offsetHeight) + 'px';
+                });
+            }
+            window.addEventListener('resize', function () { updateStacks(); updateCards(); });
+            window.addEventListener('load', updateStacks);
+            updateStacks();
+
+            // 4. Máquina de escrever + linhas dos planos em cascata (disparam uma vez)
+            document.querySelectorAll('.cascade > *').forEach(function (el, i) {
+                el.style.transitionDelay = (i * 0.16) + 's';
+            });
+            var once = document.querySelectorAll('.type-wrap, .cascade');
+            if (hasIO) {
+                var onceObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (!entry.isIntersecting) return;
+                        var line = entry.target.querySelector('.type-line');
+                        if (line) entry.target.style.setProperty('--type-w', line.scrollWidth + 'px');
+                        entry.target.classList.add('active');
+                        onceObserver.unobserve(entry.target);
+                    });
+                }, { threshold: 0.3 });
+                once.forEach(function (el) { onceObserver.observe(el); });
+            } else {
+                once.forEach(function (el) { el.classList.add('active'); });
+            }
+
+            // 5. Botão magnético (igual ao index)
+            document.querySelectorAll('.magnetic-btn').forEach(function (btn) {
+                btn.addEventListener('mousemove', function (e) {
+                    var r = btn.getBoundingClientRect();
+                    var x = e.clientX - r.left - r.width / 2;
+                    var y = e.clientY - r.top - r.height / 2;
+                    btn.style.transform = 'translate(' + (x * 0.1) + 'px, ' + (y * 0.1) + 'px) scale(1.02)';
+                });
+                btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
+            });
+
+            // 6. Partículas no fundo (igual ao index, nas cores azul/branco/verde)
+            var canvas = document.getElementById('particles-canvas');
+            if (!canvas || reduce) return;
+            var ctx = canvas.getContext('2d');
+            var colors = ['rgba(255,255,255,0.5)', 'rgba(66,133,244,0.4)', 'rgba(110,168,255,0.35)', 'rgba(52,168,83,0.25)'];
+            var parts = [];
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            function initParticles() {
+                parts = [];
+                var n = window.innerWidth < 768 ? 40 : 100;
+                for (var i = 0; i < n; i++) {
+                    parts.push({
+                        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                        s: Math.random() * 2 + 0.1,
+                        vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+                        c: colors[Math.floor(Math.random() * colors.length)]
+                    });
+                }
+            }
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (var i = 0; i < parts.length; i++) {
+                    var p = parts[i];
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x > canvas.width) p.x = 0; else if (p.x < 0) p.x = canvas.width;
+                    if (p.y > canvas.height) p.y = 0; else if (p.y < 0) p.y = canvas.height;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+                    ctx.fillStyle = p.c;
+                    ctx.fill();
+                }
+                requestAnimationFrame(draw);
+            }
+            resize(); initParticles(); draw();
+            window.addEventListener('resize', function () { resize(); initParticles(); });
+        })();
+
+        // Cena "um toque do celular": tudo calculado a partir do quanto a cena foi rolada.
+        //   0.00–0.22  celular desce até o centro
+        //   0.22–0.30  toque: ondas NFC + clarão
+        //   0.28–0.42  celular sobe e some
+        //   0.30–0.72  cartão surge do fundo em 3D (gira, cresce, ganha nitidez)
+        //   0.72–1.00  cartão parado com parallax leve + reflexo de luz; legenda aparece
+        (function () {
+            var scene = document.getElementById('tap-scene');
+            if (!scene) return;
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var phone = scene.querySelector('.tap-phone');
+            var card = scene.querySelector('.tap-card-wrap');
+            var glare = scene.querySelector('.tap-glare');
+            var floor = scene.querySelector('.tap-floor');
+            var flash = scene.querySelector('.tap-flash');
+            var hint = scene.querySelector('.tap-hint');
+            if (reduce) {
+                card.style.transform = 'perspective(1100px) rotateX(6deg) rotateY(-6deg)';
+                card.style.filter = 'drop-shadow(0 30px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 30px rgba(66,133,244,0.35))';
+                floor.style.transform = 'translateY(' + (card.offsetHeight / 2 + 10) + 'px)';
                 return;
             }
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-                });
-            }, { threshold: 0.15 });
-            items.forEach(function (el) { io.observe(el); });
+
+            var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+            var seg = function (p, a, b) { return clamp((p - a) / (b - a), 0, 1); };
+            var easeOut = function (t) { return 1 - Math.pow(1 - t, 3); };
+            var easeInOut = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+            var lerp = function (a, b, t) { return a + (b - a) * t; };
+            var mx = 0, my = 0, tmx = 0, tmy = 0;      // inclinação pelo mouse (desktop)
+            var ticking = false;
+
+            function render() {
+                ticking = false;
+                var r = scene.getBoundingClientRect();
+                var total = scene.offsetHeight - window.innerHeight;
+                var p = clamp(-r.top / total, 0, 1);
+                var vh = window.innerHeight;
+
+                // celular
+                var down = easeOut(seg(p, 0, 0.22));
+                var tapDip = Math.sin(seg(p, 0.22, 0.3) * Math.PI) * 14;
+                var up = easeInOut(seg(p, 0.28, 0.42));
+                var py = lerp(-vh * 0.55, -10, down) + tapDip - up * vh * 0.45;
+                phone.style.transform = 'translateY(' + py.toFixed(1) + 'px) rotate(' + lerp(-14, 0, down).toFixed(2) + 'deg) scale(' + lerp(0.9, 1, down) * lerp(1, 0.8, up) + ')';
+                phone.style.opacity = (seg(p, 0, 0.06) * (1 - up)).toFixed(3);
+                hint.style.opacity = (1 - seg(p, 0.05, 0.15)).toFixed(3);
+
+                // toque: ondas + clarão
+                scene.classList.toggle('tapped', p >= 0.25);
+                flash.style.opacity = (Math.sin(seg(p, 0.24, 0.4) * Math.PI) * 0.9).toFixed(3);
+
+                // cartão surgindo
+                var e = easeOut(seg(p, 0.3, 0.72));
+                var hold = seg(p, 0.72, 1);
+                var rx = lerp(70, 6, e) + lerp(0, -8, hold) + my;
+                var ry = lerp(-40, -6, e) + lerp(0, 12, hold) + mx;
+                var rz = lerp(-12, 0, e);
+                var s = lerp(0.35, 1, e);
+                var ty = lerp(90, 0, e);
+                var tz = lerp(-420, 0, e);
+                card.style.transform = 'translate3d(0,' + ty.toFixed(1) + 'px,' + tz.toFixed(1) + 'px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) rotateZ(' + rz.toFixed(2) + 'deg) scale(' + s.toFixed(3) + ')';
+                card.style.opacity = seg(p, 0.3, 0.42).toFixed(3);
+                card.style.filter = 'blur(' + lerp(14, 0, e).toFixed(2) + 'px) brightness(' + lerp(0.4, 1, e).toFixed(3) + ') drop-shadow(0 30px 40px rgba(0,0,0,0.6)) drop-shadow(0 0 30px rgba(66,133,244,' + (0.35 * e).toFixed(3) + '))';
+                glare.style.setProperty('--glare', lerp(110, -10, seg(p, 0.5, 1)).toFixed(1) + '%');
+
+                // sombra no chão acompanha o cartão
+                floor.style.transform = 'translateY(' + (card.offsetHeight / 2 + 14) + 'px) scale(' + (s * (1 - hold * 0.05)).toFixed(3) + ')';
+                floor.style.opacity = (e * 0.9).toFixed(3);
+
+                scene.classList.toggle('done', p >= 0.78);
+            }
+            function request() { if (!ticking) { ticking = true; requestAnimationFrame(render); } }
+
+            // parallax pelo mouse (suave)
+            scene.addEventListener('mousemove', function (ev) {
+                var r = scene.querySelector('.tap-stage').getBoundingClientRect();
+                tmx = ((ev.clientX - r.left) / r.width - 0.5) * 12;
+                tmy = -((ev.clientY - r.top) / r.height - 0.5) * 10;
+                easeMouse();
+            });
+            scene.addEventListener('mouseleave', function () { tmx = 0; tmy = 0; easeMouse(); });
+            var mouseRaf = null;
+            function easeMouse() {
+                if (mouseRaf) return;
+                (function step() {
+                    mx += (tmx - mx) * 0.12; my += (tmy - my) * 0.12;
+                    render();
+                    if (Math.abs(tmx - mx) > 0.05 || Math.abs(tmy - my) > 0.05) mouseRaf = requestAnimationFrame(step);
+                    else mouseRaf = null;
+                })();
+            }
+
+            window.addEventListener('scroll', request, { passive: true });
+            window.addEventListener('resize', request);
+            render();
         })();
     </script>
 </body>
