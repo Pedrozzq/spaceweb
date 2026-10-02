@@ -1063,10 +1063,12 @@
 
         /* ---------- mockup estilo iPhone 17 Pro Max ---------- */
         .ip17 {
-            --ip-w: min(52vw, 215px);
+            /* maior, mas sem passar de ~72% da altura da tela */
+            --ip-w: min(62vw, 255px, 34vh);
             position: relative;
             width: var(--ip-w);
-            aspect-ratio: 9 / 19.5;
+            /* proporção ajustada para a tela interna ter o mesmo formato dos prints dos sites */
+            aspect-ratio: 9 / 18.7;
             border-radius: calc(var(--ip-w) * 0.2);
             padding: calc(var(--ip-w) * 0.035);
             /* moldura de titânio */
@@ -1080,7 +1082,7 @@
             z-index: 3;
             will-change: transform;
         }
-        @media (min-width: 768px) { .ip17 { --ip-w: 240px; } }
+        @media (min-width: 768px) { .ip17 { --ip-w: min(290px, 34vh); } }
         /* botões laterais */
         .ip-btn { position: absolute; width: 3px; border-radius: 2px; background: linear-gradient(90deg, #6b7380, #c9ced6); }
         .ip-btn.l1 { left: -3px; top: 17%; height: 5%; }
@@ -1134,7 +1136,8 @@
             opacity: 0; transform: translateY(12%);
             background: #000;
         }
-        .ip-site img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+        /* contain: o print aparece inteiro, sem cortar as laterais */
+        .ip-site img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center top; }
         .ip-flash {
             position: absolute; inset: 0; z-index: 7; pointer-events: none;
             background: radial-gradient(circle at 50% 18%, rgba(185, 211, 255, 0.95), rgba(66, 133, 244, 0.35) 35%, rgba(66, 133, 244, 0) 70%);
@@ -1160,12 +1163,12 @@
         /* cartões do portfólio que sobem até o celular */
         .tap-card-wrap {
             position: absolute; left: 50%; top: 50%;
-            width: min(46vw, 190px);
+            width: min(50vw, 210px);
             z-index: 4;
             opacity: 0;
             will-change: transform, opacity, filter;
         }
-        @media (min-width: 768px) { .tap-card-wrap { width: 215px; } }
+        @media (min-width: 768px) { .tap-card-wrap { width: 240px; } }
         .tap-card-wrap img { display: block; width: 100%; height: auto; border-radius: 6% / 9.5%; }
         .tap-glare {
             position: absolute; inset: 1.5%;
@@ -2510,7 +2513,7 @@
                         <!-- cartões do portfólio entram aqui -->
 
                         <div class="tap-caption">
-                            <span class="tap-count">1/9</span>
+                            <span class="tap-count">1/7</span>
                             <p class="text-white font-black uppercase tracking-wide text-sm mt-1"><span class="tap-name"></span></p>
                             <p class="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 mt-1">Site aberto em segundos</p>
                         </div>
@@ -3604,9 +3607,7 @@
                 { name: 'PorElas Sem Glúten', card: 'cartoes/8.png', site: 'img/mockup-por-elas.webp' },
                 { name: 'Vênus Distribuidora', card: 'cartoes/venus.png', site: 'img/mockup-venus.webp' },
                 { name: 'Forma Máxima', card: 'cartoes/forma.png', site: 'img/mockup-tela-0.webp' },
-                { name: 'The Jolly Washer', card: 'cartoes/dddddd.png', site: 'img/mockup-jolly.webp' },
-                { name: 'JP Joias', card: 'cartoes/jpjpj.png', site: 'img/mockup-tela-1.webp' },
-                { name: 'OuroPack', card: 'cartoes/Saturno%20NFC.png', site: 'img/mockup-tela-3.webp' }
+                { name: 'The Jolly Washer', card: 'cartoes/dddddd.png', site: 'img/mockup-jolly.webp' }
             ];
             var SEG_VH = 55;   // quanto rolar (em vh) para cada cartão
 
