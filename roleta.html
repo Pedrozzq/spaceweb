@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Roleta de Prêmios - Evento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        party: {
+                            dark: '#090d16',
+                            card: '#161f32',
+                            accent: '#f59e0b',
+                            purple: '#8b5cf6',
+                            pink: '#ec4899',
+                            cyan: '#06b6d4',
+                            loss: '#64748b'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite alternate',
+                        'bounce-short': 'bounceShort 0.6s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(245, 158, 11, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(236, 72, 153, 0.7)' }
+                        },
+                        bounceShort: {
+                            '0%': { transform: 'translateY(0)' },
+                            '100%': { transform: 'translateY(-6px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at top, #1e1b4b 0%, #090d16 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+            touch-action: manipulation;
+        }
+
+        .glass-panel {
+            background: rgba(22, 31, 50, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .wheel-shadow {
+            filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.35));
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+
+        .pin-bounce {
+            transform-origin: top center;
+            transition: transform 0.05s ease-out;
+        }
+        .pin-bounce.active {
+            transform: rotate(-16deg) scale(1.1);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.5);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen font-sans antialiased justify-between items-center selection:bg-pink-500 selection:text-white px-3 py-4">
+
+    <header class="w-full max-w-md text-center z-10 my-1">
+        <div class="inline-flex items-center gap-1.5 bg-purple-900/40 border border-purple-500/30 px-3 py-1 rounded-full text-xs font-semibold text-purple-300 mb-2 backdrop-blur-md">
+            <i class="fa-solid fa-sparkles text-amber-400"></i> Evento Exclusivo • 1 Giro a cada 24h
+        </div>
+        <h1 class="text-3xl font-black uppercase tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-pink-500 to-cyan-400 glow-text">
+            Roleta de Prêmios
+        </h1>
+        <p class="text-slate-400 text-xs mt-1">
+            Gire a roleta e tente a sorte para ganhar prêmios incríveis!
+        </p>
+    </header>
+
+    <main class="w-full max-w-md flex flex-col items-center gap-4 my-2">
+        
+        <!-- Timer Status Banner -->
+        <div id="cooldownBanner" class="w-full glass-panel p-3 rounded-2xl flex items-center justify-between border border-amber-500/20 shadow-lg">
+            <div class="flex items-center gap-2.5">
+                <div id="timerIconBg" class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-base">
+                    <i id="timerIcon" class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <p id="timerTitle" class="text-xs font-bold text-slate-200">Giro Disponível!</p>
+                    <p id="timerSubtitle" class="text-[11px] text-slate-400">Você já pode testar sua sorte hoje.</p>
+                </div>
+            </div>
+            <div id="countdownDisplay" class="hidden text-right font-mono font-black text-amber-400 text-sm bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-amber-500/30">
+                23:59:59
+            </div>
+        </div>
+
+        <div class="relative w-full max-w-[320px] sm:max-w-[360px] aspect-square flex items-center justify-center my-1">
+            
+            <!-- Pointer Pin -->
+            <div id="pointerPin" class="absolute -top-3 z-30 flex flex-col items-center pin-bounce drop-shadow-md">
+                <div class="w-7 h-9 bg-gradient-to-b from-amber-300 to-amber-500 clip-path-pointer flex items-center justify-center rounded-t-md border-2 border-amber-200">
+                    <i class="fa-solid fa-caret-down text-slate-950 text-lg mt-1.5"></i>
+                </div>
+            </div>
+
+            <!-- Wheel Circle -->
+            <div class="relative w-full h-full p-2.5 rounded-full bg-slate-900/90 border-4 border-amber-400/80 shadow-2xl animate-pulse-glow flex items-center justify-center">
+                <canvas id="wheelCanvas" class="w-full h-full rounded-full cursor-pointer wheel-shadow"></canvas>
+                
+                <!-- Center Spin Button -->
+                <button id="centerSpinBtn" onclick="spinWheel()" class="absolute z-20 w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 via-pink-500 to-purple-600 p-1 shadow-2xl hover:scale-105 active:scale-95 transition-all duration-200 group focus:outline-none">
+                    <div class="w-full h-full rounded-full bg-slate-950 flex flex-col items-center justify-center text-center p-1 border border-white/20 group-hover:bg-slate-900 transition-colors">
+                        <i class="fa-solid fa-rotate text-amber-400 text-base group-hover:rotate-180 transition-transform duration-500"></i>
+                        <span class="text-[11px] font-black uppercase tracking-wider text-white mt-0.5">GIRAR</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div class="w-full text-center flex flex-col items-center gap-2">
+            <button id="mainSpinBtn" onclick="spinWheel()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 text-slate-950 font-black text-base tracking-wider uppercase shadow-lg shadow-pink-500/25 hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-dice text-lg"></i>
+                <span id="spinBtnText">Girar Roleta</span>
+            </button>
+
+            <!-- Pending Prize Reminder (shown until prize is marked as claimed) -->
+            <button id="pendingPrizeBanner" onclick="openPendingPrize()" class="hidden w-full py-4 px-4 rounded-2xl bg-cyan-500/10 border-2 border-cyan-400/40 text-cyan-300 text-base font-black uppercase tracking-wide items-center justify-center gap-3 hover:bg-cyan-500/20 transition animate-pulse-glow">
+                <i class="fa-solid fa-gift text-xl"></i>
+                <span>Ver Meu Prêmio Pendente</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Registration Modal (must be filled before the first spin) -->
+    <div id="registrationModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div id="registrationCard" class="glass-panel bg-slate-900 border-2 border-purple-400/50 rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl transform scale-90 transition-all duration-300 relative overflow-hidden">
+
+            <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-purple-400 to-pink-500 p-1 flex items-center justify-center shadow-lg">
+                <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center text-purple-400 text-2xl">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+            </div>
+
+            <p class="text-xs uppercase font-bold tracking-widest text-purple-400 mb-1">Antes de Girar</p>
+            <h3 class="text-xl font-black text-white mb-4">Preencha seus Dados</h3>
+
+            <form id="registrationForm" class="text-left flex flex-col gap-3" onsubmit="return submitRegistration(event)">
+                <div>
+                    <label for="regName" class="block text-[11px] font-semibold text-slate-400 mb-1">Nome</label>
+                    <input id="regName" type="text" required placeholder="Seu nome completo" autocomplete="name"
+                        class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-400" />
+                </div>
+                <div>
+                    <label for="regWhatsapp" class="block text-[11px] font-semibold text-slate-400 mb-1">WhatsApp</label>
+                    <input id="regWhatsapp" type="tel" required placeholder="(00) 00000-0000" autocomplete="tel"
+                        class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-400" />
+                </div>
+                <p id="registrationError" class="hidden text-[11px] text-rose-400 font-semibold"></p>
+
+                <button type="submit" class="w-full mt-1 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                    Continuar e Girar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div id="modalCard" class="glass-panel bg-slate-900 border-2 border-amber-400/50 rounded-3xl p-6 max-w-xs w-full text-center shadow-2xl transform scale-90 transition-all duration-300 relative overflow-hidden">
+            
+            <div id="modalHeaderBg" class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-amber-400 to-pink-500 p-1 flex items-center justify-center shadow-lg animate-bounce-short">
+                <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center text-amber-400 text-2xl">
+                    <i id="modalIcon" class="fa-solid fa-trophy"></i>
+                </div>
+            </div>
+
+            <p id="modalTagline" class="text-xs uppercase font-bold tracking-widest text-amber-400 mb-1">Parabéns!</p>
+            <h3 id="modalTitle" class="text-xl font-black text-white mb-2">Você Ganhou:</h3>
+            
+            <div class="py-2.5 px-3 my-2 bg-slate-950/80 border border-slate-800 rounded-xl">
+                <span id="modalPrizeName" class="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-pink-400 to-cyan-300">
+                    Combo Whisky
+                </span>
+            </div>
+
+            <p id="modalDescription" class="text-slate-300 text-xs mb-5">
+                Apresente esta tela ao balcão para resgatar. Seu próximo giro estará disponível em 24h!
+            </p>
+
+            <button onclick="closeModal()" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-pink-500 to-purple-600 text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                Entendido
+            </button>
+            <button id="modalClaimBtn" onclick="claimPrize()" class="hidden w-full py-2.5 px-4 rounded-xl bg-transparent border border-emerald-500/40 text-emerald-400 font-bold text-xs uppercase tracking-wider mt-2 hover:bg-emerald-500/10 active:scale-95 transition-all items-center justify-center gap-1.5">
+                <i class="fa-solid fa-check-double"></i>
+                <span>Já Retirei o Prêmio</span>
+            </button>
+        </div>
+    </div>
+
+    <footer class="w-full text-center text-slate-500 text-[10px] py-2 mt-2">
+        <button onclick="toggleAudio()" id="audioToggleBtn" class="hover:text-white transition inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-900/50 border border-slate-800 mb-1">
+            <i class="fa-solid fa-volume-high text-amber-400"></i>
+            <span>Som: Ligado</span>
+        </button>
+
+        <!-- Dev Test Toggle (allows resetting 24h lock for easy testing) -->
+        <button onclick="resetCooldownDev()" class="text-[10px] text-slate-500 hover:text-amber-400 transition underline inline-flex items-center gap-1">
+            <i class="fa-solid fa-flask text-amber-500/70"></i>
+            <span>Resetar Timer 24h (Modo Teste)</span>
+        </button>
+    </footer>
+
+    <script>
+        // --- WHEEL SLICE DEFINITION (Visual sectors on the wheel) ---
+        // 10 sectors evenly spaced on wheel to represent all possibilities
+        const WHEEL_SECTORS = [
+            { type: 'loss', name: 'Tente Novamente', icon: 'fa-face-frown', color: '#334155', textColor: '#94a3b8' },
+            { type: 'copo', name: 'Copo Evento', icon: 'fa-wine-glass', color: '#ec4899', textColor: '#ffffff' },
+            { type: 'loss', name: 'Tente Novamente', icon: 'fa-face-frown', color: '#1e293b', textColor: '#94a3b8' },
+            { type: 'cerveja', name: 'Cerveja', icon: 'fa-beer-mug-empty', color: '#f59e0b', textColor: '#0f172a' },
+            { type: 'loss', name: 'Tente Novamente', icon: 'fa-face-frown', color: '#334155', textColor: '#94a3b8' },
+            { type: 'beats', name: '1 Skol Beats', icon: 'fa-bolt', color: '#8b5cf6', textColor: '#ffffff' },
+            { type: 'loss', name: 'Tente Novamente', icon: 'fa-face-frown', color: '#1e293b', textColor: '#94a3b8' },
+            { type: 'combo', name: 'Combo Whisky', icon: 'fa-champagne-glasses', color: '#06b6d4', textColor: '#0f172a' },
+            { type: 'loss', name: 'Tente Novamente', icon: 'fa-face-frown', color: '#334155', textColor: '#94a3b8' },
+            { type: 'copo', name: 'Copo Evento', icon: 'fa-wine-glass', color: '#db2777', textColor: '#ffffff' }
+        ];
+
+        // --- GLOBAL STATE ---
+        let canvas = document.getElementById('wheelCanvas');
+        let ctx = canvas.getContext('2d');
+        let isSpinning = false;
+        let currentAngle = 0;
+        let audioEnabled = true;
+        let audioCtx = null;
+        let countdownTimerId = null;
+
+        const COOLDOWN_HOURS = 24;
+        const COOLDOWN_MS = COOLDOWN_HOURS * 60 * 60 * 1000;
+
+        // --- STREAMING_CHUNK: Cooldown Lock & Timer Functions ---
+        function getLastSpinTime() {
+            const stored = localStorage.getItem('roleta_last_spin');
+            return stored ? parseInt(stored, 10) : 0;
+        }
+
+        function setLastSpinTime(timestamp) {
+            localStorage.setItem('roleta_last_spin', timestamp.toString());
+            checkCooldown();
+        }
+
+        function resetCooldownDev() {
+            localStorage.removeItem('roleta_last_spin');
+            checkCooldown();
+        }
+
+        function checkCooldown() {
+            const lastSpin = getLastSpinTime();
+            const now = Date.now();
+            const elapsed = now - lastSpin;
+
+            const banner = document.getElementById('cooldownBanner');
+            const countdownDisplay = document.getElementById('countdownDisplay');
+            const timerIcon = document.getElementById('timerIcon');
+            const timerIconBg = document.getElementById('timerIconBg');
+            const timerTitle = document.getElementById('timerTitle');
+            const timerSubtitle = document.getElementById('timerSubtitle');
+            const mainSpinBtn = document.getElementById('mainSpinBtn');
+            const centerSpinBtn = document.getElementById('centerSpinBtn');
+            const spinBtnText = document.getElementById('spinBtnText');
+
+            if (elapsed < COOLDOWN_MS) {
+                // Locked state
+                const remainingMs = COOLDOWN_MS - elapsed;
+                
+                banner.classList.remove('border-amber-500/20');
+                banner.classList.add('border-rose-500/30');
+
+                timerIconBg.className = "w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-base";
+                timerIcon.className = "fa-solid fa-lock";
+                
+                timerTitle.innerText = "Giro Indisponível";
+                timerSubtitle.innerText = "Aguarde o tempo terminar para girar novamente.";
+                
+                countdownDisplay.classList.remove('hidden');
+
+                mainSpinBtn.disabled = true;
+                centerSpinBtn.disabled = true;
+                mainSpinBtn.classList.add('opacity-50', 'cursor-not-allowed', 'grayscale');
+                centerSpinBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                spinBtnText.innerText = "Aguarde 24 Horas";
+
+                startCountdownTimer(remainingMs);
+            } else {
+                // Available state
+                if (countdownTimerId) clearInterval(countdownTimerId);
+
+                banner.classList.remove('border-rose-500/30');
+                banner.classList.add('border-amber-500/20');
+
+                timerIconBg.className = "w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-base";
+                timerIcon.className = "fa-solid fa-circle-check";
+
+                timerTitle.innerText = "Giro Disponível!";
+                timerSubtitle.innerText = "Você já pode testar sua sorte hoje.";
+
+                countdownDisplay.classList.add('hidden');
+
+                if (!isSpinning && isRegistered()) {
+                    mainSpinBtn.disabled = false;
+                    centerSpinBtn.disabled = false;
+                    mainSpinBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'grayscale');
+                    centerSpinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    spinBtnText.innerText = "Girar Roleta";
+                }
+            }
+        }
+
+        function startCountdownTimer(initialMs) {
+            if (countdownTimerId) clearInterval(countdownTimerId);
+
+            function update() {
+                const elapsed = Date.now() - getLastSpinTime();
+                const remaining = COOLDOWN_MS - elapsed;
+
+                if (remaining <= 0) {
+                    clearInterval(countdownTimerId);
+                    checkCooldown();
+                    return;
+                }
+
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+                const hh = String(hours).padStart(2, '0');
+                const mm = String(minutes).padStart(2, '0');
+                const ss = String(seconds).padStart(2, '0');
+
+                document.getElementById('countdownDisplay').innerText = `${hh}:${mm}:${ss}`;
+            }
+
+            update();
+            countdownTimerId = setInterval(update, 1000);
+        }
+
+        // --- STREAMING_CHUNK: User Registration (name + WhatsApp required before spinning) ---
+        function getUserRegistration() {
+            const name = localStorage.getItem('roleta_user_name');
+            const whatsapp = localStorage.getItem('roleta_user_whatsapp');
+            return (name && whatsapp) ? { name, whatsapp } : null;
+        }
+
+        function isRegistered() {
+            return !!getUserRegistration();
+        }
+
+        function openRegistrationModal() {
+            const modal = document.getElementById('registrationModal');
+            const card = document.getElementById('registrationCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-90');
+            card.classList.add('scale-100');
+        }
+
+        function closeRegistrationModal() {
+            const modal = document.getElementById('registrationModal');
+            const card = document.getElementById('registrationCard');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-90');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function submitRegistration(event) {
+            event.preventDefault();
+
+            const nameInput = document.getElementById('regName');
+            const whatsappInput = document.getElementById('regWhatsapp');
+            const errorEl = document.getElementById('registrationError');
+
+            const name = nameInput.value.trim();
+            const whatsapp = whatsappInput.value.trim();
+            const digitsOnly = whatsapp.replace(/\D/g, '');
+
+            if (!name || digitsOnly.length < 10) {
+                errorEl.innerText = "Preencha seu nome e um WhatsApp válido (com DDD).";
+                errorEl.classList.remove('hidden');
+                return false;
+            }
+
+            errorEl.classList.add('hidden');
+            localStorage.setItem('roleta_user_name', name);
+            localStorage.setItem('roleta_user_whatsapp', whatsapp);
+
+            closeRegistrationModal();
+            checkCooldown();
+            return false;
+        }
+
+        function checkRegistration() {
+            if (!isRegistered()) {
+                const mainSpinBtn = document.getElementById('mainSpinBtn');
+                const centerSpinBtn = document.getElementById('centerSpinBtn');
+                mainSpinBtn.disabled = true;
+                centerSpinBtn.disabled = true;
+                mainSpinBtn.classList.add('opacity-50', 'cursor-not-allowed', 'grayscale');
+                centerSpinBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                openRegistrationModal();
+            }
+        }
+
+        // --- STREAMING_CHUNK: Weighted Odds Selection Logic ---
+        function getWeightedPrize() {
+            // Exact Probability Specs:
+            // 70% -> Loss (Nada / Tente Novamente)
+            // 15% -> Copo do Evento
+            // 10% -> 1 Cerveja
+            // 4%  -> 1 Skol Beats
+            // 1%  -> 1 Combo
+            
+            const rand = Math.random() * 100; // 0 to 100
+
+            let targetType = 'loss';
+            if (rand < 70) {
+                targetType = 'loss';
+            } else if (rand < 85) { // 70 to 84.99 (15%)
+                targetType = 'copo';
+            } else if (rand < 95) { // 85 to 94.99 (10%)
+                targetType = 'cerveja';
+            } else if (rand < 99) { // 95 to 98.99 (4%)
+                targetType = 'beats';
+            } else { // 99 to 100 (1%)
+                targetType = 'combo';
+            }
+
+            // Find all matching sectors on the physical wheel
+            const matchingIndices = [];
+            WHEEL_SECTORS.forEach((sec, idx) => {
+                if (sec.type === targetType) {
+                    matchingIndices.push(idx);
+                }
+            });
+
+            // Pick one sector randomly among matching indices
+            const chosenSectorIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
+            return chosenSectorIndex;
+        }
+
+        // --- STREAMING_CHUNK: Audio Synthesizer ---
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playTickSound() {
+            if (!audioEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(500, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.03);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.03);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.03);
+            } catch (e) {}
+        }
+
+        function playWinSound() {
+            if (!audioEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [261.63, 329.63, 392.00, 523.25, 659.25];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.07);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.07);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.07 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + idx * 0.07);
+                    osc.stop(ctx.currentTime + idx * 0.07 + 0.25);
+                });
+            } catch (e) {}
+        }
+
+        function playLossSound() {
+            if (!audioEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const notes = [220.00, 196.00, 174.61]; // A3, G3, F3 (sad tone)
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.12);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime + idx * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.12 + 0.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(ctx.currentTime + idx * 0.12);
+                    osc.stop(ctx.currentTime + idx * 0.12 + 0.2);
+                });
+            } catch (e) {}
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const btn = document.getElementById('audioToggleBtn');
+            if (audioEnabled) {
+                btn.innerHTML = `<i class="fa-solid fa-volume-high text-amber-400"></i><span>Som: Ligado</span>`;
+            } else {
+                btn.innerHTML = `<i class="fa-solid fa-volume-xmark text-slate-500"></i><span>Som: Desligado</span>`;
+            }
+        }
+
+        // --- STREAMING_CHUNK: Canvas Rendering Functions ---
+        function setupCanvas() {
+            const size = Math.min(canvas.parentElement.clientWidth, 400);
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            ctx.scale(dpr, dpr);
+            drawWheel(currentAngle);
+        }
+
+        function drawWheel(angle) {
+            const numSlices = WHEEL_SECTORS.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+            const dpr = window.devicePixelRatio || 1;
+            const width = canvas.width / dpr;
+            const height = canvas.height / dpr;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(centerX, centerY) - 6;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Slices
+            for (let i = 0; i < numSlices; i++) {
+                const startAngle = angle + i * sliceAngle;
+                const endAngle = startAngle + sliceAngle;
+                const sector = WHEEL_SECTORS[i];
+
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = sector.color;
+                ctx.fill();
+
+                ctx.strokeStyle = '#090d16';
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+
+                // Draw Text
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(startAngle + sliceAngle / 2);
+                
+                ctx.textAlign = 'right';
+                ctx.fillStyle = sector.textColor;
+                ctx.font = '900 12px Outfit, sans-serif';
+
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 3;
+
+                const textDistance = radius - 18;
+                const displayName = sector.type === 'loss' ? 'NADA' : sector.name.toUpperCase();
+                ctx.fillText(displayName, textDistance, 4);
+
+                ctx.restore();
+            }
+
+            // Outer decorative dots
+            const totalDots = 20;
+            for (let i = 0; i < totalDots; i++) {
+                const dotAngle = (i * Math.PI * 2) / totalDots;
+                const dotX = centerX + (radius - 6) * Math.cos(dotAngle);
+                const dotY = centerY + (radius - 6) * Math.sin(dotAngle);
+
+                ctx.beginPath();
+                ctx.arc(dotX, dotY, 2.5, 0, Math.PI * 2);
+                ctx.fillStyle = (i % 2 === 0) ? '#ffffff' : '#f59e0b';
+                ctx.fill();
+            }
+        }
+
+        // --- STREAMING_CHUNK: Spinning Wheel Engine ---
+        function spinWheel() {
+            if (!isRegistered()) {
+                openRegistrationModal();
+                return;
+            }
+
+            const lastSpin = getLastSpinTime();
+            if (Date.now() - lastSpin < COOLDOWN_MS) {
+                return; // Guard against spin during cooldown
+            }
+
+            if (isSpinning) return;
+
+            getAudioContext();
+
+            isSpinning = true;
+            document.getElementById('mainSpinBtn').disabled = true;
+            document.getElementById('centerSpinBtn').disabled = true;
+
+            const numSlices = WHEEL_SECTORS.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+
+            // Pick outcome based on exact probabilities
+            const targetIndex = getWeightedPrize();
+
+            const fullSpins = 6 + Math.floor(Math.random() * 3); // 6 to 8 rotations
+            const targetSliceCenter = targetIndex * sliceAngle + sliceAngle / 2;
+            const finalAngle = (Math.PI * 2 * fullSpins) - (Math.PI / 2 + targetSliceCenter);
+
+            const duration = 4800;
+            const startTime = performance.now();
+            const startAngle = currentAngle % (Math.PI * 2);
+
+            let lastSectorIndex = -1;
+
+            function animateSpin(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Easing function: Cubic Ease-Out
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+
+                currentAngle = startAngle + (finalAngle - startAngle) * easeOut;
+                drawWheel(currentAngle);
+
+                // Sector transition detection for sound tick
+                const normalizedAngle = (2 * Math.PI - (currentAngle % (2 * Math.PI)) - Math.PI / 2) % (2 * Math.PI);
+                const adjustedAngle = (normalizedAngle + 2 * Math.PI) % (2 * Math.PI);
+                const currentSectorIndex = Math.floor(adjustedAngle / sliceAngle);
+
+                if (currentSectorIndex !== lastSectorIndex) {
+                    playTickSound();
+                    animatePointerPin();
+                    lastSectorIndex = currentSectorIndex;
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateSpin);
+                } else {
+                    isSpinning = false;
+                    
+                    // Save 24h spin timestamp
+                    setLastSpinTime(Date.now());
+
+                    const resultSector = WHEEL_SECTORS[targetIndex];
+                    showResult(resultSector);
+                }
+            }
+
+            requestAnimationFrame(animateSpin);
+        }
+
+        function animatePointerPin() {
+            const pin = document.getElementById('pointerPin');
+            pin.classList.add('active');
+            setTimeout(() => pin.classList.remove('active'), 50);
+        }
+
+        // --- STREAMING_CHUNK: Result Modal & Celebrations ---
+        function showResult(sector, isReopen) {
+            const modal = document.getElementById('resultModal');
+            const modalCard = document.getElementById('modalCard');
+            const modalTagline = document.getElementById('modalTagline');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalPrizeName = document.getElementById('modalPrizeName');
+            const modalDescription = document.getElementById('modalDescription');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalHeaderBg = document.getElementById('modalHeaderBg');
+            const modalClaimBtn = document.getElementById('modalClaimBtn');
+
+            if (sector.type === 'loss') {
+                playLossSound();
+                modalHeaderBg.className = "w-16 h-16 mx-auto mb-3 rounded-full bg-slate-800 p-1 flex items-center justify-center shadow-lg";
+                modalIcon.className = "fa-solid fa-face-frown text-slate-400 text-2xl";
+                modalTagline.innerText = "Que Pena!";
+                modalTagline.className = "text-xs uppercase font-bold tracking-widest text-slate-400 mb-1";
+                modalTitle.innerText = "Não foi dessa vez";
+                modalPrizeName.innerText = "Tente Novamente";
+                modalPrizeName.className = "text-xl font-black text-slate-400";
+                modalDescription.innerText = "Sua próxima oportunidade estará disponível em 24 horas!";
+                modalClaimBtn.classList.add('hidden');
+                modalClaimBtn.classList.remove('flex');
+            } else {
+                if (!isReopen) {
+                    playWinSound();
+                    triggerConfetti();
+                    savePendingPrize(sector);
+                }
+                modalHeaderBg.className = "w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-tr from-amber-400 to-pink-500 p-1 flex items-center justify-center shadow-lg animate-bounce-short";
+                modalIcon.className = `fa-solid ${sector.icon} text-amber-400 text-2xl`;
+                modalTagline.innerText = "Parabéns!";
+                modalTagline.className = "text-xs uppercase font-bold tracking-widest text-amber-400 mb-1";
+                modalTitle.innerText = "Você Ganhou:";
+                modalPrizeName.innerText = sector.name;
+                modalPrizeName.className = "text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-pink-400 to-cyan-300";
+                modalDescription.innerText = "Apresente esta tela no balcão do evento para resgatar. Toque em \"Já Retirei o Prêmio\" somente após o resgate!";
+                modalClaimBtn.classList.remove('hidden');
+                modalClaimBtn.classList.add('flex');
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalCard.classList.remove('scale-90');
+            modalCard.classList.add('scale-100');
+        }
+
+        // --- STREAMING_CHUNK: Pending Prize Persistence (survives "Entendido" until explicitly claimed) ---
+        function savePendingPrize(sector) {
+            localStorage.setItem('roleta_pending_prize', JSON.stringify({
+                type: sector.type,
+                name: sector.name,
+                icon: sector.icon
+            }));
+            updatePendingPrizeBanner();
+        }
+
+        function getPendingPrize() {
+            const stored = localStorage.getItem('roleta_pending_prize');
+            return stored ? JSON.parse(stored) : null;
+        }
+
+        function clearPendingPrize() {
+            localStorage.removeItem('roleta_pending_prize');
+            updatePendingPrizeBanner();
+        }
+
+        function updatePendingPrizeBanner() {
+            const banner = document.getElementById('pendingPrizeBanner');
+            if (getPendingPrize()) {
+                banner.classList.remove('hidden');
+                banner.classList.add('flex');
+            } else {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+            }
+        }
+
+        function openPendingPrize() {
+            const pending = getPendingPrize();
+            if (pending) {
+                showResult(pending, true);
+            }
+        }
+
+        function claimPrize() {
+            clearPendingPrize();
+            closeModal();
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 70,
+                    spread: 60,
+                    origin: { y: 0.6 },
+                    colors: ['#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#ffffff']
+                });
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('resultModal');
+            const modalCard = document.getElementById('modalCard');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-90');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // --- STREAMING_CHUNK: Event Listeners & Init ---
+        window.addEventListener('resize', () => setupCanvas());
+        window.addEventListener('DOMContentLoaded', () => {
+            setupCanvas();
+            checkCooldown();
+            updatePendingPrizeBanner();
+            checkRegistration();
+        });
+    </script>
+</body>
+</html>

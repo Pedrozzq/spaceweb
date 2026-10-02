@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-83X0GRFQBL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-83X0GRFQBL');
+    </script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2272002663632377');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2272002663632377&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartão TapReview do Google | Saturno NFC</title>
+    <meta name="description" content="Cartão de avaliação do Google por NFC: o cliente aproxima o celular e a página de avaliação da sua empresa abre em segundos. Já vem configurado.">
+    <link rel="icon" type="image/webp" href="img/favicon.webp">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } }
+        }
+    </script>
+
+    <style>
+        :root {
+            --g-blue: #4285F4;
+            --g-blue-soft: #6ea8ff;
+            --g-green: #34A853;
+            --bg: #050508;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: #ffffff;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        /* céu com brilho azul suave */
+        .page-glow {
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background:
+                radial-gradient(60% 40% at 50% 0%, rgba(66, 133, 244, 0.18), transparent 70%),
+                radial-gradient(40% 30% at 85% 60%, rgba(52, 168, 83, 0.08), transparent 70%);
+        }
+
+        .eyebrow { color: var(--g-blue-soft); }
+        .title-blue {
+            background: linear-gradient(90deg, #ffffff, #b9d3ff 60%, var(--g-blue-soft));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+
+        .tap-img { position: relative; margin: 0; }
+        .tap-img img { position: relative; z-index: 1; width: 100%; height: auto; display: block; }
+        .tap-img::before {
+            content: ''; position: absolute; left: 15%; right: 15%; top: 25%; bottom: 20%;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.45) 0%, rgba(66, 133, 244, 0) 70%);
+            filter: blur(24px); z-index: 0;
+        }
+        .tap-img.float img { animation: tap-float 6s ease-in-out infinite; }
+        @keyframes tap-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        /* a 1ª foto de detalhe tem muito espaço vazio em volta do cartão:
+           amplia só na tela (a imagem mantém a proporção original) */
+        .tap-img-zoom img { transform: scale(1.5); transform-origin: 50% 58%; }
+        .tap-cap {
+            position: relative; z-index: 1; margin-top: -0.5rem;
+            text-align: center; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: #9ca3af;
+        }
+        .tap-cap b { color: #ffffff; }
+
+        .glass-card {
+            background: rgba(26, 26, 36, 0.35);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .step-icon {
+            width: 2.75rem; height: 2.75rem; flex-shrink: 0; border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--g-blue-soft); background: rgba(66, 133, 244, 0.15); border: 1px solid rgba(66, 133, 244, 0.35);
+        }
+        .included {
+            background: rgba(66, 133, 244, 0.08); border: 1px solid rgba(66, 133, 244, 0.3);
+        }
+        /* mesmas cores dos planos na seção de valores (index.html) */
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: -200% 50%; }
+        }
+        .text-saturno-silver, .text-saturno-gold {
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShine 3s linear infinite;
+        }
+        .text-saturno-silver {
+            background-image: linear-gradient(to right, #6b7280, #b8c0cc, #eaeff5, #ffffff, #eaeff5, #b8c0cc, #6b7280);
+            filter: drop-shadow(0 0 12px rgba(200, 205, 214, 0.35));
+        }
+        .text-saturno-gold {
+            background-image: linear-gradient(to right, #8a6a10, #FFB800, #FFD700, #fff7cc, #FFD700, #FFB800, #8a6a10);
+            filter: drop-shadow(0 0 12px rgba(255, 184, 0, 0.35));
+        }
+        .cta {
+            color: #ffffff; background: linear-gradient(135deg, var(--g-blue), #1a56db);
+            box-shadow: 0 10px 30px -10px rgba(66, 133, 244, 0.8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cta:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -10px rgba(66, 133, 244, 1); }
+        .back-link {
+            color: #9ca3af; border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+        .back-link:hover { color: #ffffff; border-color: rgba(255, 255, 255, 0.3); }
+
+        /* entrada suave ao rolar */
+        .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: none; }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .tap-img.float img { animation: none; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <main class="max-w-md mx-auto px-4 py-6 flex flex-col items-center">
+
+        <header class="w-full flex items-center justify-between mb-8">
+            <a href="index.html" class="back-link inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest rounded-full px-3 py-2">
+                <i class="ph ph-caret-left"></i> Voltar
+            </a>
+            <a href="index.html"><img src="img/logo.webp" alt="Saturno NFC" class="h-10 w-auto"></a>
+        </header>
+
+        <!-- Topo -->
+        <section class="w-full text-center">
+            <span class="eyebrow font-bold uppercase tracking-[0.4em] text-[10px]">Cartão TapReview do Google</span>
+            <h1 class="title-blue font-black uppercase tracking-wide text-3xl leading-tight mt-3">Aproxime e abra a avaliação</h1>
+            <p class="text-sm text-gray-400 leading-relaxed mt-3">O cliente aproxima o celular e a página de avaliação da sua empresa no Google abre em segundos.</p>
+        </section>
+
+        <figure class="tap-img float w-full mt-2">
+            <img src="img/tapreview-sem-fundo.webp" alt="Cartão TapReview do Google ao lado de um celular com a página de avaliação aberta" width="936" height="1200" decoding="async" fetchpriority="high">
+        </figure>
+
+        <!-- Benefícios -->
+        <section class="w-full grid grid-cols-1 gap-3">
+            <div class="glass-card reveal rounded-2xl p-5 flex items-start gap-4">
+                <div class="step-icon"><i class="ph ph-link text-xl"></i></div>
+                <div>
+                    <h2 class="text-white font-black uppercase tracking-wide text-sm mb-1">Já vem configurado</h2>
+                    <p class="text-xs text-gray-400 leading-relaxed">Envie o link da sua empresa após a compra. Nós gravamos no cartão antes do envio e você recebe pronto para usar.</p>
+                </div>
+            </div>
+            <div class="glass-card reveal rounded-2xl p-5 flex items-start gap-4">
+                <div class="step-icon"><i class="ph ph-wifi-high text-xl rotate-90"></i></div>
+                <div>
+                    <h2 class="text-white font-black uppercase tracking-wide text-sm mb-1">Sem aplicativo</h2>
+                    <p class="text-xs text-gray-400 leading-relaxed">É só aproximar o celular do cartão. Nada para baixar e nada para digitar.</p>
+                </div>
+            </div>
+            <div class="glass-card reveal rounded-2xl p-5 flex items-start gap-4">
+                <div class="step-icon"><i class="ph-fill ph-star text-xl"></i></div>
+                <div>
+                    <h2 class="text-white font-black uppercase tracking-wide text-sm mb-1">Mais avaliações 5 estrelas</h2>
+                    <p class="text-xs text-gray-400 leading-relaxed">Deixe no balcão, no caixa ou na mesa e peça a avaliação na hora em que o cliente está satisfeito.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detalhes do cartão -->
+        <section class="w-full mt-10 reveal">
+            <div class="text-center mb-2">
+                <span class="eyebrow font-bold uppercase tracking-[0.4em] text-[10px]">Detalhes do cartão</span>
+                <h2 class="text-white font-black uppercase tracking-wide text-lg mt-2">Receba pronto para usar</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-3 items-end">
+                <figure class="tap-img tap-img-zoom">
+                    <img src="img/tapreview1-sem-fundo.webp" alt="Cartão TapReview com o chip NFC já gravado" width="936" height="1200" loading="lazy" decoding="async">
+                    <figcaption class="tap-cap">Chip NFC gravado com o link da sua empresa</figcaption>
+                </figure>
+                <figure class="tap-img">
+                    <img src="img/tapreview2-sem-fundo.webp" alt="Cartão TapReview com 7 cm de largura e 10 cm de altura" width="800" height="1200" loading="lazy" decoding="async">
+                    <figcaption class="tap-cap">Tamanho: <b>7 × 10 cm</b></figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <!-- Planos + CTA -->
+        <section class="w-full mt-10 reveal">
+            <div class="included w-full rounded-2xl p-4 text-center">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Incluso nos planos</p>
+                <p class="text-sm font-black uppercase tracking-wide mt-2"><span class="text-saturno-silver">Plano Profissional</span> <span class="text-white">· 1 TapReview</span></p>
+                <p class="text-sm font-black uppercase tracking-wide mt-1"><span class="text-saturno-gold">Plano Fora de Órbita</span> <span class="text-white">· 2 TapReview</span></p>
+                <a href="index.html#planos" class="inline-block text-[11px] font-bold uppercase tracking-widest mt-2 eyebrow hover:text-white transition-colors">Ver os planos <i class="ph ph-arrow-right"></i></a>
+            </div>
+
+            <a href="https://wa.me/5531920067518?text=Ol%C3%A1!%20Quero%20o%20Cart%C3%A3o%20TapReview%20do%20Google." target="_blank" rel="noopener noreferrer" class="cta w-full mt-4 py-4 rounded-full flex items-center justify-center gap-2 font-black uppercase tracking-wide text-sm">
+                <i class="ph ph-google-logo text-lg"></i> Quero meu TapReview
+            </a>
+        </section>
+
+        <footer class="w-full text-center mt-12 mb-4">
+            <a href="index.html"><img src="img/logo.webp" alt="Saturno NFC" class="h-8 w-auto mx-auto opacity-70"></a>
+            <p class="text-[10px] text-gray-600 uppercase tracking-widest mt-3">Saturno NFC · Aproxime. Conecte. Converta.</p>
+        </footer>
+    </main>
+
+    <script>
+        // Revela os blocos ao entrar na tela
+        (function () {
+            var items = document.querySelectorAll('.reveal');
+            if (!('IntersectionObserver' in window)) {
+                items.forEach(function (el) { el.classList.add('visible'); });
+                return;
+            }
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+                });
+            }, { threshold: 0.15 });
+            items.forEach(function (el) { io.observe(el); });
+        })();
+    </script>
+</body>
+</html>
