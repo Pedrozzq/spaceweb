@@ -19,6 +19,9 @@ create table if not exists public.wa_conversas (
   criado_em          timestamptz not null default now()
 );
 alter table public.wa_conversas add column if not exists lead_id uuid references public.leads(id) on delete set null;
+-- WhatsApp pelo Chatwoot (caixa "Canal da API"): ids da conversa e do contato lá no Chatwoot
+alter table public.wa_conversas add column if not exists chatwoot_conversa_id integer;
+alter table public.wa_conversas add column if not exists chatwoot_contato_id integer;
 
 create table if not exists public.wa_mensagens (
   id             uuid primary key default gen_random_uuid(),
@@ -70,20 +73,23 @@ revoke all on function public.wa_lead_por_telefone(text) from public, anon;
 grant execute on function public.wa_cliente_por_telefone(text) to authenticated, service_role;
 grant execute on function public.wa_lead_por_telefone(text) to authenticated, service_role;
 
--- Contato novo no WhatsApp (sem lead nem cliente) vira lead "Novo lead" sozinho
-create or replace function public.wa_garantir_lead(p_tel text, p_nome text) returns uuid
+-- Contato novo no WhatsApp (sem lead nem cliente) vira lead sozinho
+-- (etapa "Em atendimento IA" quando o agente está respondendo; "Novo lead" quando não)
+drop function if exists public.wa_garantir_lead(text, text);
+create or replace function public.wa_garantir_lead(p_tel text, p_nome text, p_etapa text default 'novo') returns uuid
 language plpgsql security definer set search_path = public as $$
 declare v uuid := public.wa_lead_por_telefone(p_tel);
 begin
   if v is null and public.wa_cliente_por_telefone(p_tel) is null then
     insert into public.leads (nome, telefone, origem, etapa)
-    values (coalesce(nullif(trim(p_nome), ''), 'Contato ' || right(p_tel, 4)), p_tel, 'whatsapp', 'novo')
+    values (coalesce(nullif(trim(p_nome), ''), 'Contato ' || right(p_tel, 4)), p_tel, 'whatsapp',
+            case when p_etapa in ('novo','ia','humano') then p_etapa else 'novo' end)
     returning id into v;
   end if;
   return v;
 end $$;
-revoke all on function public.wa_garantir_lead(text, text) from public, anon, authenticated;
-grant execute on function public.wa_garantir_lead(text, text) to service_role;
+revoke all on function public.wa_garantir_lead(text, text, text) from public, anon, authenticated;
+grant execute on function public.wa_garantir_lead(text, text, text) to service_role;
 
 -- Cliente/lead cadastrado depois já aparece ligado à conversa existente
 create or replace function public.tg_wa_vincular_cliente() returns trigger

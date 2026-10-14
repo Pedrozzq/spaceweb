@@ -97,12 +97,14 @@ const API = DEMO ? demoApi() : {
   async waConversas() { return chk(await sb.from('wa_conversas').select('*, clientes(id,nome), leads(id,nome,etapa)').order('ultima_msg_em', {ascending: false, nullsFirst: false}).limit(300)); },
   async waMensagens(id) { return chk(await sb.from('wa_mensagens').select('*').eq('conversa_id', id).order('criado_em').limit(500)); },
   async waLer(id) { chk(await sb.from('wa_conversas').update({nao_lidas: 0}).eq('id', id)); },
-  async waBot(id, pausado) { chk(await sb.from('wa_conversas').update({bot_pausado: pausado}).eq('id', id)); },
+  // Chatwoot: liga/desliga o agente pondo/tirando a etiqueta "humano" lá no Chatwoot
+  async waBot(id, pausado) { if (VIA_CHATWOOT) return API.waFn({acao: 'bot', conversa_id: id, pausado}); chk(await sb.from('wa_conversas').update({bot_pausado: pausado}).eq('id', id)); },
   async waFn(body) {
-    const {data, error} = await sb.functions.invoke('whatsapp', {body});
+    const fn = VIA_CHATWOOT ? 'chatwoot' : 'whatsapp';
+    const {data, error} = await sb.functions.invoke(fn, {body});
     if (error) {
       const det = await error.context?.json?.().catch(() => null);
-      throw new Error(det?.error || (/Failed to send|fetch/i.test(error.message) ? 'Função "whatsapp" não publicada no Supabase' : error.message));
+      throw new Error(det?.error || (/Failed to send|fetch/i.test(error.message) ? `Função "${fn}" não publicada no Supabase` : error.message));
     }
     return data;
   },
@@ -306,7 +308,7 @@ function demoApi() {
     async waMensagens(id) { await wait(); return clone(waMsgs.filter(m => m.conversa_id === id)); },
     async waLer(id) { waConvs.find(c => c.id === id).nao_lidas = 0; },
     async waBot(id, pausado) { waConvs.find(c => c.id === id).bot_pausado = pausado; },
-    async waStatus() { return {token: false, phone_id: false, verify_token: false, app_secret: false, encaminhar: false}; },
+    async waStatus() { return VIA_CHATWOOT ? {chatwoot: true, url: false, conta: false, caixa: false, token: false, webhook_token: false, conectado: false, etiqueta: 'humano'} : {token: false, phone_id: false, verify_token: false, app_secret: false, encaminhar: false}; },
     async waEnviar({telefone, texto, template, nome}) { await wait();
       const tel = normFone(telefone), agora = iso(Date.now()), txt = template ? `[modelo] ${template}` : texto;
       let c = waConvs.find(x => x.telefone === tel);

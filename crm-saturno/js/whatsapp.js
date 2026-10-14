@@ -6,14 +6,15 @@
 const WA = {convs: [], conv: null, msgs: [], q: ''};
 const JANELA = 24 * 3600e3;   // a Meta só aceita texto livre até 24 h depois da última msg do contato
 const waNome = c => c.clientes?.nome || c.leads?.nome || c.nome || fmtFone(c.telefone);
-const waJanela = c => !!c.ultima_entrada_em && Date.now() - new Date(c.ultima_entrada_em) < JANELA;
+// pela API oficial da Meta só dá texto livre até 24 h depois da última msg do contato; pelo Chatwoot (Canal da API) não tem esse limite
+const waJanela = c => VIA_CHATWOOT || (!!c.ultima_entrada_em && Date.now() - new Date(c.ultima_entrada_em) < JANELA);
 const hora = v => new Date(v).toLocaleTimeString('pt-BR', {timeZone: TZ, hour: '2-digit', minute: '2-digit'});
 const STATUS_WA = {enviando: '🕓', enviada: '✓', entregue: '✓✓', lida: '<span style="color:var(--blue)">✓✓</span>', falhou: '⚠'};
 const foneVariantes = t => { const d = normFone(t); return [d, d.replace(/^(55\d\d)(\d{8})$/, '$19$2'), d.replace(/^(55\d\d)9(\d{8})$/, '$1$2')]; };
 
 async function viewWhatsapp() {
   const tel = new URLSearchParams(location.hash.split('?')[1] || '').get('tel');
-  $('#view').innerHTML = header('WhatsApp', 'Converse com leads e clientes pelo WhatsApp Business sem sair do CRM',
+  $('#view').innerHTML = header('WhatsApp', VIA_CHATWOOT ? 'Conversas do WhatsApp da Saturno (via Chatwoot), junto com os leads e clientes' : 'Converse com leads e clientes pelo WhatsApp Business sem sair do CRM',
     `<button class="btn" id="waCfg">Conexão</button><button class="btn pri" id="waNova">+ Nova conversa</button>`) + `
     <div id="wa">
       <div class="wa-list"><div class="search">${ICON_SEARCH}<input class="in" id="waQ" placeholder="Buscar nome ou telefone" value="${esc(WA.q)}"></div><div class="wa-convs" id="waConvs"></div></div>
@@ -67,7 +68,8 @@ function renderWaChat() {
       ${lid ? '<button class="btn sm" id="waLead">Ficha do lead</button>' : ''}
       ${cid ? '<button class="btn sm" id="waCli">Ficha do cliente</button>' : ''}
       ${!lid && !cid ? '<button class="btn sm" id="waNovoLead">+ Criar lead</button>' : ''}
-      ${c.nova ? '' : `<label class="check" style="margin:0" title="Desligado = o agente automático (n8n) não responde esta conversa"><input type="checkbox" id="waBot" ${c.bot_pausado ? '' : 'checked'}> Agente IA</label>`}
+      ${linkChatwoot(c.chatwoot_conversa_id) ? `<a class="btn sm ghost" href="${esc(linkChatwoot(c.chatwoot_conversa_id))}" target="_blank" rel="noopener" title="Abrir esta conversa no Chatwoot">Chatwoot ↗</a>` : ''}
+      ${c.nova ? '' : `<label class="check" style="margin:0" title="Desligado = o agente IA (n8n) não responde esta conversa${VIA_CHATWOOT ? ' (põe a etiqueta humano no Chatwoot)' : ''}"><input type="checkbox" id="waBot" ${c.bot_pausado ? '' : 'checked'}> Agente IA</label>`}
     </div>
     <div class="wa-msgs" id="waMsgs"></div>
     <div class="wa-quick"><span class="lbl">Prontas:</span>${MSG_PRONTAS.filter(m => !m.ctx || m.ctx === 'lead' || (cid && m.ctx !== 'ass')).slice(0, 8).map(m => `<button type="button" data-mp="${m.id}">${esc(m.t)}</button>`).join('')}</div>
@@ -155,6 +157,7 @@ function novaConversa() {
 }
 
 async function conexaoWhatsapp() {
+  if (VIA_CHATWOOT) return conexaoChatwoot();
   const st = await API.waStatus().catch(e => ({erro: e.message}));
   const hook = `${DEMO ? 'https://SEU-PROJETO.supabase.co' : CFG.SUPABASE_URL}/functions/v1/whatsapp`;
   const item = (ok, t) => `<div style="margin-bottom:6px"><span class="ok-dot ${ok ? 'on' : ''}"></span>${t}</div>`;
@@ -176,6 +179,32 @@ supabase secrets set WHATSAPP_TOKEN=... WHATSAPP_PHONE_NUMBER_ID=... \\
     </div>`, true);
   ov.querySelector('#cpHook').onclick = () => copiar(hook, 'URL copiada');
 }
+
+// Passo a passo para ligar o WhatsApp do Chatwoot à CRM
+async function conexaoChatwoot() {
+  const st = await API.waStatus().catch(e => ({erro: e.message}));
+  const base = DEMO ? 'https://SEU-PROJETO.supabase.co' : CFG.SUPABASE_URL;
+  const hook = `${base}/functions/v1/chatwoot?token=SUA-SENHA-DO-WEBHOOK`;
+  const item = (ok, t) => `<div style="margin-bottom:6px"><span class="ok-dot ${ok ? 'on' : ''}"></span>${t}</div>`;
+  const cwBase = (CFG.CHATWOOT_URL || '').replace(/\/+$/, ''), acc = CFG.CHATWOOT_ACCOUNT_ID || 1;
+  const ov = modal(`<div class="dh"><h2>WhatsApp pelo Chatwoot</h2><button class="x" data-close>${ICON_X}</button></div>
+    <div class="db">
+      ${st.erro && !st.chatwoot ? `<div class="note">${esc(st.erro)}</div>` : `<div class="card" style="margin-bottom:18px">
+        ${item(st.url && st.conta, 'CHATWOOT_URL e CHATWOOT_ACCOUNT_ID')}${item(st.caixa, 'CHATWOOT_INBOX_ID (caixa do WhatsApp)')}
+        ${item(st.token, 'CHATWOOT_TOKEN (token de acesso do Chatwoot)')}${item(st.webhook_token, 'CHATWOOT_WEBHOOK_TOKEN (senha do webhook)')}
+        ${item(st.conectado, st.conectado ? 'Conectado ao Chatwoot' : `Ainda não conecta ao Chatwoot${st.erro ? `: ${esc(st.erro)}` : ''}`)}</div>`}
+      <div class="step"><i>1</i><div><b>Publicar a função</b> no Supabase: <b>Edge Functions › Deploy a new function › Via editor</b>, nome <code>chatwoot</code>, cole o arquivo <code>supabase/functions/chatwoot/index.ts</code> e publique. Em <b>Details</b>, desligue <b>Verify JWT</b>.</div></div>
+      <div class="step"><i>2</i><div><b>Secrets</b> (Edge Functions › Secrets): <code>CHATWOOT_URL</code> = <code>${esc(cwBase || 'https://seu-chatwoot')}</code>, <code>CHATWOOT_ACCOUNT_ID</code> = <code>${esc(acc)}</code>,
+        <code>CHATWOOT_INBOX_ID</code> (número da caixa "Whatsapp"), <code>CHATWOOT_TOKEN</code> (Chatwoot › seu perfil › Token de acesso) e <code>CHATWOOT_WEBHOOK_TOKEN</code> (uma senha que você inventa).</div></div>
+      <div class="step"><i>3</i><div><b>Webhook</b> no Chatwoot: <a href="${esc(cwBase)}/app/accounts/${esc(acc)}/settings/integrations/webhook" target="_blank" rel="noopener">Integrações › Webhooks</a> › Adicionar. URL (troque o final pela sua senha):
+        <div class="keybox" style="margin:8px 0"><code>${esc(hook)}</code><button class="btn sm" id="cpHook">Copiar</button></div>
+        Marque <b>Mensagem criada</b> e <b>Conversa atualizada</b>.</div></div>
+      <div class="step"><i>4</i><div>Mande uma mensagem para o WhatsApp da Saturno: ela aparece aqui e o contato novo vira lead em "Em atendimento IA".</div></div>
+      <p class="small mut">O agente IA do n8n continua respondendo pelo Chatwoot normalmente. Quando alguém da equipe responde por aqui, a conversa ganha a etiqueta <b>${esc(st.etiqueta || 'humano')}</b> e o agente para.</p>
+    </div>`, true);
+  ov.querySelector('#cpHook').onclick = () => copiar(hook, 'URL copiada: troque o final pela sua senha');
+}
+
 
 // ======================================================================
 //  MENSAGENS PRONTAS — para leads (vendas), pedidos (produção/entrega) e mensalidades

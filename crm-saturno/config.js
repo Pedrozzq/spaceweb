@@ -8,7 +8,11 @@
 // =====================================================================
 window.SATURNO_CONFIG = {
   SUPABASE_URL: 'https://lrthxbchqafcjbvjwcne.supabase.co',
-  SUPABASE_ANON_KEY: 'sb_publishable_iprhqxL36BQb7psuTS1wSQ_UAYlhbmi'
+  SUPABASE_ANON_KEY: 'sb_publishable_iprhqxL36BQb7psuTS1wSQ_UAYlhbmi',
+  // WhatsApp da CRM: 'chatwoot' (caixa "Canal da API" do Chatwoot) ou 'meta' (API oficial da Meta)
+  WHATSAPP_VIA: 'chatwoot',
+  CHATWOOT_URL: 'https://whatsapp-chatwoot.fycoqq.easypanel.host',
+  CHATWOOT_ACCOUNT_ID: 2
 };
 
 // Dados da empresa usados nas mensagens prontas e na etiqueta de envio

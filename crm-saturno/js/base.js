@@ -5,6 +5,9 @@
 const CFG = window.SATURNO_CONFIG || {SUPABASE_URL: '', SUPABASE_ANON_KEY: ''};
 const DEMO = !CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes('SEU-PROJETO') || String(CFG.SUPABASE_ANON_KEY).includes('SUA-');
 const EMPRESA = window.SATURNO_EMPRESA || {};
+// WhatsApp pelo Chatwoot (padrão da Saturno) ou pela API oficial da Meta
+const VIA_CHATWOOT = (CFG.WHATSAPP_VIA || 'chatwoot') === 'chatwoot';
+const linkChatwoot = id => CFG.CHATWOOT_URL && id ? `${CFG.CHATWOOT_URL.replace(/\/+$/, '')}/app/accounts/${CFG.CHATWOOT_ACCOUNT_ID || 1}/conversations/${id}` : '';
 
 // ------------------------------------------------------------------ utilidades
 const $ = s => document.querySelector(s);

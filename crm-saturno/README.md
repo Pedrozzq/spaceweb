@@ -63,23 +63,39 @@ Quem já existir (mesmo nome, empresa e telefone) é pulado.
 A pasta fica em `spaceweb/crm-saturno`, então com o site publicado ela abre em `https://www.saturnonfc.com.br/crm-saturno/`.
 Depois, em **Supabase → Authentication → URL Configuration**, coloque esse endereço em *Site URL*.
 
-## 4. WhatsApp Business dentro do CRM (opcional)
+## 4. WhatsApp dentro do CRM (pelo Chatwoot)
 
-Usa a API oficial (Cloud API) da Meta; o token fica numa Edge Function, nunca no navegador.
+A Saturno usa o WhatsApp no Chatwoot (caixa **"Whatsapp"**, tipo *Canal da API*, id **1**, conta **2**).
+A função `supabase/functions/chatwoot` liga os dois: toda mensagem (do contato, da equipe ou do agente n8n) aparece na aba **WhatsApp** da CRM,
+**contato novo vira lead sozinho** (etapa "Em atendimento IA") e a equipe responde pela CRM (sai pelo Chatwoot).
+A chave **Agente IA** de cada conversa põe/tira a etiqueta **humano** no Chatwoot, a mesma que o fluxo do n8n usa para parar de responder.
 
-```
-supabase login
-supabase link --project-ref lrthxbchqafcjbvjwcne
-supabase functions deploy whatsapp --no-verify-jwt
-supabase secrets set WHATSAPP_TOKEN=... WHATSAPP_PHONE_NUMBER_ID=... WHATSAPP_VERIFY_TOKEN=uma-senha-qualquer WHATSAPP_APP_SECRET=...
-```
+1. **SQL Editor**: rode de novo o `supabase/whatsapp.sql` (acrescenta os campos do Chatwoot; pode rodar mais de uma vez).
+2. **Edge Functions → Deploy a new function → Via editor**: nome `chatwoot`, cole o `supabase/functions/chatwoot/index.ts`, publique. Em **Details**, desligue **Verify JWT**.
+3. **Edge Functions → Secrets**:
+   - `CHATWOOT_URL` = `https://whatsapp-chatwoot.fycoqq.easypanel.host`
+   - `CHATWOOT_ACCOUNT_ID` = `2`
+   - `CHATWOOT_INBOX_ID` = `1`
+   - `CHATWOOT_TOKEN` = Chatwoot → seu perfil (canto inferior esquerdo) → **Configurações do perfil → Token de acesso**
+   - `CHATWOOT_WEBHOOK_TOKEN` = uma senha que você inventa (ex.: `saturno-2026-xyz`)
+4. **Chatwoot → Configurações → Integrações → Webhooks → Adicionar**:
+   URL `https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/chatwoot?token=SUA-SENHA` (a mesma do passo 3), eventos **Mensagem criada** e **Conversa atualizada**.
+   Isso não mexe no webhook da caixa que leva as mensagens ao n8n: o agente continua funcionando igual.
+5. Na CRM, tela **WhatsApp → Conexão** mostra se está tudo certo.
 
-(rode dentro da pasta `crm-saturno`). Na Meta: **WhatsApp › Configuração › Webhook**, URL `https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/whatsapp`, token = `WHATSAPP_VERIFY_TOKEN`, assine **messages**. O botão **Conexão** na tela WhatsApp mostra o que falta.
-
-- Janela de 24 h da Meta: texto livre só até 24 h depois da última mensagem do contato; fora disso, só modelo aprovado.
-- Agente n8n junto: coloque a URL do webhook do n8n em `FORWARD_WEBHOOK_URL`. Quando alguém da equipe responde pelo CRM, o agente pausa naquela conversa.
+> Prefere a API oficial da Meta? Troque `WHATSAPP_VIA` para `'meta'` no `config.js` e use a função `supabase/functions/whatsapp` (passo a passo no botão Conexão).
 
 ## 5. Agente de IA (n8n)
+
+**Leads automáticos:** com o passo 4 feito, todo contato novo do WhatsApp já entra no funil sozinho. Para o agente também preencher nome, empresa, interesse e valor,
+troque a ferramenta **`cadastrar_lead_crm`** do fluxo *1- Secretaria IA* (hoje ela envia para a CRM antiga do Lovable) para:
+
+- Método `POST`, URL `https://lrthxbchqafcjbvjwcne.supabase.co/rest/v1/rpc/agente_salvar_lead`
+- Headers: `apikey` = a publishable key do `config.js` e `Content-Type` = `application/json`
+- Body (JSON): `p_chave` = chave da tela **Agente WhatsApp** da CRM; `p_dados` com `telefone` (o número do contato que já vem do Chatwoot no fluxo) e os campos que a IA preenche: `nome`, `empresa`, `cidade`, `interesse`, `valor`.
+
+E no sub-fluxo **transferir_para_humano**, acrescente uma chamada a `agente_chamar_humano` para o lead ir para "Atendimento humano" no funil (com aviso sonoro na CRM).
+
 
 Pegue a chave na tela **Agente WhatsApp**. Chamadas `POST https://lrthxbchqafcjbvjwcne.supabase.co/rest/v1/rpc/<funcao>` com headers `apikey: ANON_KEY` e `Content-Type: application/json`:
 
