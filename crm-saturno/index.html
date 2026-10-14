@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saturno NFC · CRM</title>
+<!-- Aberto como ".../crm-saturno" (sem a barra no fim), o navegador procura css/js na pasta de cima. Põe a barra. -->
+<script>(() => { try {
+  if (/\/$|\.html?$/.test(location.pathname)) return sessionStorage.removeItem('sat_barra');
+  if (sessionStorage.getItem('sat_barra')) return;
+  sessionStorage.setItem('sat_barra', '1');
+  location.replace(location.pathname + '/' + location.search + location.hash);
+} catch {} })();</script>
+<!-- tema salvo aplicado antes de desenhar (evita piscar claro/escuro) -->
+<script>try { const t = JSON.parse(localStorage.getItem('saturno_crm_tema') || '{}'); if (t.tema === 'light') document.documentElement.dataset.theme = 'light'; } catch {}</script>
+<link rel="icon" type="image/png" sizes="64x64" href="img/favicon-64.png">
+<link rel="apple-touch-icon" href="img/apple-touch.png">
+<meta name="theme-color" content="#0b0b10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/crm.css?v=2">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js?v=1"></script>
+</head>
+<body>
+
+<svg class="orbitas" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <ellipse cx="980" cy="120" rx="520" ry="150" transform="rotate(-14 980 120)"/>
+  <ellipse cx="980" cy="120" rx="610" ry="185" transform="rotate(-14 980 120)"/>
+  <ellipse cx="980" cy="120" rx="700" ry="220" transform="rotate(-14 980 120)"/>
+  <ellipse cx="980" cy="120" rx="800" ry="260" transform="rotate(-14 980 120)"/>
+</svg>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" class="hidden">
+  <form class="login-card" id="loginForm" autocomplete="on">
+    <div class="logo"><div class="mk"></div><div><b data-marca>Saturno NFC</b><small>CRM de vendas</small></div></div>
+    <div id="demoLogin" class="demo-tag hidden">● Modo demonstração: qualquer e-mail e senha entram</div>
+    <h2>Acesse o painel de leads, clientes e pedidos</h2>
+    <label class="f"><span>E-mail</span><input class="in" type="email" name="email" required autocomplete="username"></label>
+    <label class="f"><span>Senha</span><input class="in" type="password" name="senha" required autocomplete="current-password"></label>
+    <button class="btn pri block" type="submit">Entrar</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="app" class="hidden">
+  <div class="mob-top">
+    <div class="logo"><div class="mk"></div><div><b data-marca>Saturno NFC</b><small>CRM</small></div></div>
+    <button class="x" id="menuBtn" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <aside class="side">
+    <div class="logo"><div class="mk"></div><div><b data-marca>Saturno NFC</b><small>CRM de vendas</small></div></div>
+    <nav class="nav" id="nav">
+      <div class="nav-g">Vendas</div>
+      <a href="#dashboard" data-r="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Visão geral</a>
+      <a href="#leads" data-r="leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>Leads e funil<span class="badge hidden" id="bLeads"></span></a>
+      <a href="#tarefas" data-r="tarefas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L21 5"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tarefas<span class="badge red hidden" id="bTarefas"></span></a>
+      <a href="#pedidos" data-r="pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Pedidos<span class="badge hidden" id="bPedidos"></span></a>
+      <a href="#clientes" data-r="clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></svg>Clientes</a>
+      <a href="#assinaturas" data-r="assinaturas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M12 7v5l3 2"/></svg>Assinaturas<span class="badge red hidden" id="bAssin"></span></a>
+      <div class="nav-g">Catálogo</div>
+      <a href="#produtos" data-r="produtos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M15 10.5a2.5 2.5 0 0 1 0 3M17.5 9a5 5 0 0 1 0 6"/><path d="M6 14h4"/></svg>Produtos</a>
+      <a href="#margem" data-r="margem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/></svg>Margem de lucro</a>
+      <div class="nav-g">Atendimento</div>
+      <a href="#whatsapp" data-r="whatsapp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3.5 20.5 5 16a8.5 8.5 0 1 1 3.2 3.1z"/><path d="M9 8.6c0 3.3 2.9 6.4 6.3 6.6l1.2-1.4-1.9-1-1 .9a5 5 0 0 1-2.8-2.8l.9-1-1-1.9z"/></svg>WhatsApp<span class="badge wa hidden" id="bWa"></span></a>
+      <a href="#mensagens" data-r="mensagens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/><path d="M11.5 12.5h6M11.5 16h4"/></svg>Mensagens prontas</a>
+      <a href="#integracao" data-r="integracao"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 13h.01M15 13h.01M9 17h6"/></svg>Agente WhatsApp</a>
+    </nav>
+    <div class="me"><div class="em" id="userEmail"></div>
+      <div class="row">
+        <button class="btn sm ghost" id="personalizar" type="button">Personalizar</button>
+        <button class="btn sm ghost som-btn" id="somBtn" type="button" title="Som quando chega lead ou pedido novo"></button>
+        <button class="btn sm ghost" id="logout" type="button">Sair</button>
+      </div>
+    </div>
+  </aside>
+  <main id="view"></main>
+  <nav class="tabbar" id="tabbar" aria-label="Navegação">
+    <a href="#dashboard" data-r="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Início</a>
+    <a href="#pedidos" data-r="pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>Pedidos<span class="tb-dot hidden" id="tbPedidos"></span></a>
+    <a href="#leads" data-r="leads" class="tb-main"><span class="tb-circ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg></span>Leads<span class="tb-dot hidden" id="tbLeads"></span></a>
+    <a href="#whatsapp" data-r="whatsapp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3.5 20.5 5 16a8.5 8.5 0 1 1 3.2 3.1z"/><path d="M9 8.6c0 3.3 2.9 6.4 6.3 6.6l1.2-1.4-1.9-1-1 .9a5 5 0 0 1-2.8-2.8l.9-1-1-1.9z"/></svg>WhatsApp<span class="tb-dot hidden" id="tbWa"></span></a>
+    <a href="#clientes" data-r="clientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3"/></svg>Clientes</a>
+  </nav>
+</div>
+
+<div id="toast"></div>
+
+<!-- ordem importa: base → dados → telas → app (o app.js inicia tudo) -->
+<script src="js/base.js?v=2"></script>
+<script src="js/dados.js?v=2"></script>
+<script src="js/graficos.js?v=2"></script>
+<script src="js/visao.js?v=2"></script>
+<script src="js/leads.js?v=2"></script>
+<script src="js/vendas.js?v=2"></script>
+<script src="js/whatsapp.js?v=2"></script>
+<script src="js/etiquetas.js?v=2"></script>
+<script src="js/app.js?v=2"></script>
+</body>
+</html>
