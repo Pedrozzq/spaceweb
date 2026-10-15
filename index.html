@@ -1351,6 +1351,38 @@
             .btn-plano-tech { font-size: 0.8rem; margin-top: 0.4rem; }
         }
 
+        /* ===================== POPUP "ESCOLHA SEU PLANO" =====================
+           Abre ao clicar em "Site + Cartão NFC": caixa escura que se abre a partir de
+           uma linha de luz (mesma animação da caixa do nome), logo da Saturno no topo
+           e os botões dos planos entrando em cascata. */
+        .plm-ov { position: fixed; inset: 0; z-index: 9998; display: flex; align-items: center; justify-content: center; padding: 16px;
+            background: rgba(3,3,9,.74); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s; }
+        .plm-ov.on { opacity: 1; visibility: visible; }
+        #escolher-plano-panel { position: relative; width: min(470px, 100%); max-height: calc(100dvh - 32px); overflow-x: hidden; overflow-y: auto;
+            opacity: 1; transform: none; transition: none; border-radius: 20px;
+            background: radial-gradient(120% 60% at 50% 0%, rgba(212,175,55,.10), transparent 60%), linear-gradient(180deg, #12121c, #08080d);
+            border: 1px solid rgba(255,255,255,.08); box-shadow: 0 40px 90px -20px rgba(0,0,0,.85), 0 0 60px -30px rgba(212,175,55,.45);
+            clip-path: inset(50% 50% 50% 50% round 20px); scrollbar-width: none; }
+        #escolher-plano-panel::-webkit-scrollbar { display: none; }
+        #escolher-plano-panel::before { content: ""; position: absolute; top: 0; left: 15%; right: 15%; height: 1px;
+            background: linear-gradient(90deg, transparent, #f5d67a, transparent); opacity: .85; }
+        .plm-ov.on #escolher-plano-panel { animation: orbAbre .75s cubic-bezier(.7,0,.2,1) forwards; }
+        .plm-ov.fechando #escolher-plano-panel { animation: orbFecha .35s cubic-bezier(.5,0,.75,0) forwards; }
+        .plm-ov.on .plm-fio { animation: orbFio .75s cubic-bezier(.7,0,.2,1); width: min(470px, calc(100% - 32px)); }
+        #escolher-plano-panel > div > span:first-child { text-align: center; color: #d6c48e; letter-spacing: .22em; }
+        .plm-logo { display: block; width: 130px; height: auto; margin: 22px auto 0; opacity: 0; transform: scale(.7); }
+        .plm-ov.on .plm-logo { animation: plmLogo .8s .35s cubic-bezier(.2,.9,.3,1.1) forwards; }
+        @keyframes plmLogo { 0% { opacity: 0; transform: scale(.7); filter: blur(6px) brightness(2); } 100% { opacity: 1; transform: none; filter: none; } }
+        .plm-x { position: absolute; top: 12px; right: 12px; z-index: 2; width: 32px; height: 32px; border-radius: 10px; border: 0; background: transparent;
+            color: #6f6f80; font-size: 17px; cursor: pointer; display: grid; place-items: center; transition: color .2s, background .2s; }
+        .plm-x:hover { color: #fff; background: rgba(255,255,255,.06); }
+        /* botões entram em cascata depois que a caixa abriu */
+        #escolher-plano-panel.wa-panel-open .btn-plano-select:nth-of-type(1) { transition-delay: .45s; }
+        #escolher-plano-panel.wa-panel-open .btn-plano-select:nth-of-type(2) { transition-delay: .55s; }
+        #escolher-plano-panel.wa-panel-open .btn-plano-select:nth-of-type(3) { transition-delay: .65s; }
+        #escolher-plano-panel.wa-panel-open .btn-plano-tech { transition-delay: .75s; }
+
         /* ===================== BOTÕES "ESCOLHER PLANO" — DESTAQUE PREMIUM ===================== */
         .btn-plano-select {
             position: relative;
@@ -3608,13 +3640,48 @@
             var caret = document.getElementById('escolher-plano-caret');
             if (!btn || !panel) return;
 
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                var abrindo = !panel.classList.contains('wa-panel-open');
-                panel.classList.toggle('wa-panel-open');
-                syncLinktreeStickyState();
-                if (caret) caret.style.transform = abrindo ? 'rotate(90deg)' : '';
-                if (abrindo) setTimeout(function () { panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 250);
+            // o box de planos abre como popup no meio da tela (em vez de expandir a página)
+            var ov = document.createElement('div');
+            ov.className = 'plm-ov'; ov.id = 'planosOv'; ov.setAttribute('aria-hidden', 'true');
+            ov.innerHTML = '<span class="orb-fio plm-fio" aria-hidden="true"></span>';
+            document.body.appendChild(ov);
+            ov.appendChild(panel);
+            panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-label', 'Escolha seu plano');
+            panel.insertAdjacentHTML('afterbegin',
+                '<button type="button" class="plm-x" aria-label="Fechar"><i class="ph ph-x"></i></button>' +
+                '<img class="plm-logo" src="img/logo-caixa.webp?v=2" alt="" width="536" height="289" decoding="async">');
+            var tFecha = null, voltarFoco = null;
+            function nomeAberto() { var o = document.getElementById('orbOv'); return !!(o && o.classList.contains('on')); }
+
+            function abrirPlanos() {
+                clearTimeout(tFecha); ov.classList.remove('fechando');
+                voltarFoco = document.activeElement;
+                ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
+                panel.classList.add('wa-panel-open');
+                document.body.style.overflow = 'hidden';
+                panel.scrollTop = 0;
+            }
+            function fecharPlanos(semVoltarFoco) {
+                if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
+                ov.classList.add('fechando');
+                tFecha = setTimeout(function () {
+                    ov.classList.remove('on', 'fechando'); ov.setAttribute('aria-hidden', 'true');
+                    panel.classList.remove('wa-panel-open');
+                    if (!nomeAberto()) document.body.style.overflow = '';
+                    if (!semVoltarFoco && voltarFoco && voltarFoco.focus) voltarFoco.focus({preventScroll: true});
+                }, 330);
+            }
+            btn.addEventListener('click', function (e) { e.preventDefault(); abrirPlanos(); });
+            panel.querySelector('.plm-x').addEventListener('click', function () { fecharPlanos(); });
+            ov.addEventListener('click', function (e) { if (e.target === ov) fecharPlanos(); });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && ov.classList.contains('on') && !nomeAberto()) fecharPlanos();
+            });
+            // "Entenda como funciona...": fecha o popup e desce até a explicação
+            var tech = panel.querySelector('.btn-plano-tech');
+            if (tech) tech.addEventListener('click', function (e) {
+                e.preventDefault(); fecharPlanos(true);
+                setTimeout(function () { var alvo = document.getElementById('conheca-tecnologia'); if (alvo) alvo.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 360);
             });
 
             var WA_PLANO = {
@@ -3625,7 +3692,12 @@
             // escolheu o plano: antes de ir ao WhatsApp, pergunta o nome (janela "Antes de decolar", no fim da página)
             panel.querySelectorAll('button[data-plano]').forEach(function (b) {
                 b.addEventListener('click', function () {
-                    if (window.saturnoEscolherPlano) return window.saturnoEscolherPlano(b.getAttribute('data-plano'), b.getAttribute('data-cartoes'));
+                    if (window.saturnoEscolherPlano) {
+                        // fecha o popup de planos e abre a caixa do nome
+                        fecharPlanos(true);
+                        var plano = b.getAttribute('data-plano'), cartoes = b.getAttribute('data-cartoes');
+                        return setTimeout(function () { window.saturnoEscolherPlano(plano, cartoes); }, 300);
+                    }
                     var link = WA_PLANO[b.getAttribute('data-plano')];
                     if (link) window.open(link, '_blank', 'noopener');
                 });
@@ -4189,29 +4261,30 @@
         .orb-campo.erro .orb-erro{display:block}
         @keyframes orbTreme{25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
 
-        /* botão premium: fundo preto, borda fina em degradê na cor do plano, texto metálico,
-           brilho interno que acompanha o mouse e reflexo passando */
-        .orb-btn{--mx:50%;position:relative;width:100%;height:54px;margin-top:14px;border-radius:14px;cursor:pointer;font-family:inherit;overflow:hidden;isolation:isolate;
-            display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid transparent;
-            background:linear-gradient(180deg,#16161f,#0b0b11) padding-box,
-                       linear-gradient(120deg,var(--c1),rgba(255,255,255,.08) 35%,rgba(255,255,255,.08) 65%,var(--c2)) border-box;
-            box-shadow:0 14px 34px -16px var(--glow),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .25s,box-shadow .3s}
-        .orb-btn::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .3s;
-            background:radial-gradient(160px circle at var(--mx) 120%,color-mix(in srgb,var(--c1) 22%,transparent),transparent 70%)}
-        .orb-btn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;transform:skewX(-20deg);z-index:-1;
-            background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);animation:orbBrilho 4.5s ease-in-out 1.5s infinite}
-        @keyframes orbBrilho{0%,70%{left:-60%}100%{left:130%}}
-        .orb-btn:hover{transform:translateY(-1px);box-shadow:0 18px 40px -14px var(--glow),inset 0 1px 0 rgba(255,255,255,.08)}
-        .orb-btn:hover::before{opacity:1}
-        .orb-btn:active{transform:scale(.985)}
-        .orb-btn-tx{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-            background:linear-gradient(180deg,#fff 10%,var(--c1) 55%,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
-        /* passo 2: "PRONTO" em verde */
-        .orb-card.passo2 .orb-btn{--c1:#5df59a;--c2:#1fae5b;--glow:rgba(37,211,102,.45)}
-        .orb-btn .ph-check{display:none;font-size:16px;color:#5df59a}
-        .orb-btn.decolando .ph-check{display:inline}
-        .orb-btn .orb-seta{font-size:15px;color:var(--c1);transition:transform .25s}
+        /* botão "realista": moldura de 2px com luz branca no canto de cima, brilho atrás,
+           mancha dourada no canto de baixo (cresce no hover) e miolo escuro que aumenta no hover */
+        .orb-btn{position:relative;display:block;width:100%;margin-top:14px;padding:2px;border:0;border-radius:16px;cursor:pointer;font-family:inherit;isolation:isolate;
+            background:radial-gradient(circle 80px at 80% -10%,#ffffff,#181b1b);transition:all .3s}
+        .orb-btn-luz{position:absolute;top:0;right:0;width:65%;height:60%;border-radius:120px;z-index:-1;
+            box-shadow:0 0 20px #ffffff38;transition:all .3s ease-out}
+        .orb-btn:hover .orb-btn-luz{box-shadow:0 0 40px #ffffff60}
+        .orb-btn-verde{position:absolute;bottom:0;left:0;width:50px;height:50%;border-radius:17px;
+            background:radial-gradient(circle 60px at 0% 100%,#ffd75e,#ffb80050,transparent);
+            box-shadow:-2px 9px 40px #ffb80040;transition:all .3s ease-out}
+        .orb-btn:hover .orb-btn-verde{width:90px;box-shadow:-4px 1px 45px #ffb80060}
+        .orb-btn-in{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:14px;color:#fff;
+            background:radial-gradient(circle 80px at 80% -50%,#777777,#0f1111);transition:all .3s}
+        .orb-btn-in::after{content:"";position:absolute;inset:0;border-radius:14px;z-index:-1;
+            background:radial-gradient(circle 60px at 0% 100%,#ffd75e1a,#ffb80011,transparent)}
+        .orb-btn:hover .orb-btn-in{transform:scale(1.04)}
+        .orb-btn:active .orb-btn-in{transform:scale(.99)}
+        .orb-btn-tx{font-size:16px;font-weight:600;letter-spacing:.01em}
+        .orb-btn .orb-seta{font-size:15px;transition:transform .25s}
         .orb-btn:hover .orb-seta{transform:translateX(3px)}
+        /* passo 2: "Pronto" em dourado */
+        .orb-card.passo2 .orb-btn-tx,.orb-card.passo2 .orb-seta{color:#f5d67a}
+        .orb-btn .ph-check{display:none;font-size:16px;color:#f5d67a}
+        .orb-btn.decolando .ph-check{display:inline}
         .orb-btn.decolando .orb-seta{display:none}
         @media (max-width:420px){.orb-card{padding:24px 18px 20px}}
     </style>
@@ -4241,9 +4314,13 @@
                 </div>
             </div>
             <button type="submit" class="orb-btn orb-in d3" id="orbBtn">
-                <i class="ph-bold ph-check"></i>
-                <span class="orb-btn-tx" id="orbBtnTx">Continuar</span>
-                <i class="ph ph-arrow-right orb-seta"></i>
+                <span class="orb-btn-luz" aria-hidden="true"></span>
+                <span class="orb-btn-verde" aria-hidden="true"></span>
+                <span class="orb-btn-in">
+                    <i class="ph-bold ph-check"></i>
+                    <span class="orb-btn-tx" id="orbBtnTx">Continuar</span>
+                    <i class="ph ph-arrow-right orb-seta"></i>
+                </span>
             </button>
         </form>
     </div>
@@ -4301,9 +4378,6 @@
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('on')) fechar(); });
             nome.addEventListener('input', function () { cNome.classList.remove('erro'); });
             empresa.addEventListener('input', function () { cEmp.classList.remove('erro'); });
-            btn.addEventListener('pointermove', function (e) {
-                var r = btn.getBoundingClientRect(); btn.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-            });
 
             card.addEventListener('submit', function (e) {
                 e.preventDefault();
