@@ -1418,12 +1418,12 @@
            branca, prata e dourada) com luas girando. Um cometa dourado percorre a borda. */
         @property --plm-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
         .plm-ov { position: fixed; inset: 0; z-index: 9998; display: flex; align-items: center; justify-content: center; padding: 16px; overflow: hidden;
-            background: radial-gradient(ellipse at 50% 45%, rgba(30,20,55,.55), rgba(3,3,9,.88) 70%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            background: rgba(0,0,0,.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s; }
         .plm-ov.on { opacity: 1; visibility: visible; }
         /* hiperespaço: raios saindo do centro por um instante */
         .plm-ov::before { content: ""; position: absolute; left: 50%; top: 50%; width: 220vmax; height: 220vmax; margin: -110vmax 0 0 -110vmax; pointer-events: none; opacity: 0;
-            background: repeating-conic-gradient(from 0deg, transparent 0deg 2.6deg, rgba(255,240,200,.55) 2.6deg 2.8deg, transparent 2.8deg 6.1deg, rgba(190,200,255,.4) 6.1deg 6.25deg, transparent 6.25deg 9deg);
+            background: repeating-conic-gradient(from 0deg, transparent 0deg 2.6deg, rgba(255,240,200,.55) 2.6deg 2.8deg, transparent 2.8deg 6.1deg, rgba(255,255,255,.35) 6.1deg 6.25deg, transparent 6.25deg 9deg);
             -webkit-mask: radial-gradient(circle, transparent 4%, #000 14%, transparent 34%); mask: radial-gradient(circle, transparent 4%, #000 14%, transparent 34%); }
         .plm-ov.on::before { animation: plmWarp .85s cubic-bezier(.3,.6,.4,1); }
         @keyframes plmWarp { 0% { opacity: 0; transform: scale(.15) rotate(0deg); } 20% { opacity: 1; } 100% { opacity: 0; transform: scale(1.6) rotate(8deg); } }
@@ -1470,9 +1470,9 @@
             background: linear-gradient(90deg, transparent, #fff); transform: rotate(14deg); }
         .plm-cadente { box-shadow: 0 0 6px rgba(255,255,255,.6); }
         .plm-cadente.c2 { display: none; }
-        /* uma estrela cadente a cada 12s (a primeira passa logo depois que a caixa abre) */
-        .plm-ov.on .plm-cadente { animation: plmCadente 12s 1.6s linear infinite; }
-        @keyframes plmCadente { 0% { opacity: 0; transform: translate(0,0) rotate(14deg); } 1% { opacity: 1; } 7.5% { opacity: 0; transform: translate(640px,160px) rotate(14deg); } 100% { opacity: 0; transform: translate(640px,160px) rotate(14deg); } }
+        /* uma estrela cadente a cada 5s (a primeira passa logo depois que a caixa abre) */
+        .plm-ov.on .plm-cadente { animation: plmCadente 5s 1.6s linear infinite; }
+        @keyframes plmCadente { 0% { opacity: 0; transform: translate(0,0) rotate(14deg); } 2.5% { opacity: 1; } 18% { opacity: 0; transform: translate(640px,160px) rotate(14deg); } 100% { opacity: 0; transform: translate(640px,160px) rotate(14deg); } }
         /* horizonte do planeta, com a borda iluminada pelo "sol" */
         .plm-horizonte { position: absolute; left: -30%; right: -30%; top: 138px; height: 520px; border-radius: 50%; pointer-events: none;
             background: linear-gradient(180deg, #1a1630 0px, #0d0b17 14px, #08080d 30px);
