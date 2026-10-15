@@ -78,10 +78,10 @@ function renderTabelaLeads(list) {
     <tbody>${list.map(l => `<tr class="click" data-lead="${l.id}">
       <td><div class="who"><div class="av">${esc(initials(l.nome))}</div><div><b class="trunc ie" data-ie="nome" data-id="${l.id}" title="Clique para editar o nome">${esc(l.nome)}</b><span class="small mut">${esc(ORIGEM[l.origem] || l.origem)}</span></div></div></td>
       <td class="small mut">${dOnly(l.criado_em)}</td>
-      <td class="trunc">${esc(l.empresa || '—')}</td>
+      <td class="trunc"><span class="ie" data-ie="empresa" data-id="${l.id}" title="Clique para editar a empresa">${l.empresa ? esc(l.empresa) : '<span class="mut">—</span>'}</span></td>
       <td class="small"><span class="ie" data-ie="interesse" data-id="${l.id}" title="Clique para editar o plano">${l.interesse ? esc(l.interesse) : '<span class="mut">—</span>'}</span></td>
-      <td class="num small">${l.telefone ? esc(fmtFone(l.telefone)) : '—'}</td>
-      <td class="small">${esc(l.cidade || '—')}</td>
+      <td class="num small"><span class="ie" data-ie="telefone" data-id="${l.id}" title="Clique para editar o telefone">${l.telefone ? esc(fmtFone(l.telefone)) : '<span class="mut">—</span>'}</span></td>
+      <td class="small"><span class="ie" data-ie="cidade" data-id="${l.id}" title="Clique para editar a cidade">${l.cidade ? esc(l.cidade) : '<span class="mut">—</span>'}</span></td>
       <td class="num r strong"><span class="ie" data-ie="valor" data-id="${l.id}" title="Clique para editar o valor">${+l.valor ? brl(l.valor) : '<span class="mut">—</span>'}</span></td>
       <td>${etapaSelect(l)}</td>
       <td class="r"><span class="acts-cell">
@@ -115,7 +115,7 @@ function renderKanban(list) {
       <div class="k-head">${etapaPill(e.k)}<span class="small mut">${it.length}</span><span class="k-sum">${soma ? brlCurto(soma) : ''}</span></div>
       <div class="k-list">${it.map(l => `<article class="k-card e-${l.etapa}" draggable="true" data-kc="${l.id}">
           <b class="ie" data-ie="nome" data-id="${l.id}" title="Clique para editar o nome">${esc(l.nome)}</b>
-          <div class="k-sub">${esc([l.empresa, l.cidade].filter(Boolean).join(' · ') || '—')}</div>
+          <div class="k-sub"><span class="ie" data-ie="empresa" data-id="${l.id}" title="Clique para editar a empresa">${l.empresa ? esc(l.empresa) : '<span class="k-vazio">+ empresa</span>'}</span>${l.cidade ? ' · ' : ' '}<span class="ie" data-ie="cidade" data-id="${l.id}" title="Clique para editar a cidade">${l.cidade ? esc(l.cidade) : '<span class="k-vazio">+ cidade</span>'}</span></div>
           <div class="k-sub"><span class="ie" data-ie="interesse" data-id="${l.id}" title="Clique para editar o plano">${l.interesse ? `“${esc(l.interesse)}”` : '<span class="k-vazio">+ plano</span>'}</span></div>
           <div class="k-foot"><span class="small mut">${ago(l.etapa_em)}</span>${l.motivo_perda && !ETAPAS_ABERTAS.includes(l.etapa) ? `<span class="tag">${esc(l.motivo_perda)}</span>` : ''}
             <span class="k-val ie" data-ie="valor" data-id="${l.id}" title="Clique para editar o valor">${+l.valor ? brl(l.valor) : '<span class="k-vazio">+ valor</span>'}</span></div>
@@ -148,7 +148,7 @@ function renderKanban(list) {
 }
 
 // ------------------------------------------------------------------ EDIÇÃO RÁPIDA (tabela e kanban)
-// Clique no nome, no plano (interesse) ou no valor: vira um campo ali mesmo.
+// Clique no nome, empresa, plano (interesse), telefone, cidade ou valor: vira um campo ali mesmo.
 // Enter ou clicar fora salva · Esc cancela.
 let PRODS_IE = null;
 function bindEdicaoRapida(root, list) {
@@ -163,9 +163,14 @@ async function editarNoLugar(el, l, campo) {
   const card = el.closest('[draggable]');
   if (card) card.draggable = false;                       // senão o kanban tenta arrastar ao selecionar o texto
   const original = el.innerHTML;
-  const atual = campo === 'valor' ? (+l.valor ? fmtNum(l.valor) : '') : (l[campo] || '');
-  const extra = campo === 'valor' ? 'inputmode="decimal" placeholder="0,00"'
-    : campo === 'interesse' ? 'list="dlIe" placeholder="Plano ou produto" maxlength="120"' : 'maxlength="120" placeholder="Nome"';
+  const atual = campo === 'valor' ? (+l.valor ? fmtNum(l.valor) : '') : campo === 'telefone' ? (l.telefone ? fmtFone(l.telefone) : '') : (l[campo] || '');
+  const extra = {
+    valor: 'inputmode="decimal" placeholder="0,00"',
+    interesse: 'list="dlIe" placeholder="Plano ou produto" maxlength="120"',
+    telefone: 'inputmode="tel" placeholder="(31) 99999-9999" maxlength="25"',
+    empresa: 'maxlength="120" placeholder="Empresa"',
+    cidade: 'maxlength="80" placeholder="Cidade"'
+  }[campo] || 'maxlength="120" placeholder="Nome"';
   el.classList.add('ie-on');
   el.innerHTML = `<input class="in ie-in" ${extra} value="${esc(atual)}">`;
   const inp = el.querySelector('input');
@@ -189,6 +194,12 @@ async function editarNoLugar(el, l, campo) {
     if (campo === 'nome') {
       if (!v) { if (peloBlur) return cancelar(); toast('O nome não pode ficar vazio', true); return inp.focus(); }
       patch.nome = v;
+    } else if (campo === 'empresa' || campo === 'cidade') {
+      patch[campo] = v || null;
+    } else if (campo === 'telefone') {
+      const tel = normFone(v);
+      if (v && tel.length < 12) { if (peloBlur) return cancelar(); toast('Telefone inválido: informe com DDD', true); return inp.focus(); }
+      patch.telefone = tel || null;
     } else if (campo === 'interesse') {
       patch.interesse = v || null;
       // escolheu um produto do catálogo e o lead ainda não tem valor: usa o preço dele
@@ -206,7 +217,7 @@ async function editarNoLugar(el, l, campo) {
     try {
       await API.atualizarLead(l.id, patch);
       Object.assign(l, patch); cache.clear();
-      toast(campo === 'nome' ? 'Nome atualizado' : campo === 'valor' ? 'Valor atualizado' : 'Plano atualizado');
+      toast({nome: 'Nome', empresa: 'Empresa', interesse: 'Plano', telefone: 'Telefone', cidade: 'Cidade', valor: 'Valor'}[campo] + ' atualizado');
       sair(); viewLeads();                                  // atualiza a tela (totais do funil e cartões do topo)
     } catch (e) { toast(e.message, true); el.innerHTML = original; sair(); }
   }
