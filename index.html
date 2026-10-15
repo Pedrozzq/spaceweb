@@ -1519,7 +1519,7 @@
         @keyframes plmGira { to { --plm-ang: 360deg; } }
 
         /* céu do topo */
-        .plm-ceu { position: relative; z-index: 1; height: 150px; overflow: hidden; border-radius: 22px 22px 0 0; background: transparent; }
+        .plm-ceu { position: relative; z-index: 1; height: clamp(280px, 44vh, 320px); overflow: hidden; border-radius: 22px 22px 0 0; background: transparent; }
         .plm-estrelas, .plm-estrelas::after { position: absolute; inset: 0; pointer-events: none; content: "";
             background-image: radial-gradient(1px 1px at 8% 22%, #fff, transparent), radial-gradient(1px 1px at 18% 64%, #fff, transparent),
                 radial-gradient(1.4px 1.4px at 29% 12%, #ffe9b0, transparent), radial-gradient(1px 1px at 41% 48%, #fff, transparent),
@@ -1543,18 +1543,58 @@
         .plm-ov.on .plm-horizonte { animation: plmHorizonte 1s .85s cubic-bezier(.2,.8,.2,1) forwards; }
         @keyframes plmHorizonte { to { transform: none; opacity: 1; } }
         /* logo + órbitas + luas */
-        .plm-sistema { position: absolute; left: 50%; top: 18px; width: 240px; height: 120px; margin-left: -120px; transform: rotate(-10deg); }
+        .plm-sistema { position: absolute; left: 50%; top: 14px; width: 240px; height: 96px; margin-left: -120px; z-index: 3; }
         .plm-orbitas { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
         .plm-orbitas ellipse { fill: none; stroke-width: 1; stroke-dasharray: 600; stroke-dashoffset: 600; opacity: .55; }
         .plm-orbitas .o1 { stroke: #ffffff; } .plm-orbitas .o2 { stroke: #c0c7d1; } .plm-orbitas .o3 { stroke: #f5d67a; }
         .plm-ov.on .plm-orbitas .o1 { animation: orbDesenha 1.1s 1.2s cubic-bezier(.6,0,.2,1) forwards; }
         .plm-ov.on .plm-orbitas .o2 { animation: orbDesenha 1.2s 1.35s cubic-bezier(.6,0,.2,1) forwards; }
         .plm-ov.on .plm-orbitas .o3 { animation: orbDesenha 1.3s 1.5s cubic-bezier(.6,0,.2,1) forwards; }
-        .plm-logo { position: absolute; left: 50%; top: 50%; width: 170px; height: auto; transform: translate(-50%,-50%) rotate(10deg) translateY(8px); opacity: 0; }
+        .plm-logo { position: absolute; left: 50%; top: 50%; width: 170px; height: auto; transform: translate(-50%,-50%) translateY(8px); opacity: 0; }
         .plm-ov.on .plm-logo { animation: plmNasce .8s .15s cubic-bezier(.16,1,.3,1) forwards, plmFlutua 6s 1s ease-in-out infinite; }
-        @keyframes plmNasce { 0% { opacity: 0; transform: translate(-50%,-50%) rotate(10deg) translateY(8px); filter: blur(4px); }
-            100% { opacity: 1; transform: translate(-50%,-50%) rotate(10deg); filter: none; } }
-        @keyframes plmFlutua { 0%,100% { transform: translate(-50%,-50%) rotate(10deg); } 50% { transform: translate(-50%,-50%) rotate(10deg) translateY(-3px); } }
+        @keyframes plmNasce { 0% { opacity: 0; transform: translate(-50%,-50%) translateY(8px); filter: blur(4px); }
+            100% { opacity: 1; transform: translate(-50%,-50%); filter: drop-shadow(0 4px 18px rgba(0,0,0,.85)); } }
+        @keyframes plmFlutua { 0%,100% { transform: translate(-50%,-50%); filter: drop-shadow(0 4px 18px rgba(0,0,0,.85)); } 50% { transform: translate(-50%,-50%) translateY(-3px); filter: drop-shadow(0 4px 18px rgba(0,0,0,.85)); } }
+        /* estrela cadente passa por cima da faixa de cartões */
+        .plm-cadente { z-index: 4; }
+        /* faixa curva dos planos (Tilted Grid): os 3 botões de plano correm da direita para a esquerda por
+           dentro de um cilindro. O centro fica de frente, as pontas curvam na direção de quem olha e somem
+           num degradê. Cada botão é cortado em fatias verticais, cada fatia um pedaço plano do cilindro; o
+           bloco inteiro gira junto num único rotateY. Parando o mouse em cima, a fileira pausa para o clique.
+           Montada pelo JS do popup (montarFaixaPlanos). */
+        .plm-grid { position: absolute; inset: 0; z-index: 1; container-type: size; pointer-events: none; opacity: 0; transition: opacity .7s .35s ease; }
+        .plm-ov.on .plm-grid.pronto { opacity: 1; }
+        .plm-faixa { position: absolute; inset: 0; }
+        .plm-tile { position: absolute; transform-style: preserve-3d; pointer-events: auto; cursor: pointer; }
+        .plm-ov:not(.on) .plm-tile, .plm-grid:has(.plm-tile:hover) .plm-tile { animation-play-state: paused !important; }
+        .plm-fatia { position: absolute; top: 0; overflow: hidden; }
+        /* cópia do botão dentro de cada fatia: mesma estética, medidas proporcionais ao bloco */
+        #escolher-plano-panel .plm-copia.btn { position: absolute; top: 0; margin: 0; min-height: 0; max-width: none; padding: 1.25em .9em .55em;
+            border-radius: .75em; gap: 0; opacity: 1; transform: none; transition: filter .25s ease; box-shadow: none; }
+        #escolher-plano-panel .plm-copia .bp-desk { gap: .2em; }
+        #escolher-plano-panel .plm-copia .bp-tag { font-size: .62em; }
+        #escolher-plano-panel .plm-copia .bp-tit { font-size: 1.22em; }
+        #escolher-plano-panel .plm-copia .bp-sub { font-size: .7em; }
+        #escolher-plano-panel .plm-copia .bp-ver { font-size: .74em; margin-top: .15em; }
+        #escolher-plano-panel .plm-copia .bp-frete { top: .55em; right: .6em; font-size: .52em; padding: .35em .75em .35em .6em; gap: .35em; border-radius: 999px; }
+        #escolher-plano-panel .plm-copia .bp-frete i { font-size: 1.15em; }
+        .plm-tile:hover .plm-copia.btn { filter: brightness(1.1); }
+        /* os botões originais continuam no HTML (teclado e leitor de tela), mas quem aparece é a faixa */
+        #escolher-plano-panel button.btn-plano-select { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+        /* popup em TELA CHEIA: a faixa dos planos atravessa a página inteira, como no Tilted Grid Hero */
+        .plm-ov { padding: 0; }
+        #escolher-plano-panel { width: 100%; height: 100dvh; max-height: none; border-radius: 0; border: 0; display: flex; flex-direction: column; }
+        #escolher-plano-panel .plm-ceu { flex: 1; height: auto; min-height: 380px; border-radius: 0; }
+        #escolher-plano-panel > div:last-child { margin-top: 0; padding-bottom: max(18px, env(safe-area-inset-bottom)); }
+        #escolher-plano-panel .plm-sistema { top: clamp(28px, 7vh, 72px); width: 300px; height: 130px; margin-left: -150px; }
+        #escolher-plano-panel .plm-logo { width: clamp(170px, 22vw, 240px); }
+        .plm-x { top: 16px; right: 16px; width: 40px; height: 40px; font-size: 20px; }
+        @media (min-width: 768px) { #escolher-plano-panel .btn-plano-tech { font-size: .9rem; } }
+        /* "Escolha seu plano" logo abaixo da logo */
+        .plm-ceu .plm-titulo { position: absolute; left: 0; right: 0; top: calc(clamp(28px, 7vh, 72px) + 136px); z-index: 3; margin: 0; text-align: center; font-size: clamp(11px, 1vw, 13px); font-weight: 700;
+            letter-spacing: .26em; text-transform: uppercase; color: #e8d39a; opacity: 0; transform: translateY(8px); pointer-events: none; }
+        .plm-ov.on .plm-ceu .plm-titulo { animation: orbEntra .5s .22s ease forwards; }
         .plm-lua { position: absolute; left: 0; top: 0; width: 6px; height: 6px; border-radius: 50%; opacity: 0; offset-rotate: 0deg; }
         .plm-lua.l1 { background: #fff; box-shadow: 0 0 8px 2px rgba(255,255,255,.8); offset-path: path("M 190 55 A 70 18 0 1 1 50 55 A 70 18 0 1 1 190 55"); }
         .plm-lua.l2 { background: #e5e9ef; box-shadow: 0 0 8px 2px rgba(200,206,216,.8); offset-path: path("M 215 55 A 95 25 0 1 1 25 55 A 95 25 0 1 1 215 55"); }
@@ -3852,6 +3892,89 @@
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
+        // --- Popup de planos: os 3 botões de plano giram numa faixa curva (versão sem React do "Tilted Grid Hero") ---
+        // A medida do cilindro segue o componente original: o raio põe a borda da caixa `curva` graus em volta
+        // do arco vista pela câmera. Cada bloco é um botão de plano cortado em FATIAS faixas verticais (cada
+        // fatia mostra o seu pedaço de uma cópia do botão); o bloco inteiro gira junto num único rotateY.
+        // Clicar num bloco aciona o botão original do plano (que continua no HTML, escondido, para teclado/leitor de tela).
+        function montarFaixaPlanos(box, botoes) {
+            if (!box || !botoes.length || !window.ResizeObserver) return;
+            var FATIAS = 16, CAMERA = 1.6, MAX_LARG = 55;
+            var ALT = 26, AR = 2.2, VAO = 8, EIXO = 62, DEGRADE = 12, VELOC = 4;
+            var curva = 80 * Math.PI / 180;
+            var arco = function (b) { return (CAMERA - 1 + Math.cos(b)) / (2 * CAMERA * Math.sin(b)); };
+            var arred = function (n) { return +n.toFixed(4); };
+            var graus = function (rad) { return rad * 180 / Math.PI; };
+            function medir(w, h) {
+                var hh = Math.min(ALT / 100 * h, MAX_LARG / 100 * w / AR), raio = w * arco(curva);
+                if (!(hh > 0) || !(raio > 0)) return null;
+                var unid = graus(hh / raio), passo = (AR + VAO / 100) * unid, lim = graus(curva) + AR * unid / 2;
+                var cols = Math.min(60, Math.max(2, Math.ceil(2 * lim / passo))), varre = arred(cols * passo / 2);
+                return { cols: cols, varre: varre, unid: arred(unid), lim: arred(Math.min(varre, lim)) };
+            }
+            var u = function (n) { return 'calc(' + arred(n) + ' * min(' + ALT + 'cqh, ' + arred(MAX_LARG / AR) + 'cqw))'; };
+            var r = 100 * arco(curva), raio = (+r.toFixed(3)) + 'cqw';
+            var gira = function (g) { return 'translateZ(' + raio + ') rotateY(' + arred(g) + 'deg) translateZ(-' + raio + ')'; };
+            var estilo = document.createElement('style'), faixa = document.createElement('div');
+            var mask = 'linear-gradient(90deg,transparent,#000 ' + DEGRADE + '%,#000 ' + (100 - DEGRADE) + '%,transparent)';
+            faixa.className = 'plm-faixa';
+            faixa.style.perspective = (+(r * CAMERA).toFixed(3)) + 'cqw';
+            faixa.style.perspectiveOrigin = '50% ' + EIXO + '%';
+            faixa.style.webkitMaskImage = mask; faixa.style.maskImage = mask;
+            box.appendChild(estilo); box.appendChild(faixa);
+
+            // cópia visual do botão do plano i (div, sem foco), do tamanho do bloco
+            var copia = function (i, k, parte) {
+                var b = botoes[i];
+                return '<div class="' + b.className + ' plm-copia" style="left:' + u(-k * parte) + ';width:' + u(AR) + ';height:' + u(1) +
+                    ';font-size:' + u(0.13) + '">' + b.innerHTML + '</div>';
+            };
+            var atual = null;
+            function encher(tile, i) {
+                var parte = AR / FATIAS;
+                tile.setAttribute('data-i', i);
+                tile.setAttribute('aria-label', botoes[i].getAttribute('data-plano'));
+                tile.querySelectorAll('.plm-fatia').forEach(function (f, k) { f.innerHTML = copia(i, k, parte); });
+            }
+            function montar(L) {
+                var esconde = arred((L.varre - L.lim) / (2 * L.varre || 1) * 100);
+                estilo.textContent = '@keyframes plmFaixa{from{transform:' + gira(-L.varre) + '}to{transform:' + gira(L.varre) + '}' +
+                    '0%,' + esconde + '%,' + (100 - esconde) + '%,100%{visibility:hidden}' +
+                    (esconde + 0.001) + '%,' + (100 - esconde - 0.001) + '%{visibility:visible}}';
+                var parte = AR / FATIAS, dur = L.cols * VELOC, html = '';
+                for (var t = 0; t < L.cols; t++) {
+                    html += '<div class="plm-tile" data-t="' + t + '" style="left:calc(50% - ' + u(AR / 2) + ');top:calc(' + EIXO + '% - ' + u(0.5) + ');width:' + u(AR) +
+                        ';height:' + u(1) + ';animation:plmFaixa ' + dur + 's linear ' + (-t * VELOC) + 's infinite">';
+                    for (var k = 0; k < FATIAS; k++) {
+                        html += '<div class="plm-fatia" style="left:' + u((AR - parte) / 2) +
+                            ';width:' + (k === FATIAS - 1 ? u(parte) : 'calc(' + u(parte) + ' + 1px)') + ';height:' + u(1) +
+                            ';transform:' + gira((AR / 2 - (k + 0.5) * parte) * L.unid) + '"></div>';
+                    }
+                    html += '</div>';
+                }
+                faixa.innerHTML = html;
+                // a fileira entra na ordem Essencial, Profissional, Fora de Órbita
+                faixa.querySelectorAll('.plm-tile').forEach(function (tile, t) { encher(tile, (L.cols - 1 - t) % botoes.length); });
+            }
+            // cada volta completa, o bloco passa a mostrar o próximo plano da sequência (a troca acontece fora de vista)
+            faixa.addEventListener('animationiteration', function (e) {
+                var tile = e.target;
+                if (!tile.classList || !tile.classList.contains('plm-tile') || !atual) return;
+                var t = +tile.getAttribute('data-t'), volta = Math.round(e.elapsedTime / (atual.cols * VELOC));
+                var i = (volta * atual.cols + atual.cols - 1 - t) % botoes.length;
+                if (+tile.getAttribute('data-i') !== i) encher(tile, i);
+            });
+            faixa.addEventListener('click', function (e) {
+                var tile = e.target.closest && e.target.closest('.plm-tile');
+                if (tile) botoes[+tile.getAttribute('data-i')].click();
+            });
+            new ResizeObserver(function (ent) {
+                var cr = ent[0].contentRect, L = medir(cr.width, cr.height);
+                if (!L || (atual && atual.cols === L.cols && atual.varre === L.varre && atual.unid === L.unid)) return;
+                atual = L; montar(L); box.classList.add('pronto');
+            }).observe(box);
+        }
+
         // --- Botão principal: abre o box de planos; cada plano redireciona ao WhatsApp ---
         (function () {
             var btn = document.getElementById('btn-escolher-plano');
@@ -3869,10 +3992,14 @@
                 '<button type="button" class="plm-x" aria-label="Fechar"><i class="ph ph-x"></i></button>' +
                 '<div class="plm-ceu" aria-hidden="true">' +
                     '<span class="plm-cadente"></span><span class="plm-cadente c2"></span>' +
+                    '<div class="plm-grid"></div>' +
                     '<div class="plm-sistema">' +
                         '<img class="plm-logo" src="img/logo-caixa.webp?v=2" alt="" width="536" height="289" decoding="async">' +
                     '</div>' +
                 '</div>');
+            var tituloPlanos = panel.querySelector('.p-4 > span');
+            if (tituloPlanos) { tituloPlanos.classList.add('plm-titulo'); panel.querySelector('.plm-ceu').appendChild(tituloPlanos); }
+            montarFaixaPlanos(panel.querySelector('.plm-grid'), panel.querySelectorAll('button[data-plano]'));
             var tFecha = null, voltarFoco = null;
             function nomeAberto() { var o = document.getElementById('orbOv'); return !!(o && o.classList.contains('on')); }
 
