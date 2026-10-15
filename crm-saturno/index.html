@@ -18,9 +18,9 @@
 <meta name="theme-color" content="#0b0b10">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/crm.css?v=4">
+<link rel="stylesheet" href="css/crm.css?v=5">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="config.js?v=4"></script>
+<script src="config.js?v=5"></script>
 </head>
 <body>
 
@@ -73,7 +73,8 @@
     <div class="me"><div class="em" id="userEmail"></div>
       <div class="row">
         <button class="btn sm ghost" id="personalizar" type="button">Personalizar</button>
-        <button class="btn sm ghost som-btn" id="somBtn" type="button" title="Som quando chega lead ou pedido novo"></button>
+        <button class="btn sm ghost som-btn" id="somBtn" type="button" title="Som quando chega mensagem no WhatsApp, lead ou pedido novo"></button>
+        <button class="btn sm ghost som-btn" id="avisoBtn" type="button" title="Mostra o aviso do Windows/celular quando chega mensagem com a CRM em segundo plano">🖥 Ativar avisos</button>
         <button class="btn sm ghost" id="logout" type="button">Sair</button>
       </div>
     </div>
@@ -91,14 +92,14 @@
 <div id="toast"></div>
 
 <!-- ordem importa: base → dados → telas → app (o app.js inicia tudo) -->
-<script src="js/base.js?v=4"></script>
-<script src="js/dados.js?v=4"></script>
-<script src="js/graficos.js?v=4"></script>
-<script src="js/visao.js?v=4"></script>
-<script src="js/leads.js?v=4"></script>
-<script src="js/vendas.js?v=4"></script>
-<script src="js/whatsapp.js?v=4"></script>
-<script src="js/etiquetas.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/base.js?v=5"></script>
+<script src="js/dados.js?v=5"></script>
+<script src="js/graficos.js?v=5"></script>
+<script src="js/visao.js?v=5"></script>
+<script src="js/leads.js?v=5"></script>
+<script src="js/vendas.js?v=5"></script>
+<script src="js/whatsapp.js?v=5"></script>
+<script src="js/etiquetas.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

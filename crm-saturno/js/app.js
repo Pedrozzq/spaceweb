@@ -60,23 +60,58 @@ const SOM = (() => {
       if (!ligado || !ctx) return;
       const t = ctx.currentTime;
       if (tipo === 'pedido') [0, .7].forEach(d => [880, 1175, 1397, 1760].forEach((f, i) => nota(f, t + d + i * .09, .4, .5)));
+      // WhatsApp: "plim-plim" agudo e curto, tocado 2 vezes (bem diferente do aviso de lead)
+      else if (tipo === 'wa') [0, .42].forEach(d => { nota(1568, t + d, .18, .55); nota(2093, t + d + .1, .28, .5); });
       else [0, .16].forEach((d, i) => nota(i ? 1319 : 988, t + d, .35, .45));
       try { navigator.vibrate?.([250, 120, 250]); } catch {}
     }
   };
 })();
 const pintarSom = () => {
-  $('#somBtn').textContent = SOM.ligado ? 'Som ligado' : 'Som desligado';
+  $('#somBtn').textContent = SOM.ligado ? '🔔 Som ligado' : '🔕 Som desligado';
   $('#somBtn').classList.toggle('off', !SOM.ligado);
+  const b = $('#avisoBtn'); if (!b) return;
+  const p = 'Notification' in window ? Notification.permission : 'denied';
+  b.classList.toggle('hidden', p === 'granted' || !('Notification' in window));
 };
 pintarSom();
 $('#somBtn').onclick = () => { SOM.alternar(); pintarSom(); toast(SOM.ligado ? 'Som de aviso ligado' : 'Som de aviso desligado'); };
+$('#avisoBtn').onclick = pedirAvisoSistema;
 const TITULO = () => document.title.replace(/^\(\d+\) /, '');
 let naoVistos = 0;
 document.addEventListener('visibilitychange', () => { if (!document.hidden && naoVistos) { naoVistos = 0; document.title = TITULO(); } });
 function avisar(tipo, msg) {
   SOM.tocar(tipo); toast(msg);
   if (document.hidden) { naoVistos++; document.title = `(${naoVistos}) ${TITULO()}`; }
+}
+
+// ------------------------------------------------------------------ cartões de aviso (canto da tela) + aviso do sistema
+// Mensagem nova no WhatsApp: cartão com nome e começo da mensagem, botão "Abrir conversa".
+// Com a CRM em segundo plano, também sai o aviso do Windows/celular (se a pessoa permitiu).
+function notificar({titulo, texto, icone = '💬', acao, rotulo = 'Abrir', tempo = 12000}) {
+  let pilha = $('#notifs');
+  if (!pilha) { pilha = document.createElement('div'); pilha.id = 'notifs'; pilha.setAttribute('aria-live', 'polite'); document.body.appendChild(pilha); }
+  const el = document.createElement('div'); el.className = 'notif';
+  el.innerHTML = `<div class="notif-ic">${icone}</div><div class="notif-tx"><b>${esc(titulo)}</b><p>${esc(texto)}</p>
+    <div class="notif-acts">${acao ? `<button class="btn sm pri" data-ab>${esc(rotulo)}</button>` : ''}<button class="btn sm ghost" data-fc>Fechar</button></div></div>`;
+  const fechar = () => { el.classList.add('sai'); setTimeout(() => el.remove(), 250); };
+  el.querySelector('[data-fc]').onclick = fechar;
+  el.querySelector('[data-ab]')?.addEventListener('click', () => { fechar(); acao(); });
+  pilha.prepend(el);
+  [...pilha.children].slice(4).forEach(x => x.remove());           // no máximo 4 na tela
+  setTimeout(fechar, tempo);
+  if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+    try { const n = new Notification(titulo, {body: texto, icon: 'img/apple-touch.png', tag: titulo});
+      n.onclick = () => { window.focus(); acao?.(); n.close(); }; } catch {}
+  }
+}
+// pede permissão para o aviso do sistema (só depois de um clique da pessoa; o navegador exige)
+async function pedirAvisoSistema() {
+  if (!('Notification' in window)) return toast('Este navegador não mostra avisos do sistema', true);
+  if (Notification.permission === 'denied') return toast('Avisos bloqueados: libere em Configurações do site (cadeado ao lado do endereço)', true);
+  const r = await Notification.requestPermission();
+  toast(r === 'granted' ? 'Avisos do sistema ligados' : 'Avisos do sistema não foram liberados', r !== 'granted');
+  pintarSom();
 }
 
 // ------------------------------------------------------------------ entrada no app + tempo real

@@ -129,9 +129,25 @@ async function enviarWa(msg) {
 }
 
 let waT;
+// avisa mensagem recebida: som + cartão na tela (+ aviso do sistema com a CRM em segundo plano).
+// Não avisa se a conversa já está aberta e visível na tela.
+const waAvisadas = new Set();
+async function avisarMsgWa(row) {
+  if (waAvisadas.has(row.id)) return; waAvisadas.add(row.id);
+  const aberta = current === 'whatsapp' && WA.conv?.id === row.conversa_id && !document.hidden;
+  if (aberta) return;
+  let c = WA.convs.find(x => x.id === row.conversa_id);
+  if (!c) { WA.convs = await API.waConversas().catch(() => WA.convs); c = WA.convs.find(x => x.id === row.conversa_id); }
+  const nome = c ? waNome(c) : 'WhatsApp';
+  SOM.tocar('wa');
+  if (document.hidden) { naoVistos++; document.title = `(${naoVistos}) ${TITULO()}`; }
+  notificar({titulo: nome, texto: String(row.texto || '').slice(0, 140), icone: '🟢', rotulo: 'Abrir conversa',
+    acao: () => { if (c) { location.hash = '#whatsapp?tel=' + c.telefone; } else location.hash = '#whatsapp'; }});
+}
+
 function onWaRealtime(p) {
   const row = p.new || {};
-  if (p.table === 'wa_mensagens' && p.eventType === 'INSERT' && row.direcao === 'entrada' && current !== 'whatsapp') toast('Nova mensagem no WhatsApp');
+  if (p.table === 'wa_mensagens' && p.eventType === 'INSERT' && row.direcao === 'entrada') avisarMsgWa(row);
   if (current !== 'whatsapp') { clearTimeout(waT); waT = setTimeout(atualizarContadores, 500); return; }
   if (p.table === 'wa_mensagens' && WA.conv && row.conversa_id === WA.conv.id) {
     const i = WA.msgs.findIndex(m => m.id === row.id);
