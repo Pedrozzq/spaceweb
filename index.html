@@ -1425,6 +1425,24 @@
         .wa-panel-open .btn-plano-tech { opacity: 1; transform: none; }
         #conheca-tecnologia { scroll-margin-top: 1rem; }
 
+        /* selo "FRETE GRÁTIS" no canto superior direito de cada plano */
+        .btn-plano-select .bp-frete {
+            position: absolute; top: 7px; right: 8px; z-index: 2;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 7px 3px 6px; border-radius: 999px;
+            font-size: 8.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; line-height: 1;
+            color: #fff; background: linear-gradient(135deg, #22c55e, #15803d);
+            box-shadow: 0 2px 8px -2px rgba(21, 128, 61, .7), inset 0 1px 0 rgba(255,255,255,.25);
+        }
+        .btn-plano-select .bp-frete i { font-size: 10px; }
+        @media (min-width: 768px) { .btn-plano-select .bp-frete { top: 9px; right: 10px; font-size: 9.5px; padding: 4px 9px 4px 7px; } .btn-plano-select .bp-frete i { font-size: 11px; } }
+        /* no celular: selo encaixado no canto e um respiro no topo para não encostar no nome do plano */
+        @media (max-width: 767px) {
+            .btn-plano-select.btn { padding-top: .9rem; }
+            .btn-plano-select .bp-frete { top: 0; right: 0; border-radius: 0 .6rem 0 .5rem; font-size: 6.5px; letter-spacing: .06em; padding: 2.5px 6px 2.5px 5px; gap: 2px; }
+            .btn-plano-select .bp-frete i { font-size: 8px; }
+        }
+
         /* Painel de planos: mesmos textos no celular e no PC (no PC, um pouco maiores) */
         .bp-desk { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
         .btn-plano-select.btn { min-height: 0; padding: 0.6rem 0.9rem; text-transform: none; letter-spacing: normal; border-radius: 0.6rem; }
@@ -2583,6 +2601,7 @@
                     <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Escolha seu plano</span>
                     <div class="flex flex-col gap-2 md:gap-3 w-full">
                         <button type="button" class="btn btn-saturno-white btn-plano-select" data-plano="Essencial" data-cartoes="4 Cartões NFC personalizados" data-plan-index="0">
+                            <span class="bp-frete"><i class="ph-bold ph-truck"></i>Frete grátis</span>
                             <span class="bp-desk">
                                 <span class="bp-tag">Plano Essencial</span>
                                 <span class="bp-tit">Site + 4 cartões NFC</span>
@@ -2591,6 +2610,7 @@
                             </span>
                         </button>
                         <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="12 Cartões NFC personalizados" data-plan-index="1">
+                            <span class="bp-frete"><i class="ph-bold ph-truck"></i>Frete grátis</span>
                             <span class="bp-desk">
                                 <span class="bp-tag">Plano Profissional</span>
                                 <span class="bp-tit">Site + 12 cartões NFC</span>
@@ -2599,6 +2619,7 @@
                             </span>
                         </button>
                         <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados" data-plan-index="2">
+                            <span class="bp-frete"><i class="ph-bold ph-truck"></i>Frete grátis</span>
                             <span class="bp-desk">
                                 <span class="bp-tag">Plano Fora de Órbita</span>
                                 <span class="bp-tit">Site + 30 cartões NFC</span>
