@@ -8,7 +8,7 @@
 const cache = {
   _d: {}, _t: {},
   async get(k, fn, force) { if (force || !this._d[k] || Date.now() - this._t[k] > 1500) { this._d[k] = await fn(); this._t[k] = Date.now(); } return this._d[k]; },
-  leads(f) { return this.get('leads', () => API.leads(), f); },
+  leads(f) { return this.get('leads', async () => (await API.leads()).map(normEtapa), f); },
   pedidos(f) { return this.get('pedidos', () => API.pedidos(), f); },
   tarefas(f) { return this.get('tarefas', () => API.tarefas(), f); },
   clear() { this._d = {}; }

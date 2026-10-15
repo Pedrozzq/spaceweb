@@ -28,7 +28,7 @@ async function viewLeads() {
     <div class="kpis">
       <button class="kpi ${LD.etapa === 'todas' ? 'on' : ''}" data-kf="todas"><span>Total de leads</span><b>${leads.length}</b><small>${leads.filter(l => ETAPAS_ABERTAS.includes(l.etapa)).length} em andamento</small></button>
       <button class="kpi ${LD.etapa === 'ganho' ? 'on' : ''}" data-kf="ganho"><span>Ganhos</span><b>${ganhos.length}</b><small>vendas fechadas</small></button>
-      <button class="kpi ${LD.etapa === 'perdido' ? 'on' : ''}" data-kf="perdido"><span>Perdidos</span><b>${perdidos.length}</b><small>incl. sem interesse</small></button>
+      <button class="kpi ${LD.etapa === 'perdido' ? 'on' : ''}" data-kf="perdido"><span>Perdidos</span><b>${perdidos.length}</b><small>negócios não fechados</small></button>
       <div class="kpi"><span>Faturamento ganho</span><b>${brl(ganhos.reduce((s, l) => s + +l.valor, 0))}</b><small>soma dos leads ganhos</small></div>
       <a class="kpi" href="#tarefas" style="color:inherit"><span>Tarefas pendentes</span><b>${pend}</b><small>${tarefas.filter(t => !t.feita && t.vence_em && t.vence_em < hojeKey()).length} atrasadas</small></a>
     </div>
@@ -76,13 +76,13 @@ function renderTabelaLeads(list) {
   $('#ldBody').innerHTML = `<div class="tbl-wrap"><table>
     <thead><tr>${th('nome', 'Nome')}${th('criado_em', 'Criado')}${th('empresa', 'Empresa')}<th>Interesse</th><th>Telefone</th>${th('cidade', 'Cidade')}${th('valor', 'Valor', 'r')}${th('etapa', 'Etapa')}<th class="r">Ações</th></tr></thead>
     <tbody>${list.map(l => `<tr class="click" data-lead="${l.id}">
-      <td><div class="who"><div class="av">${esc(initials(l.nome))}</div><div><b class="trunc">${esc(l.nome)}</b><span class="small mut">${esc(ORIGEM[l.origem] || l.origem)}</span></div></div></td>
+      <td><div class="who"><div class="av">${esc(initials(l.nome))}</div><div><b class="trunc ie" data-ie="nome" data-id="${l.id}" title="Clique para editar o nome">${esc(l.nome)}</b><span class="small mut">${esc(ORIGEM[l.origem] || l.origem)}</span></div></div></td>
       <td class="small mut">${dOnly(l.criado_em)}</td>
       <td class="trunc">${esc(l.empresa || '—')}</td>
-      <td class="small">${esc(l.interesse || '—')}</td>
+      <td class="small"><span class="ie" data-ie="interesse" data-id="${l.id}" title="Clique para editar o plano">${l.interesse ? esc(l.interesse) : '<span class="mut">—</span>'}</span></td>
       <td class="num small">${l.telefone ? esc(fmtFone(l.telefone)) : '—'}</td>
       <td class="small">${esc(l.cidade || '—')}</td>
-      <td class="num r strong">${+l.valor ? brl(l.valor) : '<span class="mut">—</span>'}</td>
+      <td class="num r strong"><span class="ie" data-ie="valor" data-id="${l.id}" title="Clique para editar o valor">${+l.valor ? brl(l.valor) : '<span class="mut">—</span>'}</span></td>
       <td>${etapaSelect(l)}</td>
       <td class="r"><span class="acts-cell">
         <button class="btn sm ghost ic" data-hist="${l.id}" title="Histórico e tarefas">${IC.hist}</button>
@@ -92,7 +92,8 @@ function renderTabelaLeads(list) {
   </table>${list.length ? '' : '<div class="empty">Nenhum lead encontrado</div>'}</div>`;
   const body = $('#ldBody');
   body.querySelectorAll('[data-ord]').forEach(t => t.onclick = () => { LD.ord = {col: t.dataset.ord, dir: LD.ord.col === t.dataset.ord ? -LD.ord.dir : 1}; renderTabelaLeads(list); });
-  body.querySelectorAll('tr[data-lead]').forEach(tr => tr.onclick = e => { if (e.target.closest('select,button,a')) return; openLead(tr.dataset.lead); });
+  body.querySelectorAll('tr[data-lead]').forEach(tr => tr.onclick = e => { if (e.target.closest('select,button,a,[data-ie],.ie-in')) return; openLead(tr.dataset.lead); });
+  bindEdicaoRapida(body, list);
   body.querySelectorAll('[data-hist]').forEach(b => b.onclick = () => openLead(b.dataset.hist));
   body.querySelectorAll('[data-ed]').forEach(b => b.onclick = async () => formLead(list.find(l => l.id === b.dataset.ed)));
   body.querySelectorAll('[data-del]').forEach(b => b.onclick = () => excluirLead(list.find(l => l.id === b.dataset.del)));
@@ -113,11 +114,11 @@ function renderKanban(list) {
     return `<section class="k-col e-${e.k}" data-col="${e.k}">
       <div class="k-head">${etapaPill(e.k)}<span class="small mut">${it.length}</span><span class="k-sum">${soma ? brlCurto(soma) : ''}</span></div>
       <div class="k-list">${it.map(l => `<article class="k-card e-${l.etapa}" draggable="true" data-kc="${l.id}">
-          <b>${esc(l.nome)}</b>
+          <b class="ie" data-ie="nome" data-id="${l.id}" title="Clique para editar o nome">${esc(l.nome)}</b>
           <div class="k-sub">${esc([l.empresa, l.cidade].filter(Boolean).join(' · ') || '—')}</div>
-          ${l.interesse ? `<div class="k-sub">“${esc(l.interesse)}”</div>` : ''}
+          <div class="k-sub"><span class="ie" data-ie="interesse" data-id="${l.id}" title="Clique para editar o plano">${l.interesse ? `“${esc(l.interesse)}”` : '<span class="k-vazio">+ plano</span>'}</span></div>
           <div class="k-foot"><span class="small mut">${ago(l.etapa_em)}</span>${l.motivo_perda && !ETAPAS_ABERTAS.includes(l.etapa) ? `<span class="tag">${esc(l.motivo_perda)}</span>` : ''}
-            <span class="k-val">${+l.valor ? brl(l.valor) : ''}</span></div>
+            <span class="k-val ie" data-ie="valor" data-id="${l.id}" title="Clique para editar o valor">${+l.valor ? brl(l.valor) : '<span class="k-vazio">+ valor</span>'}</span></div>
           <div class="k-move"><select class="in" data-mv="${l.id}" aria-label="Mover ${esc(l.nome)} para">${ETAPAS.map(x => `<option value="${x.k}" ${x.k === l.etapa ? 'selected' : ''}>${x.k === l.etapa ? 'Mover para…' : x.t}</option>`).join('')}</select></div>
         </article>`).join('') || '<div class="k-empty">Arraste um lead para cá</div>'}</div></section>`;
   }).join('')}</div>`;
@@ -127,7 +128,7 @@ function renderKanban(list) {
   body.querySelectorAll('[data-kc]').forEach(c => {
     c.addEventListener('dragstart', e => { arrastando = c.dataset.kc; c.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', arrastando); });
     c.addEventListener('dragend', () => { c.classList.remove('drag'); body.querySelectorAll('.k-col').forEach(x => x.classList.remove('drop')); });
-    c.addEventListener('click', e => { if (e.target.closest('select')) return; openLead(c.dataset.kc); });
+    c.addEventListener('click', e => { if (e.target.closest('select,[data-ie],.ie-in')) return; openLead(c.dataset.kc); });
   });
   body.querySelectorAll('[data-col]').forEach(col => {
     col.addEventListener('dragover', e => { if (!arrastando) return; e.preventDefault(); col.classList.add('drop'); });
@@ -143,11 +144,82 @@ function renderKanban(list) {
     });
   });
   body.querySelectorAll('[data-mv]').forEach(s => s.onchange = async () => { if (await mudarEtapa(s.dataset.mv, s.value)) {} viewLeads(); });
+  bindEdicaoRapida(body, list);
+}
+
+// ------------------------------------------------------------------ EDIÇÃO RÁPIDA (tabela e kanban)
+// Clique no nome, no plano (interesse) ou no valor: vira um campo ali mesmo.
+// Enter ou clicar fora salva · Esc cancela.
+let PRODS_IE = null;
+function bindEdicaoRapida(root, list) {
+  root.querySelectorAll('[data-ie]').forEach(el => el.addEventListener('click', e => {
+    e.stopPropagation(); e.preventDefault();
+    const l = list.find(x => x.id === el.dataset.id);
+    if (l) editarNoLugar(el, l, el.dataset.ie);
+  }));
+}
+async function editarNoLugar(el, l, campo) {
+  if (el.querySelector('.ie-in')) return;
+  const card = el.closest('[draggable]');
+  if (card) card.draggable = false;                       // senão o kanban tenta arrastar ao selecionar o texto
+  const original = el.innerHTML;
+  const atual = campo === 'valor' ? (+l.valor ? fmtNum(l.valor) : '') : (l[campo] || '');
+  const extra = campo === 'valor' ? 'inputmode="decimal" placeholder="0,00"'
+    : campo === 'interesse' ? 'list="dlIe" placeholder="Plano ou produto" maxlength="120"' : 'maxlength="120" placeholder="Nome"';
+  el.classList.add('ie-on');
+  el.innerHTML = `<input class="in ie-in" ${extra} value="${esc(atual)}">`;
+  const inp = el.querySelector('input');
+  ['click', 'mousedown', 'pointerdown', 'dragstart'].forEach(ev => inp.addEventListener(ev, e => e.stopPropagation()));
+  inp.focus(); inp.select();
+  if (campo === 'interesse') {
+    // sugestões: produtos ativos do catálogo (com preço)
+    if (!PRODS_IE) PRODS_IE = await API.produtos().catch(() => []);
+    if (!document.getElementById('dlIe')) {
+      const dl = document.createElement('datalist'); dl.id = 'dlIe';
+      dl.innerHTML = PRODS_IE.filter(p => p.ativo).map(p => `<option value="${esc(p.nome)}">${brl(p.preco)}</option>`).join('');
+      document.body.appendChild(dl);
+    }
+  }
+  let feito = false;
+  const sair = () => { el.classList.remove('ie-on'); if (card) card.draggable = true; };
+  const cancelar = () => { if (feito) return; feito = true; el.innerHTML = original; sair(); };
+  async function salvar(peloBlur) {
+    if (feito) return;
+    const v = inp.value.trim(), patch = {};
+    if (campo === 'nome') {
+      if (!v) { if (peloBlur) return cancelar(); toast('O nome não pode ficar vazio', true); return inp.focus(); }
+      patch.nome = v;
+    } else if (campo === 'interesse') {
+      patch.interesse = v || null;
+      // escolheu um produto do catálogo e o lead ainda não tem valor: usa o preço dele
+      const p = (PRODS_IE || []).find(x => x.nome.toLowerCase() === v.toLowerCase());
+      if (p && !+l.valor) patch.valor = +p.preco;
+    } else {
+      const n = v ? parseNum(v) : 0;
+      if (Number.isNaN(n) || n < 0) { if (peloBlur) return cancelar(); toast('Valor inválido', true); return inp.focus(); }
+      patch.valor = Math.round(n * 100) / 100;
+    }
+    feito = true;
+    const mudou = Object.keys(patch).some(k => k === 'valor' ? +patch.valor !== +l.valor : (patch[k] || null) !== (l[k] || null));
+    if (!mudou) { el.innerHTML = original; return sair(); }
+    el.innerHTML = '<span class="small mut">Salvando…</span>';
+    try {
+      await API.atualizarLead(l.id, patch);
+      Object.assign(l, patch); cache.clear();
+      toast(campo === 'nome' ? 'Nome atualizado' : campo === 'valor' ? 'Valor atualizado' : 'Plano atualizado');
+      sair(); viewLeads();                                  // atualiza a tela (totais do funil e cartões do topo)
+    } catch (e) { toast(e.message, true); el.innerHTML = original; sair(); }
+  }
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); salvar(false); }
+    else if (e.key === 'Escape') { e.preventDefault(); cancelar(); }
+  });
+  inp.addEventListener('blur', () => salvar(true));
 }
 
 // muda a etapa; perdido pede o motivo; ganho oferece virar cliente + pedido. Devolve true se salvou.
 async function mudarEtapa(id, nova) {
-  const l = (await cache.leads()).find(x => x.id === id) || await API.lead(id);
+  const l = (await cache.leads()).find(x => x.id === id) || normEtapa(await API.lead(id));
   if (!l || l.etapa === nova) return false;
   let patch = {etapa: nova};
   if (nova === 'perdido' || nova === 'sem_interesse') {
@@ -253,7 +325,7 @@ function renderRelatorios(list, todos) {
 // ------------------------------------------------------------------ FICHA DO LEAD (dados + histórico + tarefas)
 async function openLead(id, aba = 'hist') {
   fecharModais();
-  const l = await API.lead(id); if (!l) return;
+  const l = normEtapa(await API.lead(id)); if (!l) return;
   const ov = modal(`<div class="dh"><div class="who"><div class="av" style="width:42px;height:42px;font-size:16px">${esc(initials(l.nome))}</div>
       <div><h2 class="trunc" style="max-width:360px">${esc(l.nome)}</h2><span class="small mut">${esc(l.empresa || 'Sem empresa')} · ${etapaPill(l.etapa)}</span></div></div>
       <button class="x" data-close>${ICON_X}</button></div>
@@ -397,8 +469,8 @@ const IMP_CAMPOS = [
 ];
 const sem = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
 const etapaDeTexto = v => { const s = sem(v); if (!s) return 'novo';
-  return s.includes('ganh') || s.includes('fech') || s.includes('won') ? 'ganho' : s.includes('perd') || s.includes('lost') ? 'perdido' : s.includes('sem inter') ? 'sem_interesse'
-    : s.includes('ia') && s.includes('atend') ? 'ia' : s.includes('humano') ? 'humano' : s.includes('reun') ? 'reuniao' : s.includes('propost') ? 'proposta' : 'novo'; };
+  return s.includes('ganh') || s.includes('fech') || s.includes('won') ? 'ganho' : s.includes('perd') || s.includes('lost') || s.includes('sem inter') ? 'perdido'
+    : s.includes('ia') && s.includes('atend') ? 'ia' : s.includes('humano') ? 'humano' : s.includes('reun') || s.includes('propost') ? 'proposta' : 'novo'; };
 const origemDeTexto = v => { const s = sem(v); return Object.entries(ORIGEM).find(([k, t]) => s && (sem(t) === s || k === s))?.[0] || 'importado'; };
 
 function importarCsv() {

@@ -171,8 +171,8 @@ function demoApi() {
     const criado = now - (175 - i * 6 + rnd(4)) * D - rnd(10) * H;
     const [interesse, valor] = pick(interesses);
     // mais antigos tendem a estar fechados; recentes ainda no funil
-    let etapa = i < 18 ? pick(['ganho', 'ganho', 'ganho', 'perdido', 'ganho', 'sem_interesse', 'perdido', 'ganho'])
-      : i < 24 ? pick(['proposta', 'reuniao', 'humano', 'ganho', 'proposta']) : pick(['novo', 'ia', 'novo', 'humano', 'ia']);
+    let etapa = i < 18 ? pick(['ganho', 'ganho', 'ganho', 'perdido', 'ganho', 'perdido', 'perdido', 'ganho'])
+      : i < 24 ? pick(['proposta', 'proposta', 'humano', 'ganho', 'proposta']) : pick(['novo', 'ia', 'novo', 'humano', 'ia']);
     if (i === 20 || i === 22 || i === 23) etapa = 'ganho';   // algumas vendas recentes (pedidos em produção)
     const ordem = ETAPAS.find(e => e.k === etapa).ordem;
     const l = {id: uid(), nome: `${nomes[i]} ${pick(sobren)}`, telefone: '5531' + (988000000 + i * 1373 + rnd(900)), email: `${nomes[i].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')}@${emp.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z]/g, '')}.com.br`,

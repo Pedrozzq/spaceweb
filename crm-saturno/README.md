@@ -23,7 +23,7 @@ Abra o `index.html` sem configurar nada para ver o **modo demonstração** (dado
 | Tela | O que faz |
 |---|---|
 | **Visão geral** | Vendas do mês, receita recorrente, leads do mês, conversão, pedidos em andamento, tarefas de hoje, leads esperando resposta, mensalidades a vencer e gráficos de faturamento |
-| **Leads e funil** | Etapas: Novo lead → Em atendimento IA → Atendimento humano → Reunião agendada → Proposta enviada → Ganho / Perdido / Sem interesse. **Tabela** (ordena por coluna, muda etapa na linha), **Kanban** (arrastar e soltar; no celular, "Mover para…") e **Relatórios** (conversão, faturamento, ticket médio, ciclo de venda, leads por etapa, funil, evolução mensal, origem, motivos de perda, interesse). Filtros por busca, etapa, mês e origem. Importa e exporta CSV |
+| **Leads e funil** | Etapas: Novo lead → Em atendimento IA → Atendimento humano → Proposta enviada → Ganho / Perdido. **Tabela** (ordena por coluna, muda etapa na linha), **Kanban** (arrastar e soltar; no celular, "Mover para…") e **Relatórios** (conversão, faturamento, ticket médio, ciclo de venda, leads por etapa, funil, evolução mensal, origem, motivos de perda, interesse). Filtros por busca, etapa, mês e origem. Importa e exporta CSV |
 | **Ficha do lead** | Dados, histórico (notas + mudanças de etapa registradas sozinhas) e tarefas. Lead **ganho** vira cliente com um clique e já abre o pedido com o produto de interesse. **Perdido** pede o motivo |
 | **Tarefas** | Lembretes de follow-up: atrasadas, hoje, próximos 7 dias |
 | **Pedidos** | Novo → Criação da arte → Aguardando aprovação → Em produção → Enviado → Entregue. Pago/a receber, rastreio, prazo, personalização por item, etiqueta de envio 10×15 cm (PDF), CSV |
@@ -102,13 +102,13 @@ Pegue a chave na tela **Agente WhatsApp**. Chamadas `POST https://lrthxbchqafcjb
 | Função | Quando | Body |
 |---|---|---|
 | `agente_buscar_contato` | Início da conversa | `{"p_chave":"…","p_telefone":"31999998888"}` |
-| `agente_salvar_lead` | A cada dado novo | `{"p_chave":"…","p_dados":{"telefone":"…","nome":"…","empresa":"…","cidade":"…","interesse":"Plano Essencial","valor":600,"etapa":"reuniao"}}` |
+| `agente_salvar_lead` | A cada dado novo | `{"p_chave":"…","p_dados":{"telefone":"…","nome":"…","empresa":"…","cidade":"…","interesse":"Plano Essencial","valor":600,"etapa":"proposta"}}` |
 | `agente_registrar_nota` | Resumo da conversa | `{"p_chave":"…","p_telefone":"…","p_texto":"Quer 2 espelhos para a loja"}` |
 | `agente_chamar_humano` | Pronto para fechar / dúvida | `{"p_chave":"…","p_telefone":"…","p_motivo":"…"}` |
 | `agente_listar_produtos` | "Quanto custa?" | `{"p_chave":"…"}` |
 | `agente_status_pedido` | "Cadê meu pedido?" | `{"p_chave":"…","p_telefone":"…","p_numero":null}` |
 
-Regras: telefone é normalizado (aceita `(31) 99999-8888`, `+55…`); campos vazios não apagam dados; lead novo do agente entra em **Em atendimento IA**; se o contato voltar depois de um negócio fechado, abre um lead novo com o nome já conhecido. `etapa` aceita `novo`, `ia`, `humano`, `reuniao`, `proposta`, `ganho`, `perdido`, `sem_interesse`.
+Regras: telefone é normalizado (aceita `(31) 99999-8888`, `+55…`); campos vazios não apagam dados; lead novo do agente entra em **Em atendimento IA**; se o contato voltar depois de um negócio fechado, abre um lead novo com o nome já conhecido. `etapa` aceita `novo`, `ia`, `humano`, `proposta`, `ganho`, `perdido` (se o agente ainda mandar `reuniao` ou `sem_interesse`, o banco converte para `proposta` e `perdido` — ver `supabase/etapas.sql`).
 
 ## Catálogo inicial
 

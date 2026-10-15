@@ -59,19 +59,22 @@ const debounce = (fn, ms = 200) => { let t; return (...a) => { clearTimeout(t); 
 const uid = () => crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2) + Date.now();
 
 // ------------------------------------------------------------------ funil de vendas (leads)
-// mesma ordem da CRM anterior. "ordem" = degrau do funil (perdido/sem interesse ficam fora)
+// "ordem" = degrau do funil (perdido fica fora)
 const ETAPAS = [
   {k: 'novo', t: 'Novo lead', ordem: 0},
   {k: 'ia', t: 'Em atendimento IA', ordem: 1},
   {k: 'humano', t: 'Atendimento humano', ordem: 2},
-  {k: 'reuniao', t: 'Reunião agendada', ordem: 3},
-  {k: 'proposta', t: 'Proposta enviada', ordem: 4},
-  {k: 'ganho', t: 'Ganho', ordem: 5},
-  {k: 'perdido', t: 'Perdido'},
-  {k: 'sem_interesse', t: 'Sem interesse'}
+  {k: 'proposta', t: 'Proposta enviada', ordem: 3},
+  {k: 'ganho', t: 'Ganho', ordem: 4},
+  {k: 'perdido', t: 'Perdido'}
 ];
 const ETAPA = Object.fromEntries(ETAPAS.map(e => [e.k, e.t]));
-const ETAPAS_ABERTAS = ['novo', 'ia', 'humano', 'reuniao', 'proposta'];
+const ETAPAS_ABERTAS = ['novo', 'ia', 'humano', 'proposta'];
+// etapas que saíram do funil: leads antigos nelas aparecem na etapa equivalente
+const ETAPA_ANTIGA = {reuniao: 'proposta', sem_interesse: 'perdido'};
+const normEtapa = l => { if (l && ETAPA_ANTIGA[l.etapa]) l.etapa = ETAPA_ANTIGA[l.etapa]; return l; };
+// nomes das etapas antigas (onde o lead aparece sem passar pelo normEtapa, ex.: conversa do WhatsApp)
+Object.entries(ETAPA_ANTIGA).forEach(([antiga, nova]) => { ETAPA[antiga] = ETAPA[nova]; });
 const ETAPAS_FUNIL = ETAPAS.filter(e => e.ordem != null);
 const etapaPill = k => `<span class="pill e-${esc(k)}">${esc(ETAPA[k] || k)}</span>`;
 const etapaSelect = (l, attr = '') => `<select class="pill e-${esc(l.etapa)}" data-etapa="${l.id}" ${attr} title="Mudar a etapa">${
