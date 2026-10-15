@@ -13,6 +13,8 @@ crm-saturno/
 └── supabase/
     ├── schema.sql                  ← banco completo (rode primeiro)
     ├── whatsapp.sql                ← caixa de entrada do WhatsApp (rode depois)
+    ├── stripe.sql                  ← ids da Stripe nas assinaturas (rode depois)
+    ├── functions/stripe/index.ts   ← Edge Function: assinatura paga na Stripe entra na CRM
     └── functions/whatsapp/index.ts ← Edge Function: webhook da Meta e envio
 ```
 
@@ -109,6 +111,24 @@ Pegue a chave na tela **Agente WhatsApp**. Chamadas `POST https://lrthxbchqafcjb
 | `agente_status_pedido` | "Cadê meu pedido?" | `{"p_chave":"…","p_telefone":"…","p_numero":null}` |
 
 Regras: telefone é normalizado (aceita `(31) 99999-8888`, `+55…`); campos vazios não apagam dados; lead novo do agente entra em **Em atendimento IA**; se o contato voltar depois de um negócio fechado, abre um lead novo com o nome já conhecido. `etapa` aceita `novo`, `ia`, `humano`, `proposta`, `ganho`, `perdido` (se o agente ainda mandar `reuniao` ou `sem_interesse`, o banco converte para `proposta` e `perdido` — ver `supabase/etapas.sql`).
+
+## 6. Gestão Saturno pela Stripe (assinatura entra sozinha)
+
+Quando a Stripe recebe um pagamento do produto **Gestão Saturno** (`prod_VJI9xh6P8Ao8Rm`), a função `supabase/functions/stripe`
+cadastra o cliente (ou acha pelo telefone/e-mail), cria a assinatura na aba **Assinaturas** e registra o pagamento.
+A cada renovação paga, o próximo vencimento avança sozinho. Cancelou na Stripe → "Cancelada"; pausou a cobrança → "Pausada".
+
+1. **SQL Editor**: rode o `supabase/stripe.sql`.
+2. **Edge Functions → Deploy a new function → Via editor**: nome `stripe`, cole o `supabase/functions/stripe/index.ts`, publique. Em **Details**, desligue **Verify JWT**.
+3. **Stripe → Desenvolvedores/Workbench → Webhooks → Adicionar destino**: URL `https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/stripe`,
+   eventos `invoice.paid`, `customer.subscription.updated` e `customer.subscription.deleted`. Copie a **chave secreta de assinatura** (`whsec_…`).
+4. **Edge Functions → Secrets**:
+   - `STRIPE_WEBHOOK_SECRET` = o `whsec_…` do passo 3
+   - `STRIPE_PRODUTO_ID` = `prod_VJI9xh6P8Ao8Rm`
+   - `STRIPE_PRODUTO_NOME` = `Gestão Saturno` (opcional)
+5. No link de pagamento/checkout da Stripe, ative **coletar telefone** para o cliente já entrar com WhatsApp na CRM.
+
+> Teste: no webhook da Stripe, **Enviar evento de teste** só manda dados fictícios (ignorados por serem de outro produto). Para testar de verdade, reenvie um `invoice.paid` real da Gestão Saturno pela lista de eventos da Stripe (não duplica pagamento).
 
 ## Catálogo inicial
 

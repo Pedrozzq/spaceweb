@@ -74,7 +74,7 @@ function renderWaChat() {
         : `<button class="btn sm" id="waBotBtn" data-p="1" title="Põe a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA para de responder esta conversa">🧑 Assumir (humano)</button><span class="tag ok">IA respondendo</span>`}
     </div>
     <div class="wa-msgs" id="waMsgs"></div>
-    <div class="wa-quick"><span class="lbl">Prontas:</span>${MSG_PRONTAS.filter(m => !m.ctx || m.ctx === 'lead' || (cid && m.ctx !== 'ass')).slice(0, 8).map(m => `<button type="button" data-mp="${m.id}">${esc(m.t)}</button>`).join('')}</div>
+    <div class="wa-quick"><span class="lbl">Prontas:</span>${MSG_PRONTAS.filter(m => !m.ctx || m.ctx === 'lead' || (cid && m.ctx !== 'ass')).filter((m, i) => i < 8 || m.id === 'gestao').map(m => `<button type="button" data-mp="${m.id}">${esc(m.t)}</button>`).join('')}</div>
     ${aberta ? `
       <form class="wa-comp" id="waForm"><textarea class="in" id="waTxt" rows="1" placeholder="Digite uma mensagem (Enter envia, Shift+Enter quebra linha)" maxlength="4096"></textarea><button class="btn pri">Enviar</button></form>` : `
       <div class="wa-note">${c.nova || !c.ultima_entrada_em ? 'Para iniciar a conversa' : 'Passaram 24 h desde a última mensagem do contato:'} o WhatsApp só permite enviar um <b>modelo aprovado</b> (Meta › WhatsApp Manager › Modelos de mensagem). Quando a pessoa responder, o chat livre libera.</div>
@@ -230,6 +230,7 @@ async function conexaoChatwoot() {
 //  "Abrir no WhatsApp" usa o link wa.me (não depende da integração com a Meta)
 // ======================================================================
 const LINK_AVALIACAO = String(EMPRESA.avaliacao_google || '').trim();
+const LINK_GESTAO = String(EMPRESA.link_gestao || '').trim();
 const oi = d => d.nome ? `, ${d.nome}` : '';
 // ctx: lead | ped | ass (vazio = geral). status: etapa do pedido que combina com a mensagem
 const MSG_PRONTAS = [
@@ -248,6 +249,21 @@ Inclui a criação da arte do cartão, a página personalizada e a configuraçã
 
 Posso seguir com o seu pedido? 🚀`},
   {id: 'follow', t: 'Follow-up', ctx: 'lead', txt: d => `Oi${oi(d)}! Passando para saber se ficou alguma dúvida sobre a proposta${d.interesse ? ` do ${d.interesse}` : ''} 😊\nSe quiser, ajusto algo para caber melhor no que você precisa.`},
+  {id: 'ultimo', t: 'Último contato (sem resposta)', ctx: 'lead', txt: d => `Oi${oi(d)}! Como não tive retorno, imagino que agora não seja o melhor momento, então não vou mais te incomodar 🙂\n\nSe mais pra frente fizer sentido para a ${d.empresa || 'sua empresa'}, é só me chamar aqui que retomamos de onde paramos.`},
+  {id: 'fechar', t: 'Dados para fechar o pedido', ctx: 'lead', txt: d => `Perfeito${oi(d)}! Para eu registrar o seu pedido${d.interesse ? ` do *${d.interesse}*` : ''}, me envia por favor:
+• Nome completo ou razão social
+• CPF ou CNPJ
+• Endereço de entrega com CEP
+• E-mail
+
+Assim que receber, te mando o pagamento e já começamos a criação da arte 🚀`},
+  {id: 'material', t: 'Pedir material para a arte', ctx: 'ped', status: 'arte', txt: d => `Oi${oi(d)}! Vamos começar a arte do seu pedido${d.ped} 🎨 Me envia por aqui:
+• Logo em boa qualidade (PNG ou PDF, de preferência sem fundo)
+• Cores da marca, se tiver
+• Links que vão na página: WhatsApp, Instagram, site, cardápio/catálogo, localização no Google Maps
+• Algum modelo ou referência que você goste
+
+Com isso em mãos, te mando a primeira versão para aprovação.`},
   {id: 'arte', t: 'Arte para aprovação', ctx: 'ped', status: 'aprovacao', txt: d => `${d.nome || 'Olá'}, a arte do seu pedido${d.ped} ficou pronta! 🎨
 Dá uma olhada e me diga se está tudo certo ou se quer ajustar algo. Assim que você aprovar, já mandamos para produção.`},
   {id: 'producao', t: 'Em produção', ctx: 'ped', status: 'producao', txt: d => `Oi${oi(d)}! Arte aprovada ✅\nSeu pedido${d.ped} entrou em produção${d.prazo ? ` e a previsão de entrega é *${d.prazo}*` : ''}.`},
@@ -257,19 +273,47 @@ ${d.pagina ? `\nSua página: ${d.pagina}\n` : ''}
 Obrigado por escolher a ${d.loja}! Se puder, avalie a gente no Google, leva menos de 1 minuto ⭐
 ${d.link}`},
   {id: 'pago', t: 'Pagamento recebido', ctx: 'ped', txt: d => `Pagamento recebido, ${d.nome || 'obrigado'}! ✅\nPedido${d.ped}${d.total ? ` · ${d.total}` : ''}. Já estamos cuidando de tudo por aqui.`},
-  {id: 'mensal', t: 'Lembrete de mensalidade', ctx: 'ass', txt: d => `Oi${oi(d)}! Passando para lembrar da mensalidade da ${d.loja} (${d.assinatura}) de *${d.valorMensal}*, com vencimento em *${d.venc}*.\n\nPode pagar no Pix. Qualquer dúvida, é só chamar 😊`},
+  {id: 'posvenda', t: 'Pós-venda (dicas de uso)', ctx: 'ped', txt: d => `Oi${oi(d)}! Tudo certo com o seu cartão${d.ped ? ` (pedido${d.ped})` : ''}? 🪐
+${d.pagina ? `\nSua página: ${d.pagina}\n` : ''}
+Algumas dicas para aproveitar mais:
+• Deixe o cartão em um lugar visível, como no caixa ou no balcão
+• Convide o cliente a aproximar o celular na hora de pagar ou ao final do atendimento
+• Se algum link ou informação mudar, me avise que atualizamos a página
+
+Qualquer dúvida, é só chamar!`},
+  {id: 'gestao', t: 'Assinar Gestão Saturno', txt: d => `Oi${oi(d)}! Para a sua página continuar sempre atualizada, temos a *Gestão Saturno*${d.gestaoValor ? `, por *${d.gestaoValor}/mês*` : ''} 🪐
+
+Nossa equipe cuida da página para você, com suporte direto aqui pelo WhatsApp.
+
+A assinatura é feita pelo link abaixo, com cobrança mensal automática no cartão:
+${d.gestao}`},
+  {id: 'gestao_ok', t: 'Boas-vindas à Gestão Saturno', ctx: 'ass', txt: d => `${d.nome ? `${d.nome}, sua` : 'Sua'} assinatura da *${d.assinatura || 'Gestão Saturno'}* está ativa! ✅
+
+${d.stripe ? `A cobrança de *${d.valorMensal}* é feita automaticamente no cartão todo mês; a próxima é em *${d.venc}*.` : `O valor é *${d.valorMensal}* por mês; o próximo vencimento é em *${d.venc}*.`}
+Sempre que precisar mudar algo na sua página, é só mandar por aqui. Obrigado pela confiança! 🪐`},
+  {id: 'mensal', t: 'Lembrete de mensalidade', ctx: 'ass', txt: d => d.stripe
+    ? `Oi${oi(d)}! Só um aviso: a mensalidade da ${d.loja} (${d.assinatura}) de *${d.valorMensal}* será cobrada automaticamente no seu cartão em *${d.venc}*.\n\nNão precisa fazer nada. Qualquer dúvida, é só chamar 😊`
+    : `Oi${oi(d)}! Passando para lembrar da mensalidade da ${d.loja} (${d.assinatura}) de *${d.valorMensal}*, com vencimento em *${d.venc}*.\n\nPode pagar no Pix. Qualquer dúvida, é só chamar 😊`},
+  {id: 'atraso', t: 'Mensalidade em atraso', ctx: 'ass', txt: d => `Oi${oi(d)}, tudo bem? Não identificamos o pagamento da mensalidade da ${d.loja} (${d.assinatura}) de *${d.valorMensal}*, que venceu em *${d.venc}*.
+
+${d.stripe ? 'Pode ser que o cartão tenha sido recusado ou esteja vencido. Me chama aqui que te ajudo a regularizar.' : 'Pode pagar no Pix e me mandar o comprovante por aqui.'}
+Se já pagou, desconsidere esta mensagem 😊`},
+  {id: 'indicacao', t: 'Pedir indicação', txt: d => `Oi${oi(d)}! Que bom ter você como cliente da ${d.loja} 🪐\n\nConhece alguém que também ganharia com um cartão NFC ou com mais avaliações no Google? Se puder, me passa o contato ou encaminha esta mensagem. Vamos cuidar dessa pessoa com o mesmo carinho!`},
   {id: 'avaliar', t: 'Avaliar no Google', txt: d => `Oi${oi(d)}! Sua opinião é muito importante pra gente ⭐\nPode avaliar a ${d.loja} no Google? Leva menos de 1 minuto:\n${d.link}\n\nMuito obrigado! 🪐`}
 ];
 
 async function dadosMsg({lead, cliente, pedido, assinatura, nome}) {
   const prods = await API.produtos().catch(() => []);
   const planos = prods.filter(p => p.ativo && p.categoria === 'Planos').map(p => `• *${p.nome}*: ${brl(p.preco)}${p.descricao ? ` (${p.descricao})` : ''}`).join('\n');
+  const gestao = prods.find(p => p.nome === 'Gestão Saturno');
   const pessoa = cliente || lead || pedido?.clientes || assinatura?.clientes || {};
   return {
     loja: TEMA.get().marca || EMPRESA.nome || 'Saturno NFC', nome: primeiroNome(pessoa.nome || nome), empresa: pessoa.empresa || lead?.empresa || '',
     interesse: lead?.interesse || '', valor: +lead?.valor ? brl(lead.valor) : '', planos: planos || '[liste aqui os planos]',
     ped: pedido ? ` *#${pedido.numero}*` : '', total: pedido ? brl(pedido.total) : '', prazo: pedido?.prazo ? dOnly(pedido.prazo) : '', rastreio: pedido?.codigo_rastreio || '',
     pagina: cliente?.link_pagina || '', assinatura: assinatura?.descricao || '', valorMensal: assinatura ? brl(assinatura.valor) : '', venc: assinatura ? dOnly(assinatura.proximo_vencimento) : '',
+    stripe: !!assinatura?.stripe_assinatura_id,
+    gestao: LINK_GESTAO || '[cole aqui o link de assinatura da Gestão Saturno]', gestaoValor: +gestao?.preco ? brl(gestao.preco) : '',
     link: LINK_AVALIACAO || '[cole aqui o link de avaliação do Google]'
   };
 }
@@ -326,7 +370,7 @@ async function viewMensagens(silent) {
   const lista = () => {
     const q = MP.q.trim().toLowerCase(), it = fontes[MP.aba].filter(x => !q || `${x.nome} ${x.sub}`.toLowerCase().includes(q));
     if (MP.sel && !fontes[MP.aba].some(x => x.id === MP.sel)) MP.sel = null;
-    $('#mpLista').innerHTML = `<div class="wa-conv ${!MP.sel ? 'on' : ''}" data-ms=""><div class="av">✉</div><div class="grow"><div class="l1"><b>Mensagem geral</b></div><div class="l2"><span>Saudação, avaliação no Google</span></div></div></div>`
+    $('#mpLista').innerHTML = `<div class="wa-conv ${!MP.sel ? 'on' : ''}" data-ms=""><div class="av">✉</div><div class="grow"><div class="l1"><b>Mensagem geral</b></div><div class="l2"><span>Saudação, Gestão Saturno, indicação, avaliação</span></div></div></div>`
       + it.map(x => `<div class="wa-conv ${MP.sel === x.id ? 'on' : ''}" data-ms="${x.id}"><div class="av">${esc(initials(x.nome.replace(/^#\d+ · /, '')))}</div>
         <div class="grow"><div class="l1"><b>${esc(x.nome)}</b></div><div class="l2"><span>${esc(x.sub)}</span>${x.pill}</div></div></div>`).join('');
     $('#mpLista').querySelectorAll('[data-ms]').forEach(d => d.onclick = () => { MP.sel = d.dataset.ms || null; lista(); cartoes(); });
