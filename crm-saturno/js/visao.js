@@ -20,8 +20,10 @@ async function viewDashboard() {
   const vencendo = ativas.filter(a => diasAte(a.proximo_vencimento) <= 5).slice(0, 6);
   const negociando = leads.filter(l => ETAPAS_ABERTAS.includes(l.etapa)).reduce((s, l) => s + +l.valor, 0);
 
-  // faturamento dos últimos 6 meses (pedidos + mensalidades recebidas)
-  const meses = []; for (let i = 5; i >= 0; i--) { const d = new Date(); d.setDate(15); d.setMonth(d.getMonth() - i); meses.push(mesKey(d)); }
+  // faturamento por mês: pedidos + vendas ganhas que não viraram pedido (ex.: vindas do CRM antigo) + mensalidades recebidas
+  const comPedido = new Set(peds.map(p => p.lead_id).filter(Boolean));
+  const ganhosSemPedido = leads.filter(l => l.etapa === 'ganho' && +l.valor > 0 && !comPedido.has(l.id));
+  const meses = mesesGrafico([...ok.map(p => p.criado_em), ...ganhosSemPedido.map(l => l.etapa_em)]);
   const pags = await API.pagamentosTodos(meses[0] + '-01T00:00:00Z').catch(() => []);
 
   $('#view').innerHTML = header('Visão geral', new Date().toLocaleDateString('pt-BR', {timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long'}),
@@ -57,11 +59,13 @@ async function viewDashboard() {
       </div>
     </div>
     <div class="cols2">
-      <div class="card"><h3>Faturamento <span class="small mut">pedidos + mensalidades recebidas</span></h3><div id="dFat"></div></div>
+      <div class="card"><h3>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></h3><div id="dFat"></div></div>
       <div class="card"><h3>Vendas por categoria <span class="small mut">todos os pedidos</span></h3><div id="dCat"></div></div>
     </div>`;
 
-  G.barras($('#dFat'), meses.map(m => ({k: mesNome(m), v: ok.filter(p => mesKey(p.criado_em) === m).reduce((s, p) => s + +p.total, 0) + pags.filter(p => mesKey(p.pago_em) === m).reduce((s, p) => s + +p.valor, 0)})),
+  G.barras($('#dFat'), meses.map(m => ({k: mesNome(m), v: ok.filter(p => mesKey(p.criado_em) === m).reduce((s, p) => s + +p.total, 0)
+      + ganhosSemPedido.filter(l => mesKey(l.etapa_em) === m).reduce((s, l) => s + +l.valor, 0)
+      + pags.filter(p => mesKey(p.pago_em) === m).reduce((s, p) => s + +p.valor, 0)})),
     {fmt: v => brlCurto(v), nome: 'Faturamento'});
   const cat = {}; ok.forEach(p => (p.pedido_itens || []).forEach(i => { const k = i.categoria || 'Outros'; cat[k] = (cat[k] || 0) + i.quantidade * i.preco_unitario; }));
   G.horiz($('#dCat'), Object.entries(cat).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({k, v})), {fmt: brl, nome: 'Vendido'});

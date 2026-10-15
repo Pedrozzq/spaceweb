@@ -24,6 +24,19 @@ const mesKey = v => dayKey(v).slice(0, 7);                                      
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 const mesNome = k => { const [a, m] = k.split('-'); return `${MESES[+m - 1]}/${a.slice(2)}`; };
 const mesLongo = k => { const [a, m] = k.split('-'); return new Date(+a, +m - 1, 15).toLocaleDateString('pt-BR', {month: 'long', year: 'numeric'}); };
+// meses dos gráficos: do mês mais antigo com dados até o mês atual (no mínimo 6, no máximo 12)
+function mesesGrafico(datas) {
+  const atual = mesKey(Date.now());
+  const antigo = datas.filter(Boolean).map(d => mesKey(d)).filter(k => k <= atual).sort()[0] || atual;
+  const meses = [];
+  for (let i = 0; i < 12; i++) {
+    const d = new Date(); d.setDate(15); d.setMonth(d.getMonth() - i);
+    const k = mesKey(d); meses.unshift(k);
+    if (meses.length >= 6 && k <= antigo) break;
+  }
+  return meses;
+}
+
 // soma meses a "2026-10-10" mantendo o dia (até 28)
 const somaMes = (iso, n = 1) => { const [a, m, d] = iso.split('-').map(Number); const x = new Date(Date.UTC(a, m - 1 + n, Math.min(d, 28))); return x.toISOString().slice(0, 10); };
 const diasAte = iso => Math.round((Date.parse(iso + 'T12:00:00') - Date.parse(hojeKey() + 'T12:00:00')) / 864e5);

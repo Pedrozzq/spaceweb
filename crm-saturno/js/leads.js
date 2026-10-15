@@ -293,7 +293,7 @@ function renderRelatorios(list, todos) {
   const aberto = list.filter(l => ETAPAS_ABERTAS.includes(l.etapa)).reduce((s, l) => s + +l.valor, 0);
   // últimos 6 meses (sempre do total, não do filtro de mês)
   const base = LD.mes === 'todos' ? list : todos.filter(l => (LD.etapa === 'todas' || l.etapa === LD.etapa || (LD.etapa === 'abertas' && ETAPAS_ABERTAS.includes(l.etapa))) && (LD.origem === 'todas' || l.origem === LD.origem));
-  const meses = []; for (let i = 5; i >= 0; i--) { const d = new Date(); d.setDate(15); d.setMonth(d.getMonth() - i); meses.push(mesKey(d)); }
+  const meses = mesesGrafico(base.flatMap(l => [l.criado_em, l.etapa === 'ganho' ? l.etapa_em : null]));
 
   $('#ldBody').innerHTML = `
     <div class="kpis">
@@ -308,7 +308,7 @@ function renderRelatorios(list, todos) {
       <div class="card"><h3>Funil de conversão <span class="small mut">leads que chegaram a cada etapa</span></h3><div id="grFunil"></div></div>
     </div>
     <div class="cols2">
-      <div class="card"><h3>Evolução mensal <span class="small mut">últimos 6 meses</span></h3><div id="grMes"></div></div>
+      <div class="card"><h3>Evolução mensal <span class="small mut">${meses.length} meses</span></h3><div id="grMes"></div></div>
       <div class="card"><h3>Faturamento ganho por mês</h3><div id="grFat"></div></div>
     </div>
     <div class="cols2">
