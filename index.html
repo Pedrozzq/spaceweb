@@ -4579,10 +4579,19 @@
         .orb-saturno,.orb-cartao{position:absolute;left:50%;top:50%;height:auto;opacity:0}
         .orb-saturno{width:100px;z-index:2;transform:translate(-50%,-50%) translateX(28px) scale(.55)}
         .orb-cartao{width:54px;z-index:3;transform:translate(-50%,-50%) translateX(-150px) rotate(-30deg) scale(.8)}
-        .orb-ov.on .orb-saturno{animation:orbSatEntra .8s .35s cubic-bezier(.2,.8,.2,1) forwards,orbSatJunta .7s 1.6s ease-out forwards}
+        .orb-ov.on .orb-saturno{animation:orbSatEntra .8s .35s cubic-bezier(.2,.8,.2,1) forwards,orbSatJunta .7s 1.6s ease-out forwards,orbSatLoop 2.4s 2.3s ease-out infinite}
+        @keyframes orbSatLoop{0%,84%,100%{opacity:1;transform:translate(-50%,-50%) translateX(24px)}
+            89%{opacity:1;transform:translate(-50%,-50%) translateX(27px) scale(1.04)}}
         @keyframes orbSatEntra{to{opacity:1;transform:translate(-50%,-50%) translateX(28px) scale(1)}}
         @keyframes orbSatJunta{from{opacity:1;transform:translate(-50%,-50%) translateX(28px)}to{opacity:1;transform:translate(-50%,-50%) translateX(24px)}}
-        .orb-ov.on .orb-cartao{animation:orbCartaoVem .9s .7s cubic-bezier(.3,.7,.35,1) forwards,orbCartaoJunta .7s 1.6s ease-out forwards}
+        .orb-ov.on .orb-cartao{animation:orbCartaoVem .9s .7s cubic-bezier(.3,.7,.35,1) forwards,orbCartaoJunta .7s 1.6s ease-out forwards,orbCartaoLoop 2.4s 2.3s infinite}
+        /* loop (2.4s): afasta devagar, volta acelerando e encosta no planeta aos 85% */
+        @keyframes orbCartaoLoop{
+            0%{opacity:1;transform:translate(-50%,-50%) translateX(-25px) rotate(-5deg);animation-timing-function:cubic-bezier(.3,0,.3,1)}
+            45%{opacity:1;transform:translate(-50%,-50%) translateX(-62px) rotate(-16deg) scale(.96);animation-timing-function:cubic-bezier(.6,0,.9,.6)}
+            85%{opacity:1;transform:translate(-50%,-50%) translateX(-24px) rotate(-4deg)}
+            90%{opacity:1;transform:translate(-50%,-50%) translateX(-27px) rotate(-6deg)}
+            100%{opacity:1;transform:translate(-50%,-50%) translateX(-25px) rotate(-5deg)}}
         @keyframes orbCartaoVem{0%{opacity:0}25%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) translateX(-29px) rotate(-8deg) scale(1)}}
         @keyframes orbCartaoJunta{from{opacity:1;transform:translate(-50%,-50%) translateX(-29px) rotate(-8deg)}
             40%{opacity:1;transform:translate(-50%,-50%) translateX(-31px) rotate(-10deg)}
@@ -4590,14 +4599,16 @@
         /* clarão no toque */
         .orb-flash{position:absolute;left:calc(50% - 2px);top:50%;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;z-index:4;pointer-events:none;opacity:0;
             background:radial-gradient(circle,#fff 0%,rgba(255,226,140,.9) 18%,rgba(255,184,0,.35) 45%,transparent 70%)}
-        .orb-ov.on .orb-flash{animation:orbFlash .8s 1.58s ease-out forwards}
+        .orb-ov.on .orb-flash{animation:orbFlash .8s 1.58s ease-out forwards,orbFlashLoop 2.4s 2.3s ease-out infinite}
+        @keyframes orbFlashLoop{0%,84%{opacity:0;transform:scale(.2)}88%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
         @keyframes orbFlash{0%{opacity:0;transform:scale(.2)}20%{opacity:1}100%{opacity:0;transform:scale(1.6)}}
         /* ondas de conexão saindo do ponto de contato */
         .orb-con{position:absolute;left:calc(50% - 2px);top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;z-index:1;pointer-events:none;opacity:0;
             border:1.5px solid rgba(255,215,0,.85);box-shadow:0 0 10px rgba(255,184,0,.5)}
-        .orb-ov.on .orb-con{animation:orbCon 1.6s 1.6s ease-out forwards}
-        .orb-ov.on .orb-con.c2{animation-delay:1.9s}
-        .orb-ov.on .orb-con.c3{animation-delay:2.2s}
+        .orb-ov.on .orb-con{animation:orbCon 1.6s 1.6s ease-out forwards,orbConLoop 2.4s 2.3s ease-out infinite}
+        .orb-ov.on .orb-con.c2{animation-delay:1.9s,2.5s}
+        .orb-ov.on .orb-con.c3{animation-delay:2.2s,2.7s}
+        @keyframes orbConLoop{0%,84%{opacity:0;transform:scale(.3)}85%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(4)}}
         @keyframes orbCon{0%{opacity:.95;transform:scale(.3)}100%{opacity:0;transform:scale(4.2)}}
         /* brilho dourado atrás do par, que cresce quando eles se juntam */
         .orb-halo{position:absolute;left:50%;top:50%;width:150px;height:110px;margin:-55px 0 0 -75px;border-radius:50%;z-index:0;pointer-events:none;opacity:0;
