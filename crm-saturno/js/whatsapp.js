@@ -45,7 +45,7 @@ function renderWaConvs() {
       <div class="av">${esc(initials(waNome(c)))}</div>
       <div class="grow">
         <div class="l1"><b>${esc(waNome(c))}</b><span class="small mut">${c.ultima_msg_em ? ago(c.ultima_msg_em) : ''}</span></div>
-        <div class="l2"><span>${esc(c.ultima_msg || '')}</span>${c.nao_lidas ? `<span class="wa-unread">${c.nao_lidas}</span>` : c.leads?.etapa && !c.clientes ? etapaPill(c.leads.etapa) : ''}</div>
+        <div class="l2"><span>${esc(c.ultima_msg || '')}</span>${c.nao_lidas ? `<span class="wa-unread">${c.nao_lidas}</span>` : c.bot_pausado ? '<span class="tag bad">humano</span>' : c.leads?.etapa && !c.clientes ? etapaPill(c.leads.etapa) : ''}</div>
       </div></div>`).join('') || `<div class="empty">${WA.convs.length ? 'Nada encontrado' : 'Nenhuma conversa ainda.<br><span class="small">As mensagens recebidas no WhatsApp Business aparecem aqui.</span>'}</div>`;
   el.querySelectorAll('[data-wc]').forEach(d => d.onclick = () => abrirConversa(WA.convs.find(c => c.id === d.dataset.wc)));
 }
@@ -69,7 +69,9 @@ function renderWaChat() {
       ${cid ? '<button class="btn sm" id="waCli">Ficha do cliente</button>' : ''}
       ${!lid && !cid ? '<button class="btn sm" id="waNovoLead">+ Criar lead</button>' : ''}
       ${linkChatwoot(c.chatwoot_conversa_id) ? `<a class="btn sm ghost" href="${esc(linkChatwoot(c.chatwoot_conversa_id))}" target="_blank" rel="noopener" title="Abrir esta conversa no Chatwoot">Chatwoot ↗</a>` : ''}
-      ${c.nova ? '' : `<label class="check" style="margin:0" title="Desligado = o agente IA (n8n) não responde esta conversa${VIA_CHATWOOT ? ' (põe a etiqueta humano no Chatwoot)' : ''}"><input type="checkbox" id="waBot" ${c.bot_pausado ? '' : 'checked'}> Agente IA</label>`}
+      ${c.nova ? '' : c.bot_pausado
+        ? `<button class="btn sm" id="waBotBtn" data-p="0" title="Tira a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA volta a responder">🤖 Devolver para a IA</button><span class="tag bad">humano</span>`
+        : `<button class="btn sm" id="waBotBtn" data-p="1" title="Põe a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA para de responder esta conversa">🧑 Assumir (humano)</button><span class="tag ok">IA respondendo</span>`}
     </div>
     <div class="wa-msgs" id="waMsgs"></div>
     <div class="wa-quick"><span class="lbl">Prontas:</span>${MSG_PRONTAS.filter(m => !m.ctx || m.ctx === 'lead' || (cid && m.ctx !== 'ass')).slice(0, 8).map(m => `<button type="button" data-mp="${m.id}">${esc(m.t)}</button>`).join('')}</div>
@@ -84,9 +86,10 @@ function renderWaChat() {
   $('#waLead')?.addEventListener('click', () => openLead(lid));
   $('#waCli')?.addEventListener('click', () => openCliente(cid));
   $('#waNovoLead')?.addEventListener('click', () => formLead({nome: c.nome || '', telefone: c.telefone, origem: 'whatsapp'}));
-  $('#waBot')?.addEventListener('change', async e => {
-    try { await API.waBot(c.id, !e.target.checked); c.bot_pausado = !e.target.checked; toast(e.target.checked ? 'Agente IA ligado nesta conversa' : 'Agente pausado: só a equipe responde'); }
-    catch (er) { e.target.checked = !e.target.checked; toast(er.message, true); } });
+  $('#waBotBtn')?.addEventListener('click', async e => {
+    const pausar = e.currentTarget.dataset.p === '1'; e.currentTarget.disabled = true;
+    try { await API.waBot(c.id, pausar); c.bot_pausado = pausar; toast(pausar ? 'Etiqueta humano colocada: o agente IA parou nesta conversa' : 'Etiqueta humano retirada: o agente IA voltou a responder'); renderWaChat(); renderWaConvs(); }
+    catch (er) { toast(er.message, true); e.currentTarget.disabled = false; } });
   if (aberta) {
     const ta = $('#waTxt');
     ta.oninput = () => { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight, 160) + 'px'; };

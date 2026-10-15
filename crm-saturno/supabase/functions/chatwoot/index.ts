@@ -92,6 +92,7 @@ async function conversaCrm(telefone: string, nome: string | null, cwConv: number
     if (cwContato && cwContato !== c.chatwoot_contato_id) patch.chatwoot_contato_id = cwContato;
     if (pausado !== null && pausado !== c.bot_pausado) patch.bot_pausado = pausado;
     if (Object.keys(patch).length) await db.from("wa_conversas").update(patch).eq("id", c.id);
+    if (pausado && !c.bot_pausado) await leadParaHumano(c.lead_id);
     return { ...c, ...patch };
   }
   const { data: cliente_id } = await db.rpc("wa_cliente_por_telefone", { p_tel: telefone });
@@ -103,6 +104,14 @@ async function conversaCrm(telefone: string, nome: string | null, cwConv: number
   }, { onConflict: "telefone" }).select().single();
   if (error) throw error;
   return data;
+}
+
+// conversa ganhou a etiqueta "humano" (agente transferiu ou equipe assumiu): lead vai para "Atendimento humano"
+// no funil (só se ainda estava em "Novo lead" ou "Em atendimento IA"); a CRM toca o aviso
+async function leadParaHumano(leadId: string | null) {
+  if (!leadId) return;
+  const { data } = await db.from("leads").update({ etapa: "humano" }).eq("id", leadId).in("etapa", ["novo", "ia"]).select("id");
+  if (data?.length) await db.from("lead_atividades").insert({ lead_id: leadId, tipo: "agente", texto: `Conversa transferida para atendimento humano (etiqueta ${ETIQUETA} no Chatwoot)` });
 }
 
 // ------------------------------------------------------------------ 1. webhook do Chatwoot
@@ -158,6 +167,7 @@ async function crm(req: Request, raw: string) {
     if (!c) return json({ error: "conversa não encontrada" }, 404);
     if (c.chatwoot_conversa_id) await etiquetaHumano(c.chatwoot_conversa_id, !!b.pausado);
     await db.from("wa_conversas").update({ bot_pausado: !!b.pausado }).eq("id", c.id);
+    if (b.pausado && !c.bot_pausado) await leadParaHumano(c.lead_id);
     return json({ ok: true });
   }
 
@@ -178,6 +188,7 @@ async function crm(req: Request, raw: string) {
   // quem responde pela CRM assume a conversa: o agente IA para de responder (etiqueta "humano")
   await etiquetaHumano(cwConv, true).catch((e) => console.warn("etiqueta:", e.message));
   await db.from("wa_conversas").update({ ultima_msg: texto.slice(0, 300), ultima_msg_em: agora, bot_pausado: true, chatwoot_conversa_id: cwConv }).eq("id", c.id);
+  if (!c.bot_pausado) await leadParaHumano(c.lead_id);
   return json({ ok: true, conversa_id: c.id });
 }
 
