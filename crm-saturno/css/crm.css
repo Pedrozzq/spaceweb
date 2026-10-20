@@ -312,6 +312,7 @@ select.pill option{background:var(--card);color:var(--txt)}
 .mgp.mid{color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent)}
 .mgp.hi{color:var(--green);background:color-mix(in srgb,var(--green) 10%,transparent)}
 .neg-txt{color:var(--red)!important}
+.nowrap{white-space:nowrap}
 .in.cell{width:92px;padding:6px 8px;text-align:right;display:inline-block}
 #mgTbl .in.cell{width:72px}
 #mgTbl .in.cell.nome{width:100%;min-width:210px}

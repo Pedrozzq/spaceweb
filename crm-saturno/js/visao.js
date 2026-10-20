@@ -63,16 +63,19 @@ async function viewDashboard() {
     </div>
     <div class="cols2">
       <div class="pilha">
-        <div class="card"><h3>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></h3><div id="dFat"></div></div>
-        <div class="card"><h3>Lucro estimado <span class="small mut">faturamento − custo de produção − plataformas</span></h3><div id="dLucro"></div></div>
+        <div class="card"><h3><span>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></span><span class="small mut nowrap">Total <b class="num strong" id="dFatTot"></b></span></h3><div id="dFat"></div></div>
+        <div class="card"><h3><span>Lucro estimado <span class="small mut">faturamento − custo de produção − plataformas</span></span><span class="small mut nowrap">Total <b class="num strong" id="dLucroTot"></b></span></h3><div id="dLucro"></div></div>
       </div>
       <div class="card"><h3>Vendas por categoria <span class="small mut">todos os pedidos</span></h3><div id="dCat"></div></div>
     </div>`;
 
-  G.barras($('#dFat'), meses.map(m => ({k: mesNome(m), v: ok.filter(p => mesKey(p.criado_em) === m).reduce((s, p) => s + +p.total, 0)
+  // total no canto do título: soma dos meses mostrados no gráfico
+  const total = (el, dados) => { const t = dados.reduce((s, d) => s + d.v, 0); el.textContent = brl(t); el.classList.toggle('neg-txt', t < 0); };
+  const fat = meses.map(m => ({k: mesNome(m), v: ok.filter(p => mesKey(p.criado_em) === m).reduce((s, p) => s + +p.total, 0)
       + ganhosSemPedido.filter(l => mesKey(l.etapa_em) === m).reduce((s, l) => s + +l.valor, 0)
-      + pags.filter(p => mesKey(p.pago_em) === m).reduce((s, p) => s + +p.valor, 0)})),
-    {fmt: v => brlCurto(v), nome: 'Faturamento'});
+      + pags.filter(p => mesKey(p.pago_em) === m).reduce((s, p) => s + +p.valor, 0)}));
+  G.barras($('#dFat'), fat, {fmt: v => brlCurto(v), nome: 'Faturamento'});
+  total($('#dFatTot'), fat);
 
   // lucro estimado por mês: cada venda menos o custo de produção do produto/plano (custo + frete + impostos da tela Margem),
   // menos o custo mensal das plataformas ativas (entra igual em todos os meses)
@@ -90,6 +93,7 @@ async function viewDashboard() {
     return {k: mesNome(m), v: receita - producao - plataformas, dica: `Faturamento ${esc(brl(receita))}<br>Produção −${esc(brl(producao))}<br>Plataformas −${esc(brl(plataformas))}`};
   });
   G.barras($('#dLucro'), lucro, {fmt: v => brlCurto(v), nome: 'Lucro estimado', cor: 'var(--c2)'});
+  total($('#dLucroTot'), lucro);
   const cat = {}; ok.forEach(p => (p.pedido_itens || []).forEach(i => { const k = i.categoria || 'Outros'; cat[k] = (cat[k] || 0) + i.quantidade * i.preco_unitario; }));
   G.horiz($('#dCat'), Object.entries(cat).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({k, v})), {fmt: brl, nome: 'Vendido'});
 
