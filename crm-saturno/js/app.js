@@ -141,7 +141,7 @@ function enter(s) {
 // ------------------------------------------------------------------ rotas
 const VIEWS = {
   dashboard: viewDashboard, leads: viewLeads, tarefas: viewTarefas, pedidos: viewPedidos, clientes: viewClientes,
-  assinaturas: viewAssinaturas, produtos: viewProdutos, margem: viewMargem, whatsapp: viewWhatsapp, mensagens: viewMensagens, integracao: viewIntegracao
+  assinaturas: viewAssinaturas, produtos: viewProdutos, margem: viewMargem, plataformas: viewPlataformas, whatsapp: viewWhatsapp, mensagens: viewMensagens, integracao: viewIntegracao
 };
 let current = '';
 async function route(silent) {

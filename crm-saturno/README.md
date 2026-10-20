@@ -14,6 +14,7 @@ crm-saturno/
     ├── schema.sql                  ← banco completo (rode primeiro)
     ├── whatsapp.sql                ← caixa de entrada do WhatsApp (rode depois)
     ├── stripe.sql                  ← ids da Stripe nas assinaturas (rode depois)
+    ├── plataformas.sql             ← custos mensais das plataformas da Saturno (rode depois)
     ├── functions/stripe/index.ts   ← Edge Function: assinatura paga na Stripe entra na CRM
     └── functions/whatsapp/index.ts ← Edge Function: webhook da Meta e envio
 ```
@@ -33,6 +34,7 @@ Abra o `index.html` sem configurar nada para ver o **modo demonstração** (dado
 | **Assinaturas** | Mensalidades (ex.: manutenção da página R$ 89,90): receita recorrente, vencimentos, atrasos, "Recebido" registra o pagamento e passa para o mês seguinte |
 | **Produtos** | Preço, estoque (baixa sozinha a cada pedido; cancelado devolve), ativo, cobrança mensal |
 | **Margem de lucro** | Custo, frete, impostos, lucro e margem; calculadora de preço pela margem desejada |
+| **Plataformas** | Assinaturas que a Saturno paga (Supabase, VPS, domínio, Canva…): adiciona, edita nome/categoria/valor/cobrança e marca ativa direto na tabela. Mostra custo mensal (anual ÷ 12), custo anual e quanto sobra da receita recorrente. Rode o `supabase/plataformas.sql` antes de usar |
 | **WhatsApp** | Caixa de entrada pela API oficial da Meta. Contato novo vira lead sozinho. Liga/desliga o agente por conversa |
 | **Mensagens prontas** | Textos para leads (apresentar planos, proposta, follow-up), pedidos (arte, produção, envio com rastreio, entrega + avaliação) e mensalidades. Copia ou abre direto no WhatsApp |
 | **Agente WhatsApp** | Chave e funções para o agente de IA (n8n) criar/mover leads |

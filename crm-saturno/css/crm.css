@@ -316,6 +316,12 @@ select.pill option{background:var(--card);color:var(--txt)}
 #mgTbl .in.cell.nome{width:100%;min-width:210px}
 #mgTbl .in.cell.bad{border-color:var(--red)}
 #mgTbl .in.forn{width:130px;text-align:left}
+#plTbl .in.cell{width:96px}
+#plTbl .in.cell.nome{width:100%;min-width:200px}
+#plTbl .in.cell.txt{width:150px;text-align:left}
+#plTbl .in.cell.sel{width:96px;text-align:left}
+#plTbl .in.cell.bad{border-color:var(--red)}
+#plTbl input[type=checkbox]{width:17px;height:17px;accent-color:var(--ac);cursor:pointer}
 .in.nome{width:100%;min-width:180px;text-align:left;font-weight:600;background:transparent;border-color:transparent}
 .in.nome:hover{border-color:var(--line2)}
 .in.nome:focus{background:var(--bg2);border-color:var(--ac)}

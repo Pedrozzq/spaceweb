@@ -81,6 +81,12 @@ const API = DEMO ? demoApi() : {
   async custos() { return chk(await sb.from('produto_custos').select('produto_id,custo,frete,taxa_pct,fornecedor')); },
   async salvarCusto(produto_id, patch) { chk(await sb.from('produto_custos').upsert({produto_id, ...patch}, {onConflict: 'produto_id'})); },
 
+  // ---- plataformas (custos fixos da Saturno)
+  async plataformas() { return chk(await sb.from('plataformas').select('*').order('nome')); },
+  async salvarPlataforma(p) { return chk(await sb.from('plataformas').insert(p).select().single()); },
+  async atualizarPlataforma(id, patch) { chk(await sb.from('plataformas').update(patch).eq('id', id)); },
+  async excluirPlataforma(id) { chk(await sb.from('plataformas').delete().eq('id', id)); },
+
   // ---- assinaturas
   async assinaturas() { return chk(await sb.from('assinaturas').select('*, clientes(id,nome,telefone,empresa)').order('proximo_vencimento')); },
   async salvarAssinatura(a) { const {id, ...row} = a; return id ? chk(await sb.from('assinaturas').update(row).eq('id', id).select().single()) : chk(await sb.from('assinaturas').insert(row).select().single()); },
@@ -121,7 +127,7 @@ const API = DEMO ? demoApi() : {
 
   realtime(cb) {
     const ch = sb.channel('sat-crm');
-    ['leads', 'lead_atividades', 'tarefas', 'pedidos', 'clientes', 'produtos', 'assinaturas'].forEach(t => ch.on('postgres_changes', {event: '*', schema: 'public', table: t}, cb));
+    ['leads', 'lead_atividades', 'tarefas', 'pedidos', 'clientes', 'produtos', 'assinaturas', 'plataformas'].forEach(t => ch.on('postgres_changes', {event: '*', schema: 'public', table: t}, cb));
     ch.subscribe();
   }
 };
@@ -150,6 +156,11 @@ function demoApi() {
   const custos = [['Plano Essencial', 95], ['Plano Profissional', 160], ['Plano Fora de Órbita', 380], ['Cartão NFC avulso', 22],
     ['Cartão Google Avaliação', 9.5], ['Kit 2 Cartões Google Avaliação', 19], ['Espelho Instagramável', 310]]
     .map(([n, custo]) => ({produto_id: P(n).id, custo, frete: n.includes('Espelho') ? 45 : 0, taxa_pct: 6, fornecedor: null}));
+
+  const plataformas = [['Supabase', 'Infraestrutura', 135, 'mensal', 'https://supabase.com/dashboard'], ['Easypanel (VPS)', 'Infraestrutura', 79.9, 'mensal', null],
+    ['Domínio saturnonfc.com.br', 'Domínio e e-mail', 40, 'anual', 'https://registro.br'], ['Google Workspace', 'Domínio e e-mail', 33.6, 'mensal', null],
+    ['n8n', 'Automação e IA', 120, 'mensal', null], ['Canva Pro', 'Design', 34.9, 'mensal', 'https://www.canva.com'], ['CapCut Pro', 'Design', 44.9, 'mensal', null, false]]
+    .map(([nome, categoria, valor, ciclo, link, ativo = true]) => ({id: uid(), nome, categoria, valor, ciclo, link, ativo, criado_em: iso(now - 90 * D)}));
 
   const empresas = ['Café Central', 'Barbearia Dom', 'Studio Bella', 'Pizzaria Forno a Lenha', 'Ótica Visão', 'Academia Forma', 'Clínica Sorriso', 'Pousada Serra',
     'Imobiliária Lar', 'Pet Shop Amigo', 'Doceria Encanto', 'Restaurante Tropeiro', 'Escritório Lima Advogados', 'Hamburgueria 77', 'Salão Glamour',
@@ -293,6 +304,11 @@ function demoApi() {
     async excluirProduto(id) { await wait(); Object.assign(produtos.find(p => p.id === id), {excluido: true, ativo: false}); },
     async custos() { await wait(); return clone(custos); },
     async salvarCusto(produto_id, patch) { await wait(); const c = custos.find(x => x.produto_id === produto_id); c ? Object.assign(c, patch) : custos.push({produto_id, custo: null, frete: 0, taxa_pct: 0, fornecedor: null, ...patch}); },
+
+    async plataformas() { await wait(); return clone(plataformas); },
+    async salvarPlataforma(p) { await wait(); const n = {categoria: null, link: null, ...p, id: uid(), criado_em: iso(Date.now())}; plataformas.push(n); return clone(n); },
+    async atualizarPlataforma(id, patch) { await wait(); Object.assign(plataformas.find(p => p.id === id), patch); },
+    async excluirPlataforma(id) { await wait(); plataformas.splice(plataformas.findIndex(p => p.id === id), 1); },
 
     async assinaturas() { await wait(); return clone(assinaturas.map(a => ({...a, clientes: clientes.find(c => c.id === a.cliente_id)}))).sort((a, b) => a.proximo_vencimento.localeCompare(b.proximo_vencimento)); },
     async salvarAssinatura(a) { await wait(); if (a.id) { Object.assign(assinaturas.find(x => x.id === a.id), a); return clone(a); }
