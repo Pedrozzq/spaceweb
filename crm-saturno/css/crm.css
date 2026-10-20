@@ -124,6 +124,7 @@ button.kpi:hover{border-color:var(--line2)}
 .kpi.hl b,.kpi.on b{color:var(--ac)}
 .cols{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-bottom:14px}
 .cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.pilha{display:grid;gap:14px;align-content:start;min-width:0}
 
 /* tabelas */
 .tbl-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:auto}

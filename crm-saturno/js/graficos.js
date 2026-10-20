@@ -26,23 +26,24 @@ const G = (() => {
   }
   const posRel = (box, el) => { const a = box.getBoundingClientRect(), b = el.getBoundingClientRect(); return [b.left - a.left + b.width / 2, b.top - a.top]; };
 
-  // Barras verticais (uma série). dados: [{k, v}] · fmt: formata valor
+  // Barras verticais (uma série). dados: [{k, v}] · fmt: formata valor · valores negativos descem abaixo do zero (cor --red)
   function barras(el, dados, {fmt = v => v, cor = 'var(--c1)', alt = 220, nome = 'Total'} = {}) {
     const W = 560, H = alt, ml = 34, mr = 8, mt = 18, mb = 46;
-    const {top, passo} = escala(Math.max(...dados.map(d => d.v), 0));
+    const max = Math.max(...dados.map(d => d.v), 0), min = Math.min(...dados.map(d => d.v), 0);
+    const {top, passo} = escala(Math.max(max, -min)), bot = min < 0 ? -passo * Math.ceil(-min / passo) : 0, topo = max > 0 ? passo * Math.ceil(max / passo) : bot ? 0 : top;
     const bw = (W - ml - mr) / Math.max(dados.length, 1), larg = Math.min(46, bw * .62);
-    const y = v => mt + (H - mt - mb) * (1 - v / top);
+    const y = v => mt + (H - mt - mb) * (topo - v) / (topo - bot);
     let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(nome)}"><g class="grid">`;
-    for (let v = 0; v <= top + 1e-9; v += passo) s += `<line x1="${ml}" x2="${W - mr}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${ml - 6}" y="${y(v) + 4}" text-anchor="end">${esc(fmt(v, true))}</text>`;
+    for (let v = bot; v <= topo + 1e-9; v += passo) s += `<line x1="${ml}" x2="${W - mr}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${ml - 6}" y="${y(v) + 4}" text-anchor="end">${esc(fmt(v, true))}</text>`;
     s += '</g>';
     dados.forEach((d, i) => {
-      const cx = ml + bw * i + bw / 2, h = Math.max(0, y(0) - y(d.v));
-      // topo arredondado (4px) apoiado na base
-      const r = Math.min(4, h / 2, larg / 2), x0 = cx - larg / 2, yt = y(d.v);
-      if (h > 0) s += `<path class="bar-m" data-i="${i}" fill="${cor}" d="M${x0},${y(0)} V${yt + r} Q${x0},${yt} ${x0 + r},${yt} H${x0 + larg - r} Q${x0 + larg},${yt} ${x0 + larg},${yt + r} V${y(0)} Z"/>`;
-      if (d.v > 0 && dados.length <= 12) s += `<text class="lbl" x="${cx}" y="${yt - 5}" text-anchor="middle">${esc(fmt(d.v))}</text>`;
-      const rot = dados.length > 6;
-      s += `<text class="ax" x="${cx}" y="${y(0) + 15}" text-anchor="${rot ? 'end' : 'middle'}" ${rot ? `transform="rotate(-28 ${cx} ${y(0) + 15})"` : ''}>${esc(d.k)}</text>`;
+      const cx = ml + bw * i + bw / 2, h = Math.abs(y(0) - y(d.v));
+      // ponta arredondada (4px) do lado oposto ao zero
+      const r = Math.min(4, h / 2, larg / 2), x0 = cx - larg / 2, yt = y(d.v), sg = d.v < 0 ? -1 : 1;
+      if (h > 0) s += `<path class="bar-m" data-i="${i}" fill="${d.v < 0 ? 'var(--red)' : cor}" d="M${x0},${y(0)} V${yt + r * sg} Q${x0},${yt} ${x0 + r},${yt} H${x0 + larg - r} Q${x0 + larg},${yt} ${x0 + larg},${yt + r * sg} V${y(0)} Z"/>`;
+      if (d.v && dados.length <= 12) s += `<text class="lbl" x="${cx}" y="${d.v < 0 ? yt + 14 : yt - 5}" text-anchor="middle">${esc(fmt(d.v))}</text>`;
+      const rot = dados.length > 6, yb = y(bot) + 15;
+      s += `<text class="ax" x="${cx}" y="${yb}" text-anchor="${rot ? 'end' : 'middle'}" ${rot ? `transform="rotate(-28 ${cx} ${yb})"` : ''}>${esc(d.k)}</text>`;
       s += `<rect class="hit" data-i="${i}" x="${ml + bw * i}" y="${mt}" width="${bw}" height="${H - mt - mb}"/>`;
     });
     s += `<line x1="${ml}" x2="${W - mr}" y1="${y(0)}" y2="${y(0)}" stroke="var(--line2)"/></svg>`;
@@ -50,7 +51,8 @@ const G = (() => {
     const box = el.querySelector('.chart'), t = dica(box);
     box.querySelectorAll('.hit').forEach(h => {
       const i = +h.dataset.i, d = dados[i], m = box.querySelector(`.bar-m[data-i="${i}"]`);
-      h.onmouseenter = () => { box.classList.add('hov'); m?.classList.add('on'); const [x, yy] = posRel(box, m || h); t.mostra(`<b>${esc(d.k)}</b>${esc(nome)}: ${esc(fmt(d.v))}`, x, yy); };
+      h.onmouseenter = () => { box.classList.add('hov'); m?.classList.add('on'); const [x, yy] = posRel(box, m || h);
+        t.mostra(`<b>${esc(d.k)}</b>${esc(nome)}: ${esc(fmt(d.v))}${d.dica ? `<div class="small">${d.dica}</div>` : ''}`, x, yy); };
       h.onmouseleave = () => { box.classList.remove('hov'); m?.classList.remove('on'); t.esconde(); };
     });
   }

@@ -92,7 +92,7 @@ const API = DEMO ? demoApi() : {
   async salvarAssinatura(a) { const {id, ...row} = a; return id ? chk(await sb.from('assinaturas').update(row).eq('id', id).select().single()) : chk(await sb.from('assinaturas').insert(row).select().single()); },
   async atualizarAssinatura(id, patch) { chk(await sb.from('assinaturas').update(patch).eq('id', id)); },
   async pagamentos(assId) { return chk(await sb.from('assinatura_pagamentos').select('*').eq('assinatura_id', assId).order('pago_em', {ascending: false})); },
-  async pagamentosTodos(desde) { return chk(await sb.from('assinatura_pagamentos').select('valor,pago_em').gte('pago_em', desde)); },
+  async pagamentosTodos(desde) { return chk(await sb.from('assinatura_pagamentos').select('valor,pago_em,assinatura_id').gte('pago_em', desde)); },
   // registra o pagamento do vencimento atual e passa para o mês seguinte
   async registrarPagamento(a) {
     chk(await sb.from('assinatura_pagamentos').insert({assinatura_id: a.id, referencia: a.proximo_vencimento, valor: a.valor}));

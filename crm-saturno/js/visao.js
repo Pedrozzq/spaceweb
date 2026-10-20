@@ -24,7 +24,8 @@ async function viewDashboard() {
   const comPedido = new Set(peds.map(p => p.lead_id).filter(Boolean));
   const ganhosSemPedido = leads.filter(l => l.etapa === 'ganho' && +l.valor > 0 && !comPedido.has(l.id));
   const meses = mesesGrafico([...ok.map(p => p.criado_em), ...ganhosSemPedido.map(l => l.etapa_em)]);
-  const pags = await API.pagamentosTodos(meses[0] + '-01T00:00:00Z').catch(() => []);
+  const [pags, plats, prods, custos] = await Promise.all([API.pagamentosTodos(meses[0] + '-01T00:00:00Z').catch(() => []),
+    API.plataformas().catch(() => []), API.produtos().catch(() => []), API.custos().catch(() => [])]);
 
   $('#view').innerHTML = header('Visão geral', new Date().toLocaleDateString('pt-BR', {timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long'}),
     `<span class="live"><i></i>${DEMO ? 'Demonstração' : 'Ao vivo'}</span><button class="btn pri" id="dNovo">+ Novo lead</button>`) + `
@@ -59,7 +60,10 @@ async function viewDashboard() {
       </div>
     </div>
     <div class="cols2">
-      <div class="card"><h3>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></h3><div id="dFat"></div></div>
+      <div class="pilha">
+        <div class="card"><h3>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></h3><div id="dFat"></div></div>
+        <div class="card"><h3>Lucro estimado <span class="small mut">faturamento − custo de produção − plataformas</span></h3><div id="dLucro"></div></div>
+      </div>
       <div class="card"><h3>Vendas por categoria <span class="small mut">todos os pedidos</span></h3><div id="dCat"></div></div>
     </div>`;
 
@@ -67,6 +71,23 @@ async function viewDashboard() {
       + ganhosSemPedido.filter(l => mesKey(l.etapa_em) === m).reduce((s, l) => s + +l.valor, 0)
       + pags.filter(p => mesKey(p.pago_em) === m).reduce((s, p) => s + +p.valor, 0)})),
     {fmt: v => brlCurto(v), nome: 'Faturamento'});
+
+  // lucro estimado por mês: cada venda menos o custo de produção do produto/plano (custo + frete + impostos da tela Margem),
+  // menos as plataformas vigentes no mês (cadastrada até o mês e, se desativada, só antes do mês em que foi desativada)
+  const prodCusto = new Map(prods.map(p => { const c = custos.find(x => x.produto_id === p.id); if (!c) return [p.id, 0]; const m = calcMg({...c, preco: p.preco}); return [p.id, m.base + m.taxas]; }));
+  const porNome = new Map(prods.map(p => [p.nome.toLowerCase(), p.id]));
+  const custoDe = (id, nome) => prodCusto.get(id || porNome.get(String(nome || '').toLowerCase())) || 0;
+  const assinProd = new Map(assin.map(a => [a.id, a.produto_id]));
+  const lucro = meses.map(m => {
+    const fatPed = ok.filter(p => mesKey(p.criado_em) === m), fatLead = ganhosSemPedido.filter(l => mesKey(l.etapa_em) === m), fatPag = pags.filter(p => mesKey(p.pago_em) === m);
+    const receita = fatPed.reduce((s, p) => s + +p.total, 0) + fatLead.reduce((s, l) => s + +l.valor, 0) + fatPag.reduce((s, p) => s + +p.valor, 0);
+    const producao = fatPed.reduce((s, p) => s + (p.pedido_itens || []).reduce((t, i) => t + i.quantidade * custoDe(i.produto_id, i.produto), 0), 0)
+      + fatLead.reduce((s, l) => s + custoDe(null, l.interesse), 0)
+      + fatPag.reduce((s, p) => s + custoDe(assinProd.get(p.assinatura_id)), 0);
+    const plataformas = plats.filter(p => p.criado_em && mesKey(p.criado_em) <= m && (p.ativo || (p.atualizado_em && mesKey(p.atualizado_em) > m))).reduce((s, p) => s + plMes(p), 0);
+    return {k: mesNome(m), v: receita - producao - plataformas, dica: `Faturamento ${esc(brl(receita))}<br>Produção −${esc(brl(producao))}<br>Plataformas −${esc(brl(plataformas))}`};
+  });
+  G.barras($('#dLucro'), lucro, {fmt: v => brlCurto(v), nome: 'Lucro estimado', cor: 'var(--c2)'});
   const cat = {}; ok.forEach(p => (p.pedido_itens || []).forEach(i => { const k = i.categoria || 'Outros'; cat[k] = (cat[k] || 0) + i.quantidade * i.preco_unitario; }));
   G.horiz($('#dCat'), Object.entries(cat).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({k, v})), {fmt: brl, nome: 'Vendido'});
 
