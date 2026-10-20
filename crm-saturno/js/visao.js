@@ -73,18 +73,18 @@ async function viewDashboard() {
     {fmt: v => brlCurto(v), nome: 'Faturamento'});
 
   // lucro estimado por mês: cada venda menos o custo de produção do produto/plano (custo + frete + impostos da tela Margem),
-  // menos as plataformas vigentes no mês (cadastrada até o mês e, se desativada, só antes do mês em que foi desativada)
+  // menos o custo mensal das plataformas ativas (entra igual em todos os meses)
   const prodCusto = new Map(prods.map(p => { const c = custos.find(x => x.produto_id === p.id); if (!c) return [p.id, 0]; const m = calcMg({...c, preco: p.preco}); return [p.id, m.base + m.taxas]; }));
   const porNome = new Map(prods.map(p => [p.nome.toLowerCase(), p.id]));
   const custoDe = (id, nome) => prodCusto.get(id || porNome.get(String(nome || '').toLowerCase())) || 0;
   const assinProd = new Map(assin.map(a => [a.id, a.produto_id]));
+  const plataformas = plats.filter(p => p.ativo).reduce((s, p) => s + plMes(p), 0);
   const lucro = meses.map(m => {
     const fatPed = ok.filter(p => mesKey(p.criado_em) === m), fatLead = ganhosSemPedido.filter(l => mesKey(l.etapa_em) === m), fatPag = pags.filter(p => mesKey(p.pago_em) === m);
     const receita = fatPed.reduce((s, p) => s + +p.total, 0) + fatLead.reduce((s, l) => s + +l.valor, 0) + fatPag.reduce((s, p) => s + +p.valor, 0);
     const producao = fatPed.reduce((s, p) => s + (p.pedido_itens || []).reduce((t, i) => t + i.quantidade * custoDe(i.produto_id, i.produto), 0), 0)
       + fatLead.reduce((s, l) => s + custoDe(null, l.interesse), 0)
       + fatPag.reduce((s, p) => s + custoDe(assinProd.get(p.assinatura_id)), 0);
-    const plataformas = plats.filter(p => p.criado_em && mesKey(p.criado_em) <= m && (p.ativo || (p.atualizado_em && mesKey(p.atualizado_em) > m))).reduce((s, p) => s + plMes(p), 0);
     return {k: mesNome(m), v: receita - producao - plataformas, dica: `Faturamento ${esc(brl(receita))}<br>Produção −${esc(brl(producao))}<br>Plataformas −${esc(brl(plataformas))}`};
   });
   G.barras($('#dLucro'), lucro, {fmt: v => brlCurto(v), nome: 'Lucro estimado', cor: 'var(--c2)'});
