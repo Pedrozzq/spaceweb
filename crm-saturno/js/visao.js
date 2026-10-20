@@ -63,10 +63,10 @@ async function viewDashboard() {
     </div>
     <div class="cols2">
       <div class="pilha">
-        <div class="card"><h3><span>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></span><span class="small mut nowrap">Total <b class="num strong" id="dFatTot"></b></span></h3><div id="dFat"></div></div>
-        <div class="card"><h3><span>Lucro estimado <span class="small mut">faturamento − custo de produção − plataformas</span></span><span class="small mut nowrap">Total <b class="num strong" id="dLucroTot"></b></span></h3><div id="dLucro"></div></div>
+        <div class="card"><h3><span>Faturamento <span class="small mut">pedidos, vendas ganhas e mensalidades</span></span><span class="small mut nowrap">Total <b class="tot-h num" id="dFatTot"></b></span></h3><div id="dFat"></div></div>
+        <div class="card"><h3><span>Lucro estimado <span class="small mut">faturamento − custo de produção − plataformas</span></span><span class="small mut nowrap">Total <b class="tot-h num" id="dLucroTot"></b></span></h3><div id="dLucro"></div></div>
       </div>
-      <div class="card"><h3>Vendas por categoria <span class="small mut">todos os pedidos</span></h3><div id="dCat"></div></div>
+      <div class="card"><h3>Vendas por categoria <span class="small mut">pedidos, vendas ganhas e mensalidades</span></h3><div id="dCat"></div></div>
     </div>`;
 
   // total no canto do título: soma dos meses mostrados no gráfico
@@ -94,7 +94,14 @@ async function viewDashboard() {
   });
   G.barras($('#dLucro'), lucro, {fmt: v => brlCurto(v), nome: 'Lucro estimado', cor: 'var(--c2)'});
   total($('#dLucroTot'), lucro);
-  const cat = {}; ok.forEach(p => (p.pedido_itens || []).forEach(i => { const k = i.categoria || 'Outros'; cat[k] = (cat[k] || 0) + i.quantidade * i.preco_unitario; }));
+  // planos aparecem pelo nome (Plano Essencial, Profissional...); o resto pela categoria.
+  // vendas ganhas sem pedido (ex.: vindas do CRM antigo) entram pelo plano/produto de interesse
+  const chave = (nome, categoria) => { const p = prods.find(x => x.nome.toLowerCase() === String(nome || '').toLowerCase()), c = categoria || p?.categoria || 'Outros';
+    return c === 'Planos' ? p?.nome || nome || 'Planos' : c; };
+  const cat = {}; ok.forEach(p => (p.pedido_itens || []).forEach(i => { const k = chave(i.produto, i.categoria); cat[k] = (cat[k] || 0) + i.quantidade * i.preco_unitario; }));
+  ganhosSemPedido.forEach(l => { const k = chave(l.interesse); cat[k] = (cat[k] || 0) + +l.valor; });
+  // mensalidades recebidas desde o início (julho)
+  const mensal = pags.reduce((t, p) => t + +p.valor, 0); if (mensal) cat['Assinaturas Gestão Saturno'] = mensal;
   G.horiz($('#dCat'), Object.entries(cat).sort((a, b) => b[1] - a[1]).map(([k, v]) => ({k, v})), {fmt: brl, nome: 'Vendido'});
 
   $('#dNovo').onclick = () => formLead();
