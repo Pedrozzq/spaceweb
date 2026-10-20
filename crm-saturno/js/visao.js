@@ -2,6 +2,7 @@
 //  SATURNO NFC · CRM — Visão geral
 // =====================================================================
 'use strict';
+const INICIO_SATURNO = '2026-07';
 async function viewDashboard() {
   const [leads, peds, tarefas, assin] = await Promise.all([cache.leads(true), cache.pedidos(true), cache.tarefas(true), API.assinaturas().catch(() => [])]);
   const mes = mesKey(Date.now()), hoje = hojeKey();
@@ -23,7 +24,8 @@ async function viewDashboard() {
   // faturamento por mês: pedidos + vendas ganhas que não viraram pedido (ex.: vindas do CRM antigo) + mensalidades recebidas
   const comPedido = new Set(peds.map(p => p.lead_id).filter(Boolean));
   const ganhosSemPedido = leads.filter(l => l.etapa === 'ganho' && +l.valor > 0 && !comPedido.has(l.id));
-  const meses = mesesGrafico([...ok.map(p => p.criado_em), ...ganhosSemPedido.map(l => l.etapa_em)]);
+  // gráficos começam em julho/2026, início da Saturno
+  const meses = mesesGrafico([...ok.map(p => p.criado_em), ...ganhosSemPedido.map(l => l.etapa_em)]).filter(m => m >= INICIO_SATURNO);
   const [pags, plats, prods, custos] = await Promise.all([API.pagamentosTodos(meses[0] + '-01T00:00:00Z').catch(() => []),
     API.plataformas().catch(() => []), API.produtos().catch(() => []), API.custos().catch(() => [])]);
 
