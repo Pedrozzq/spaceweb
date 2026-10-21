@@ -115,6 +115,22 @@ const API = DEMO ? demoApi() : {
     return data;
   },
   async waEnviar(msg) { return API.waFn({acao: 'enviar', ...msg}); },
+  // ---- Notificações no celular (Edge Function "push" + supabase/notificacoes.sql)
+  async pushFn(body) {
+    const {data, error} = await sb.functions.invoke('push', {body});
+    if (error) {
+      const det = await error.context?.json?.().catch(() => null);
+      throw new Error(det?.error || (/Failed to send|fetch/i.test(error.message) ? 'Função "push" não publicada no Supabase' : error.message));
+    }
+    return data;
+  },
+  async pushRegistrar(s, dispositivo, tipos) {
+    const r = await sb.rpc('push_registrar', {p_endpoint: s.endpoint, p_p256dh: s.keys.p256dh, p_auth: s.keys.auth, p_dispositivo: dispositivo, p_tipos: tipos});
+    if (r.error && /push_registrar/.test(r.error.message)) throw new Error('Rode o supabase/notificacoes.sql no Supabase primeiro');
+    chk(r);
+  },
+  async pushInscricao(endpoint) { return chk(await sb.from('push_inscricoes').select('tipos').eq('endpoint', endpoint).maybeSingle()); },
+  async pushRemover(endpoint) { chk(await sb.from('push_inscricoes').delete().eq('endpoint', endpoint)); },
   async waStatus() { return API.waFn({acao: 'status'}); },
   waRealtime(cb) {
     sb.channel('sat-wa').on('postgres_changes', {event: '*', schema: 'public', table: 'wa_mensagens'}, cb)

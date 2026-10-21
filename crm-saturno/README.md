@@ -136,3 +136,40 @@ A cada renovação paga, o próximo vencimento avança sozinho. Cancelou na Stri
 
 Criado pelo `schema.sql` com os preços do site: Plano Essencial R$ 600, Profissional R$ 1.000, Fora de Órbita R$ 2.000, Cartão Google Avaliação R$ 60, Kit 2 cartões R$ 100 e Manutenção mensal R$ 89,90.
 **Cartão NFC avulso** e **Espelho Instagramável** entram com preço R$ 0: defina em **Produtos**.
+
+## Notificações no celular (leads, pedidos, conversas, atualizações)
+
+Avisos que chegam **mesmo com a CRM fechada**, como notificação de app (substitui o antigo botão "Ativar avisos"):
+
+| Tipo | Quando chega |
+|---|---|
+| **Leads** | Lead novo e quando o agente pede **atendimento humano** (com o motivo) |
+| **Pedidos novos** | Pedido criado pelo agente, site ou equipe |
+| **Conversas do WhatsApp** | Cada mensagem de contato (várias da mesma conversa se juntam numa notificação) |
+| **Atualizações** | Venda ganha, status de pedido, pedido pago, assinatura nova/cancelada, mensalidade paga, estoque baixo/esgotado |
+
+Tocar na notificação abre a CRM na tela certa. O ícone do app mostra leads esperando + pedidos novos + mensagens não lidas. Quem faz uma mudança na CRM não recebe aviso da própria ação.
+
+### Configurar (uma vez)
+
+1. **SQL Editor**: rode `supabase/notificacoes.sql` (depois do `schema.sql`; se rodar o `whatsapp.sql` depois, rode o `notificacoes.sql` de novo para ligar o aviso de conversas).
+2. **Edge Function e chaves** (já feito em out/2026; as chaves ficam fora do repositório, em `Documentos\saturno-vapid-keys.env`):
+   ```
+   npx supabase functions deploy push --no-verify-jwt --use-api --project-ref lrthxbchqafcjbvjwcne
+   npx supabase secrets set --env-file <arquivo-com-as-chaves> --project-ref lrthxbchqafcjbvjwcne
+   ```
+   Chaves novas só com `npx web-push generate-vapid-keys`, mas **não troque depois**: todos os celulares precisariam ativar de novo.
+3. Publique o site (o `manifest.webmanifest`, o `sw.js` e o `js/notificacoes.js` vão junto).
+
+### No iPhone (cada pessoa da equipe)
+
+O iPhone só notifica a CRM **instalada pelo Safari** (iOS 16.4 ou mais novo). Atalho criado pelo app **Atalhos** não recebe.
+
+1. Apague o ícone antigo da CRM, se ele foi criado pelo app Atalhos.
+2. Abra `https://www.saturnonfc.com.br/crm-saturno/` no **Safari** > **Compartilhar** > **Adicionar à Tela de Início**.
+3. Abra a CRM pelo novo ícone, faça login e toque em **Ativar notificações** (aparece um cartão na primeira vez; depois fica no menu ☰, embaixo).
+4. Aceite a permissão. Chega uma notificação de teste.
+
+No menu **Notificações** dá para escolher os tipos, mandar um teste ou desligar. No Android e no computador funciona direto pelo navegador.
+
+**Não chegou?** Ajustes > Notificações > Saturno CRM ligado; Foco/Não Perturbe desligado; Supabase > Edge Functions > push > Logs mostra cada envio.

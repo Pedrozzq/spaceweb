@@ -70,13 +70,9 @@ const SOM = (() => {
 const pintarSom = () => {
   $('#somBtn').textContent = SOM.ligado ? '🔔 Som ligado' : '🔕 Som desligado';
   $('#somBtn').classList.toggle('off', !SOM.ligado);
-  const b = $('#avisoBtn'); if (!b) return;
-  const p = 'Notification' in window ? Notification.permission : 'denied';
-  b.classList.toggle('hidden', p === 'granted' || !('Notification' in window));
 };
 pintarSom();
 $('#somBtn').onclick = () => { SOM.alternar(); pintarSom(); toast(SOM.ligado ? 'Som de aviso ligado' : 'Som de aviso desligado'); };
-$('#avisoBtn').onclick = pedirAvisoSistema;
 const TITULO = () => document.title.replace(/^\(\d+\) /, '');
 let naoVistos = 0;
 document.addEventListener('visibilitychange', () => { if (!document.hidden && naoVistos) { naoVistos = 0; document.title = TITULO(); } });
@@ -88,6 +84,7 @@ function avisar(tipo, msg) {
 // ------------------------------------------------------------------ cartões de aviso (canto da tela) + aviso do sistema
 // Mensagem nova no WhatsApp: cartão com nome e começo da mensagem, botão "Abrir conversa".
 // Com a CRM em segundo plano, também sai o aviso do Windows/celular (se a pessoa permitiu).
+// Com as notificações push ligadas, quem avisa é o push (js/notificacoes.js): não duplica.
 function notificar({titulo, texto, icone = '💬', acao, rotulo = 'Abrir', tempo = 12000}) {
   let pilha = $('#notifs');
   if (!pilha) { pilha = document.createElement('div'); pilha.id = 'notifs'; pilha.setAttribute('aria-live', 'polite'); document.body.appendChild(pilha); }
@@ -100,18 +97,10 @@ function notificar({titulo, texto, icone = '💬', acao, rotulo = 'Abrir', tempo
   pilha.prepend(el);
   [...pilha.children].slice(4).forEach(x => x.remove());           // no máximo 4 na tela
   setTimeout(fechar, tempo);
-  if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+  if (document.hidden && !PUSH.ativo && 'Notification' in window && Notification.permission === 'granted') {
     try { const n = new Notification(titulo, {body: texto, icon: 'img/apple-touch.png', tag: titulo});
       n.onclick = () => { window.focus(); acao?.(); n.close(); }; } catch {}
   }
-}
-// pede permissão para o aviso do sistema (só depois de um clique da pessoa; o navegador exige)
-async function pedirAvisoSistema() {
-  if (!('Notification' in window)) return toast('Este navegador não mostra avisos do sistema', true);
-  if (Notification.permission === 'denied') return toast('Avisos bloqueados: libere em Configurações do site (cadeado ao lado do endereço)', true);
-  const r = await Notification.requestPermission();
-  toast(r === 'granted' ? 'Avisos do sistema ligados' : 'Avisos do sistema não foram liberados', r !== 'granted');
-  pintarSom();
 }
 
 // ------------------------------------------------------------------ entrada no app + tempo real
@@ -134,6 +123,7 @@ function enter(s) {
     API.waRealtime(onWaRealtime);
     window.addEventListener('hashchange', () => route());
     setInterval(atualizarContadores, 60000);
+    iniciarNotificacoes();
   }
   route();
 }

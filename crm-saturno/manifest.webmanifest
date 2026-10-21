@@ -1,0 +1,17 @@
+{
+  "name": "Saturno NFC · CRM",
+  "short_name": "Saturno CRM",
+  "description": "Leads, pedidos, assinaturas e WhatsApp da Saturno NFC",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0b10",
+  "theme_color": "#0b0b10",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "img/saturno-icone.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
+    { "src": "img/apple-touch.png", "sizes": "180x180", "type": "image/png", "purpose": "any" }
+  ]
+}
