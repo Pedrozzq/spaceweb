@@ -1627,6 +1627,9 @@
         .btn-saturno-white.btn-plano-select { animation: goldShimmer 4s linear infinite; box-shadow: 0 0 20px rgba(255, 255, 255, 0.45); }
         .btn-saturno-silver.btn-plano-select { animation: goldShimmer 4s linear infinite; box-shadow: 0 0 20px rgba(220, 225, 232, 0.48); }
         .btn-saturno-gold.btn-plano-select { animation: goldShimmer 4s linear infinite; box-shadow: 0 0 20px rgba(245, 214, 122, 0.5); }
+        /* no popup de planos o degradê metálico fica parado (animar background-position redesenha os botões a cada quadro);
+           o reflexo que passa por cima continua, e ele roda na placa de vídeo */
+        #escolher-plano-panel .btn-plano-select { animation: none; }
 
         .btn-plano-select:hover {
             transform: translateY(-4px) scale(1.035);
@@ -3413,9 +3416,10 @@
             }
         }
 
+        let particlesPausadas = false;
         function animateParticles() {
-            // popup aberto: não redesenha (o fundo fica escondido atrás dele)
-            if (document.body.classList.contains('popup-aberto')) { requestAnimationFrame(animateParticles); return; }
+            // popup aberto: o laço para por completo (volta no evento 'saturno-popup' ao fechar)
+            if (document.body.classList.contains('popup-aberto')) { particlesPausadas = true; return; }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].update();
@@ -3426,6 +3430,9 @@
 
         initParticles();
         animateParticles();
+        window.addEventListener('saturno-popup', () => {
+            if (particlesPausadas && !document.body.classList.contains('popup-aberto')) { particlesPausadas = false; animateParticles(); }
+        });
 
         // Redimensiona o canvas ao alterar o tamanho da janela
         window.addEventListener('resize', () => {
@@ -3738,7 +3745,7 @@
 
             function startAuto() {
                 if (autoTimer || !isMobile()) return;
-                autoTimer = setInterval(next, 5000);
+                autoTimer = setInterval(() => { if (!document.body.classList.contains('popup-aberto')) next(); }, 5000);
             }
             function stopAuto() {
                 clearInterval(autoTimer);
@@ -3903,7 +3910,7 @@
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 panel.classList.add('wa-panel-open');
                 document.body.style.overflow = 'hidden';
-                document.body.classList.add('popup-aberto');
+                document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                 panel.scrollTop = 0;
             }
             function fecharPlanos(semVoltarFoco) {
@@ -3912,7 +3919,7 @@
                 tFecha = setTimeout(function () {
                     ov.classList.remove('on', 'fechando'); ov.setAttribute('aria-hidden', 'true');
                     panel.classList.remove('wa-panel-open');
-                    if (!nomeAberto()) { document.body.style.overflow = ''; document.body.classList.remove('popup-aberto'); }
+                    if (!nomeAberto()) { document.body.style.overflow = ''; document.body.classList.remove('popup-aberto'); window.dispatchEvent(new Event('saturno-popup')); }
                     if (!semVoltarFoco && voltarFoco && voltarFoco.focus) voltarFoco.focus({preventScroll: true});
                 }, 330);
             }
@@ -4275,6 +4282,7 @@
         if (cardInner && cardImg) {
             let heroCardIndex = 0;
             setInterval(() => {
+                if (document.body.classList.contains('popup-aberto')) return;   // popup aberto: cartão parado
                 // Fase 1: Inicia o giro
                 cardInner.style.transition = 'transform 0.4s ease-in, filter 0.4s ease-in';
                 cardInner.style.transform = 'rotateY(90deg) scale(1.05)';
@@ -4759,7 +4767,7 @@
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
-                document.body.classList.add('popup-aberto');
+                document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                 // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
                 foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
             }
@@ -4769,7 +4777,7 @@
                 tFecha = setTimeout(function () {
                     ov.classList.remove('on', 'fechando'); ov.setAttribute('aria-hidden', 'true');
                     document.body.style.overflow = '';
-                    document.body.classList.remove('popup-aberto');
+                    document.body.classList.remove('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                     if (voltarFoco && voltarFoco.focus) voltarFoco.focus();
                 }, 330);
             }
