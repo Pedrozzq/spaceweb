@@ -1560,48 +1560,6 @@
         @keyframes plmFlutua { 0%,100% { transform: translate(-50%,-50%); filter: drop-shadow(0 4px 18px rgba(0,0,0,.85)); } 50% { transform: translate(-50%,-50%) translateY(-3px); filter: drop-shadow(0 4px 18px rgba(0,0,0,.85)); } }
         /* estrela cadente passa por cima da faixa dos planos */
         .plm-cadente { z-index: 4; }
-        /* faixa curva dos planos (Tilted Grid): os 3 botões de plano correm da direita para a esquerda por
-           dentro de um cilindro. O centro fica de frente, as pontas curvam na direção de quem olha e somem
-           num degradê. Cada botão é cortado em fatias verticais, cada fatia um pedaço plano do cilindro; o
-           bloco inteiro gira junto num único rotateY. Parando o mouse em cima, a fileira pausa para o clique.
-           Montada pelo JS do popup (montarFaixaPlanos). */
-        /* no celular fica a caixa de antes, com os 3 botões empilhados; a faixa e a tela cheia são só no PC */
-        .plm-grid { display: none; }
-        @media (min-width: 768px) {
-            .plm-grid { display: block; position: absolute; inset: 0; z-index: 1; container-type: size; pointer-events: none; opacity: 0; transition: opacity .7s .35s ease; }
-            .plm-ov.on .plm-grid.pronto { opacity: 1; }
-            .plm-faixa { position: absolute; inset: 0; }
-            .plm-tile { position: absolute; transform-style: preserve-3d; pointer-events: auto; cursor: pointer; }
-            .plm-ov:not(.on) .plm-tile, .plm-grid:has(.plm-tile:hover) .plm-tile { animation-play-state: paused !important; }
-            .plm-fatia { position: absolute; top: 0; overflow: hidden; }
-            /* cópia do botão dentro de cada fatia: mesma estética, medidas proporcionais ao bloco */
-            #escolher-plano-panel .plm-copia.btn { position: absolute; top: 0; margin: 0; min-height: 0; max-width: none; padding: 1.25em .9em .55em;
-                border-radius: .75em; gap: 0; opacity: 1; transform: none; transition: filter .25s ease; box-shadow: none; }
-            #escolher-plano-panel .plm-copia .bp-desk { gap: .2em; }
-            #escolher-plano-panel .plm-copia .bp-tag { font-size: .62em; }
-            #escolher-plano-panel .plm-copia .bp-tit { font-size: 1.22em; }
-            #escolher-plano-panel .plm-copia .bp-sub { font-size: .7em; }
-            #escolher-plano-panel .plm-copia .bp-ver { font-size: .74em; margin-top: .15em; }
-            #escolher-plano-panel .plm-copia .bp-frete { top: .55em; right: .6em; font-size: .52em; padding: .35em .75em .35em .6em; gap: .35em; border-radius: 999px; }
-            #escolher-plano-panel .plm-copia .bp-frete i { font-size: 1.15em; }
-            .plm-tile:hover .plm-copia.btn { filter: brightness(1.1); }
-            /* os botões originais continuam no HTML (teclado e leitor de tela), mas quem aparece é a faixa */
-            #escolher-plano-panel button.btn-plano-select { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
-                clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-            /* popup em TELA CHEIA: a faixa dos planos atravessa a página inteira, como no Tilted Grid Hero */
-            .plm-ov { padding: 0; }
-            #escolher-plano-panel { width: 100%; height: 100dvh; max-height: none; border-radius: 0; border: 0; display: flex; flex-direction: column; }
-            #escolher-plano-panel .plm-ceu { flex: 1; height: auto; min-height: 380px; border-radius: 0; }
-            #escolher-plano-panel > div:last-child { margin-top: 0; padding-bottom: max(18px, env(safe-area-inset-bottom)); }
-            #escolher-plano-panel .plm-sistema { top: clamp(28px, 7vh, 72px); width: 300px; height: 130px; margin-left: -150px; }
-            #escolher-plano-panel .plm-logo { width: clamp(170px, 22vw, 240px); }
-            #escolher-plano-panel .plm-x { top: 16px; right: 16px; width: 40px; height: 40px; font-size: 20px; }
-            #escolher-plano-panel .btn-plano-tech { font-size: .9rem; }
-            /* "Escolha seu plano" logo abaixo da logo */
-            .plm-ceu .plm-titulo { position: absolute; left: 0; right: 0; top: calc(clamp(28px, 7vh, 72px) + 136px); z-index: 3; margin: 0; text-align: center; font-size: clamp(11px, 1vw, 13px); font-weight: 700;
-                letter-spacing: .26em; text-transform: uppercase; color: #e8d39a; opacity: 0; transform: translateY(8px); pointer-events: none; }
-            .plm-ov.on .plm-ceu .plm-titulo { animation: orbEntra .5s .22s ease forwards; }
-        }
         .plm-lua { position: absolute; left: 0; top: 0; width: 6px; height: 6px; border-radius: 50%; opacity: 0; offset-rotate: 0deg; }
         .plm-lua.l1 { background: #fff; box-shadow: 0 0 8px 2px rgba(255,255,255,.8); offset-path: path("M 190 55 A 70 18 0 1 1 50 55 A 70 18 0 1 1 190 55"); }
         .plm-lua.l2 { background: #e5e9ef; box-shadow: 0 0 8px 2px rgba(200,206,216,.8); offset-path: path("M 215 55 A 95 25 0 1 1 25 55 A 95 25 0 1 1 215 55"); }
@@ -2207,6 +2165,21 @@
         #vantagens-grid.active .glass-card:nth-child(4) { animation-delay: 1.2s; }
         #vantagens-grid.active .glass-card:nth-child(5) { animation-delay: 1.6s; }
         #vantagens-grid.active .glass-card:nth-child(6) { animation-delay: 2s; }
+        #vantagens-grid.active .glass-card:nth-child(7) { animation-delay: 2.4s; }
+        /* "Link na bio diferenciado": vantagem em destaque, linha inteira com borda dourada e reflexo */
+        #vantagens-grid .vantagem-destaque { position: relative; overflow: hidden; padding-top: 18px; padding-bottom: 18px;
+            border: 1px solid rgba(255, 199, 64, .55);
+            background: linear-gradient(120deg, rgba(255, 184, 0, .14), rgba(255, 255, 255, .03) 55%, rgba(124, 58, 237, .10));
+            box-shadow: 0 0 0 1px rgba(255, 184, 0, .08), 0 10px 34px -12px rgba(255, 184, 0, .45); }
+        .vantagem-destaque::after { content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%; pointer-events: none;
+            background: linear-gradient(105deg, transparent, rgba(255, 233, 176, .22), transparent); transform: skewX(-18deg);
+            animation: vantagemReflexo 4.5s ease-in-out infinite; }
+        @keyframes vantagemReflexo { 0%, 55% { left: -40%; } 100% { left: 140%; } }
+        .vantagem-destaque-ic { flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 20px; color: #1a1205;
+            background: linear-gradient(180deg, #ffe08a, #e0a91c); box-shadow: 0 6px 18px -6px rgba(255, 184, 0, .7); }
+        .vantagem-destaque-tag { flex-shrink: 0; align-self: flex-start; padding: 3px 9px; border-radius: 999px; font-size: 9.5px; font-weight: 800;
+            letter-spacing: .12em; text-transform: uppercase; color: #ffd75e; border: 1px solid rgba(255, 215, 94, .45); background: rgba(255, 184, 0, .08); }
+        @media (prefers-reduced-motion: reduce) { .vantagem-destaque::after { animation: none; display: none; } }
         @keyframes vantagemPulse {
             0%   { transform: scale(1); }
             50%  { transform: scale(1.06); box-shadow: 0 0 20px rgba(255, 184, 0, 0.35); }
@@ -2773,6 +2746,14 @@
             <h2 class="text-xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Vantagens Exclusivas</h2>
 
             <div id="vantagens-grid" class="grid grid-cols-2 gap-3 md:gap-4">
+                <div class="glass-card vantagem-destaque col-span-2 rounded-xl p-4 flex items-center gap-3">
+                    <span class="vantagem-destaque-ic"><i class="ph-bold ph-link"></i></span>
+                    <span class="flex-1 min-w-0 text-left">
+                        <span class="block text-[15px] font-bold text-white leading-tight">Link na bio diferenciado</span>
+                        <span class="block text-xs text-gray-400 mt-0.5">Uma página com a sua marca no lugar daquele link comum do Instagram</span>
+                    </span>
+                    <span class="vantagem-destaque-tag">Destaque</span>
+                </div>
                 <div class="glass-card rounded-xl p-4 flex items-center gap-3">
                     <i class="ph ph-lightning text-brand-gold text-xl"></i>
                     <span class="text-sm font-medium text-gray-200">Reconhecimento e engajamento digital</span>
@@ -3899,89 +3880,6 @@
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
-        // --- Popup de planos: os 3 botões de plano giram numa faixa curva (versão sem React do "Tilted Grid Hero") ---
-        // A medida do cilindro segue o componente original: o raio põe a borda da caixa `curva` graus em volta
-        // do arco vista pela câmera. Cada bloco é um botão de plano cortado em FATIAS faixas verticais (cada
-        // fatia mostra o seu pedaço de uma cópia do botão); o bloco inteiro gira junto num único rotateY.
-        // Clicar num bloco aciona o botão original do plano (que continua no HTML, escondido, para teclado/leitor de tela).
-        function montarFaixaPlanos(box, botoes) {
-            if (!box || !botoes.length || !window.ResizeObserver) return;
-            var FATIAS = 16, CAMERA = 1.6, MAX_LARG = 55;
-            var ALT = 26, AR = 2.2, VAO = 8, EIXO = 62, DEGRADE = 12, VELOC = 4;
-            var curva = 80 * Math.PI / 180;
-            var arco = function (b) { return (CAMERA - 1 + Math.cos(b)) / (2 * CAMERA * Math.sin(b)); };
-            var arred = function (n) { return +n.toFixed(4); };
-            var graus = function (rad) { return rad * 180 / Math.PI; };
-            function medir(w, h) {
-                var hh = Math.min(ALT / 100 * h, MAX_LARG / 100 * w / AR), raio = w * arco(curva);
-                if (!(hh > 0) || !(raio > 0)) return null;
-                var unid = graus(hh / raio), passo = (AR + VAO / 100) * unid, lim = graus(curva) + AR * unid / 2;
-                var cols = Math.min(60, Math.max(2, Math.ceil(2 * lim / passo))), varre = arred(cols * passo / 2);
-                return { cols: cols, varre: varre, unid: arred(unid), lim: arred(Math.min(varre, lim)) };
-            }
-            var u = function (n) { return 'calc(' + arred(n) + ' * min(' + ALT + 'cqh, ' + arred(MAX_LARG / AR) + 'cqw))'; };
-            var r = 100 * arco(curva), raio = (+r.toFixed(3)) + 'cqw';
-            var gira = function (g) { return 'translateZ(' + raio + ') rotateY(' + arred(g) + 'deg) translateZ(-' + raio + ')'; };
-            var estilo = document.createElement('style'), faixa = document.createElement('div');
-            var mask = 'linear-gradient(90deg,transparent,#000 ' + DEGRADE + '%,#000 ' + (100 - DEGRADE) + '%,transparent)';
-            faixa.className = 'plm-faixa';
-            faixa.style.perspective = (+(r * CAMERA).toFixed(3)) + 'cqw';
-            faixa.style.perspectiveOrigin = '50% ' + EIXO + '%';
-            faixa.style.webkitMaskImage = mask; faixa.style.maskImage = mask;
-            box.appendChild(estilo); box.appendChild(faixa);
-
-            // cópia visual do botão do plano i (div, sem foco), do tamanho do bloco
-            var copia = function (i, k, parte) {
-                var b = botoes[i];
-                return '<div class="' + b.className + ' plm-copia" style="left:' + u(-k * parte) + ';width:' + u(AR) + ';height:' + u(1) +
-                    ';font-size:' + u(0.13) + '">' + b.innerHTML + '</div>';
-            };
-            var atual = null;
-            function encher(tile, i) {
-                var parte = AR / FATIAS;
-                tile.setAttribute('data-i', i);
-                tile.setAttribute('aria-label', botoes[i].getAttribute('data-plano'));
-                tile.querySelectorAll('.plm-fatia').forEach(function (f, k) { f.innerHTML = copia(i, k, parte); });
-            }
-            function montar(L) {
-                var esconde = arred((L.varre - L.lim) / (2 * L.varre || 1) * 100);
-                estilo.textContent = '@keyframes plmFaixa{from{transform:' + gira(-L.varre) + '}to{transform:' + gira(L.varre) + '}' +
-                    '0%,' + esconde + '%,' + (100 - esconde) + '%,100%{visibility:hidden}' +
-                    (esconde + 0.001) + '%,' + (100 - esconde - 0.001) + '%{visibility:visible}}';
-                var parte = AR / FATIAS, dur = L.cols * VELOC, html = '';
-                for (var t = 0; t < L.cols; t++) {
-                    html += '<div class="plm-tile" data-t="' + t + '" style="left:calc(50% - ' + u(AR / 2) + ');top:calc(' + EIXO + '% - ' + u(0.5) + ');width:' + u(AR) +
-                        ';height:' + u(1) + ';animation:plmFaixa ' + dur + 's linear ' + (-t * VELOC) + 's infinite">';
-                    for (var k = 0; k < FATIAS; k++) {
-                        html += '<div class="plm-fatia" style="left:' + u((AR - parte) / 2) +
-                            ';width:' + (k === FATIAS - 1 ? u(parte) : 'calc(' + u(parte) + ' + 1px)') + ';height:' + u(1) +
-                            ';transform:' + gira((AR / 2 - (k + 0.5) * parte) * L.unid) + '"></div>';
-                    }
-                    html += '</div>';
-                }
-                faixa.innerHTML = html;
-                // a fileira entra na ordem Essencial, Profissional, Fora de Órbita
-                faixa.querySelectorAll('.plm-tile').forEach(function (tile, t) { encher(tile, (L.cols - 1 - t) % botoes.length); });
-            }
-            // cada volta completa, o bloco passa a mostrar o próximo plano da sequência (a troca acontece fora de vista)
-            faixa.addEventListener('animationiteration', function (e) {
-                var tile = e.target;
-                if (!tile.classList || !tile.classList.contains('plm-tile') || !atual) return;
-                var t = +tile.getAttribute('data-t'), volta = Math.round(e.elapsedTime / (atual.cols * VELOC));
-                var i = (volta * atual.cols + atual.cols - 1 - t) % botoes.length;
-                if (+tile.getAttribute('data-i') !== i) encher(tile, i);
-            });
-            faixa.addEventListener('click', function (e) {
-                var tile = e.target.closest && e.target.closest('.plm-tile');
-                if (tile) botoes[+tile.getAttribute('data-i')].click();
-            });
-            new ResizeObserver(function (ent) {
-                var cr = ent[0].contentRect, L = medir(cr.width, cr.height);
-                if (!L || (atual && atual.cols === L.cols && atual.varre === L.varre && atual.unid === L.unid)) return;
-                atual = L; montar(L); box.classList.add('pronto');
-            }).observe(box);
-        }
-
         // --- Botão principal: abre o box de planos; cada plano redireciona ao WhatsApp ---
         (function () {
             var btn = document.getElementById('btn-escolher-plano');
@@ -3999,22 +3897,10 @@
                 '<button type="button" class="plm-x" aria-label="Fechar"><i class="ph ph-x"></i></button>' +
                 '<div class="plm-ceu" aria-hidden="true">' +
                     '<span class="plm-cadente"></span><span class="plm-cadente c2"></span>' +
-                    '<div class="plm-grid"></div>' +
                     '<div class="plm-sistema">' +
                         '<img class="plm-logo" src="img/logo-caixa.webp?v=2" alt="" width="536" height="289" decoding="async">' +
                     '</div>' +
                 '</div>');
-            // no PC o título "Escolha seu plano" fica no céu, logo abaixo da logo; no celular volta para cima dos botões
-            var tituloPlanos = panel.querySelector('.p-4 > span'), blocoPlanos = panel.querySelector('.p-4'), mqPc = window.matchMedia('(min-width: 768px)');
-            function posicionarTitulo() {
-                if (!tituloPlanos) return;
-                tituloPlanos.classList.toggle('plm-titulo', mqPc.matches);
-                if (mqPc.matches) panel.querySelector('.plm-ceu').appendChild(tituloPlanos);
-                else blocoPlanos.insertBefore(tituloPlanos, blocoPlanos.firstChild);
-            }
-            posicionarTitulo();
-            if (mqPc.addEventListener) mqPc.addEventListener('change', posicionarTitulo);
-            montarFaixaPlanos(panel.querySelector('.plm-grid'), panel.querySelectorAll('button[data-plano]'));
             var tFecha = null, voltarFoco = null;
             function nomeAberto() { var o = document.getElementById('orbOv'); return !!(o && o.classList.contains('on')); }
 
@@ -4690,46 +4576,41 @@
          ESCOLHA DE PLANO → pergunta o nome e a empresa antes de abrir o WhatsApp
          Caixa minimalista que se abre a partir de uma linha de luz; ao abrir,
          a logo da Saturno surge com um brilho e a órbita se desenha em volta.
-         Passo 1: nome da pessoa · Passo 2: nome da empresa dos cartões.
+         Nome e empresa no mesmo box, com um único botão "Continuar".
          ===================================================================== -->
     <style>
         .orb-ov{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
-            background:rgba(3,3,9,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+            background:rgba(10,10,14,.45);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
             opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s;font-family:"Plus Jakarta Sans",sans-serif}
         .orb-ov.on{opacity:1;visibility:visible}
 
-        .orb-card{--c1:#ffffff;--c2:#a9c8ff;--glow:rgba(190,210,255,.35);position:relative;width:min(380px,100%);border-radius:20px;padding:26px 24px 24px;text-align:center;
-            background:linear-gradient(180deg,#11111b,#09090f);border:1px solid rgba(255,255,255,.08);
-            box-shadow:0 40px 90px -20px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.4);clip-path:inset(50% 50% 50% 50% round 20px)}
-        .orb-card[data-plano="Profissional"]{--c1:#eef1f5;--c2:#9aa6b8;--glow:rgba(210,216,226,.32)}
-        .orb-card[data-plano="Fora de Órbita"]{--c1:#f6dc8a;--c2:#c9961a;--glow:rgba(212,160,23,.4)}
-        /* fio de luz na borda de cima, na cor do plano */
-        .orb-card::before{content:"";position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--c1),transparent);opacity:.8}
+        .orb-card{position:relative;width:min(460px,100%);border-radius:28px;padding:32px 32px 28px;text-align:center;
+            font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Plus Jakarta Sans","Helvetica Neue",Arial,sans-serif;
+            background:#fff;color:#1d1d1f;border:0;
+            box-shadow:0 30px 80px -20px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.06);clip-path:inset(50% 50% 50% 50% round 28px)}
 
         /* abertura: um ponto vira linha de luz e a linha se abre em caixa */
         .orb-ov.on .orb-card{animation:orbAbre .75s cubic-bezier(.7,0,.2,1) forwards}
-        @keyframes orbAbre{0%{clip-path:inset(50% 50% 50% 50% round 20px)}
-            38%{clip-path:inset(calc(50% - 1px) 0 calc(50% - 1px) 0 round 20px)}
-            100%{clip-path:inset(0 0 0 0 round 20px)}}
-        .orb-fio{position:absolute;left:50%;top:50%;width:min(380px,calc(100% - 40px));height:1px;transform:translate(-50%,-50%) scaleX(0);pointer-events:none;
+        @keyframes orbAbre{0%{clip-path:inset(50% 50% 50% 50% round 28px)}
+            38%{clip-path:inset(calc(50% - 1px) 0 calc(50% - 1px) 0 round 28px)}
+            100%{clip-path:inset(0 0 0 0 round 28px)}}
+        .orb-fio{position:absolute;left:50%;top:50%;width:min(460px,calc(100% - 40px));height:1px;transform:translate(-50%,-50%) scaleX(0);pointer-events:none;
             background:linear-gradient(90deg,transparent,#fff,transparent);box-shadow:0 0 18px 2px rgba(255,255,255,.5);opacity:0}
         .orb-ov.on .orb-fio{animation:orbFio .75s cubic-bezier(.7,0,.2,1)}
         @keyframes orbFio{0%{opacity:1;transform:translate(-50%,-50%) scaleX(0)}38%{opacity:1;transform:translate(-50%,-50%) scaleX(1)}70%{opacity:0;transform:translate(-50%,-50%) scaleX(1) scaleY(30)}100%{opacity:0}}
         /* fechamento: a caixa se fecha de volta na linha */
         .orb-ov.fechando .orb-card{animation:orbFecha .35s cubic-bezier(.5,0,.75,0) forwards}
-        @keyframes orbFecha{0%{clip-path:inset(0 0 0 0 round 20px)}100%{clip-path:inset(calc(50% - 1px) 6% calc(50% - 1px) 6% round 20px)}}
+        @keyframes orbFecha{0%{clip-path:inset(0 0 0 0 round 28px)}100%{clip-path:inset(calc(50% - 1px) 6% calc(50% - 1px) 6% round 28px)}}
 
         /* conteúdo entra depois que a caixa abriu */
         .orb-in{opacity:0;transform:translateY(8px)}
         .orb-ov.on .orb-in{animation:orbEntra .5s ease forwards}
-        .orb-ov.on .orb-in.d1{animation-delay:.6s}.orb-ov.on .orb-in.d2{animation-delay:.7s}.orb-ov.on .orb-in.d3{animation-delay:.8s}
+        .orb-ov.on .orb-in.d1{animation-delay:.6s}.orb-ov.on .orb-in.d2{animation-delay:.7s}.orb-ov.on .orb-in.d3{animation-delay:.8s}.orb-ov.on .orb-in.d4{animation-delay:.9s}
         @keyframes orbEntra{to{opacity:1;transform:none}}
 
-        .orb-x,.orb-volta{position:absolute;top:12px;width:32px;height:32px;border-radius:10px;border:0;background:transparent;z-index:2;
-            color:#6f6f80;font-size:17px;cursor:pointer;display:grid;place-items:center;transition:color .2s,background .2s,opacity .25s}
-        .orb-x{right:12px}.orb-volta{left:12px;opacity:0;pointer-events:none}
-        .orb-card.passo2 .orb-volta{opacity:1;pointer-events:auto}
-        .orb-x:hover,.orb-volta:hover{color:#fff;background:rgba(255,255,255,.06)}
+        .orb-x{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;border:0;background:#f5f5f7;z-index:2;
+            color:#6e6e73;font-size:15px;cursor:pointer;display:grid;place-items:center;transition:color .2s,background .2s}
+        .orb-x:hover{color:#1d1d1f;background:#e8e8ed}
 
         /* logo da Saturno: surge com um clarão dourado, ganha nitidez e a órbita se desenha em volta */
         /* conexão: o planeta surge, o cartão vem voando e encosta nele; no toque sai um clarão,
@@ -4780,60 +4661,46 @@
         @keyframes orbHalo{to{opacity:1;transform:scale(1)}}
         @keyframes orbHaloPulso{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.08)}}
 
-        /* indicador de passos (2 tracinhos) */
-        .orb-passos{display:flex;justify-content:center;gap:6px;margin-bottom:16px}
-        .orb-passos i{width:18px;height:3px;border-radius:3px;background:rgba(255,255,255,.12);transition:background .35s,width .35s}
-        .orb-passos i.on{width:28px;background:linear-gradient(90deg,var(--c1),var(--c2))}
+        /* título curto acima dos campos */
+        .orb-tit{margin:0 0 6px;font-size:26px;font-weight:700;color:#1d1d1f;letter-spacing:-.025em;line-height:1.15;text-wrap:balance}
+        .orb-sub{margin:0 0 24px;font-size:15px;line-height:1.45;color:#6e6e73;letter-spacing:-.01em}
+        .orb-sub b{color:#1d1d1f;font-weight:600}
 
-        /* os dois campos lado a lado; o trilho desliza para o passo 2 */
-        .orb-janela{overflow:hidden;margin:-4px}
-        .orb-trilho{display:flex;width:200%;transition:transform .5s cubic-bezier(.7,0,.2,1)}
-        .orb-card.passo2 .orb-trilho{transform:translateX(-50%)}
-        .orb-campo{width:50%;flex-shrink:0;text-align:left;padding:4px}
-        .orb-campo input{width:100%;height:50px;border-radius:12px;padding:0 14px;font-size:16px;font-weight:500;color:#fff;font-family:inherit;
-            background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);outline:none;transition:border-color .2s,box-shadow .2s}
-        .orb-campo input::placeholder{color:#5e5e70}
-        .orb-campo input:focus{border-color:color-mix(in srgb,var(--c1) 70%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--c1) 12%,transparent)}
-        .orb-campo.erro input{border-color:#ff6b6b;animation:orbTreme .35s}
-        .orb-erro{display:none;color:#ff8a8a;font-size:12px;margin-top:6px}
+        /* nome e empresa juntos, um embaixo do outro */
+        .orb-campos{display:grid;gap:14px}
+        .orb-campo{text-align:left}
+        .orb-rot{display:block;margin:0 0 7px 4px;font-size:13px;font-weight:600;color:#1d1d1f;letter-spacing:-.005em}
+        .orb-campo input{width:100%;height:52px;border-radius:14px;padding:0 16px;font-size:17px;font-weight:400;color:#1d1d1f;font-family:inherit;
+            background:#f5f5f7;border:1px solid transparent;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+        .orb-campo input::placeholder{color:#a1a1a6}
+        .orb-campo input:hover{background:#efeff2}
+        .orb-campo input:focus{background:#fff;border-color:#0071e3;box-shadow:0 0 0 4px rgba(0,113,227,.15)}
+        .orb-campo.erro input{background:#fff;border-color:#e30000;box-shadow:0 0 0 4px rgba(227,0,0,.1);animation:orbTreme .35s}
+        .orb-erro{display:none;color:#e30000;font-size:12.5px;margin:6px 0 0 4px}
         .orb-campo.erro .orb-erro{display:block}
         @keyframes orbTreme{25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
 
-        /* botão "realista": moldura de 2px com luz branca no canto de cima, brilho atrás,
-           mancha dourada no canto de baixo (cresce no hover) e miolo escuro que aumenta no hover */
-        .orb-btn{position:relative;display:block;width:100%;margin-top:14px;padding:2px;border:0;border-radius:16px;cursor:pointer;font-family:inherit;isolation:isolate;
-            background:radial-gradient(circle 80px at 80% -10%,#ffffff,#181b1b);transition:all .3s}
-        .orb-btn-luz{position:absolute;top:0;right:0;width:65%;height:60%;border-radius:120px;z-index:-1;
-            box-shadow:0 0 20px #ffffff38;transition:all .3s ease-out}
-        .orb-btn:hover .orb-btn-luz{box-shadow:0 0 40px #ffffff60}
-        .orb-btn-verde{position:absolute;bottom:0;left:0;width:50px;height:50%;border-radius:17px;
-            background:radial-gradient(circle 60px at 0% 100%,#ffd75e,#ffb80050,transparent);
-            box-shadow:-2px 9px 40px #ffb80040;transition:all .3s ease-out}
-        .orb-btn:hover .orb-btn-verde{width:90px;box-shadow:-4px 1px 45px #ffb80060}
-        .orb-btn-in{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:14px;color:#fff;
-            background:radial-gradient(circle 80px at 80% -50%,#777777,#0f1111);transition:all .3s}
-        .orb-btn-in::after{content:"";position:absolute;inset:0;border-radius:14px;z-index:-1;
-            background:radial-gradient(circle 60px at 0% 100%,#ffd75e1a,#ffb80011,transparent)}
-        .orb-btn:hover .orb-btn-in{transform:scale(1.04)}
-        .orb-btn:active .orb-btn-in{transform:scale(.99)}
-        .orb-btn-tx{font-size:16px;font-weight:600;letter-spacing:.01em}
-        .orb-btn .orb-seta{font-size:15px;transition:transform .25s}
-        .orb-btn:hover .orb-seta{transform:translateX(3px)}
-        /* passo 2: "Pronto" com a estética verde neon (Continuar fica dourado) */
-        .orb-card.passo2 .orb-btn-verde{background:radial-gradient(circle 60px at 0% 100%,#3fff75,#00ff8050,transparent);box-shadow:-2px 9px 40px #00ff2d40}
-        .orb-card.passo2 .orb-btn:hover .orb-btn-verde{box-shadow:-4px 1px 45px #00ff2d60}
-        .orb-card.passo2 .orb-btn-in::after{background:radial-gradient(circle 60px at 0% 100%,#00e1ff1a,#0000ff11,transparent)}
-        .orb-card.passo2 .orb-btn-tx,.orb-card.passo2 .orb-seta{color:#5df59a}
-        .orb-btn .ph-check{display:none;font-size:16px;color:#5df59a}
+        /* botão estilo Apple: pílula preta, leve escurecida no hover */
+        .orb-btn{display:block;width:100%;margin-top:24px;padding:0;border:0;border-radius:999px;cursor:pointer;font-family:inherit;
+            background:#1d1d1f;color:#fff;transition:background .2s,transform .15s}
+        .orb-btn:hover{background:#000}
+        .orb-btn:active{transform:scale(.985)}
+        .orb-btn:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(0,113,227,.35)}
+        .orb-btn-in{display:flex;align-items:center;justify-content:center;gap:8px;height:52px}
+        .orb-btn-tx{font-size:17px;font-weight:500;letter-spacing:-.01em}
+                .orb-btn .orb-seta{font-size:19px}
+        .orb-selos{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin:14px 0 0;font-size:12px;color:#86868b}
+        .orb-selos span{display:inline-flex;align-items:center;gap:5px}
+        .orb-selos i{font-size:14px}
+        .orb-btn .ph-check{display:none;font-size:16px;color:#30d158}
         .orb-btn.decolando .ph-check{display:inline}
         .orb-btn.decolando .orb-seta{display:none}
-        @media (max-width:420px){.orb-card{padding:24px 18px 20px}}
+        @media (max-width:420px){.orb-card{padding:28px 20px 22px;border-radius:24px}.orb-tit{font-size:23px}.orb-logo{margin-bottom:8px}}
     </style>
 
     <div class="orb-ov" id="orbOv" aria-hidden="true">
         <span class="orb-fio" aria-hidden="true"></span>
         <form class="orb-card" id="orbCard" role="dialog" aria-modal="true" aria-label="Seus dados para o atendimento" novalidate>
-            <button type="button" class="orb-volta" id="orbVolta" aria-label="Voltar"><i class="ph ph-arrow-left"></i></button>
             <button type="button" class="orb-x" id="orbX" aria-label="Fechar"><i class="ph ph-x"></i></button>
             <div class="orb-logo" aria-hidden="true">
                 <div class="orb-par">
@@ -4844,28 +4711,30 @@
                     <span class="orb-con"></span><span class="orb-con c2"></span><span class="orb-con c3"></span>
                 </div>
             </div>
-            <div class="orb-passos orb-in d1" aria-hidden="true"><i class="on"></i><i id="orbPasso2"></i></div>
-            <div class="orb-janela orb-in d2">
-                <div class="orb-trilho">
-                    <div class="orb-campo" id="orbCampoNome">
-                        <input id="orbNome" name="nome" type="text" autocomplete="given-name" maxlength="60" placeholder="Seu nome" aria-label="Seu nome">
-                        <span class="orb-erro">Digite seu nome para continuar</span>
-                    </div>
-                    <div class="orb-campo" id="orbCampoEmp" inert>
-                        <input id="orbEmpresa" name="empresa" type="text" autocomplete="organization" maxlength="80" placeholder="Nome da empresa" aria-label="Nome da empresa">
-                        <span class="orb-erro">Digite o nome da empresa</span>
-                    </div>
+            <div class="orb-in d1">
+                <p class="orb-tit">Seu plano <span id="orbPlanoNome"></span> está a um passo</p>
+                <p class="orb-sub">Um especialista vai te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
+            </div>
+            <div class="orb-campos orb-in d2">
+                <div class="orb-campo" id="orbCampoNome">
+                    <label class="orb-rot" for="orbNome">Seu nome</label>
+                    <input id="orbNome" name="nome" type="text" autocomplete="given-name" maxlength="60" placeholder="Como podemos te chamar?">
+                    <span class="orb-erro">Digite seu nome para continuar</span>
+                </div>
+                <div class="orb-campo orb-in d3" id="orbCampoEmp">
+                    <label class="orb-rot" for="orbEmpresa">Empresa</label>
+                    <input id="orbEmpresa" name="empresa" type="text" autocomplete="organization" maxlength="80" placeholder="Nome que vai nos cartões">
+                    <span class="orb-erro">Digite o nome da empresa</span>
                 </div>
             </div>
-            <button type="submit" class="orb-btn orb-in d3" id="orbBtn">
-                <span class="orb-btn-luz" aria-hidden="true"></span>
-                <span class="orb-btn-verde" aria-hidden="true"></span>
+            <button type="submit" class="orb-btn orb-in d4" id="orbBtn">
                 <span class="orb-btn-in">
                     <i class="ph-bold ph-check"></i>
-                    <span class="orb-btn-tx" id="orbBtnTx">Continuar</span>
-                    <i class="ph ph-arrow-right orb-seta"></i>
+                    <i class="ph-bold ph-whatsapp-logo orb-seta"></i>
+                    <span class="orb-btn-tx" id="orbBtnTx">Falar com um especialista</span>
                 </span>
             </button>
+            <p class="orb-selos orb-in d4"><span><i class="ph ph-handshake"></i>Sem compromisso</span></p>
         </form>
     </div>
 
@@ -4876,8 +4745,8 @@
             var ov = document.getElementById('orbOv'), card = document.getElementById('orbCard');
             var nome = document.getElementById('orbNome'), empresa = document.getElementById('orbEmpresa');
             var cNome = document.getElementById('orbCampoNome'), cEmp = document.getElementById('orbCampoEmp');
-            var btn = document.getElementById('orbBtn'), btnTx = document.getElementById('orbBtnTx');
-            var plano = '', passo = 1, voltarFoco = null, tFecha = null;
+            var btn = document.getElementById('orbBtn');
+            var plano = '', voltarFoco = null, tFecha = null;
             try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
 
             // primeira letra de cada palavra em maiúscula ("ana souza" → "Ana Souza")
@@ -4886,24 +4755,18 @@
             function erro(campo, input) { campo.classList.remove('erro'); void campo.offsetWidth; campo.classList.add('erro'); input.focus(); }
             function foca(el, atraso) { setTimeout(function () { el.focus({preventScroll: true}); if (el.value) el.select(); }, atraso); }
 
-            function irPasso(n) {
-                passo = n;
-                card.classList.toggle('passo2', n === 2);
-                document.getElementById('orbPasso2').classList.toggle('on', n === 2);
-                cNome.inert = n === 2; cEmp.inert = n === 1;
-                btnTx.textContent = n === 2 ? 'Pronto' : 'Continuar';
-                foca(n === 2 ? empresa : nome, n === 2 ? 450 : 350);
-            }
             function abrir(p) {
                 plano = p;
                 clearTimeout(tFecha); ov.classList.remove('fechando', 'on'); void ov.offsetWidth;   // reinicia a animação
                 card.setAttribute('data-plano', p);
+                document.getElementById('orbPlanoNome').textContent = p;
                 cNome.classList.remove('erro'); cEmp.classList.remove('erro');
                 btn.classList.remove('decolando'); btn.disabled = false;
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
-                irPasso(1); foca(nome, 750);
+                // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
+                foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
             }
             function fechar() {
                 if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
@@ -4917,7 +4780,6 @@
             window.saturnoEscolherPlano = abrir;
 
             document.getElementById('orbX').addEventListener('click', fechar);
-            document.getElementById('orbVolta').addEventListener('click', function () { irPasso(1); });
             ov.addEventListener('click', function (e) { if (e.target === ov) fechar(); });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('on')) fechar(); });
             nome.addEventListener('input', function () { cNome.classList.remove('erro'); });
@@ -4926,14 +4788,14 @@
             card.addEventListener('submit', function (e) {
                 e.preventDefault();
                 var n = limpa(nome);
-                if (n.length < 2) { if (passo === 2) irPasso(1); return erro(cNome, nome); }
-                cNome.classList.remove('erro');
-                if (passo === 1) return irPasso(2);
                 var emp = limpa(empresa);
+                cNome.classList.toggle('erro', n.length < 2);
+                cEmp.classList.toggle('erro', emp.length < 2);
+                if (n.length < 2) return erro(cNome, nome);
                 if (emp.length < 2) return erro(cEmp, empresa);
                 n = capitaliza(n);
                 try { localStorage.setItem('saturno_nome', n); localStorage.setItem('saturno_empresa', emp); } catch (err) {}
-                var texto = 'Olá, meu nome é ' + n + ', da empresa ' + emp + '. Vim do site e estou interessado no plano ' + plano + '.';
+                var texto = 'Olá! Sou ' + n + ', da empresa ' + emp + '. Vim pelo site e quero contratar o plano ' + plano + '. Pode me passar os detalhes?';
                 // abre na hora do clique (senão o navegador bloqueia a nova aba)
                 window.open('https://wa.me/' + FONE + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
                 btn.disabled = true; btn.classList.add('decolando');
