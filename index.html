@@ -1479,9 +1479,12 @@
            branca, prata e dourada) com luas girando. Um cometa dourado percorre a borda. */
         @property --plm-ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
         .plm-ov { position: fixed; inset: 0; z-index: 9998; display: flex; align-items: center; justify-content: center; padding: 16px; overflow: hidden;
-            background: rgba(0,0,0,.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            background: rgba(0,0,0,.88);
             opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s; }
         .plm-ov.on { opacity: 1; visibility: visible; }
+        /* popup aberto: pausa as animações da página por trás (só o popup continua animando) */
+        body.popup-aberto > :not(.plm-ov):not(.orb-ov), body.popup-aberto > :not(.plm-ov):not(.orb-ov) *,
+        body.popup-aberto > :not(.plm-ov):not(.orb-ov) *::before, body.popup-aberto > :not(.plm-ov):not(.orb-ov) *::after { animation-play-state: paused !important; }
         /* hiperespaço: raios saindo do centro por um instante */
         .plm-ov::before { content: ""; position: absolute; left: 50%; top: 50%; width: 220vmax; height: 220vmax; margin: -110vmax 0 0 -110vmax; pointer-events: none; opacity: 0;
             background: repeating-conic-gradient(from 0deg, transparent 0deg 2.6deg, rgba(255,240,200,.55) 2.6deg 2.8deg, transparent 2.8deg 6.1deg, rgba(255,255,255,.35) 6.1deg 6.25deg, transparent 6.25deg 9deg);
@@ -1518,7 +1521,7 @@
         /* cometa dourado correndo pela borda */
         #escolher-plano-panel::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0;
             background-image: radial-gradient(1.4px 1.4px at 40px 90px, #fff, transparent), radial-gradient(1px 1px at 170px 20px, #ffe9b0, transparent), radial-gradient(1.6px 1.6px at 220px 170px, #fff, transparent), radial-gradient(1px 1px at 90px 150px, #cfe0ff, transparent), radial-gradient(1.2px 1.2px at 130px 120px, #fff, transparent);
-            background-size: 260px 210px; animation: plTwinkle 3.4s ease-in-out infinite; }
+            background-size: 260px 210px; animation: plTwinkle 3.4s ease-in-out infinite; will-change: opacity; }
         @keyframes plmGira { to { --plm-ang: 360deg; } }
 
         /* céu do topo */
@@ -1529,7 +1532,7 @@
                 radial-gradient(1px 1px at 63% 18%, #fff, transparent), radial-gradient(1.4px 1.4px at 74% 58%, #cfe0ff, transparent),
                 radial-gradient(1px 1px at 86% 14%, #fff, transparent), radial-gradient(1px 1px at 93% 46%, #ffe9b0, transparent),
                 radial-gradient(1px 1px at 52% 8%, #fff, transparent), radial-gradient(1px 1px at 4% 82%, #fff, transparent);
-            animation: plTwinkle 3.2s ease-in-out infinite; }
+            animation: plTwinkle 3.2s ease-in-out infinite; will-change: opacity; }
         .plm-estrelas::after { transform: translate(6%, 9%) scale(1.15); animation-delay: 1.6s; opacity: .7; }
         .plm-cadente { position: absolute; top: 18px; left: -30%; width: 110px; height: 1.5px; border-radius: 2px; opacity: 0; pointer-events: none;
             background: linear-gradient(90deg, transparent, #fff); transform: rotate(14deg); }
@@ -1607,35 +1610,23 @@
         .btn-plano-select::after {
             content: '';
             position: absolute;
-            top: 0; left: -60%;
+            top: 0; left: 0;
             width: 35%; height: 100%;
             background: linear-gradient(115deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
-            transform: skewX(-20deg);
+            transform: translateX(-175%) skewX(-20deg);
             animation: planoBtnSweep 3.2s ease-in-out infinite;
+            will-change: transform;
             pointer-events: none;
         }
         @keyframes planoBtnSweep {
-            0%   { left: -60%; }
-            45%, 100% { left: 130%; }
+            0%   { transform: translateX(-175%) skewX(-20deg); }
+            45%, 100% { transform: translateX(390%) skewX(-20deg); }
         }
 
         /* Respiração/pulso do brilho em repouso, uma cor por plano */
-        .btn-saturno-white.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowWhite 2.6s ease-in-out infinite; }
-        .btn-saturno-silver.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowSilver 2.6s ease-in-out infinite; }
-        .btn-saturno-gold.btn-plano-select { animation: goldShimmer 4s linear infinite, planoGlowGold 2.6s ease-in-out infinite; }
-
-        @keyframes planoGlowWhite {
-            0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
-            50%      { box-shadow: 0 0 26px rgba(255, 255, 255, 0.6); }
-        }
-        @keyframes planoGlowSilver {
-            0%, 100% { box-shadow: 0 0 15px rgba(200, 205, 214, 0.3); }
-            50%      { box-shadow: 0 0 26px rgba(220, 225, 232, 0.65); }
-        }
-        @keyframes planoGlowGold {
-            0%, 100% { box-shadow: 0 0 15px rgba(212, 160, 23, 0.3); }
-            50%      { box-shadow: 0 0 26px rgba(245, 214, 122, 0.7); }
-        }
+        .btn-saturno-white.btn-plano-select { animation: goldShimmer 4s linear infinite; box-shadow: 0 0 20px rgba(255, 255, 255, 0.45); }
+        .btn-saturno-silver.btn-plano-select { animation: goldShimmer 4s linear infinite; box-shadow: 0 0 20px rgba(220, 225, 232, 0.48); }
+        .btn-saturno-gold.btn-plano-select { animation: goldShimmer 4s linear infinite; box-shadow: 0 0 20px rgba(245, 214, 122, 0.5); }
 
         .btn-plano-select:hover {
             transform: translateY(-4px) scale(1.035);
@@ -3423,6 +3414,8 @@
         }
 
         function animateParticles() {
+            // popup aberto: não redesenha (o fundo fica escondido atrás dele)
+            if (document.body.classList.contains('popup-aberto')) { requestAnimationFrame(animateParticles); return; }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].update();
@@ -3910,6 +3903,7 @@
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 panel.classList.add('wa-panel-open');
                 document.body.style.overflow = 'hidden';
+                document.body.classList.add('popup-aberto');
                 panel.scrollTop = 0;
             }
             function fecharPlanos(semVoltarFoco) {
@@ -3918,7 +3912,7 @@
                 tFecha = setTimeout(function () {
                     ov.classList.remove('on', 'fechando'); ov.setAttribute('aria-hidden', 'true');
                     panel.classList.remove('wa-panel-open');
-                    if (!nomeAberto()) document.body.style.overflow = '';
+                    if (!nomeAberto()) { document.body.style.overflow = ''; document.body.classList.remove('popup-aberto'); }
                     if (!semVoltarFoco && voltarFoco && voltarFoco.focus) voltarFoco.focus({preventScroll: true});
                 }, 330);
             }
@@ -4765,6 +4759,7 @@
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
+                document.body.classList.add('popup-aberto');
                 // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
                 foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
             }
@@ -4774,6 +4769,7 @@
                 tFecha = setTimeout(function () {
                     ov.classList.remove('on', 'fechando'); ov.setAttribute('aria-hidden', 'true');
                     document.body.style.overflow = '';
+                    document.body.classList.remove('popup-aberto');
                     if (voltarFoco && voltarFoco.focus) voltarFoco.focus();
                 }, 330);
             }
