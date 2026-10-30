@@ -324,7 +324,7 @@ function renderRelatorios(list, todos) {
     {nome: 'Criados', cor: 'var(--c1)', valores: meses.map(m => base.filter(l => mesKey(l.criado_em) === m).length)},
     {nome: 'Ganhos', cor: 'var(--c2)', valores: meses.map(m => base.filter(l => l.etapa === 'ganho' && mesKey(l.etapa_em) === m).length)}]);
   G.barras($('#grFat'), meses.map(m => ({k: mesNome(m), v: base.filter(l => l.etapa === 'ganho' && mesKey(l.etapa_em) === m).reduce((s, l) => s + +l.valor, 0)})),
-    {fmt: (v, eixo) => eixo ? brlCurto(v) : brlCurto(v), nome: 'Faturamento'});
+    {fmt: (v, eixo) => eixo ? brlCurto(v) : brl(v), nome: 'Faturamento'});
   const porOrig = Object.entries(list.reduce((a, l) => (a[l.origem] = (a[l.origem] || 0) + 1, a), {})).sort((a, b) => b[1] - a[1]);
   G.horiz($('#grOrig'), porOrig.map(([o, n]) => { const g = list.filter(l => l.origem === o && l.etapa === 'ganho').length; return {k: ORIGEM[o] || o, v: n, sub: `${g} ganho${g === 1 ? '' : 's'}`}; }), {nome: 'Leads'});
   const mot = Object.entries(perdidos.reduce((a, l) => { const k = (l.motivo_perda || 'Não informado').split(':')[0]; a[k] = (a[k] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]);

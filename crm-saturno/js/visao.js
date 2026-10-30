@@ -79,7 +79,7 @@ async function viewDashboard() {
   const fat = meses.map(m => ({k: mesNome(m), v: ok.filter(p => mesKey(p.criado_em) === m).reduce((s, p) => s + +p.total, 0)
       + ganhosSemPedido.filter(l => mesKey(l.etapa_em) === m).reduce((s, l) => s + +l.valor, 0)
       + pags.filter(p => mesKey(p.pago_em) === m).reduce((s, p) => s + +p.valor, 0)}));
-  G.barras($('#dFat'), fat, {fmt: v => brlCurto(v), nome: 'Faturamento'});
+  G.barras($('#dFat'), fat, {fmt: (v, eixo) => eixo ? brlCurto(v) : brl(v), nome: 'Faturamento'});
   total($('#dFatTot'), fat);
 
   // lucro estimado por mês: cada venda menos o custo de produção do produto/plano (custo + frete + impostos da tela Margem),
@@ -97,7 +97,7 @@ async function viewDashboard() {
       + fatPag.reduce((s, p) => s + custoDe(assinProd.get(p.assinatura_id)), 0);
     return {k: mesNome(m), v: receita - producao - plataformas, dica: `Faturamento ${esc(brl(receita))}<br>Produção −${esc(brl(producao))}<br>Plataformas −${esc(brl(plataformas))}`};
   });
-  G.barras($('#dLucro'), lucro, {fmt: v => brlCurto(v), nome: 'Lucro estimado', cor: 'var(--c2)'});
+  G.barras($('#dLucro'), lucro, {fmt: (v, eixo) => eixo ? brlCurto(v) : brl(v), nome: 'Lucro estimado', cor: 'var(--c2)'});
   total($('#dLucroTot'), lucro);
   // planos aparecem pelo nome (Plano Essencial, Profissional...); o resto pela categoria.
   // vendas ganhas sem pedido (ex.: vindas do CRM antigo) entram pelo plano/produto de interesse
