@@ -7,18 +7,19 @@ const LD = {aba: 'tabela', q: '', etapa: 'todas', mes: 'todos', origem: 'todas',
 try { LD.aba = localStorage.getItem('saturno_aba_leads') || 'tabela'; } catch {}
 
 // filtros da barra (busca, etapa, mês de criação, origem) + atalho dos cartões do topo
-function filtrarLeads(leads) {
+// semMes: ignora o filtro de mês (relatórios contam ganhos/perdidos pelo mês em que fecharam)
+function filtrarLeads(leads, semMes) {
   const q = LD.q.trim().toLowerCase(), qd = q.replace(/\D/g, '');
   return leads.filter(l =>
     (!q || `${l.nome} ${l.empresa || ''} ${l.cidade || ''} ${l.email || ''} ${l.interesse || ''} ${ETAPA[l.etapa]}`.toLowerCase().includes(q) || (qd.length > 3 && String(l.telefone || '').includes(qd))) &&
     (LD.etapa === 'todas' || (LD.etapa === 'abertas' ? ETAPAS_ABERTAS.includes(l.etapa) : l.etapa === LD.etapa)) &&
-    (LD.mes === 'todos' || mesKey(l.criado_em) === LD.mes) &&
+    (semMes || LD.mes === 'todos' || mesKey(l.criado_em) === LD.mes) &&
     (LD.origem === 'todas' || l.origem === LD.origem));
 }
 
 async function viewLeads() {
   const [leads, tarefas] = await Promise.all([cache.leads(true), cache.tarefas(true)]);
-  const meses = [...new Set(leads.map(l => mesKey(l.criado_em)))].sort().reverse();
+  const meses = [...new Set(leads.flatMap(l => [mesKey(l.criado_em), l.etapa === 'ganho' ? mesKey(l.etapa_em) : null]).filter(Boolean))].sort().reverse();
   const origens = [...new Set(leads.map(l => l.origem))];
   const ganhos = leads.filter(l => l.etapa === 'ganho'), perdidos = leads.filter(l => ['perdido', 'sem_interesse'].includes(l.etapa));
   const pend = tarefas.filter(t => !t.feita).length;
@@ -286,13 +287,15 @@ async function converterEmCliente(l) {
 
 // ------------------------------------------------------------------ RELATÓRIOS
 function renderRelatorios(list, todos) {
-  const ganhos = list.filter(l => l.etapa === 'ganho'), perdidos = list.filter(l => ['perdido', 'sem_interesse'].includes(l.etapa));
+  // com mês selecionado: leads criados no mês, mas ganhos/perdidos (e o faturamento) pelo mês em que fecharam
+  const base = LD.mes === 'todos' ? list : filtrarLeads(todos, true);
+  const fechouNoMes = l => LD.mes === 'todos' || mesKey(l.etapa_em) === LD.mes;
+  const ganhos = base.filter(l => l.etapa === 'ganho' && fechouNoMes(l)), perdidos = base.filter(l => ['perdido', 'sem_interesse'].includes(l.etapa) && fechouNoMes(l));
   const fechados = ganhos.length + perdidos.length;
   const fat = ganhos.reduce((s, l) => s + +l.valor, 0);
   const ciclo = ganhos.length ? ganhos.reduce((s, l) => s + Math.max(0, Date.parse(l.etapa_em) - Date.parse(l.criado_em)), 0) / ganhos.length / 864e5 : 0;
   const aberto = list.filter(l => ETAPAS_ABERTAS.includes(l.etapa)).reduce((s, l) => s + +l.valor, 0);
-  // últimos 6 meses (sempre do total, não do filtro de mês)
-  const base = LD.mes === 'todos' ? list : todos.filter(l => (LD.etapa === 'todas' || l.etapa === LD.etapa || (LD.etapa === 'abertas' && ETAPAS_ABERTAS.includes(l.etapa))) && (LD.origem === 'todas' || l.origem === LD.origem));
+  // gráficos mensais: sempre do total (base), não do filtro de mês
   const meses = mesesGrafico(base.flatMap(l => [l.criado_em, l.etapa === 'ganho' ? l.etapa_em : null]));
 
   $('#ldBody').innerHTML = `
@@ -326,11 +329,11 @@ function renderRelatorios(list, todos) {
   G.barras($('#grFat'), meses.map(m => ({k: mesNome(m), v: base.filter(l => l.etapa === 'ganho' && mesKey(l.etapa_em) === m).reduce((s, l) => s + +l.valor, 0)})),
     {fmt: (v, eixo) => eixo ? brlCurto(v) : brl(v), nome: 'Faturamento'});
   const porOrig = Object.entries(list.reduce((a, l) => (a[l.origem] = (a[l.origem] || 0) + 1, a), {})).sort((a, b) => b[1] - a[1]);
-  G.horiz($('#grOrig'), porOrig.map(([o, n]) => { const g = list.filter(l => l.origem === o && l.etapa === 'ganho').length; return {k: ORIGEM[o] || o, v: n, sub: `${g} ganho${g === 1 ? '' : 's'}`}; }), {nome: 'Leads'});
+  G.horiz($('#grOrig'), porOrig.map(([o, n]) => { const g = ganhos.filter(l => l.origem === o).length; return {k: ORIGEM[o] || o, v: n, sub: `${g} ganho${g === 1 ? '' : 's'}`}; }), {nome: 'Leads'});
   const mot = Object.entries(perdidos.reduce((a, l) => { const k = (l.motivo_perda || 'Não informado').split(':')[0]; a[k] = (a[k] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]);
   G.horiz($('#grMot'), mot.map(([k, v]) => ({k, v})), {nome: 'Leads', cor: 'var(--c2)'});
   const inter = Object.entries(list.reduce((a, l) => { const k = l.interesse || 'Não informado'; a[k] = (a[k] || 0) + 1; return a; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 8);
-  G.horiz($('#grInt'), inter.map(([k, v]) => ({k, v, sub: `${list.filter(l => (l.interesse || 'Não informado') === k && l.etapa === 'ganho').length} ganhos`})), {nome: 'Leads'});
+  G.horiz($('#grInt'), inter.map(([k, v]) => ({k, v, sub: `${ganhos.filter(l => (l.interesse || 'Não informado') === k).length} ganhos`})), {nome: 'Leads'});
 }
 
 // ------------------------------------------------------------------ FICHA DO LEAD (dados + histórico + tarefas)
