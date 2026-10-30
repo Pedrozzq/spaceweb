@@ -8,7 +8,6 @@ async function viewDashboard() {
   const mes = mesKey(Date.now()), hoje = hojeKey();
   const ok = peds.filter(contaVenda);
   const pedMes = ok.filter(p => mesKey(p.criado_em) === mes);
-  const fatMes = pedMes.reduce((s, p) => s + +p.total, 0);
   const ativas = assin.filter(a => a.status === 'ativa');
   const mrr = ativas.reduce((s, a) => s + +a.valor, 0);
   const leadsMes = leads.filter(l => mesKey(l.criado_em) === mes);
@@ -28,11 +27,17 @@ async function viewDashboard() {
   const meses = mesesGrafico([...ok.map(p => p.criado_em), ...ganhosSemPedido.map(l => l.etapa_em)]).filter(m => m >= INICIO_SATURNO);
   const [pags, plats, prods, custos] = await Promise.all([API.pagamentosTodos(meses[0] + '-01T00:00:00Z').catch(() => []),
     API.plataformas().catch(() => []), API.produtos().catch(() => []), API.custos().catch(() => [])]);
+  // vendas no mês: mesma conta do gráfico de faturamento (pedidos + vendas ganhas sem pedido + mensalidades recebidas)
+  const ganhosSemPedMes = ganhosSemPedido.filter(l => mesKey(l.etapa_em) === mes), pagsMes = pags.filter(p => mesKey(p.pago_em) === mes);
+  const fatMes = pedMes.reduce((s, p) => s + +p.total, 0) + ganhosSemPedMes.reduce((s, l) => s + +l.valor, 0) + pagsMes.reduce((s, p) => s + +p.valor, 0);
+  const plural = (n, a, b) => `${n} ${n === 1 ? a : b}`;
+  const fatMesSub = [plural(pedMes.length, 'pedido', 'pedidos'), ganhosSemPedMes.length && plural(ganhosSemPedMes.length, 'venda ganha', 'vendas ganhas'),
+    pagsMes.length && plural(pagsMes.length, 'mensalidade', 'mensalidades')].filter(Boolean).join(' · ');
 
   $('#view').innerHTML = header('Visão geral', new Date().toLocaleDateString('pt-BR', {timeZone: TZ, weekday: 'long', day: 'numeric', month: 'long'}),
     `<span class="live"><i></i>${DEMO ? 'Demonstração' : 'Ao vivo'}</span><button class="btn pri" id="dNovo">+ Novo lead</button>`) + `
     <div class="kpis">
-      <div class="kpi hl"><span>Vendas no mês</span><b>${brl(fatMes)}</b><small>${pedMes.length} pedido${pedMes.length === 1 ? '' : 's'}</small></div>
+      <div class="kpi hl"><span>Vendas no mês</span><b>${brl(fatMes)}</b><small>${fatMesSub}</small></div>
       <a class="kpi" href="#assinaturas" style="color:inherit"><span>Receita recorrente</span><b>${brl(mrr)}</b><small>${ativas.length} assinatura${ativas.length === 1 ? '' : 's'} ativa${ativas.length === 1 ? '' : 's'}</small></a>
       <a class="kpi" href="#leads" style="color:inherit"><span>Leads no mês</span><b>${leadsMes.length}</b><small>${ganhosMes.length} ganho${ganhosMes.length === 1 ? '' : 's'} no mês</small></a>
       <div class="kpi"><span>Taxa de conversão</span><b>${conv}%</b><small>${brlCurto(negociando)} em negociação</small></div>
