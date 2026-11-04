@@ -139,6 +139,12 @@ Mesmo nome e empresa contam como a mesma pessoa: o cliente não é duplicado e o
 
 Para ligar, rode `supabase/site-pedidos.sql` no SQL Editor (depois do `schema.sql`).
 
+## 8. Chat do site com o agente do WhatsApp
+
+O "Fale com a IA" do site (`index.html`) conversa pela API pública da caixa **"Site"** do Chatwoot (id **2**, conta **2**), que entrega as mensagens ao mesmo fluxo do n8n. É o mesmo agente, com o mesmo prompt.
+O visitante não tem telefone: no fluxo, `whatsapp_lead` vira `site-<id do contato>`, e esse prefixo reduz a espera do `Wait` e avisa o agente de que a conversa é pelo chat. Preços e regras mudam no prompt do Rafael e valem nos dois canais.
+A conversa fica só no Chatwoot: não aparece na aba WhatsApp da CRM e não vira lead. A função `supabase/functions/ia-site` não é mais usada pelo site.
+
 ## Catálogo inicial
 
 Criado pelo `schema.sql` com os preços do site: Plano Essencial R$ 600, Profissional R$ 1.000, Fora de Órbita R$ 2.000, Cartão Google Avaliação R$ 60, Kit 2 cartões R$ 100 e Manutenção mensal R$ 89,90.

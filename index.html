@@ -5134,7 +5134,7 @@
         @media (prefers-reduced-motion:reduce){.sai-orb,.sai-orb::before,.sai-orb::after,.sai-mini::after{animation:none!important}}
     </style>
 
-    <button type="button" class="sai-btn" id="sai-btn" aria-label="Conversar com a assistente de IA da Saturno NFC">
+    <button type="button" class="sai-btn" id="sai-btn" aria-label="Conversar com o assistente de IA da Saturno NFC">
         <span class="sai-mini" aria-hidden="true"></span>
         <span>Fale com a IA<small>Por voz ou texto</small></span>
     </button>
@@ -5174,9 +5174,11 @@
 
     <script>
     (function () {
-        var API = 'https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/ia-site';
+        // mesmo agente do WhatsApp: o site é uma caixa do Chatwoot que entrega as mensagens ao fluxo do n8n
+        var CW = 'https://whatsapp-chatwoot.fycoqq.easypanel.host/public/api/v1/inboxes/1CvoySLVaeBG4xfmzCx7vkzd';
+        var CHAVE = 'saturno_ia', VALIDADE = 24 * 3600 * 1000, LIMITE = 30, SEM_RESPOSTA = 60000, SILENCIO = 4000;
         var FONE = '5531920067518';
-        var SAUDACAO = 'Oi! Eu sou a Saturno, a assistente de IA da Saturno NFC. Me conta: qual é o seu negócio?';
+        var SAUDACAO = 'Oi! Aqui é o Rafael, o assistente de IA da Saturno NFC. Me conta: qual é o seu negócio?';
         var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         var TEM_VOZ = 'speechSynthesis' in window;
 
@@ -5184,7 +5186,7 @@
         var ov = $('sai-ov'), legenda = $('sai-legenda'), status = $('sai-status'), msgsEl = $('sai-msgs');
         var txt = $('sai-texto'), env = $('sai-env'), micBtn = $('sai-mic'), modoBtn = $('sai-modo');
 
-        var historico = [];          // conversa enviada para a IA (user/assistant)
+        var historico = [];          // o que foi dito nesta visita (usado no link do WhatsApp)
         var aberto = false, mudo = false, modoTexto = false;
         var estado = 'parado';       // parado | ouvindo | pensando | falando
         var rec = null, tentativas = 0, geracao = 0, pedido = null;
@@ -5280,6 +5282,82 @@
             return b;
         }
 
+        // ---------- conversa no Chatwoot (o agente responde por lá) ----------
+        var sessao = leSessao(), ultimoId = 0, carregado = false, espera = null, tVigia = null;
+
+        function leSessao() {
+            try {
+                var s = JSON.parse(localStorage.getItem(CHAVE) || 'null');
+                if (s && s.src && s.conv && Date.now() - s.em < VALIDADE) return s;
+            } catch (e) {}
+            return null;
+        }
+        function guardaSessao() {
+            try { if (sessao) localStorage.setItem(CHAVE, JSON.stringify(sessao)); else localStorage.removeItem(CHAVE); } catch (e) {}
+        }
+        function cw(caminho, corpo) {
+            return fetch(CW + caminho, corpo ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) } : undefined)
+                .then(function (res) {
+                    if (!res.ok) { var e = new Error('HTTP ' + res.status); e.status = res.status; throw e; }
+                    return res.json();
+                });
+        }
+        function garanteConversa() {
+            if (sessao) return Promise.resolve();
+            return cw('/contacts', { name: 'Visitante do site' }).then(function (c) {
+                return cw('/contacts/' + c.source_id + '/conversations', {}).then(function (conv) {
+                    sessao = { src: c.source_id, conv: conv.id, em: Date.now(), qtd: 0 };
+                    guardaSessao();
+                });
+            });
+        }
+        function caminhoMsgs() { return '/contacts/' + sessao.src + '/conversations/' + sessao.conv + '/messages'; }
+        function mostraWhats() { atualizaWhats(); $('sai-wa').classList.add('on'); $('sai-wa2').classList.add('on'); }
+
+        function chegouResposta(texto) {
+            if (pedido && pedido.bolha) { pedido.bolha.textContent = texto; pedido.bolha = null; msgsEl.scrollTop = msgsEl.scrollHeight; }
+            else bolha('ia', texto);
+            historico.push({ role: 'assistant', content: texto });
+            mostraLegenda(texto);
+            mostraWhats();
+            if (espera) { espera.recebeuEm = Date.now(); fala(texto, espera.geracao); }
+        }
+
+        // procura mensagens novas: rápido enquanto espera uma resposta; devagar com o chat aberto (a equipe pode assumir a conversa)
+        function agendaBusca(ms) {
+            clearTimeout(tVigia);
+            if (aberto || espera) tVigia = setTimeout(buscaMsgs, ms);
+        }
+        function buscaMsgs() {
+            if (!sessao) return;
+            cw(caminhoMsgs()).then(function (lista) {
+                (Array.isArray(lista) ? lista : []).forEach(function (m) {
+                    if (m.id <= ultimoId) return;
+                    ultimoId = m.id;
+                    if (m.private || !m.content) return;
+                    if (m.message_type === 1) chegouResposta(String(m.content));
+                    else if (m.message_type === 0 && !carregado) bolha('eu', String(m.content)); // visita anterior
+                });
+                carregado = true;
+            }).catch(function () {}).then(function () {
+                if (espera) {
+                    var agora = Date.now(), e = espera;
+                    if (e.recebeuEm && agora - e.recebeuEm > SILENCIO) { espera = null; terminou(e.geracao); }
+                    else if (!e.recebeuEm && agora - e.desde > SEM_RESPOSTA) {
+                        espera = null;
+                        avisoFalha('Estou demorando para responder. Se preferir, continue comigo no WhatsApp.', e.geracao);
+                    }
+                }
+                agendaBusca(espera ? 1500 : 6000);
+            });
+        }
+        function avisoFalha(aviso, minha) {
+            if (pedido && pedido.bolha) { pedido.bolha.textContent = aviso; pedido.bolha = null; } else bolha('ia', aviso);
+            mostraLegenda(aviso);
+            mostraWhats();
+            terminou(minha);
+        }
+
         function envia(texto) {
             texto = (texto || '').trim();
             if (!texto) return;
@@ -5288,62 +5366,41 @@
             historico.push({ role: 'user', content: texto });
             bolha('eu', texto);
             mostraLegenda(texto, true);
-            define('pensando');
             respostaTerminou = false;
+            pedido = { bolha: null };
+            if (sessao && sessao.qtd >= LIMITE) {
+                return avisoFalha('Para continuar a conversa, fale com a gente no WhatsApp. É só tocar no botão.', minha);
+            }
+            define('pensando');
+            pedido.bolha = bolha('ia', '…');
 
-            var b = bolha('ia', '…'), resposta = '', aFalar = '';
-            var ctrl = new AbortController();
-            var atual = pedido = { ctrl: ctrl, bolha: b, parcial: function () { return resposta.replace('[[erro]]', '').trim(); } };
-            fetch(API, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: historico }), signal: ctrl.signal
-            }).then(function (res) {
-                if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
-                var leitor = res.body.getReader(), dec = new TextDecoder();
-                function passo() {
-                    return leitor.read().then(function (p) {
-                        if (minha !== geracao) { try { leitor.cancel(); } catch (e) {} return; }
-                        if (p.done) return;
-                        var pedaco = dec.decode(p.value, { stream: true });
-                        resposta += pedaco; aFalar += pedaco;
-                        var visivel = resposta.replace('[[erro]]', '').trim();
-                        b.textContent = visivel || '…'; mostraLegenda(visivel); msgsEl.scrollTop = msgsEl.scrollHeight;
-                        // fala frase por frase enquanto a resposta chega
-                        var m;
-                        while ((m = aFalar.match(/^([\s\S]*?[.!?…:]\s|[\s\S]*?\n)/))) {
-                            fala(m[1], minha); aFalar = aFalar.slice(m[1].length);
-                        }
-                        return passo();
-                    });
-                }
-                return passo();
-            }).then(function () {
-                if (minha !== geracao) return;
-                if (resposta.indexOf('[[erro]]') > -1) throw new Error('erro na IA');
-                fala(aFalar, minha);
-                var limpa = resposta.trim();
-                historico.push({ role: 'assistant', content: limpa });
-                $('sai-wa').classList.add('on'); $('sai-wa2').classList.add('on');
-                atualizaWhats();
-                terminou(minha);
-            }).catch(function (e) {
-                if ((e && e.name === 'AbortError') || pedido !== atual) return;
-                historico.pop();
-                var aviso = 'Tive um probleminha de conexão. Pode repetir? Se preferir, fale com a gente no WhatsApp.';
-                b.textContent = aviso; mostraLegenda(aviso);
-                $('sai-wa').classList.add('on'); $('sai-wa2').classList.add('on');
-                terminou(minha);
-            });
+            function manda(jaTentou) {
+                garanteConversa().then(function () {
+                    return cw(caminhoMsgs(), { content: texto.slice(0, 1000) });
+                }).then(function (m) {
+                    carregado = true;
+                    if (m && m.id > ultimoId) ultimoId = m.id;
+                    sessao.qtd = (sessao.qtd || 0) + 1; guardaSessao();
+                    if (minha !== geracao) return;
+                    espera = { geracao: minha, desde: Date.now(), recebeuEm: 0 };
+                    agendaBusca(1500);
+                }).catch(function (e) {
+                    // conversa antiga que não existe mais: começa outra uma vez
+                    if (!jaTentou && e && (e.status === 404 || e.status === 401)) { sessao = null; guardaSessao(); return manda(true); }
+                    if (minha !== geracao) return;
+                    historico.pop();
+                    avisoFalha('Tive um probleminha de conexão. Pode repetir? Se preferir, fale com a gente no WhatsApp.', minha);
+                });
+            }
+            manda(false);
         }
 
-        // cancela a resposta em andamento e deixa o histórico coerente (o que já veio fica)
+        // para de esperar a resposta atual; se ela ainda chegar, aparece na conversa sem ser lida em voz alta
         function cancelaPedido() {
+            espera = null;
             if (!pedido) return;
             var p = pedido; pedido = null;
-            try { p.ctrl.abort(); } catch (e) {}
-            var parcial = p.parcial();
-            if (parcial) { historico.push({ role: 'assistant', content: parcial }); p.bolha.textContent = parcial; }
-            else { historico.pop(); p.bolha.remove(); }
+            if (p.bolha) p.bolha.remove();
         }
 
         function terminou(minha) {
@@ -5354,7 +5411,7 @@
 
         function atualizaWhats() {
             var ultimas = historico.filter(function (m) { return m.role === 'user'; }).slice(-2).map(function (m) { return m.content; }).join(' / ');
-            var t = 'Olá! Vim pela assistente de IA do site da Saturno NFC e quero continuar o atendimento.' + (ultimas ? '\n\nO que eu falei: ' + ultimas.slice(0, 400) : '');
+            var t = 'Olá! Vim pelo assistente de IA do site da Saturno NFC e quero continuar o atendimento.' + (ultimas ? '\n\nO que eu falei: ' + ultimas.slice(0, 400) : '');
             var href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(t);
             $('sai-wa').href = href; $('sai-wa2').href = href;
         }
@@ -5365,12 +5422,13 @@
             if (!SR) defineModoTexto(true);
             if (!msgsEl.childNodes.length) bolha('ia', SAUDACAO);
             mostraLegenda(SAUDACAO);
+            if (sessao) buscaMsgs();
             geracao++; respostaTerminou = true;
             if (TEM_VOZ && !modoTexto) { speechSynthesis.cancel(); fala(SAUDACAO, geracao); } // dentro do toque: libera o áudio no iPhone
             else depoisDeFalar();
         }
         function fecha() {
-            aberto = false; geracao++; paraOuvir(); paraFala(); cancelaPedido();
+            aberto = false; geracao++; paraOuvir(); paraFala(); cancelaPedido(); clearTimeout(tVigia);
             ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sai-aberto');
             define('parado');
         }
