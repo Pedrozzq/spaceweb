@@ -1471,7 +1471,7 @@
         }
 
         /* ===================== POPUP "ESCOLHA SEU PLANO" =====================
-           Abre ao clicar em "Site + Cartão NFC".
+           Abre ao clicar em "Crie seu plano personalizado agora!".
            Abertura: salto no hiperespaço (raios de luz) → um anel de Saturno dourado
            gira, achata numa linha de luz e a linha se abre na caixa.
            Dentro: céu com nebulosa e estrelas, horizonte de um planeta com a borda
@@ -1584,6 +1584,62 @@
         .plm-x { position: absolute; top: 12px; right: 12px; z-index: 5; width: 32px; height: 32px; border-radius: 10px; border: 0; background: rgba(0,0,0,.25);
             color: #8a8a9c; font-size: 17px; cursor: pointer; display: grid; place-items: center; transition: color .2s, background .2s; }
         .plm-x:hover { color: #fff; background: rgba(255,255,255,.08); }
+        /* montador de pedido no estilo Apple: blocos limpos, tipografia SF, entrada gradual */
+        #escolher-plano-panel .sp-head, #escolher-plano-panel .sp-cfg { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+        .sp-head { text-align: center; margin-bottom: 4px; }
+        .sp-head h3 { margin: 0; color: #f5f5f7; font-size: 26px; font-weight: 600; letter-spacing: -.022em; line-height: 1.1; }
+        .sp-head p { margin: 6px 0 0; color: #86868b; font-size: 14px; letter-spacing: -.01em; }
+        .sp-cfg { display: flex; flex-direction: column; gap: 10px; }
+        .sp-anim { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+        .plm-ov.on .sp-anim { animation: spSobe .75s cubic-bezier(.16,1,.3,1) calc(.2s + var(--i, 0) * .09s) forwards; }
+        @keyframes spSobe { to { opacity: 1; transform: none; filter: none; } }
+        .sp-row { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; background: rgba(28,28,30,.92); border: 1px solid rgba(255,255,255,.06); transition: background .25s ease; }
+        .sp-row:hover { background: rgba(38,38,41,.95); }
+        .sp-thumb { flex: none; width: 56px; height: 56px; border-radius: 12px; overflow: hidden; display: grid; place-items: center; background: linear-gradient(160deg, #2c2c2e, #18181a); }
+        .sp-thumb img { width: 100%; height: 100%; object-fit: contain; }
+        .plm-ov.on .sp-thumb img { animation: spImg 1s cubic-bezier(.16,1,.3,1) calc(.35s + var(--i, 0) * .09s) both; }
+        @keyframes spImg { from { opacity: 0; transform: scale(1.12); } to { opacity: 1; transform: none; } }
+        /* mockups 3D: celular com o site e cartão NFC, sem fundo, com sombra suave */
+        .sp-3d { background: radial-gradient(circle at 50% 60%, rgba(255,255,255,.10), rgba(255,255,255,0) 70%); overflow: visible; }
+        .sp-thumb.sp-3d img { height: 62px; width: auto; max-width: none; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.55)); }
+        .sp-thumb.sp-3d-card img { width: 64px; height: auto; transform: rotate(-8deg); }
+        .plm-ov.on .sp-3d-card img { animation-name: spImgCard; }
+        @keyframes spImgCard { from { opacity: 0; transform: rotate(-8deg) scale(1.12); } to { opacity: 1; transform: rotate(-8deg); } }
+        .sp-thumb-tag img { width: 74%; height: 88%; }
+        .sp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; text-align: left; }
+        .sp-txt b { color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.012em; line-height: 1.2; }
+        .sp-txt span { color: #86868b; font-size: 12px; line-height: 1.35; letter-spacing: -.005em; }
+        .sp-val { flex: none; color: #f5f5f7; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+        .sp-qtd { flex: none; display: flex; align-items: center; gap: 2px; }
+        .sp-qtd button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: transparent; color: #f5f5f7; font-size: 13px; cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s, transform .12s, opacity .2s; }
+        .sp-qtd button:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.35); }
+        .sp-qtd button:active { transform: scale(.9); }
+        .sp-qtd button:disabled { opacity: .25; cursor: default; background: transparent; }
+        .sp-qtd input { width: 34px; background: transparent; border: 0; color: #f5f5f7; font: 600 16px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Plus Jakarta Sans", sans-serif; text-align: center; outline: none; -moz-appearance: textfield; appearance: textfield; }
+        .sp-qtd input::-webkit-outer-spin-button, .sp-qtd input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        /* serviço opcional (liga/desliga), ex.: CRM */
+        label.sp-row { cursor: pointer; }
+        .sp-thumb-ic { color: #f5f5f7; font-size: 28px; }
+        .sp-opc { display: inline-block; margin-left: 4px; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.1); color: #c7c7cc; font-size: 10px; font-style: normal; font-weight: 500; letter-spacing: 0; vertical-align: 1px; }
+        .sp-opc-dir { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
+        .sp-tog { position: relative; display: block; width: 44px; height: 26px; }
+        .sp-tog input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+        .sp-tog i { display: block; width: 100%; height: 100%; border-radius: 999px; background: rgba(255,255,255,.18); transition: background .2s ease; pointer-events: none; }
+        .sp-tog i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); transition: transform .2s cubic-bezier(.2,.8,.3,1); }
+        .sp-tog input:checked + i { background: #0071e3; }
+        .sp-tog input:checked + i::after { transform: translateX(18px); }
+        .sp-tog input:focus-visible + i { outline: 2px solid #fff; outline-offset: 2px; }
+        .sp-total { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 12px 4px 4px; border-top: 1px solid rgba(255,255,255,.08); margin-top: 4px; text-align: left; }
+        .sp-rot { display: block; color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+        .sp-det { display: block; color: #86868b; font-size: 12px; margin-top: 3px; line-height: 1.35; }
+        .sp-total strong { color: #f5f5f7; font-size: 28px; font-weight: 600; letter-spacing: -.025em; line-height: 1; white-space: nowrap; transition: transform .2s ease; }
+        .sp-total strong.pulo { transform: scale(1.05); }
+        .sp-pedir { width: 100%; padding: 15px 18px; border-radius: 999px; border: 0; background: #0071e3; color: #fff; font: 500 16px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Plus Jakarta Sans", sans-serif; letter-spacing: -.01em; cursor: pointer; transition: background .2s ease, transform .12s ease; }
+        .sp-pedir:hover { background: #0077ed; }
+        .sp-pedir:active { transform: scale(.98); }
+        .sp-frete { display: flex; align-items: center; justify-content: center; gap: 6px; color: #86868b; font-size: 12px; }
+        @media (max-width: 380px) { .sp-row { padding: 10px; gap: 10px; } .sp-thumb { width: 48px; height: 48px; } .sp-total strong { font-size: 25px; } }
+        @media (prefers-reduced-motion: reduce) { .sp-anim { opacity: 1; transform: none; filter: none; } .plm-ov.on .sp-anim { animation: none; } }
         /* botões dos planos entram em cascata depois da abertura */
         #escolher-plano-panel.wa-panel-open .btn-plano-select:nth-of-type(1) { transition-delay: .26s; }
         #escolher-plano-panel.wa-panel-open .btn-plano-select:nth-of-type(2) { transition-delay: .33s; }
@@ -1871,6 +1927,7 @@
         /* item TapReview na lista dos planos (azul) */
         /* texto do botão principal: encolhe com a tela para caber numa linha */
         .main-btn-text { font-size: clamp(12px, 3.6vw, 16px); }
+        @media (max-width: 340px) { #btn-escolher-plano .main-btn-text { font-size: 11.5px; } }
         /* subtexto pequeno dos botões da seção 1 */
         .btn-subtext { font-size: clamp(10px, 2.7vw, 12px); font-weight: 500; line-height: 1.25; margin-top: 1px; opacity: 0.85; }
         .icon-google { font-size: 1.1rem; color: #4285F4; margin-top: -1px; flex-shrink: 0; }
@@ -2603,7 +2660,7 @@
                         <i class="ph ph-shopping-cart-simple text-lg text-brand-gold"></i>
                     </div>
                     <span class="flex flex-col min-w-0 text-left z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">
-                        <span class="font-bold text-white main-btn-text tracking-tight whitespace-nowrap truncate">Site + Cartão NFC</span>
+                        <span class="font-bold text-white main-btn-text tracking-tight whitespace-nowrap truncate">Crie seu plano personalizado agora!</span>
                         <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Presença digital completa para sua empresa</span>
                     </span>
                 </div>
@@ -2612,35 +2669,50 @@
 
             <div id="escolher-plano-panel" class="wa-panel w-full rounded-2xl border border-white/10 bg-[rgba(15,15,22,0.75)] backdrop-blur-md">
                 <div class="p-4 sm:p-5 flex flex-col gap-3">
-                    <span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Escolha seu plano</span>
+                    <div class="sp-head sp-anim" style="--i:0">
+                        <h3>Monte seu pedido.</h3>
+                        <p>Escolha o que vai no seu projeto.</p>
+                    </div>
                     <div class="flex flex-col gap-2 md:gap-3 w-full">
-                        <button type="button" class="btn btn-saturno-white btn-plano-select" data-plano="Essencial" data-cartoes="4 Cartões NFC personalizados" data-plan-index="0">
-                            <span class="bp-frete"><i class="ph-bold ph-truck"></i>Frete grátis</span>
-                            <span class="bp-desk">
-                                <span class="bp-tag">Plano Essencial</span>
-                                <span class="bp-tit">Site + 4 cartões NFC</span>
-                                <span class="bp-sub">Ideal para autônomos e pequenos negócios</span>
-                                <span class="bp-ver">Ver plano <i class="ph-bold ph-arrow-right"></i></span>
-                            </span>
-                        </button>
-                        <button type="button" class="btn btn-saturno-silver btn-plano-select" data-plano="Profissional" data-cartoes="12 Cartões NFC personalizados" data-plan-index="1">
-                            <span class="bp-frete"><i class="ph-bold ph-truck"></i>Frete grátis</span>
-                            <span class="bp-desk">
-                                <span class="bp-tag">Plano Profissional</span>
-                                <span class="bp-tit">Site + 12 cartões NFC</span>
-                                <span class="bp-sub">Ideal para empresas e equipes comerciais</span>
-                                <span class="bp-ver">Ver plano <i class="ph-bold ph-arrow-right"></i></span>
-                            </span>
-                        </button>
-                        <button type="button" class="btn btn-saturno-gold btn-plano-select" data-plano="Fora de Órbita" data-cartoes="30 Cartões NFC personalizados" data-plan-index="2">
-                            <span class="bp-frete"><i class="ph-bold ph-truck"></i>Frete grátis</span>
-                            <span class="bp-desk">
-                                <span class="bp-tag">Plano Fora de Órbita</span>
-                                <span class="bp-tit">Site + 30 cartões NFC</span>
-                                <span class="bp-sub">Ideal para equipes maiores e empresas em expansão</span>
-                                <span class="bp-ver">Ver plano <i class="ph-bold ph-arrow-right"></i></span>
-                            </span>
-                        </button>
+                        <div class="sp-cfg" id="sp-cfg">
+                            <div class="sp-row sp-anim" style="--i:1">
+                                <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></div>
+                                <div class="sp-txt"><b>Site personalizado</b><span>Vem pronto e configurado. WhatsApp, localização, redes e salvar contato.</span></div>
+                                <span class="sp-val">R$ 397</span>
+                            </div>
+                            <div class="sp-row sp-anim" style="--i:2">
+                                <div class="sp-thumb sp-3d sp-3d-card"><img src="img/caixa-cartao.webp" alt="" width="156" height="120" decoding="async"></div>
+                                <div class="sp-txt"><b>Cartões NFC</b><span>Personalizado com a cara do seu negócio, aproximou seu site abriu! R$ 60 cada.</span></div>
+                                <div class="sp-qtd" role="group" aria-label="Quantidade de cartões NFC">
+                                    <button type="button" data-passo="-1" data-alvo="sp-n" aria-label="Remover um cartão"><i class="ph ph-minus"></i></button>
+                                    <input id="sp-n" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de cartões NFC">
+                                    <button type="button" data-passo="1" data-alvo="sp-n" aria-label="Adicionar um cartão"><i class="ph ph-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="sp-row sp-anim" style="--i:3">
+                                <div class="sp-thumb sp-thumb-tag"><img src="img/tapreview-card.webp" alt="" decoding="async"></div>
+                                <div class="sp-txt"><b>Tag Avaliação Google</b><span>O cliente aproxima o celular e avalia na hora. R$ 50 cada.</span></div>
+                                <div class="sp-qtd" role="group" aria-label="Quantidade de tags Avaliação Google">
+                                    <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
+                                    <input id="sp-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
+                                    <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
+                                </div>
+                            </div>
+                            <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
+                                <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
+                                <span class="sp-txt"><b>CRM <em class="sp-opc">Opcional</em></b><span>Organize seus clientes, conversas e vendas em um só lugar.</span></span>
+                                <span class="sp-opc-dir">
+                                    <span class="sp-val">R$ 1.500</span>
+                                    <span class="sp-tog"><input id="sp-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
+                                </span>
+                            </label>
+                            <div class="sp-total sp-anim" style="--i:5">
+                                <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site personalizado</span></div>
+                                <strong id="sp-preco" aria-live="polite">R$ 397,00</strong>
+                            </div>
+                            <button type="button" class="sp-pedir sp-anim" id="sp-pedir" style="--i:6">Fazer meu pedido</button>
+                            <span class="sp-frete sp-anim" style="--i:7"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
+                        </div>
                         <a href="#conheca-tecnologia" class="btn-plano-tech">
                             <span class="bp-desk"><svg class="bp-nfc" viewBox="0 0 22 16" width="20" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="1" y="2" width="8" height="12" rx="1.6"/><path d="M13 5.2a4 4 0 0 1 0 5.6M16.2 3a7.2 7.2 0 0 1 0 10"/></svg> Entenda como funciona a aproximação NFC <i class="ph ph-caret-right"></i></span>
                         </a>
@@ -3936,6 +4008,52 @@
                 setTimeout(function () { var alvo = document.getElementById('conheca-tecnologia'); if (alvo) alvo.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 360);
             });
 
+            // montador de pedido: site = R$ 397 (sem cartão); cada cartão soma R$ 60; cada tag Google R$ 50; CRM opcional R$ 1.500
+            var BASE = 397, POR_CARTAO = 60, POR_TAG = 50, PRECO_CRM = 1500;
+            var crmIn = document.getElementById('sp-crm');
+            var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
+            var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+            function val(inp) { var n = parseInt(inp.value, 10), min = +inp.min, max = +inp.max; return isNaN(n) ? min : Math.min(max, Math.max(min, n)); }
+            function resumoTxt() {
+                var c = val(cIn), g = val(gIn);
+                return (c || g || crmIn.checked ? 'Site' : 'Site personalizado') +
+                    (c ? ' + ' + c + (c === 1 ? ' cartão NFC' : ' cartões NFC') : '') +
+                    (g ? ' + ' + g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google') : '') +
+                    (crmIn.checked ? ' + CRM' : '');
+            }
+            function atualizaPreco(pular) {
+                var total = BASE + val(cIn) * POR_CARTAO + val(gIn) * POR_TAG + (crmIn.checked ? PRECO_CRM : 0), preco = document.getElementById('sp-preco');
+                preco.textContent = brl(total);
+                document.getElementById('sp-det').textContent = resumoTxt();
+                panel.querySelectorAll('.sp-qtd button').forEach(function (b) {
+                    var inp = document.getElementById(b.getAttribute('data-alvo')), v = val(inp);
+                    b.disabled = +b.getAttribute('data-passo') < 0 ? v <= +inp.min : v >= +inp.max;
+                });
+                if (pular) { preco.classList.remove('pulo'); void preco.offsetWidth; preco.classList.add('pulo'); setTimeout(function () { preco.classList.remove('pulo'); }, 200); }
+                return total;
+            }
+            panel.querySelectorAll('.sp-qtd button').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var inp = document.getElementById(b.getAttribute('data-alvo'));
+                    inp.value = val(inp) + (+b.getAttribute('data-passo')); inp.value = val(inp); atualizaPreco(true);
+                });
+            });
+            [cIn, gIn].forEach(function (inp) {
+                inp.addEventListener('input', function () { if (inp.value !== '') atualizaPreco(true); });
+                inp.addEventListener('blur', function () { inp.value = val(inp); atualizaPreco(); });
+            });
+            crmIn.addEventListener('change', function () { atualizaPreco(true); });
+            atualizaPreco();
+            document.getElementById('sp-pedir').addEventListener('click', function () {
+                cIn.value = val(cIn); gIn.value = val(gIn);
+                var total = atualizaPreco(), resumo = resumoTxt() + ' (' + brl(total) + ')';
+                if (window.saturnoEscolherPlano) {
+                    fecharPlanos(true);
+                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total); }, 300);
+                }
+                window.open('https://wa.me/5531920067518?text=' + encodeURIComponent('Olá! Vim pelo site e quero fazer o pedido: ' + resumo + '. Pode me passar os detalhes?'), '_blank', 'noopener');
+            });
+
             var WA_PLANO = {
                 'Essencial': 'https://wa.link/304efy',
                 'Profissional': 'https://wa.link/bu191w',
@@ -4663,6 +4781,7 @@
         /* nome e empresa juntos, um embaixo do outro */
         .orb-campos{display:grid;gap:14px}
         .orb-campo{text-align:left}
+        .orb-priv{margin:6px 0 0;color:#86868b;font-size:11.5px;text-align:center}
         .orb-rot{display:block;margin:0 0 7px 4px;font-size:13px;font-weight:600;color:#1d1d1f;letter-spacing:-.005em}
         .orb-campo input{width:100%;height:52px;border-radius:14px;padding:0 16px;font-size:17px;font-weight:400;color:#1d1d1f;font-family:inherit;
             background:#f5f5f7;border:1px solid transparent;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
@@ -4706,7 +4825,7 @@
                 </div>
             </div>
             <div class="orb-in d1">
-                <p class="orb-tit">Seu plano <span id="orbPlanoNome"></span> está a um passo</p>
+                <p class="orb-tit" id="orbPlanoTit">Seu plano <span id="orbPlanoNome"></span> está a um passo</p>
                 <p class="orb-sub">Um especialista vai te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
             </div>
             <div class="orb-campos orb-in d2">
@@ -4720,6 +4839,11 @@
                     <input id="orbEmpresa" name="empresa" type="text" autocomplete="organization" maxlength="80" placeholder="Nome que vai nos cartões">
                     <span class="orb-erro">Digite o nome da empresa</span>
                 </div>
+                <div class="orb-campo orb-in d3" id="orbCampoTel">
+                    <label class="orb-rot" for="orbTelefone">Seu WhatsApp</label>
+                    <input id="orbTelefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="20" placeholder="(31) 99999-8888">
+                    <span class="orb-erro">Digite seu WhatsApp com DDD</span>
+                </div>
             </div>
             <button type="submit" class="orb-btn orb-in d4" id="orbBtn">
                 <span class="orb-btn-in">
@@ -4729,19 +4853,40 @@
                 </span>
             </button>
             <p class="orb-selos orb-in d4"><span><i class="ph ph-handshake"></i>Sem compromisso</span></p>
+            <p class="orb-priv orb-in d4">Usamos seus dados só para atender este pedido.</p>
         </form>
     </div>
 
     <script>
-        // Abre a caixa, pede nome e empresa e manda para o WhatsApp com os dois na mensagem
+        // Abre a caixa, pede nome, empresa e WhatsApp, cadastra na CRM e abre o WhatsApp com os dados na mensagem
         (function () {
             var FONE = '5531920067518';
             var ov = document.getElementById('orbOv'), card = document.getElementById('orbCard');
             var nome = document.getElementById('orbNome'), empresa = document.getElementById('orbEmpresa');
             var cNome = document.getElementById('orbCampoNome'), cEmp = document.getElementById('orbCampoEmp');
             var btn = document.getElementById('orbBtn');
-            var plano = '', voltarFoco = null, tFecha = null;
-            try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
+            var telefone = document.getElementById('orbTelefone'), cTel = document.getElementById('orbCampoTel');
+            var plano = '', pedidoPersonalizado = false, valorPedido = 0, voltarFoco = null, tFecha = null;
+            var PRECO_PLANO = {'Essencial': 600, 'Profissional': 1000, 'Fora de Órbita': 2000};
+            try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; telefone.value = localStorage.getItem('saturno_telefone') || ''; } catch (e) {}
+
+            // só os dígitos com DDD, sem o 55 ("" se o número não tem 10 ou 11 dígitos)
+            function digitosFone(t) { var d = t.replace(/\D/g, ''); if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2); return /^[1-9][0-9]{9,10}$/.test(d) ? d : ''; }
+            function mascaraFone(t) {
+                var d = t.replace(/\D/g, '').slice(0, 11);
+                if (d.length < 3) return d;
+                return '(' + d.slice(0, 2) + ') ' + (d.length > 10 ? d.slice(2, 7) + '-' + d.slice(7) : d.length > 6 ? d.slice(2, 6) + '-' + d.slice(6) : d.slice(2));
+            }
+            // cadastra o cliente e o lead na CRM. Se falhar, a pessoa segue para o WhatsApp do mesmo jeito.
+            function registrarNaCrm(dados) {
+                try {
+                    fetch('https://lrthxbchqafcjbvjwcne.supabase.co/rest/v1/rpc/site_registrar_pedido', {
+                        method: 'POST', keepalive: true,
+                        headers: {'Content-Type': 'application/json', apikey: 'sb_publishable_iprhqxL36BQb7psuTS1wSQ_UAYlhbmi'},
+                        body: JSON.stringify({p_dados: dados})
+                    }).catch(function () {});
+                } catch (e) {}
+            }
 
             // primeira letra de cada palavra em maiúscula ("ana souza" → "Ana Souza")
             function capitaliza(t) { return t.toLowerCase().replace(/(^|\s)(\S)/g, function (m, a, b) { return a + b.toUpperCase(); }); }
@@ -4749,19 +4894,20 @@
             function erro(campo, input) { campo.classList.remove('erro'); void campo.offsetWidth; campo.classList.add('erro'); input.focus(); }
             function foca(el, atraso) { setTimeout(function () { el.focus({preventScroll: true}); if (el.value) el.select(); }, atraso); }
 
-            function abrir(p) {
-                plano = p;
+            function abrir(p, _cartoes, personalizado, valor) {
+                plano = p; pedidoPersonalizado = !!personalizado; valorPedido = personalizado ? (valor || 0) : (PRECO_PLANO[p] || 0);
+                document.getElementById('orbPlanoTit').firstChild.textContent = personalizado ? 'Seu pedido ' : 'Seu plano ';
                 clearTimeout(tFecha); ov.classList.remove('fechando', 'on'); void ov.offsetWidth;   // reinicia a animação
                 card.setAttribute('data-plano', p);
                 document.getElementById('orbPlanoNome').textContent = p;
-                cNome.classList.remove('erro'); cEmp.classList.remove('erro');
+                cNome.classList.remove('erro'); cEmp.classList.remove('erro'); cTel.classList.remove('erro');
                 btn.classList.remove('decolando'); btn.disabled = false;
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
                 document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                 // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
-                foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
+                foca(limpa(nome).length < 2 ? nome : limpa(empresa).length < 2 ? empresa : digitosFone(telefone.value) ? nome : telefone, 750);
             }
             function fechar() {
                 if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
@@ -4780,6 +4926,7 @@
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('on')) fechar(); });
             nome.addEventListener('input', function () { cNome.classList.remove('erro'); });
             empresa.addEventListener('input', function () { cEmp.classList.remove('erro'); });
+            telefone.addEventListener('input', function () { cTel.classList.remove('erro'); telefone.value = mascaraFone(telefone.value); });
 
             card.addEventListener('submit', function (e) {
                 e.preventDefault();
@@ -4787,11 +4934,15 @@
                 var emp = limpa(empresa);
                 cNome.classList.toggle('erro', n.length < 2);
                 cEmp.classList.toggle('erro', emp.length < 2);
+                var tel = digitosFone(telefone.value);
+                cTel.classList.toggle('erro', !tel);
                 if (n.length < 2) return erro(cNome, nome);
                 if (emp.length < 2) return erro(cEmp, empresa);
+                if (!tel) return erro(cTel, telefone);
                 n = capitaliza(n);
-                try { localStorage.setItem('saturno_nome', n); localStorage.setItem('saturno_empresa', emp); } catch (err) {}
-                var texto = 'Olá! Sou ' + n + ', da empresa ' + emp + '. Vim pelo site e quero contratar o plano ' + plano + '. Pode me passar os detalhes?';
+                try { localStorage.setItem('saturno_nome', n); localStorage.setItem('saturno_empresa', emp); localStorage.setItem('saturno_telefone', mascaraFone(tel)); } catch (err) {}
+                registrarNaCrm({nome: n, empresa: emp, telefone: tel, pedido: pedidoPersonalizado ? plano : 'Plano ' + plano, valor: valorPedido});
+                var texto = 'Olá! Sou ' + n + ', da empresa ' + emp + '. Vim pelo site e ' + (pedidoPersonalizado ? 'quero fazer o pedido: ' : 'quero contratar o plano ') + plano + '. Pode me passar os detalhes?';
                 // abre na hora do clique (senão o navegador bloqueia a nova aba)
                 window.open('https://wa.me/' + FONE + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
                 btn.disabled = true; btn.classList.add('decolando');
@@ -4844,5 +4995,378 @@
     })();
     </script>
     <!-- End Meta Pixel - Lead -->
+
+    <!-- =====================================================================
+         SATURNO IA: botão inferior "Fale com a IA" + conversa por voz no estilo
+         do modo de voz do ChatGPT (esfera animada que ouve, pensa e fala).
+         Back-end: Supabase Edge Function crm-saturno/supabase/functions/ia-site
+         ===================================================================== -->
+    <style>
+        .sai-btn{position:fixed;left:1.25rem;bottom:1.6rem;z-index:70;display:flex;align-items:center;gap:.6rem;
+            padding:.45rem 1.05rem .45rem .45rem;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+            background:rgba(12,12,20,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;
+            font:700 .82rem/1 "Plus Jakarta Sans",sans-serif;letter-spacing:.01em;cursor:pointer;
+            box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 24px rgba(138,43,226,.28);transition:transform .25s ease,box-shadow .25s ease,opacity .3s}
+        .sai-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 30px rgba(138,43,226,.45)}
+        .sai-btn small{display:block;font-weight:600;font-size:.62rem;color:rgba(255,255,255,.55);margin-top:.22rem;letter-spacing:.04em;text-transform:uppercase}
+        .sai-mini{position:relative;width:2.35rem;height:2.35rem;border-radius:50%;flex:none;overflow:hidden;
+            background:radial-gradient(circle at 35% 30%,#fff 0%,#cfe3ff 18%,#6aa8ff 42%,#7b3fe4 72%,#1b1040 100%);
+            box-shadow:0 0 14px rgba(106,168,255,.55)}
+        .sai-mini::after{content:'';position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.55),transparent 40%);
+            animation:saiGira 3.2s linear infinite;mix-blend-mode:overlay}
+        @media (max-width:767px){.sai-btn{left:1rem;bottom:1.5rem}body.tour-on .sai-btn{opacity:0;pointer-events:none}}
+        body.sai-aberto .sai-btn,body.sai-aberto #chat-widget{opacity:0;pointer-events:none}
+
+        .sai-ov{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;
+            background:radial-gradient(circle at 50% 38%,#0e0b1c 0%,#050508 62%);color:#fff;font-family:"Plus Jakarta Sans",sans-serif;
+            opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+        .sai-ov.on{opacity:1;visibility:visible}
+        .sai-topo{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem}
+        .sai-marca{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:.95rem}
+        .sai-marca span{font-weight:600;font-size:.7rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:.2rem .5rem}
+        .sai-status{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.6);min-height:1em}
+
+        .sai-palco{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:0 1.5rem;min-height:0}
+        .sai-orb-wrap{position:relative;width:min(58vw,250px);aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
+        .sai-orb{position:absolute;inset:0;border-radius:50%;overflow:hidden;transform:scale(var(--s,1));transition:transform .18s ease-out;
+            background:radial-gradient(circle at 34% 28%,#ffffff 0%,#dbe9ff 14%,#8ab9ff 34%,#5b6cf0 56%,#6a2bd6 76%,#1a0f3d 100%);
+            box-shadow:0 0 60px rgba(106,140,255,.45),0 0 120px rgba(138,43,226,.25),inset -18px -22px 50px rgba(20,8,60,.55)}
+        .sai-orb::before,.sai-orb::after{content:'';position:absolute;inset:-25%;border-radius:45%;filter:blur(18px);opacity:.75}
+        .sai-orb::before{background:conic-gradient(from 0deg,rgba(255,255,255,.0),rgba(255,255,255,.75),rgba(120,200,255,.2),rgba(255,255,255,0) 60%);animation:saiGira 7s linear infinite}
+        .sai-orb::after{background:conic-gradient(from 180deg,rgba(186,120,255,0),rgba(186,120,255,.7),rgba(80,160,255,.3),rgba(186,120,255,0) 55%);animation:saiGira 11s linear infinite reverse}
+        .sai-anel{position:absolute;left:-16%;right:-16%;top:43%;height:14%;border-radius:50%;pointer-events:none;
+            border:2px solid rgba(245,214,122,.55);transform:rotate(-14deg);box-shadow:0 0 18px rgba(245,214,122,.25);
+            -webkit-mask:linear-gradient(#000 0 46%,transparent 46% 100%);mask:linear-gradient(#000 0 46%,transparent 46% 100%);opacity:.8;transition:opacity .4s}
+        .sai-anel.frente{-webkit-mask:linear-gradient(transparent 0 46%,#000 46% 100%);mask:linear-gradient(transparent 0 46%,#000 46% 100%);z-index:2}
+        .sai-ov.ouvindo .sai-orb{animation:saiRespira 2.6s ease-in-out infinite}
+        .sai-ov.pensando .sai-orb{animation:saiPensa 1.1s ease-in-out infinite}
+        .sai-ov.pensando .sai-orb::before{animation-duration:1.6s}
+        .sai-ov.pensando .sai-orb::after{animation-duration:2.4s}
+        .sai-ov.falando .sai-orb::before{animation-duration:3s}
+        .sai-ov.parado .sai-orb{filter:saturate(.55) brightness(.75)}
+        .sai-ov.parado .sai-anel{opacity:.35}
+        @keyframes saiGira{to{transform:rotate(360deg)}}
+        @keyframes saiRespira{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+        @keyframes saiPensa{0%,100%{transform:scale(.86)}50%{transform:scale(.94)}}
+
+        .sai-legenda{max-width:520px;min-height:4.2em;text-align:center;font-size:1.05rem;line-height:1.5;font-weight:500;color:rgba(255,255,255,.88);
+            display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+        .sai-legenda.voce{color:rgba(255,255,255,.55);font-style:italic}
+
+        .sai-wa{display:none;align-items:center;gap:.5rem;padding:.6rem 1.1rem;border-radius:999px;background:#25D366;color:#06210f;
+            font-weight:800;font-size:.85rem;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,.35)}
+        .sai-wa.on{display:inline-flex}
+
+        .sai-chat{display:none;flex:1;width:100%;max-width:640px;min-height:0;flex-direction:column;padding:0 1rem}
+        .sai-ov.texto .sai-palco{display:none}
+        .sai-ov.texto .sai-chat{display:flex}
+        .sai-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:.6rem;padding:.5rem 0 1rem;overscroll-behavior:contain}
+        .sai-msg{max-width:85%;padding:.7rem .95rem;border-radius:1.1rem;font-size:.92rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+        .sai-msg.ia{align-self:flex-start;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-bottom-left-radius:.35rem}
+        .sai-msg.eu{align-self:flex-end;background:linear-gradient(135deg,#5b6cf0,#7b3fe4);border-bottom-right-radius:.35rem}
+        .sai-compor{display:flex;gap:.5rem;align-items:flex-end;padding:.5rem 0}
+        .sai-compor textarea{flex:1;resize:none;max-height:7rem;padding:.75rem 1rem;border-radius:1.4rem;border:1px solid rgba(255,255,255,.14);
+            background:rgba(255,255,255,.06);color:#fff;font:500 16px/1.35 "Plus Jakarta Sans",sans-serif;outline:none}
+        .sai-compor textarea:focus{border-color:rgba(123,63,228,.8)}
+        .sai-env{width:2.9rem;height:2.9rem;border-radius:50%;border:none;background:#fff;color:#0b0b12;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+        .sai-env:disabled{opacity:.35;cursor:default}
+
+        .sai-barra{display:flex;align-items:center;justify-content:center;gap:1.1rem;padding:1rem 1rem 1.6rem}
+        .sai-ctl{width:3.6rem;height:3.6rem;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;
+            background:rgba(255,255,255,.1);color:#fff;font-size:1.45rem;transition:background .2s,transform .15s}
+        .sai-ctl:active{transform:scale(.92)}
+        .sai-ctl:hover{background:rgba(255,255,255,.16)}
+        .sai-ctl.ativo{background:#fff;color:#0b0b12}
+        .sai-ctl.fechar{background:#ef4444}
+        .sai-ctl.fechar:hover{background:#dc2626}
+        .sai-dica{font-size:.72rem;color:rgba(255,255,255,.4);text-align:center;padding:0 1rem}
+        @media (prefers-reduced-motion:reduce){.sai-orb,.sai-orb::before,.sai-orb::after,.sai-mini::after{animation:none!important}}
+    </style>
+
+    <button type="button" class="sai-btn" id="sai-btn" aria-label="Conversar com a assistente de IA da Saturno NFC">
+        <span class="sai-mini" aria-hidden="true"></span>
+        <span>Fale com a IA<small>Por voz ou texto</small></span>
+    </button>
+
+    <div class="sai-ov parado" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
+        <div class="sai-topo">
+            <div class="sai-marca">Saturno IA <span>Beta</span></div>
+            <div class="sai-status" id="sai-status" aria-live="polite"></div>
+        </div>
+
+        <div class="sai-palco">
+            <div class="sai-orb-wrap" id="sai-orb" role="button" tabindex="0" aria-label="Tocar para falar ou interromper">
+                <div class="sai-anel"></div>
+                <div class="sai-orb"></div>
+                <div class="sai-anel frente"></div>
+            </div>
+            <p class="sai-legenda" id="sai-legenda"></p>
+            <a class="sai-wa" id="sai-wa" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer"><i class="ph-fill ph-whatsapp-logo"></i> Continuar no WhatsApp</a>
+        </div>
+
+        <div class="sai-chat">
+            <div class="sai-msgs" id="sai-msgs" aria-live="polite"></div>
+            <a class="sai-wa" id="sai-wa2" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer" style="align-self:center;margin-bottom:.4rem"><i class="ph-fill ph-whatsapp-logo"></i> Continuar no WhatsApp</a>
+            <div class="sai-compor">
+                <textarea id="sai-texto" rows="1" placeholder="Escreva sua mensagem" aria-label="Mensagem"></textarea>
+                <button type="button" class="sai-env" id="sai-env" aria-label="Enviar" disabled><i class="ph-bold ph-arrow-up"></i></button>
+            </div>
+        </div>
+
+        <div class="sai-barra">
+            <button type="button" class="sai-ctl" id="sai-mic" aria-label="Desligar microfone"><i class="ph-fill ph-microphone"></i></button>
+            <button type="button" class="sai-ctl" id="sai-modo" aria-label="Conversar por texto"><i class="ph ph-chat-centered-text"></i></button>
+            <button type="button" class="sai-ctl fechar" id="sai-fechar" aria-label="Encerrar conversa"><i class="ph-bold ph-x"></i></button>
+        </div>
+        <p class="sai-dica" id="sai-dica">Toque na esfera para falar ou para interromper a IA.</p>
+    </div>
+
+    <script>
+    (function () {
+        var API = 'https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/ia-site';
+        var FONE = '5531920067518';
+        var SAUDACAO = 'Oi! Eu sou a Saturno, a assistente de IA da Saturno NFC. Me conta: qual é o seu negócio?';
+        var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var TEM_VOZ = 'speechSynthesis' in window;
+
+        var $ = function (id) { return document.getElementById(id); };
+        var ov = $('sai-ov'), legenda = $('sai-legenda'), status = $('sai-status'), msgsEl = $('sai-msgs');
+        var txt = $('sai-texto'), env = $('sai-env'), micBtn = $('sai-mic'), modoBtn = $('sai-modo');
+
+        var historico = [];          // conversa enviada para a IA (user/assistant)
+        var aberto = false, mudo = false, modoTexto = false;
+        var estado = 'parado';       // parado | ouvindo | pensando | falando
+        var rec = null, tentativas = 0, geracao = 0, pedido = null;
+        var falasPendentes = 0, respostaTerminou = true, vozPt = null;
+
+        // ---------- voz da IA (síntese do navegador, pt-BR) ----------
+        function escolheVoz() {
+            if (!TEM_VOZ) return;
+            var vs = speechSynthesis.getVoices().filter(function (v) { return /^pt(-|_)BR/i.test(v.lang); });
+            if (!vs.length) vs = speechSynthesis.getVoices().filter(function (v) { return /^pt/i.test(v.lang); });
+            var pref = [/natural/i, /google/i, /francisca|thalita|luciana|maria/i];
+            for (var i = 0; i < pref.length && !vozPt; i++) vozPt = vs.filter(function (v) { return pref[i].test(v.name); })[0] || null;
+            vozPt = vozPt || vs[0] || null;
+        }
+        if (TEM_VOZ) { escolheVoz(); speechSynthesis.onvoiceschanged = escolheVoz; }
+
+        function paraFala() {
+            if (TEM_VOZ) speechSynthesis.cancel();
+            falasPendentes = 0;
+            $('sai-orb').querySelector('.sai-orb').style.setProperty('--s', 1);
+        }
+
+        function fala(trecho, minhaGeracao) {
+            trecho = trecho.replace(/[*_#`>\[\]]/g, '').replace(/https?:\/\/\S+/g, '').trim();
+            if (!trecho || !TEM_VOZ || modoTexto) return;
+            var u = new SpeechSynthesisUtterance(trecho);
+            u.lang = 'pt-BR'; if (vozPt) u.voice = vozPt; u.rate = 1.06; u.pitch = 1;
+            var orb = $('sai-orb').querySelector('.sai-orb');
+            u.onstart = function () { if (minhaGeracao === geracao) define('falando'); };
+            u.onboundary = function () { orb.style.setProperty('--s', (1.04 + Math.random() * 0.1).toFixed(3)); setTimeout(function () { orb.style.setProperty('--s', 1); }, 140); };
+            u.onend = u.onerror = function () {
+                if (minhaGeracao !== geracao) return;
+                falasPendentes = Math.max(0, falasPendentes - 1);
+                if (!falasPendentes && respostaTerminou) depoisDeFalar();
+            };
+            falasPendentes++;
+            speechSynthesis.speak(u);
+        }
+
+        function depoisDeFalar() {
+            if (!aberto || modoTexto) return;
+            if (mudo) define('parado', 'Microfone desligado'); else ouve();
+        }
+
+        // ---------- estados visuais ----------
+        var ROTULO = { parado: 'Toque para falar', ouvindo: 'Ouvindo…', pensando: 'Pensando…', falando: 'Falando…' };
+        function define(e, rotulo) {
+            estado = e;
+            ov.classList.remove('parado', 'ouvindo', 'pensando', 'falando');
+            ov.classList.add(e);
+            status.textContent = modoTexto ? (e === 'pensando' ? 'Digitando…' : '') : (rotulo || ROTULO[e]);
+        }
+        function mostraLegenda(t, doVisitante) { legenda.textContent = t; legenda.classList.toggle('voce', !!doVisitante); }
+
+        // ---------- reconhecimento de voz (o visitante fala) ----------
+        function ouve() {
+            if (!SR || mudo || modoTexto || !aberto) { define('parado', SR ? undefined : 'Seu navegador não ouve voz: use o texto'); return; }
+            paraOuvir();
+            var r = new SR(), final = '', parcial = '';
+            r.lang = 'pt-BR'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+            r.onstart = function () { define('ouvindo'); };
+            r.onresult = function (ev) {
+                parcial = '';
+                for (var i = ev.resultIndex; i < ev.results.length; i++) {
+                    if (ev.results[i].isFinal) final += ev.results[i][0].transcript; else parcial += ev.results[i][0].transcript;
+                }
+                mostraLegenda((final + ' ' + parcial).trim(), true);
+            };
+            r.onerror = function (ev) {
+                if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
+                    mudo = true; atualizaMic(); define('parado', 'Permita o microfone ou use o texto');
+                }
+            };
+            r.onend = function () {
+                if (rec !== r) return;
+                rec = null;
+                var dito = (final || parcial).trim();
+                if (dito) { tentativas = 0; envia(dito); return; }
+                if (aberto && !mudo && !modoTexto && estado === 'ouvindo' && ++tentativas < 3) { setTimeout(ouve, 250); return; }
+                tentativas = 0;
+                if (estado === 'ouvindo') define('parado');
+            };
+            rec = r;
+            try { r.start(); } catch (e) { rec = null; define('parado'); }
+        }
+        function paraOuvir() { if (rec) { var r = rec; rec = null; try { r.abort(); } catch (e) {} } }
+
+        // ---------- conversa com a IA ----------
+        function bolha(quem, texto) {
+            var b = document.createElement('div');
+            b.className = 'sai-msg ' + quem; b.textContent = texto;
+            msgsEl.appendChild(b); msgsEl.scrollTop = msgsEl.scrollHeight;
+            return b;
+        }
+
+        function envia(texto) {
+            texto = (texto || '').trim();
+            if (!texto) return;
+            paraOuvir(); paraFala(); cancelaPedido();
+            var minha = ++geracao;
+            historico.push({ role: 'user', content: texto });
+            bolha('eu', texto);
+            mostraLegenda(texto, true);
+            define('pensando');
+            respostaTerminou = false;
+
+            var b = bolha('ia', '…'), resposta = '', aFalar = '';
+            var ctrl = new AbortController();
+            var atual = pedido = { ctrl: ctrl, bolha: b, parcial: function () { return resposta.replace('[[erro]]', '').trim(); } };
+            fetch(API, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages: historico }), signal: ctrl.signal
+            }).then(function (res) {
+                if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
+                var leitor = res.body.getReader(), dec = new TextDecoder();
+                function passo() {
+                    return leitor.read().then(function (p) {
+                        if (minha !== geracao) { try { leitor.cancel(); } catch (e) {} return; }
+                        if (p.done) return;
+                        var pedaco = dec.decode(p.value, { stream: true });
+                        resposta += pedaco; aFalar += pedaco;
+                        var visivel = resposta.replace('[[erro]]', '').trim();
+                        b.textContent = visivel || '…'; mostraLegenda(visivel); msgsEl.scrollTop = msgsEl.scrollHeight;
+                        // fala frase por frase enquanto a resposta chega
+                        var m;
+                        while ((m = aFalar.match(/^([\s\S]*?[.!?…:]\s|[\s\S]*?\n)/))) {
+                            fala(m[1], minha); aFalar = aFalar.slice(m[1].length);
+                        }
+                        return passo();
+                    });
+                }
+                return passo();
+            }).then(function () {
+                if (minha !== geracao) return;
+                if (resposta.indexOf('[[erro]]') > -1) throw new Error('erro na IA');
+                fala(aFalar, minha);
+                var limpa = resposta.trim();
+                historico.push({ role: 'assistant', content: limpa });
+                $('sai-wa').classList.add('on'); $('sai-wa2').classList.add('on');
+                atualizaWhats();
+                terminou(minha);
+            }).catch(function (e) {
+                if ((e && e.name === 'AbortError') || pedido !== atual) return;
+                historico.pop();
+                var aviso = 'Tive um probleminha de conexão. Pode repetir? Se preferir, fale com a gente no WhatsApp.';
+                b.textContent = aviso; mostraLegenda(aviso);
+                $('sai-wa').classList.add('on'); $('sai-wa2').classList.add('on');
+                terminou(minha);
+            });
+        }
+
+        // cancela a resposta em andamento e deixa o histórico coerente (o que já veio fica)
+        function cancelaPedido() {
+            if (!pedido) return;
+            var p = pedido; pedido = null;
+            try { p.ctrl.abort(); } catch (e) {}
+            var parcial = p.parcial();
+            if (parcial) { historico.push({ role: 'assistant', content: parcial }); p.bolha.textContent = parcial; }
+            else { historico.pop(); p.bolha.remove(); }
+        }
+
+        function terminou(minha) {
+            if (minha !== geracao) return;
+            respostaTerminou = true; pedido = null;
+            if (modoTexto || !TEM_VOZ || !falasPendentes) { define('parado'); depoisDeFalar(); }
+        }
+
+        function atualizaWhats() {
+            var ultimas = historico.filter(function (m) { return m.role === 'user'; }).slice(-2).map(function (m) { return m.content; }).join(' / ');
+            var t = 'Olá! Vim pela assistente de IA do site da Saturno NFC e quero continuar o atendimento.' + (ultimas ? '\n\nO que eu falei: ' + ultimas.slice(0, 400) : '');
+            var href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(t);
+            $('sai-wa').href = href; $('sai-wa2').href = href;
+        }
+
+        // ---------- abrir / fechar / controles ----------
+        function abre() {
+            aberto = true; ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false'); document.body.classList.add('sai-aberto');
+            if (!SR) defineModoTexto(true);
+            if (!msgsEl.childNodes.length) bolha('ia', SAUDACAO);
+            mostraLegenda(SAUDACAO);
+            geracao++; respostaTerminou = true;
+            if (TEM_VOZ && !modoTexto) { speechSynthesis.cancel(); fala(SAUDACAO, geracao); } // dentro do toque: libera o áudio no iPhone
+            else depoisDeFalar();
+        }
+        function fecha() {
+            aberto = false; geracao++; paraOuvir(); paraFala(); cancelaPedido();
+            ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sai-aberto');
+            define('parado');
+        }
+        function atualizaMic() {
+            micBtn.classList.toggle('ativo', mudo);
+            micBtn.innerHTML = mudo ? '<i class="ph-fill ph-microphone-slash"></i>' : '<i class="ph-fill ph-microphone"></i>';
+            micBtn.setAttribute('aria-label', mudo ? 'Ligar microfone' : 'Desligar microfone');
+        }
+        function defineModoTexto(on) {
+            modoTexto = on; ov.classList.toggle('texto', on);
+            modoBtn.classList.toggle('ativo', on);
+            modoBtn.innerHTML = on ? '<i class="ph-fill ph-waveform"></i>' : '<i class="ph ph-chat-centered-text"></i>';
+            modoBtn.setAttribute('aria-label', on ? 'Voltar para a voz' : 'Conversar por texto');
+            micBtn.style.display = on ? 'none' : '';
+            $('sai-dica').style.visibility = on ? 'hidden' : '';
+            if (on) { paraOuvir(); paraFala(); define(pedido ? 'pensando' : 'parado'); setTimeout(function () { txt.focus(); }, 50); }
+            else if (!pedido) ouve();
+        }
+
+        $('sai-btn').addEventListener('click', abre);
+        $('sai-fechar').addEventListener('click', fecha);
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && aberto) fecha(); });
+
+        function toqueOrb() {
+            if (estado === 'falando' || estado === 'pensando') {        // interrompe a IA e passa a ouvir
+                geracao++; paraFala(); cancelaPedido(); respostaTerminou = true;
+                mudo = false; atualizaMic(); ouve();
+            } else if (estado === 'ouvindo') {                          // para de ouvir e envia o que já foi dito
+                if (rec) try { rec.stop(); } catch (e) {}
+            } else { mudo = false; atualizaMic(); tentativas = 0; ouve(); }
+        }
+        $('sai-orb').addEventListener('click', toqueOrb);
+        $('sai-orb').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toqueOrb(); } });
+
+        micBtn.addEventListener('click', function () {
+            mudo = !mudo; atualizaMic();
+            if (mudo) { paraOuvir(); if (estado === 'ouvindo') define('parado', 'Microfone desligado'); }
+            else if (estado === 'parado') { tentativas = 0; ouve(); }
+        });
+        modoBtn.addEventListener('click', function () { defineModoTexto(!modoTexto); });
+
+        function enviaTexto() { var t = txt.value; txt.value = ''; ajusta(); envia(t); }
+        function ajusta() { txt.style.height = 'auto'; txt.style.height = Math.min(txt.scrollHeight, 112) + 'px'; env.disabled = !txt.value.trim(); }
+        txt.addEventListener('input', ajusta);
+        txt.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (txt.value.trim()) enviaTexto(); } });
+        env.addEventListener('click', enviaTexto);
+    })();
+    </script>
 </body>
 </html>

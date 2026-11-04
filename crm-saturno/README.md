@@ -132,6 +132,13 @@ A cada renovação paga, o próximo vencimento avança sozinho. Cancelou na Stri
 
 > Teste: no webhook da Stripe, **Enviar evento de teste** só manda dados fictícios (ignorados por serem de outro produto). Para testar de verdade, reenvie um `invoice.paid` real da Gestão Saturno pela lista de eventos da Stripe (não duplica pagamento).
 
+## 7. Pedidos do site entram sozinhos
+
+Quando alguém termina o pedido no site (`index.html`), a função `site_registrar_pedido` cadastra o **cliente** (nome, empresa e WhatsApp) e abre um **lead** em "Novo lead", origem Site, com o pedido em *Interesse* e o total em *Valor*.
+Se o WhatsApp já existe, os dados do cliente não são sobrescritos e a conversa em aberto é atualizada. Limite de 60 pedidos do site por hora.
+
+Para ligar, rode `supabase/site-pedidos.sql` no SQL Editor (depois do `schema.sql`).
+
 ## Catálogo inicial
 
 Criado pelo `schema.sql` com os preços do site: Plano Essencial R$ 600, Profissional R$ 1.000, Fora de Órbita R$ 2.000, Cartão Google Avaliação R$ 60, Kit 2 cartões R$ 100 e Manutenção mensal R$ 89,90.
