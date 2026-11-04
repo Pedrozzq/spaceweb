@@ -134,8 +134,8 @@ A cada renovação paga, o próximo vencimento avança sozinho. Cancelou na Stri
 
 ## 7. Pedidos do site entram sozinhos
 
-Quando alguém termina o pedido no site (`index.html`), a função `site_registrar_pedido` cadastra o **cliente** (nome, empresa e WhatsApp) e abre um **lead** em "Novo lead", origem Site, com o pedido em *Interesse* e o total em *Valor*.
-Se o WhatsApp já existe, os dados do cliente não são sobrescritos e a conversa em aberto é atualizada. Limite de 60 pedidos do site por hora.
+Quando alguém termina o pedido no site (`index.html`), a função `site_registrar_pedido` cadastra o **cliente** (nome e empresa, sem telefone) e abre um **lead** em "Novo lead", origem Site, com o pedido em *Interesse* e o total em *Valor*.
+Mesmo nome e empresa contam como a mesma pessoa: o cliente não é duplicado e o lead do site em aberto é atualizado. Quem depois chamar no WhatsApp entra como outro contato, até a equipe juntar os dados. Limite de 60 pedidos do site por hora.
 
 Para ligar, rode `supabase/site-pedidos.sql` no SQL Editor (depois do `schema.sql`).
 

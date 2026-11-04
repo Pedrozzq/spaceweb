@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-83X0GRFQBL"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-83X0GRFQBL');
+    </script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2272002663632377');
+    fbq('init', '1654961029371415');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2272002663632377&ev=PageView&noscript=1"
+    /><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1654961029371415&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O que é CRM | Saturno NFC</title>
+    <meta name="description" content="Entenda o que é CRM e como a CRM Saturno reúne leads, conversas do WhatsApp, pedidos e mensalidades em um só painel para sua empresa vender com controle.">
+    <meta name="theme-color" content="#050508">
+    <link rel="icon" type="image/png" sizes="64x64" href="img/favicon-saturno-64.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-saturno.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>document.documentElement.classList.add('js');</script>
+    <style>
+        :root {
+            --fundo: #050508;
+            --cartao: rgba(20, 20, 28, .72);
+            --cartao-solido: #12121a;
+            --linha: rgba(255, 255, 255, .09);
+            --texto: #f5f5f7;
+            --suave: #a1a1aa;
+            --ouro: #ffc933;
+            --ouro-claro: #ffe08a;
+            --laranja: #ff8a1e;
+            --verde: #4ade80;
+        }
+        * { box-sizing: border-box; margin: 0; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            background: var(--fundo);
+            color: var(--texto);
+            font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+            line-height: 1.55;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* céu da Saturno: brilho dourado no topo e estrelas pequenas */
+        .ceu { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background:
+                radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.7), transparent 60%),
+                radial-gradient(1px 1px at 78% 12%, rgba(255,255,255,.55), transparent 60%),
+                radial-gradient(1.5px 1.5px at 64% 34%, rgba(255,224,138,.65), transparent 60%),
+                radial-gradient(1px 1px at 28% 52%, rgba(255,255,255,.45), transparent 60%),
+                radial-gradient(1px 1px at 88% 58%, rgba(255,255,255,.55), transparent 60%),
+                radial-gradient(1.5px 1.5px at 8% 76%, rgba(255,255,255,.4), transparent 60%),
+                radial-gradient(1px 1px at 48% 84%, rgba(255,255,255,.5), transparent 60%),
+                radial-gradient(1px 1px at 94% 90%, rgba(255,224,138,.5), transparent 60%),
+                radial-gradient(circle at 50% -10%, rgba(255, 170, 30, .17), rgba(5, 5, 8, 0) 55%);
+        }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+        .caixa { width: min(1120px, 100%); margin: 0 auto; padding: 0 20px; }
+        .secao { padding: 72px 0; scroll-margin-top: 62px; }
+        .olho { display: inline-flex; align-items: center; gap: 8px; color: var(--ouro); font-size: 12.5px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+        h1, h2, h3 { letter-spacing: -.025em; line-height: 1.12; text-wrap: balance; }
+        h1 { font-size: clamp(36px, 7vw, 66px); font-weight: 800; margin: 16px 0 18px; }
+        h2 { font-size: clamp(28px, 4.6vw, 44px); font-weight: 800; margin: 12px 0 14px; }
+        h3 { font-size: 18px; font-weight: 700; letter-spacing: -.015em; line-height: 1.25; }
+        .dourado { background: linear-gradient(100deg, var(--ouro-claro), var(--ouro) 45%, var(--laranja)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .lead { color: var(--suave); font-size: clamp(16px, 2.2vw, 19px); max-width: 680px; }
+        .cabeca { max-width: 720px; margin-bottom: 38px; }
+        .centro { text-align: center; margin-left: auto; margin-right: auto; }
+        .centro .lead { margin: 0 auto; }
+
+        /* botões */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 14px 26px; border-radius: 16px; font-weight: 700; font-size: 16px; line-height: 1.2; text-align: center; transition: transform .18s ease, box-shadow .25s ease, background .25s ease; }
+        .btn-ouro { color: #1f1400; background: linear-gradient(120deg, #ffe08a, #ffc933 45%, #ff9d1e); box-shadow: 0 12px 38px -10px rgba(255, 170, 30, .75); }
+        .btn-ouro:hover { transform: translateY(-2px); box-shadow: 0 16px 48px -10px rgba(255, 170, 30, .95); }
+        .btn-linha { color: var(--texto); border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.04); }
+        .btn-linha:hover { background: rgba(255,255,255,.09); }
+        .btn:active { transform: translateY(1px) scale(.985); }
+        .btn:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--ouro); outline-offset: 3px; }
+        .acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+
+        /* topo */
+        .topo { position: sticky; top: 0; z-index: 20; background: rgba(5,5,8,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,.06); }
+        .topo .caixa { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 62px; }
+        .marca { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.02em; font-size: 17px; }
+        .marca img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .voltar { display: inline-flex; align-items: center; gap: 6px; color: var(--suave); font-size: 14px; font-weight: 600; min-height: 44px; }
+        .voltar:hover { color: var(--texto); }
+
+        /* abertura */
+        .abertura { padding: 58px 0 34px; text-align: center; }
+        .abertura .lead { margin: 0 auto; }
+        .abertura .acoes { justify-content: center; }
+
+        /* painel ilustrativo */
+        .painel { margin-top: 46px; padding: 14px; border-radius: 24px; border: 1px solid rgba(255, 201, 51, .28); background: linear-gradient(180deg, rgba(28,24,14,.9), rgba(13,13,19,.95)); box-shadow: 0 40px 110px -40px rgba(255,170,30,.55); text-align: left; }
+        .painel-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 4px 6px 14px; color: var(--suave); font-size: 13px; font-weight: 600; }
+        .bolinhas { display: flex; gap: 6px; }
+        .bolinhas i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.2); }
+        .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+        .kpi { padding: 13px 14px; border-radius: 14px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.06); min-width: 0; }
+        .kpi span { display: block; color: var(--suave); font-size: 11.5px; font-weight: 600; }
+        .kpi b { display: block; margin-top: 3px; font-size: clamp(16px, 2.3vw, 22px); font-weight: 800; letter-spacing: -.02em; }
+        .funil { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .coluna { padding: 10px; border-radius: 14px; background: rgba(255,255,255,.03); min-width: 0; }
+        .coluna h4 { display: flex; justify-content: space-between; gap: 6px; font-size: 12px; font-weight: 700; color: #d4d4d8; margin-bottom: 9px; }
+        .coluna h4 em { font-style: normal; color: var(--ouro); }
+        .ficha { padding: 10px 11px; border-radius: 11px; background: var(--cartao-solido); border: 1px solid rgba(255,255,255,.07); margin-top: 7px; font-size: 12.5px; line-height: 1.3; }
+        .ficha b { display: block; font-weight: 700; }
+        .ficha span { display: block; color: var(--suave); font-size: 11.5px; margin-top: 3px; }
+        .ficha.ganho { border-color: rgba(74,222,128,.42); }
+        .ficha.ganho span { color: var(--verde); }
+        .nota { margin-top: 10px; color: #71717a; font-size: 12px; text-align: center; }
+
+        /* o que é */
+        .duas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .quadro { padding: 28px; border-radius: 22px; border: 1px solid var(--linha); background: var(--cartao); }
+        .quadro.bom { border-color: rgba(255,201,51,.42); background: linear-gradient(170deg, rgba(62,44,8,.55), rgba(18,18,26,.82)); }
+        .quadro h3 { display: flex; align-items: center; gap: 9px; font-size: 20px; margin-bottom: 16px; }
+        .quadro ul { list-style: none; padding: 0; display: grid; gap: 12px; }
+        .quadro li { display: flex; gap: 10px; color: #d4d4d8; font-size: 15px; line-height: 1.42; }
+        .quadro li i { flex: none; margin-top: 2px; font-size: 18px; color: #71717a; }
+        .quadro.bom li i, .quadro.bom h3 i { color: var(--ouro); }
+
+        /* funções */
+        .grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .func { padding: 24px; border-radius: 20px; border: 1px solid var(--linha); background: var(--cartao); transition: border-color .25s ease, transform .25s ease; }
+        .func:hover { border-color: rgba(255,201,51,.45); transform: translateY(-3px); }
+        .func > i { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-bottom: 15px; border-radius: 13px; font-size: 23px; color: #2a1a00; background: linear-gradient(145deg, #ffd84d, #ff9d1e); }
+        .func p { margin-top: 8px; color: var(--suave); font-size: 14.5px; line-height: 1.5; }
+
+        /* caminho da venda */
+        .caminho { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: passo; }
+        .caminho li { position: relative; padding: 24px 22px; border-radius: 20px; border: 1px solid var(--linha); background: var(--cartao); counter-increment: passo; }
+        .caminho li::before { content: counter(passo); display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-bottom: 14px; border-radius: 50%; font-size: 14px; font-weight: 800; color: var(--ouro); border: 1px solid rgba(255,201,51,.5); }
+        .caminho p { margin-top: 7px; color: var(--suave); font-size: 14.5px; line-height: 1.5; }
+
+        /* alto valor */
+        .valor { padding: 44px; border-radius: 28px; border: 1px solid rgba(255,201,51,.35); background: linear-gradient(135deg, rgba(70,48,8,.62), rgba(14,14,20,.92) 62%); }
+        .valor-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 30px; }
+        .valor-grade b { display: block; font-size: 17px; font-weight: 700; letter-spacing: -.012em; }
+        .valor-grade p { margin-top: 6px; color: #c4c4cc; font-size: 14.5px; line-height: 1.5; }
+
+        /* investimento */
+        .oferta { display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: center; padding: 42px; border-radius: 28px; border: 1px solid rgba(255,201,51,.5); background: var(--cartao-solido); box-shadow: 0 34px 100px -44px rgba(255,170,30,.7); }
+        .preco { font-size: clamp(44px, 7vw, 64px); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; margin: 10px 0 8px; }
+        .oferta small { display: block; color: var(--suave); font-size: 14px; }
+        .oferta .btn { width: 100%; margin-top: 22px; }
+        .oferta .btn + .btn { margin-top: 10px; }
+        .inclui { list-style: none; padding: 0; display: grid; gap: 11px; }
+        .inclui li { display: flex; gap: 10px; font-size: 15px; line-height: 1.4; }
+        .inclui i { flex: none; margin-top: 2px; color: var(--ouro); font-size: 18px; }
+
+        /* dúvidas */
+        .duvidas { max-width: 780px; margin: 0 auto; display: grid; gap: 10px; }
+        details { border-radius: 16px; border: 1px solid var(--linha); background: var(--cartao); }
+        summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 58px; padding: 15px 20px; font-weight: 700; font-size: 15.5px; cursor: pointer; list-style: none; border-radius: 16px; }
+        summary::-webkit-details-marker { display: none; }
+        summary i { flex: none; color: var(--ouro); transition: transform .2s ease; }
+        details[open] summary i { transform: rotate(45deg); }
+        details p { padding: 0 20px 18px; color: var(--suave); font-size: 15px; }
+
+        .fim { text-align: center; padding: 76px 0 96px; }
+        .fim .acoes { justify-content: center; }
+        .rodape { padding: 26px 0 34px; border-top: 1px solid rgba(255,255,255,.06); color: #71717a; font-size: 13px; text-align: center; }
+
+        /* barra fixa no celular */
+        .barra { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: none; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 16px calc(11px + env(safe-area-inset-bottom)); background: rgba(10,10,15,.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid rgba(255,201,51,.3); transform: translateY(110%); transition: transform .3s ease; }
+        .barra.on { transform: none; }
+        .barra span { font-size: 12px; color: var(--suave); line-height: 1.2; }
+        .barra b { display: block; color: var(--texto); font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+        .barra .btn { min-height: 46px; padding: 11px 16px; font-size: 14px; border-radius: 13px; }
+
+        /* entrada suave ao rolar (sem JavaScript, tudo aparece normalmente) */
+        .js .sobe { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); }
+        .js .sobe.visto { opacity: 1; transform: none; }
+
+        @media (max-width: 900px) {
+            .grade, .valor-grade { grid-template-columns: repeat(2, 1fr); }
+            .caminho { grid-template-columns: repeat(2, 1fr); }
+            .oferta { grid-template-columns: 1fr; padding: 30px 24px; gap: 26px; }
+            .valor { padding: 32px 24px; }
+        }
+        @media (max-width: 640px) {
+            .secao { padding: 54px 0; }
+            .abertura { padding: 40px 0 20px; }
+            .abertura .acoes .btn, .fim .btn { width: 100%; }
+            .duas, .grade, .valor-grade, .caminho { grid-template-columns: 1fr; }
+            .kpis, .funil { grid-template-columns: repeat(2, 1fr); }
+            .funil .coluna:nth-child(n+3) { display: none; }
+            .painel { padding: 10px; margin-top: 34px; border-radius: 20px; }
+            .quadro { padding: 22px; }
+            .barra { display: flex; }
+            body { padding-bottom: 76px; }
+            .fim { padding: 56px 0 60px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .js .sobe { opacity: 1; transform: none; transition: none; }
+            .btn, .func, .barra { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ceu" aria-hidden="true"></div>
+
+    <header class="topo">
+        <div class="caixa">
+            <a class="marca" href="index.html"><img src="img/favicon-saturno-64.png" alt="" width="30" height="30">Saturno NFC</a>
+            <a class="voltar" href="index.html?pedido=1"><i class="ph ph-arrow-left" aria-hidden="true"></i>Voltar ao pedido</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="abertura">
+            <div class="caixa">
+                <span class="olho"><i class="ph-fill ph-planet" aria-hidden="true"></i>CRM Saturno</span>
+                <h1>Nenhum cliente esquecido.<br><span class="dourado">Nenhuma venda no escuro.</span></h1>
+                <p class="lead">Leads, conversas do WhatsApp, pedidos e mensalidades em um só painel. Você abre a CRM e sabe quem precisa de resposta, o que está para vencer e quanto está entrando.</p>
+                <div class="acoes">
+                    <a class="btn btn-ouro" href="index.html?crm=1">Incluir a CRM no meu pedido<i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+                    <a class="btn btn-linha" href="#o-que-e">Entender o que é CRM</a>
+                </div>
+
+                <div class="painel sobe" role="img" aria-label="Ilustração do painel da CRM com indicadores do mês e um funil de vendas em colunas">
+                    <div class="painel-topo">
+                        <span class="bolinhas" aria-hidden="true"><i></i><i></i><i></i></span>
+                        <span>Leads e funil</span>
+                    </div>
+                    <div class="kpis">
+                        <div class="kpi"><span>Vendas do mês</span><b class="dourado">R$ 48.200</b></div>
+                        <div class="kpi"><span>Receita recorrente</span><b>R$ 6.900</b></div>
+                        <div class="kpi"><span>Conversão</span><b>32%</b></div>
+                        <div class="kpi"><span>Tarefas de hoje</span><b>7</b></div>
+                    </div>
+                    <div class="funil">
+                        <div class="coluna"><h4>Novo lead <em>3</em></h4>
+                            <div class="ficha"><b>Marina Costa</b><span>Pediu orçamento pelo site</span></div>
+                            <div class="ficha"><b>Grupo Horizonte</b><span>Chegou pelo WhatsApp</span></div>
+                        </div>
+                        <div class="coluna"><h4>Atendimento <em>2</em></h4>
+                            <div class="ficha"><b>Studio Lume</b><span>Retornar hoje às 15h</span></div>
+                            <div class="ficha"><b>Rafael Nunes</b><span>Aguardando resposta</span></div>
+                        </div>
+                        <div class="coluna"><h4>Proposta enviada <em>2</em></h4>
+                            <div class="ficha"><b>Clínica Vértice</b><span>R$ 12.000</span></div>
+                            <div class="ficha"><b>Atelier Sol</b><span>R$ 8.500</span></div>
+                        </div>
+                        <div class="coluna"><h4>Ganho <em>1</em></h4>
+                            <div class="ficha ganho"><b>Casa Oliva</b><span>R$ 15.000, pedido aberto</span></div>
+                        </div>
+                    </div>
+                </div>
+                <p class="nota">Ilustração com dados fictícios.</p>
+            </div>
+        </section>
+
+        <section class="secao" id="o-que-e">
+            <div class="caixa">
+                <div class="cabeca sobe">
+                    <span class="olho">O que é CRM</span>
+                    <h2>É a memória e o controle do seu comercial.</h2>
+                    <p class="lead">CRM vem de <em>Customer Relationship Management</em>, ou gestão do relacionamento com o cliente. Na prática, é o sistema onde fica cada contato, cada conversa, cada proposta e o próximo passo de cada negociação.</p>
+                </div>
+                <div class="duas">
+                    <div class="quadro sobe">
+                        <h3><i class="ph ph-warning-circle" aria-hidden="true"></i>Sem CRM</h3>
+                        <ul>
+                            <li><i class="ph ph-x" aria-hidden="true"></i>Contatos espalhados entre WhatsApp, planilha e caderno</li>
+                            <li><i class="ph ph-x" aria-hidden="true"></i>O retorno ao cliente depende da memória de alguém</li>
+                            <li><i class="ph ph-x" aria-hidden="true"></i>Quando alguém sai, o histórico da negociação vai junto</li>
+                            <li><i class="ph ph-x" aria-hidden="true"></i>O faturamento e a margem só aparecem no fim do mês</li>
+                        </ul>
+                    </div>
+                    <div class="quadro bom sobe">
+                        <h3><i class="ph-fill ph-check-circle" aria-hidden="true"></i>Com a CRM Saturno</h3>
+                        <ul>
+                            <li><i class="ph-bold ph-check" aria-hidden="true"></i>Todo contato em um só lugar, com a etapa em que está</li>
+                            <li><i class="ph-bold ph-check" aria-hidden="true"></i>Tarefas mostram quem precisa de retorno hoje e o que atrasou</li>
+                            <li><i class="ph-bold ph-check" aria-hidden="true"></i>Histórico de notas e mudanças de etapa guardado na ficha</li>
+                            <li><i class="ph-bold ph-check" aria-hidden="true"></i>Vendas, receita recorrente e conversão visíveis a qualquer momento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao" id="funcoes">
+            <div class="caixa">
+                <div class="cabeca sobe">
+                    <span class="olho">O que ela faz</span>
+                    <h2>Do primeiro contato à <span class="dourado">mensalidade recebida.</span></h2>
+                    <p class="lead">Cada função existe para tirar o comercial e o operacional da improvisação.</p>
+                </div>
+                <div class="grade">
+                    <article class="func sobe"><i class="ph ph-kanban" aria-hidden="true"></i><h3>Funil de vendas visual</h3><p>Veja cada negociação por etapa, em tabela ou em colunas de arrastar e soltar, com filtros por mês e origem.</p></article>
+                    <article class="func sobe"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i><h3>WhatsApp dentro da CRM</h3><p>Converse com seus contatos no próprio painel. Contato novo vira lead sozinho, sem digitar nada.</p></article>
+                    <article class="func sobe"><i class="ph ph-address-book" aria-hidden="true"></i><h3>Ficha completa do cliente</h3><p>Dados da empresa, histórico, tarefas, pedidos e assinaturas de cada cliente reunidos em um só lugar.</p></article>
+                    <article class="func sobe"><i class="ph ph-bell-ringing" aria-hidden="true"></i><h3>Tarefas e avisos no celular</h3><p>Lembretes de retorno e notificações de lead novo, pedido e mensagem, mesmo com a CRM fechada.</p></article>
+                    <article class="func sobe"><i class="ph ph-package" aria-hidden="true"></i><h3>Pedidos e estoque</h3><p>Acompanhe cada pedido, pagamento e rastreio. O estoque baixa sozinho a cada venda.</p></article>
+                    <article class="func sobe"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i><h3>Mensalidades sob controle</h3><p>Receita recorrente, vencimentos e atrasos em uma tela, com o registro de cada pagamento recebido.</p></article>
+                    <article class="func sobe"><i class="ph ph-chart-line-up" aria-hidden="true"></i><h3>Relatórios que orientam</h3><p>Conversão, faturamento, ticket médio, ciclo de venda, origem dos leads e motivos de perda.</p></article>
+                    <article class="func sobe"><i class="ph ph-percent" aria-hidden="true"></i><h3>Margem de lucro</h3><p>Custo, frete, impostos, lucro e margem de cada produto, com calculadora de preço pela margem desejada.</p></article>
+                    <article class="func sobe"><i class="ph ph-chats-circle" aria-hidden="true"></i><h3>Mensagens prontas</h3><p>Textos para proposta, retorno, envio e cobrança. Copie ou abra direto no WhatsApp do cliente.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao">
+            <div class="caixa">
+                <div class="cabeca sobe">
+                    <span class="olho">Na prática</span>
+                    <h2>O caminho de uma venda na CRM.</h2>
+                </div>
+                <ol class="caminho">
+                    <li class="sobe"><h3>O contato chega</h3><p>Quem chama no WhatsApp entra no funil sozinho, e você é avisado na hora.</p></li>
+                    <li class="sobe"><h3>Você conduz</h3><p>Cada conversa, nota e tarefa fica na ficha. O próximo retorno já tem dia marcado.</p></li>
+                    <li class="sobe"><h3>A proposta avança</h3><p>Você vê o valor em negociação em cada etapa e sabe onde agir primeiro.</p></li>
+                    <li class="sobe"><h3>Ganho vira pedido</h3><p>Com um clique, o lead vira cliente e o pedido já abre com o produto de interesse.</p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="secao">
+            <div class="caixa">
+                <div class="valor sobe">
+                    <span class="olho">Para quem vende alto valor</span>
+                    <h2>Quando cada cliente vale muito, o improviso custa caro.</h2>
+                    <p class="lead" style="color:#d4d4d8">Venda de ticket alto pede retorno no momento certo, histórico à mão e atendimento à altura. A CRM dá essa estrutura à sua operação.</p>
+                    <div class="valor-grade">
+                        <div><b>Atendimento à altura</b><p>Retome cada conversa sabendo o que foi dito e o que o cliente pediu, sem fazer a mesma pergunta duas vezes.</p></div>
+                        <div><b>Decisão com números</b><p>Saiba de onde vêm os melhores leads, por que as vendas se perdem e quanto cada produto deixa de lucro.</p></div>
+                        <div><b>Operação que não depende de uma pessoa</b><p>Cada pessoa da equipe tem seu login, e o histórico fica com a empresa.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao" id="investimento">
+            <div class="caixa">
+                <div class="oferta sobe">
+                    <div>
+                        <span class="olho">Investimento</span>
+                        <h2 style="margin-bottom:6px">Coloque seu comercial em órbita.</h2>
+                        <div class="preco dourado">R$ 1.500</div>
+                        <small>Serviço opcional, adicionado ao seu pedido do site.</small>
+                        <a class="btn btn-ouro" href="index.html?crm=1">Incluir a CRM no meu pedido<i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+                        <a class="btn btn-linha" href="https://wa.me/5531920067518?text=Ol%C3%A1%21%20Vi%20a%20p%C3%A1gina%20da%20CRM%20e%20tenho%20uma%20d%C3%BAvida." target="_blank" rel="noopener"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i>Tirar dúvidas no WhatsApp</a>
+                    </div>
+                    <ul class="inclui">
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Funil de vendas com tabela, colunas e relatórios</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Caixa de entrada do WhatsApp no painel</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Clientes, tarefas e histórico completos</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Pedidos, estoque e etiquetas de envio</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Mensalidades e receita recorrente</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Cálculo de margem de lucro</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Notificações no celular</li>
+                        <li><i class="ph-bold ph-check" aria-hidden="true"></i>Pedidos do site entrando sozinhos no funil</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao" id="duvidas">
+            <div class="caixa">
+                <div class="cabeca centro sobe">
+                    <span class="olho">Dúvidas</span>
+                    <h2>Antes de decidir.</h2>
+                </div>
+                <div class="duvidas sobe">
+                    <details><summary>Preciso instalar algum programa?<i class="ph-bold ph-plus" aria-hidden="true"></i></summary><p>Não. A CRM abre no navegador, no computador ou no celular, e também pode ser adicionada à tela de início do celular como um aplicativo.</p></details>
+                    <details><summary>Minha equipe pode usar junto?<i class="ph-bold ph-plus" aria-hidden="true"></i></summary><p>Sim. Cada pessoa entra com o próprio login, e todos trabalham sobre os mesmos dados.</p></details>
+                    <details><summary>Já tenho meus contatos em uma planilha. Perco tudo?<i class="ph-bold ph-plus" aria-hidden="true"></i></summary><p>Não. A CRM importa planilhas em CSV e também exporta seus leads quando você precisar.</p></details>
+                    <details><summary>Quem consegue ver os dados da minha empresa?<i class="ph-bold ph-plus" aria-hidden="true"></i></summary><p>Os dados só podem ser lidos por usuários logados, e o login é criado apenas para quem você autorizar.</p></details>
+                    <details><summary>Ela fica com a cara da minha marca?<i class="ph-bold ph-plus" aria-hidden="true"></i></summary><p>Sim. Você pode escolher o nome da marca, a cor principal e o tema claro ou escuro.</p></details>
+                </div>
+            </div>
+        </section>
+
+        <section class="fim">
+            <div class="caixa sobe">
+                <h2>Sua próxima venda merece <span class="dourado">mais do que memória.</span></h2>
+                <div class="acoes">
+                    <a class="btn btn-ouro" href="index.html?crm=1">Incluir a CRM no meu pedido<i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="rodape"><div class="caixa">Saturno NFC</div></footer>
+
+    <div class="barra" id="barra">
+        <span>CRM Saturno<b>R$ 1.500</b></span>
+        <a class="btn btn-ouro" href="index.html?crm=1">Incluir no pedido</a>
+    </div>
+
+    <script>
+        (function () {
+            var itens = document.querySelectorAll('.sobe');
+            if ('IntersectionObserver' in window) {
+                var olho = new IntersectionObserver(function (es) {
+                    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visto'); olho.unobserve(e.target); } });
+                }, { rootMargin: '0px 0px -6% 0px' });
+                itens.forEach(function (el) { olho.observe(el); });
+            } else {
+                itens.forEach(function (el) { el.classList.add('visto'); });
+            }
+            // barra do celular: aparece depois da abertura e sai quando a oferta está na tela
+            var barra = document.getElementById('barra'), oferta = document.getElementById('investimento'), fim = document.querySelector('.fim');
+            function atualiza() {
+                var a = innerHeight, r = oferta.getBoundingClientRect(), f = fim.getBoundingClientRect();
+                var cobre = (r.top < a && r.bottom > 0) || (f.top < a && f.bottom > 0);
+                barra.classList.toggle('on', scrollY > 420 && !cobre);
+            }
+            addEventListener('scroll', atualiza, { passive: true });
+            addEventListener('resize', atualiza);
+            atualiza();
+        })();
+    </script>
+</body>
+</html>

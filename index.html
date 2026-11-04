@@ -1609,6 +1609,16 @@
         .sp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; text-align: left; }
         .sp-txt b { color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.012em; line-height: 1.2; }
         .sp-txt span { color: #86868b; font-size: 12px; line-height: 1.35; letter-spacing: -.005em; }
+        .sp-row-site { flex-wrap: wrap; }
+        .sp-desc { flex: 0 0 100%; min-width: 0; text-align: left; }
+        .sp-desc-t { display: block; color: #a1a1a6; font-size: 12.5px; line-height: 1.4; letter-spacing: -.005em; }
+        .sp-oque { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; margin-top: 8px; padding: 8px 14px; border-radius: 12px; color: #ffd84d; font-size: 13px; font-weight: 700; border: 1px solid rgba(255,216,77,.45); background: rgba(255,216,77,.08); transition: background .2s ease; }
+        .sp-oque:hover { background: rgba(255,216,77,.18); }
+        .sp-desc p { margin: 0; color: #a1a1a6; font-size: 12.5px; line-height: 1.4; letter-spacing: -.005em; }
+        .sp-frete.sp-frete-neon, .sp-frete.sp-frete-neon i { color: #39ff14; text-shadow: 0 0 10px rgba(57,255,20,.55); }
+        .sp-lista { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+        .sp-lista li { display: flex; align-items: flex-start; gap: 6px; color: #c7c7cc; font-size: 12px; line-height: 1.3; letter-spacing: -.005em; }
+        .sp-lista i { flex: none; margin-top: 1px; color: #ffd84d; font-size: 12px; }
         .sp-val { flex: none; color: #f5f5f7; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
         .sp-qtd { flex: none; display: flex; align-items: center; gap: 2px; }
         .sp-qtd button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: transparent; color: #f5f5f7; font-size: 13px; cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s, transform .12s, opacity .2s; }
@@ -1927,7 +1937,20 @@
         /* item TapReview na lista dos planos (azul) */
         /* texto do botão principal: encolhe com a tela para caber numa linha */
         .main-btn-text { font-size: clamp(12px, 3.6vw, 16px); }
-        @media (max-width: 340px) { #btn-escolher-plano .main-btn-text { font-size: 11.5px; } }
+        /* Botão principal: maior, dourado e com brilho pulsando (o título pode quebrar em 2 linhas no celular) */
+        #linktree-buttons #btn-escolher-plano { padding: 18px 16px; border-radius: 20px; border-color: rgba(255, 196, 0, .75); box-shadow: 0 0 0 1px rgba(255, 196, 0, .25), 0 10px 34px -8px rgba(255, 170, 0, .55); animation: destaquePulsa 2.6s ease-in-out infinite; }
+        #linktree-buttons #btn-escolher-plano::after { background: linear-gradient(120deg, rgba(92, 62, 4, .92), rgba(38, 26, 8, .94) 55%, rgba(84, 42, 6, .92)); }
+        #linktree-buttons #btn-escolher-plano:hover::after { background: linear-gradient(120deg, rgba(120, 82, 6, .92), rgba(52, 36, 10, .94) 55%, rgba(112, 56, 8, .92)); }
+        #btn-escolher-plano .main-btn-text { font-size: clamp(16px, 4.6vw, 20px); font-weight: 800; line-height: 1.2; white-space: normal; overflow: visible; }
+        #btn-escolher-plano .btn-subtext { font-size: clamp(12px, 3.3vw, 14px); color: #ffe08a; opacity: 1; margin-top: 3px; white-space: normal; overflow: visible; }
+        #btn-escolher-plano .icon-wrapper { width: 44px; height: 44px; background: linear-gradient(145deg, #ffd84d, #ff9d1e); }
+        #btn-escolher-plano .icon-wrapper i { color: #2a1a00; font-size: 24px; }
+        #btn-escolher-plano #escolher-plano-caret { color: #ffd84d; font-size: 20px; flex: none; }
+        @keyframes destaquePulsa {
+            0%, 100% { box-shadow: 0 0 0 1px rgba(255, 196, 0, .25), 0 10px 34px -8px rgba(255, 170, 0, .55); }
+            50% { box-shadow: 0 0 0 2px rgba(255, 196, 0, .5), 0 12px 46px -6px rgba(255, 170, 0, .85); }
+        }
+        @media (prefers-reduced-motion: reduce) { #linktree-buttons #btn-escolher-plano { animation: none; } }
         /* subtexto pequeno dos botões da seção 1 */
         .btn-subtext { font-size: clamp(10px, 2.7vw, 12px); font-weight: 500; line-height: 1.25; margin-top: 1px; opacity: 0.85; }
         .icon-google { font-size: 1.1rem; color: #4285F4; margin-top: -1px; flex-shrink: 0; }
@@ -2372,10 +2395,19 @@
             50%      { transform: scale(1.12); }
         }
 
-        /* Atendimento personalizado: campo de mensagem + enviar, no estilo do WhatsApp */
-        .cw-compor { display: flex; align-items: flex-end; gap: 8px; }
-        .chat-widget-form-input.cw-texto { flex: 1; min-width: 0; margin: 0; min-height: 46px; max-height: 120px; resize: none; overflow-y: auto;
-            border-radius: 23px; padding: 12px 16px; line-height: 1.35; font-family: inherit; }
+        /* Ajuda com o pedido: balão branco de conversa, com campo e enviar no estilo do WhatsApp */
+        .chat-widget-form { width: min(272px, calc(100vw - 2.5rem)); background: #ffffff; border: 0; border-radius: 1.1rem 1.1rem 0.25rem 1.1rem; padding: 0.95rem 0.8rem 0.8rem 0.95rem; gap: 0.3rem; box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55); }
+        #chat-widget:has(.chat-widget-form-open) .chat-widget-bubble { opacity: 0; pointer-events: none; animation: none; }
+        .chat-widget-form::after { content: ''; position: absolute; right: -7px; bottom: -6px; width: 13px; height: 12px; background: #ffffff; clip-path: polygon(0 0, 100% 100%, 0 45%); }
+        .chat-widget-form .chat-widget-form-title { color: #111b21; font-size: 0.98rem; font-weight: 800; letter-spacing: -0.01em; padding-right: 1.6rem; }
+        .chat-widget-form .chat-widget-form-subtitle { color: #54656f; font-size: 0.8rem; line-height: 1.35; margin: 0 0 0.45rem; }
+        .chat-widget-form > .chat-widget-bubble-close { top: 0.65rem; right: 0.6rem; width: 1.75rem; height: 1.75rem; color: #54656f; font-size: 0.85rem; }
+        .chat-widget-form > .chat-widget-bubble-close:hover { color: #111b21; }
+        .cw-compor { display: flex; align-items: center; gap: 8px; }
+        .chat-widget-form .chat-widget-form-input { flex: 1; min-width: 0; height: 46px; border-radius: 23px; padding: 0 16px; background: #f0f2f5; border: 1px solid transparent; color: #111b21; font-family: inherit; font-size: 16px; }
+        .chat-widget-form .chat-widget-form-input::placeholder { color: #667781; }
+        .chat-widget-form .chat-widget-form-input:focus { border-color: #25D366; background: #ffffff; }
+        .cw-erro { margin: 0.3rem 0 0 0.5rem; color: #d92d20; font-size: 0.72rem; font-weight: 600; }
         .cw-enviar { flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center;
             color: #fff; background: #25D366; box-shadow: 0 6px 18px -6px rgba(37, 211, 102, 0.7); transition: background .2s, transform .15s; }
         .cw-enviar svg { margin-left: 2px; }
@@ -2661,7 +2693,7 @@
                     </div>
                     <span class="flex flex-col min-w-0 text-left z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">
                         <span class="font-bold text-white main-btn-text tracking-tight whitespace-nowrap truncate">Crie seu plano personalizado agora!</span>
-                        <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Presença digital completa para sua empresa</span>
+                        <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Seu site pronto a partir de R$ 597</span>
                     </span>
                 </div>
                 <i id="escolher-plano-caret" class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
@@ -2675,10 +2707,16 @@
                     </div>
                     <div class="flex flex-col gap-2 md:gap-3 w-full">
                         <div class="sp-cfg" id="sp-cfg">
-                            <div class="sp-row sp-anim" style="--i:1">
+                            <div class="sp-row sp-row-site sp-anim" style="--i:1">
                                 <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></div>
-                                <div class="sp-txt"><b>Site personalizado</b><span>Vem pronto e configurado. WhatsApp, localização, redes e salvar contato.</span></div>
-                                <span class="sp-val">R$ 397</span>
+                                <div class="sp-txt"><b>Site personalizado</b><span>Sua presença digital completa</span></div>
+                                <span class="sp-val">R$ 597</span>
+                                <div class="sp-desc">
+                                    <p>Criado com a identidade da sua empresa e entregue pronto para receber clientes. Um único link que transforma quem conhece você em contato, visita e venda.</p>
+                                    <ul class="sp-lista">
+                                        <li><i class="ph ph-check" aria-hidden="true"></i>Entregue configurado: você não precisa montar nada</li>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="sp-row sp-anim" style="--i:2">
                                 <div class="sp-thumb sp-3d sp-3d-card"><img src="img/caixa-cartao.webp" alt="" width="156" height="120" decoding="async"></div>
@@ -2698,20 +2736,24 @@
                                     <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
-                            <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
+                            <label class="sp-row sp-row-site sp-anim" style="--i:4" for="sp-crm">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                                <span class="sp-txt"><b>CRM <em class="sp-opc">Opcional</em></b><span>Organize seus clientes, conversas e vendas em um só lugar.</span></span>
+                                <span class="sp-txt"><b>CRM <em class="sp-opc">Opcional</em></b><span>Seu comercial sob controle</span></span>
                                 <span class="sp-opc-dir">
                                     <span class="sp-val">R$ 1.500</span>
                                     <span class="sp-tog"><input id="sp-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
                                 </span>
+                                <span class="sp-desc">
+                                    <span class="sp-desc-t">Leads, conversas do WhatsApp, pedidos e mensalidades em um só painel. Você vê quem precisa de resposta, o que está para vencer e quanto está entrando.</span>
+                                    <a class="sp-oque" id="sp-oque" href="crm.html">O que é CRM?<i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
+                                </span>
                             </label>
                             <div class="sp-total sp-anim" style="--i:5">
                                 <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site personalizado</span></div>
-                                <strong id="sp-preco" aria-live="polite">R$ 397,00</strong>
+                                <strong id="sp-preco" aria-live="polite">R$ 597,00</strong>
                             </div>
                             <button type="button" class="sp-pedir sp-anim" id="sp-pedir" style="--i:6">Fazer meu pedido</button>
-                            <span class="sp-frete sp-anim" style="--i:7"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
+                            <span class="sp-frete sp-frete-neon sp-anim" style="--i:7"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
                         </div>
                         <a href="#conheca-tecnologia" class="btn-plano-tech">
                             <span class="bp-desk"><svg class="bp-nfc" viewBox="0 0 22 16" width="20" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="1" y="2" width="8" height="12" rx="1.6"/><path d="M13 5.2a4 4 0 0 1 0 5.6M16.2 3a7.2 7.2 0 0 1 0 10"/></svg> Entenda como funciona a aproximação NFC <i class="ph ph-caret-right"></i></span>
@@ -2720,21 +2762,6 @@
                 </div>
             </div>
 
-            <div class="relative w-full">
-                <a href="tapreview.html" id="btn-tapreview" class="link-btn btn-tapreview magnetic-btn w-full rounded-2xl px-4 py-3 flex items-center justify-between gap-2 group cascade-btn" style="transition-delay: 0.5s;">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="icon-wrapper w-8 h-8 shrink-0 rounded-full bg-[#4285F4]/25 flex items-center justify-center transition-colors group-hover:bg-[#4285F4]/35 z-10 relative">
-                            <i class="ph ph-google-logo text-lg text-[#6ea8ff]"></i>
-                        </div>
-                        <span class="flex flex-col min-w-0 text-left z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">
-                            <span class="font-bold text-white text-[13px] sm:text-sm md:text-base whitespace-nowrap truncate">Avaliações Google por NFC</span>
-                            <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Mais avaliações com apenas uma aproximação</span>
-                        </span>
-                    </div>
-                    <i class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
-                </a>
-                <span class="badge-novidade" aria-hidden="true">Novidade</span>
-            </div>
 
         </section>
 
@@ -3320,37 +3347,33 @@
 
     </main>
 
-    <!-- Widget de Chat Flutuante: Atendimento personalizado via WhatsApp -->
+    <!-- Widget de Chat Flutuante: ajuda com o pedido via WhatsApp -->
     <div id="chat-widget">
-        <div id="chat-widget-bubble" class="chat-widget-bubble" role="button" tabindex="0" aria-label="Abrir atendimento personalizado no WhatsApp">
+        <div id="chat-widget-bubble" class="chat-widget-bubble" role="button" tabindex="0" aria-label="Ajuda com seu pedido? Falar no WhatsApp">
             <span class="cw-dot" aria-hidden="true"></span>
-            <span class="cw-msg">Atendimento personalizado</span>
+            <span class="cw-msg">Ajuda com seu pedido?</span>
             <button type="button" id="chat-widget-bubble-close" class="chat-widget-bubble-close" aria-label="Fechar">
                 <i class="ph ph-x"></i>
             </button>
         </div>
 
-        <!-- Popup: nome + mensagem, enviado direto pro WhatsApp -->
-        <div id="chat-widget-form" class="chat-widget-form">
-            <button type="button" id="chat-widget-form-close" class="chat-widget-bubble-close" aria-label="Fechar" style="top: 0.9rem; right: 0.9rem;">
+        <!-- Popup: balão branco de conversa; pede só o nome e abre o WhatsApp -->
+        <form id="chat-widget-form" class="chat-widget-form" novalidate>
+            <button type="button" id="chat-widget-form-close" class="chat-widget-bubble-close" aria-label="Fechar">
                 <i class="ph ph-x"></i>
             </button>
-            <p class="chat-widget-form-title">Atendimento personalizado</p>
-            <p class="chat-widget-form-subtitle">Diga seu nome e escreva sua mensagem para falar direto com a gente no WhatsApp.</p>
-            <label for="chat-widget-nome" class="chat-widget-form-label">Seu nome</label>
-            <input id="chat-widget-nome" type="text" placeholder="Digite seu nome" autocomplete="name" class="chat-widget-form-input">
-            <label for="chat-widget-texto" class="chat-widget-form-label">Mensagem</label>
-            <!-- campo de mensagem + botão de enviar redondo, no estilo do WhatsApp -->
+            <p class="chat-widget-form-title">Ajuda com seu pedido?</p>
+            <p class="chat-widget-form-subtitle">Me diga seu nome e continuamos no WhatsApp.</p>
             <div class="cw-compor">
-                <textarea id="chat-widget-texto" rows="1" placeholder="Mensagem" class="chat-widget-form-input cw-texto"></textarea>
-                <button type="button" id="chat-widget-form-enviar" class="cw-enviar" aria-label="Enviar no WhatsApp">
+                <input id="chat-widget-nome" type="text" maxlength="60" placeholder="Seu nome" autocomplete="name" aria-label="Seu nome" class="chat-widget-form-input">
+                <button type="submit" id="chat-widget-form-enviar" class="cw-enviar" aria-label="Continuar no WhatsApp">
                     <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21.85 12.5a.55.55 0 0 0 0-1L3.4 3.6a.55.55 0 0 0-.77.6L4.5 11l9 1-9 1-1.87 6.8a.55.55 0 0 0 .77.6Z"/></svg>
                 </button>
             </div>
-            <p id="chat-widget-form-erro" class="hidden text-[11px] font-semibold text-red-400 -mt-1">Preencha seu nome e escreva sua mensagem.</p>
-        </div>
+            <p id="chat-widget-form-erro" class="cw-erro hidden" role="alert">Digite seu nome para continuar.</p>
+        </form>
 
-        <button type="button" id="chat-widget-btn" class="chat-widget-btn" aria-label="Atendimento personalizado via WhatsApp">
+        <button type="button" id="chat-widget-btn" class="chat-widget-btn" aria-label="Ajuda com seu pedido? Falar no WhatsApp">
             <!-- Logo oficial do WhatsApp (glifo branco sobre o verde da marca) -->
             <span class="cw-count" aria-hidden="true">1</span>
             <svg class="chat-widget-wa" viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="#ffffff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -3560,7 +3583,7 @@
             observer.observe(video);
         })();
 
-        // --- Widget de Chat: mostra o balão "Atendimento personalizado"
+        // --- Widget de Chat: mostra o balão "Ajuda com seu pedido?"
         // assim que o usuário começar a rolar a página (scroll). ---
         (function () {
             const bubble = document.getElementById('chat-widget-bubble');
@@ -3606,7 +3629,7 @@
             });
         })();
 
-        // --- Widget de Chat: popup "nome + mensagem" enviado direto pro WhatsApp ---
+        // --- Widget de Chat: pede só o nome e abre o WhatsApp ---
         (function () {
             const WHATSAPP_PHONE = '5531920067518';
 
@@ -3614,10 +3637,8 @@
             const form = document.getElementById('chat-widget-form');
             const closeBtn = document.getElementById('chat-widget-form-close');
             const nomeInput = document.getElementById('chat-widget-nome');
-            const textoInput = document.getElementById('chat-widget-texto');
             const erroMsg = document.getElementById('chat-widget-form-erro');
-            const enviarBtn = document.getElementById('chat-widget-form-enviar');
-            if (!btn || !form || !nomeInput || !textoInput || !enviarBtn) return;
+            if (!btn || !form || !nomeInput) return;
 
             function openForm() {
                 form.classList.add('chat-widget-form-open');
@@ -3637,40 +3658,24 @@
                     closeForm();
                 }
             });
-
-            function limparErro() {
-                if (erroMsg && nomeInput.value.trim() && textoInput.value.trim()) erroMsg.classList.add('hidden');
-            }
-            // o campo de mensagem cresce conforme a pessoa escreve (como no WhatsApp)
-            function ajustarAltura() {
-                textoInput.style.height = 'auto';
-                textoInput.style.height = Math.min(textoInput.scrollHeight, 120) + 'px';
-            }
-            nomeInput.addEventListener('input', limparErro);
-            textoInput.addEventListener('input', () => { limparErro(); ajustarAltura(); });
-            // Enter envia; Shift + Enter pula linha
-            textoInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarBtn.click(); }
+            nomeInput.addEventListener('input', () => {
+                if (nomeInput.value.trim().length >= 2) erroMsg?.classList.add('hidden');
             });
 
-            enviarBtn.addEventListener('click', () => {
-                const nome = nomeInput.value.trim();
-                const msg = textoInput.value.trim();
-                if (!nome || !msg) {
-                    if (!nome) nomeInput.classList.add('wa-input-error');
-                    if (!msg) textoInput.classList.add('wa-input-error');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const nome = nomeInput.value.trim().replace(/\s+/g, ' ');
+                if (nome.length < 2) {
+                    nomeInput.classList.add('wa-input-error');
                     erroMsg?.classList.remove('hidden');
-                    (nome ? textoInput : nomeInput).focus();
-                    setTimeout(() => {
-                        nomeInput.classList.remove('wa-input-error');
-                        textoInput.classList.remove('wa-input-error');
-                    }, 600);
+                    nomeInput.focus();
+                    setTimeout(() => nomeInput.classList.remove('wa-input-error'), 600);
                     return;
                 }
                 erroMsg?.classList.add('hidden');
-                const texto = 'Olá, meu nome é ' + nome + '. ' + msg;
+                const texto = 'Olá, meu nome é ' + nome + '. Preciso de ajuda com meu pedido.';
                 window.open('https://wa.me/' + WHATSAPP_PHONE + '?text=' + encodeURIComponent(texto), '_blank');
-                textoInput.value = ''; ajustarAltura();
+                nomeInput.value = '';
                 closeForm();
             });
         })();
@@ -4008,8 +4013,8 @@
                 setTimeout(function () { var alvo = document.getElementById('conheca-tecnologia'); if (alvo) alvo.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 360);
             });
 
-            // montador de pedido: site = R$ 397 (sem cartão); cada cartão soma R$ 60; cada tag Google R$ 50; CRM opcional R$ 1.500
-            var BASE = 397, POR_CARTAO = 60, POR_TAG = 50, PRECO_CRM = 1500;
+            // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 60; cada tag Google R$ 50; CRM opcional R$ 1.500
+            var BASE = 597, POR_CARTAO = 60, POR_TAG = 50, PRECO_CRM = 1500;
             var crmIn = document.getElementById('sp-crm');
             var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
             var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
@@ -4044,6 +4049,22 @@
             });
             crmIn.addEventListener('change', function () { atualizaPreco(true); });
             atualizaPreco();
+
+            // "O que é CRM?": guarda o que já foi escolhido; ao voltar da página da CRM, o pedido reabre igual
+            document.getElementById('sp-oque').addEventListener('click', function () {
+                try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked})); } catch (err) {}
+            });
+            var volta = /[?&](crm|pedido)=1/.exec(location.search);
+            if (volta) {
+                try {
+                    var salvo = JSON.parse(sessionStorage.getItem('saturno_pedido') || 'null');
+                    if (salvo) { cIn.value = salvo.c; gIn.value = salvo.g; cIn.value = val(cIn); gIn.value = val(gIn); crmIn.checked = !!salvo.crm; }
+                } catch (err) {}
+                if (volta[1] === 'crm') crmIn.checked = true;
+                atualizaPreco();
+                abrirPlanos();
+                try { history.replaceState(null, '', location.pathname); } catch (err) {}
+            }
             document.getElementById('sp-pedir').addEventListener('click', function () {
                 cIn.value = val(cIn); gIn.value = val(gIn);
                 var total = atualizaPreco(), resumo = resumoTxt() + ' (' + brl(total) + ')';
@@ -4781,7 +4802,6 @@
         /* nome e empresa juntos, um embaixo do outro */
         .orb-campos{display:grid;gap:14px}
         .orb-campo{text-align:left}
-        .orb-priv{margin:6px 0 0;color:#86868b;font-size:11.5px;text-align:center}
         .orb-rot{display:block;margin:0 0 7px 4px;font-size:13px;font-weight:600;color:#1d1d1f;letter-spacing:-.005em}
         .orb-campo input{width:100%;height:52px;border-radius:14px;padding:0 16px;font-size:17px;font-weight:400;color:#1d1d1f;font-family:inherit;
             background:#f5f5f7;border:1px solid transparent;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
@@ -4826,7 +4846,7 @@
             </div>
             <div class="orb-in d1">
                 <p class="orb-tit" id="orbPlanoTit">Seu plano <span id="orbPlanoNome"></span> está a um passo</p>
-                <p class="orb-sub">Um especialista vai te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
+                <p class="orb-sub">Vamos te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
             </div>
             <div class="orb-campos orb-in d2">
                 <div class="orb-campo" id="orbCampoNome">
@@ -4839,43 +4859,71 @@
                     <input id="orbEmpresa" name="empresa" type="text" autocomplete="organization" maxlength="80" placeholder="Nome que vai nos cartões">
                     <span class="orb-erro">Digite o nome da empresa</span>
                 </div>
-                <div class="orb-campo orb-in d3" id="orbCampoTel">
-                    <label class="orb-rot" for="orbTelefone">Seu WhatsApp</label>
-                    <input id="orbTelefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="20" placeholder="(31) 99999-8888">
-                    <span class="orb-erro">Digite seu WhatsApp com DDD</span>
-                </div>
             </div>
             <button type="submit" class="orb-btn orb-in d4" id="orbBtn">
                 <span class="orb-btn-in">
                     <i class="ph-bold ph-check"></i>
                     <i class="ph-bold ph-whatsapp-logo orb-seta"></i>
-                    <span class="orb-btn-tx" id="orbBtnTx">Falar com um especialista</span>
+                    <span class="orb-btn-tx" id="orbBtnTx">Enviar pedido</span>
                 </span>
             </button>
             <p class="orb-selos orb-in d4"><span><i class="ph ph-handshake"></i>Sem compromisso</span></p>
-            <p class="orb-priv orb-in d4">Usamos seus dados só para atender este pedido.</p>
         </form>
     </div>
 
     <script>
-        // Abre a caixa, pede nome, empresa e WhatsApp, cadastra na CRM e abre o WhatsApp com os dados na mensagem
+        // Abre a caixa, pede nome e empresa, cadastra na CRM e abre o WhatsApp com os dados na mensagem
         (function () {
             var FONE = '5531920067518';
             var ov = document.getElementById('orbOv'), card = document.getElementById('orbCard');
             var nome = document.getElementById('orbNome'), empresa = document.getElementById('orbEmpresa');
             var cNome = document.getElementById('orbCampoNome'), cEmp = document.getElementById('orbCampoEmp');
             var btn = document.getElementById('orbBtn');
-            var telefone = document.getElementById('orbTelefone'), cTel = document.getElementById('orbCampoTel');
             var plano = '', pedidoPersonalizado = false, valorPedido = 0, voltarFoco = null, tFecha = null;
             var PRECO_PLANO = {'Essencial': 600, 'Profissional': 1000, 'Fora de Órbita': 2000};
-            try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; telefone.value = localStorage.getItem('saturno_telefone') || ''; } catch (e) {}
+            try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
 
-            // só os dígitos com DDD, sem o 55 ("" se o número não tem 10 ou 11 dígitos)
-            function digitosFone(t) { var d = t.replace(/\D/g, ''); if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2); return /^[1-9][0-9]{9,10}$/.test(d) ? d : ''; }
-            function mascaraFone(t) {
-                var d = t.replace(/\D/g, '').slice(0, 11);
-                if (d.length < 3) return d;
-                return '(' + d.slice(0, 2) + ') ' + (d.length > 10 ? d.slice(2, 7) + '-' + d.slice(7) : d.length > 6 ? d.slice(2, 6) + '-' + d.slice(6) : d.slice(2));
+            // Festa: confete saindo do botão e dois canhões nos cantos de baixo, em duas ondas (mesmo efeito do pedido da Zoo)
+            function confete(c) {
+                var cores = ['#26ccff', '#a25afd', '#ff5e7e', '#88ff5a', '#fcff42', '#ffa62d', '#ff36ff'], formas = ['circle', 'rect', 'rect', 'strip', 'strip'];
+                var passos = 40, pop = 0.08, ticks = Math.round(c.duracao * 60), decay = 0.91, gravidade = 1;
+                var palco = document.createElement('div');
+                palco.setAttribute('aria-hidden', 'true');
+                palco.style.cssText = 'position:fixed;left:' + c.x + 'px;top:' + c.y + 'px;width:0;height:0;z-index:99999;pointer-events:none;perspective:600px';
+                document.body.appendChild(palco);
+                for (var k = 0; k < c.pecas; k++) {
+                    var sp = c.abertura * Math.PI / 180, ang = c.angulo * Math.PI / 180 + (0.5 * sp - Math.random() * sp), v = c.forca * 0.5 + Math.random() * c.forca;
+                    var giro = Math.min(0.11, Math.random() * 0.1 + 0.05), tilt = 2 + Math.random() * 4, rot = Math.random() * 360;
+                    var x = 0, y = 0, w = Math.random() * 10, t = 0, quadros = [];
+                    for (var i = 0; i <= passos; i++) {
+                        var p = i / passos;
+                        if (i > 0) { var alvo = Math.round(i * ticks / passos); while (t < alvo) { x += Math.cos(ang) * v; y += Math.sin(ang) * v + gravidade * 3; v *= decay; w += giro; t++; } }
+                        var tx = i === 0 ? 0 : x + Math.cos(w) * 15 * c.tam;
+                        var esc = p < pop * 0.6 ? (p / (pop * 0.6)) * 1.15 : p < pop ? 1.15 - ((p - pop * 0.6) / (pop * 0.4)) * 0.15 : 1;
+                        var op = p <= 0.5 ? 1 : p <= 0.8 ? 1 - ((p - 0.5) / 0.3) * 0.5 : 0.5 - ((p - 0.8) / 0.2) * 0.5;
+                        quadros.push({transform: 'translate(' + tx + 'px,' + y + 'px) scale(' + esc + ') rotateY(' + (tilt * 360 * p) + 'deg) rotate(' + rot + 'deg)', opacity: op});
+                    }
+                    var forma = formas[Math.floor(Math.random() * formas.length)], tam = 6 * c.tam + Math.random() * 6 * c.tam;
+                    var d = document.createElement('i');
+                    d.style.cssText = 'position:absolute;left:0;top:0;display:block;width:' + (forma === 'strip' ? tam * 0.3 : forma === 'rect' ? tam * 0.7 : tam) + 'px;height:' + (forma === 'strip' ? tam * 2 : tam) + 'px;' +
+                        'border-radius:' + (forma === 'circle' ? '50%' : forma === 'strip' ? tam * 0.12 + 'px' : '2px') + ';background:' + cores[Math.floor(Math.random() * cores.length)] + ';will-change:transform,opacity';
+                    palco.appendChild(d);
+                    try { d.animate(quadros, {duration: c.duracao * 1000, easing: 'linear', fill: 'forwards'}); } catch (err) { d.remove(); }
+                }
+                setTimeout(function () { palco.remove(); }, (c.duracao + 0.5) * 1000);
+            }
+            // animações reduzidas no aparelho: menos peças e uma onda só (a festa continua)
+            function festa(el) {
+                var leve = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches), m = leve ? 0.5 : 1;
+                var cel = innerWidth < 700, tam = cel ? 1.45 : 1.15, vel = cel ? 1.25 : 1, r = el.getBoundingClientRect(), base = innerHeight + 10;
+                var lados = [{x: -10, a: cel ? -62 : -55}, {x: innerWidth + 10, a: cel ? -118 : -125}];
+                if (navigator.vibrate) try { navigator.vibrate([40, 60, 40]); } catch (err) {}
+                confete({x: r.left + r.width / 2, y: r.top + r.height / 2, angulo: -90, pecas: Math.round((cel ? 110 : 140) * m), forca: 30 * vel, abertura: 120, tam: tam, duracao: 2.8});
+                lados.forEach(function (l) { confete({x: l.x, y: base, angulo: l.a, pecas: Math.round((cel ? 80 : 110) * m), forca: (cel ? 38 : 44) * vel, abertura: 55, tam: tam, duracao: 3}); });
+                if (!leve) setTimeout(function () {
+                    lados.forEach(function (l) { confete({x: l.x, y: base, angulo: l.a, pecas: cel ? 60 : 80, forca: (cel ? 34 : 40) * vel, abertura: 65, tam: tam, duracao: 3}); });
+                    confete({x: innerWidth / 2, y: innerHeight * 0.35, angulo: -90, pecas: cel ? 70 : 90, forca: 22 * vel, abertura: 360, tam: tam, duracao: 2.6});
+                }, 380);
             }
             // cadastra o cliente e o lead na CRM. Se falhar, a pessoa segue para o WhatsApp do mesmo jeito.
             function registrarNaCrm(dados) {
@@ -4899,15 +4947,16 @@
                 document.getElementById('orbPlanoTit').firstChild.textContent = personalizado ? 'Seu pedido ' : 'Seu plano ';
                 clearTimeout(tFecha); ov.classList.remove('fechando', 'on'); void ov.offsetWidth;   // reinicia a animação
                 card.setAttribute('data-plano', p);
-                document.getElementById('orbPlanoNome').textContent = p;
-                cNome.classList.remove('erro'); cEmp.classList.remove('erro'); cTel.classList.remove('erro');
+                // pedido montado: só "Seu pedido está a um passo" (os itens seguem na mensagem do WhatsApp e na CRM)
+                document.getElementById('orbPlanoNome').textContent = personalizado ? '' : p;
+                cNome.classList.remove('erro'); cEmp.classList.remove('erro');
                 btn.classList.remove('decolando'); btn.disabled = false;
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
                 document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                 // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
-                foca(limpa(nome).length < 2 ? nome : limpa(empresa).length < 2 ? empresa : digitosFone(telefone.value) ? nome : telefone, 750);
+                foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
             }
             function fechar() {
                 if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
@@ -4926,7 +4975,6 @@
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('on')) fechar(); });
             nome.addEventListener('input', function () { cNome.classList.remove('erro'); });
             empresa.addEventListener('input', function () { cEmp.classList.remove('erro'); });
-            telefone.addEventListener('input', function () { cTel.classList.remove('erro'); telefone.value = mascaraFone(telefone.value); });
 
             card.addEventListener('submit', function (e) {
                 e.preventDefault();
@@ -4934,19 +4982,22 @@
                 var emp = limpa(empresa);
                 cNome.classList.toggle('erro', n.length < 2);
                 cEmp.classList.toggle('erro', emp.length < 2);
-                var tel = digitosFone(telefone.value);
-                cTel.classList.toggle('erro', !tel);
                 if (n.length < 2) return erro(cNome, nome);
                 if (emp.length < 2) return erro(cEmp, empresa);
-                if (!tel) return erro(cTel, telefone);
                 n = capitaliza(n);
-                try { localStorage.setItem('saturno_nome', n); localStorage.setItem('saturno_empresa', emp); localStorage.setItem('saturno_telefone', mascaraFone(tel)); } catch (err) {}
-                registrarNaCrm({nome: n, empresa: emp, telefone: tel, pedido: pedidoPersonalizado ? plano : 'Plano ' + plano, valor: valorPedido});
+                try { localStorage.setItem('saturno_nome', n); localStorage.setItem('saturno_empresa', emp); } catch (err) {}
+                registrarNaCrm({nome: n, empresa: emp, pedido: pedidoPersonalizado ? plano : 'Plano ' + plano, valor: valorPedido});
                 var texto = 'Olá! Sou ' + n + ', da empresa ' + emp + '. Vim pelo site e ' + (pedidoPersonalizado ? 'quero fazer o pedido: ' : 'quero contratar o plano ') + plano + '. Pode me passar os detalhes?';
-                // abre na hora do clique (senão o navegador bloqueia a nova aba)
-                window.open('https://wa.me/' + FONE + '?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+                var link = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(texto);
                 btn.disabled = true; btn.classList.add('decolando');
-                setTimeout(fechar, 1100);
+                // festa primeiro, WhatsApp logo depois: abrir na hora esconderia o confete atrás da aba nova
+                festa(btn);
+                setTimeout(function () {
+                    // se o navegador bloquear a aba nova (comum no iPhone depois da espera), abre na mesma aba
+                    var aba = window.open(link, '_blank');
+                    if (aba) { try { aba.opener = null; } catch (err) {} } else { location.href = link; }
+                    setTimeout(fechar, 150);
+                }, 1200);
             });
 
             // cartões da seção Planos ("Escolher Plano"): mesmo fluxo, sem sair direto para o WhatsApp
