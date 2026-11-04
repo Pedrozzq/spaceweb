@@ -841,8 +841,8 @@
         }
         .chat-widget-btn {
             position: relative;
-            width: 4rem;
-            height: 4rem;
+            width: 3.25rem;
+            height: 3.25rem;
             border-radius: 9999px;
             background: #25D366;
             border: none;
@@ -3385,7 +3385,7 @@
         <button type="button" id="chat-widget-btn" class="chat-widget-btn" aria-label="Ajuda com seu pedido? Falar no WhatsApp">
             <!-- Logo oficial do WhatsApp (glifo branco sobre o verde da marca) -->
             <span class="cw-count" aria-hidden="true">1</span>
-            <svg class="chat-widget-wa" viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path fill="#ffffff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <svg class="chat-widget-wa" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="#ffffff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </button>
     </div>
 
@@ -3593,35 +3593,21 @@
         })();
 
         // --- Widget de Chat: mostra o balão "Ajuda com seu pedido?"
-        // assim que o usuário começar a rolar a página (scroll). ---
+        // só enquanto a seção "Como Funciona na Prática" está na tela. ---
         (function () {
             const bubble = document.getElementById('chat-widget-bubble');
             const closeBtn = document.getElementById('chat-widget-bubble-close');
             if (!bubble) return;
-            const SCROLL_THRESHOLD = 80; // px rolados até o balão aparecer
+            const secao = document.getElementById('pratica');
             let dismissed = false;
-            let revealed = false;
-            function reveal() {
-                if (dismissed || revealed) return;
-                revealed = true;
-                bubble.classList.add('chat-widget-bubble-visible');
+            let obs = null;
+            function stopWatching() { if (obs) { obs.disconnect(); obs = null; } }
+            if (secao && 'IntersectionObserver' in window) {
+                obs = new IntersectionObserver((itens) => {
+                    if (!dismissed) bubble.classList.toggle('chat-widget-bubble-visible', itens[0].isIntersecting);
+                }, { rootMargin: '-10% 0px -10% 0px' });
+                obs.observe(secao);
             }
-            // No celular a rolagem pode não acontecer na janela (window.scrollY fica 0),
-            // então escuta a rolagem de qualquer elemento (captura), o primeiro toque
-            // arrastando e, por garantia, mostra 3s depois que o preloader sai.
-            function onScroll(e) {
-                const t = e && e.target;
-                const y = (t && t !== document && t.scrollTop) || window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-                if (y > SCROLL_THRESHOLD) stopWatching(), reveal();
-            }
-            function onTouch() { stopWatching(); reveal(); }
-            function stopWatching() {
-                document.removeEventListener('scroll', onScroll, true);
-                window.removeEventListener('touchmove', onTouch);
-            }
-            document.addEventListener('scroll', onScroll, { passive: true, capture: true });
-            window.addEventListener('touchmove', onTouch, { passive: true });
-            window.addEventListener('load', () => setTimeout(reveal, 4500));
             // clicar no balão abre o atendimento (o mesmo do botão do WhatsApp)
             function openFromBubble(e) {
                 if (closeBtn && closeBtn.contains(e.target)) return;
@@ -5095,6 +5081,8 @@
         .sai-ov.baixa .sai-globo{display:none}
         .sai-ov.baixa .sai-hero{padding-bottom:.6rem}
         .sai-ov.baixa .sai-hero h2{font-size:1.35rem}
+        .sai-ov.baixa .sai-desc{display:none}
+        .sai-desc{margin:.6rem 0 0;color:rgba(255,255,255,.62);font-size:.95rem;font-weight:400;line-height:1.4;letter-spacing:-.005em;text-align:center}
         .sai-ov.baixa .sai-nota{display:none}
         .sai-ov ::selection{background:rgba(255,190,90,.3)}
         .sai-aurora{position:absolute;z-index:-1;left:-10%;right:-10%;top:-38vh;height:90vh;pointer-events:none;
@@ -5121,14 +5109,16 @@
 
         /* tela inicial */
         .sai-hero{margin-top:auto;padding:0 1.25rem 1.6rem;text-align:center;animation:saiSobe .6s cubic-bezier(.2,.8,.2,1) both}
-        .sai-globo{position:relative;display:grid;place-items:center;height:7rem;margin-bottom:1.2rem}
-        .sai-logo{position:relative;z-index:1;width:11.5rem;aspect-ratio:536/289;animation:saiLogoEntra .9s cubic-bezier(.16,1,.3,1) both,saiFlutua 6s ease-in-out .9s infinite}
-        .sai-logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:brightness(1.35) contrast(1.05)}
-        .sai-logo-cor,.sai-logo-luz{position:absolute;inset:0;-webkit-mask:url(img/logo-caixa.webp?v=2) center/contain no-repeat;mask:url(img/logo-caixa.webp?v=2) center/contain no-repeat}
-        .sai-logo{isolation:isolate}
-        .sai-logo-cor{mix-blend-mode:color;background:linear-gradient(100deg,#a35bff,#5b8cff,#ffc933,#ff9d4d,#a35bff);background-size:300% 100%;animation:saiLogoCor 9s linear infinite}
-        .sai-logo-luz{mix-blend-mode:screen;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.85) 50%,transparent 60%);background-size:300% 100%;animation:saiLogoLuz 5s ease-in-out infinite}
-        .sai-halo{position:absolute;z-index:-1;left:50%;top:50%;width:150%;height:190%;margin:-95% 0 0 -75%;margin-top:0;transform:translateY(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(123,63,228,.42),rgba(70,120,255,.2) 55%,transparent);filter:blur(10px);animation:saiHalo 5s ease-in-out infinite}
+        .sai-globo{position:relative;display:grid;place-items:center;height:7.5rem;margin-bottom:1rem}
+        .sai-logo{position:relative;z-index:1;isolation:isolate;width:15rem;height:5.5rem;animation:saiLogoEntra .9s cubic-bezier(.16,1,.3,1) both}
+        .sai-logo .sai-central{position:absolute;z-index:2;left:50%;top:50%;width:3.4rem;height:3.4rem;margin:-1.7rem 0 0 -1.7rem;box-shadow:0 0 24px rgba(255,190,90,.5),0 0 48px rgba(138,80,255,.45);animation:saiCentral 3.6s ease-in-out infinite}
+        .sai-orb-x{position:absolute;left:50%;top:50%;width:2.4rem;margin:-.66rem 0 0 -1.2rem;animation:saiOrbX 7s cubic-bezier(.37,0,.63,1) -3.5s infinite alternate,saiOrbZ 14s step-end infinite}
+        .sai-orb-y{position:relative;isolation:isolate;aspect-ratio:560/310;animation:saiOrbY 7s cubic-bezier(.37,0,.63,1) infinite alternate}
+        .sai-orb-y img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:grayscale(1) brightness(1.4) contrast(1.05)}
+        .sai-logo-cor,.sai-logo-luz{position:absolute;inset:0;-webkit-mask:url(img/saturno-planeta.webp) center/contain no-repeat;mask:url(img/saturno-planeta.webp) center/contain no-repeat}
+        .sai-logo-cor{mix-blend-mode:color;background:linear-gradient(90deg,#3a1c8f 0%,#a35bff 30%,#ffb648 50%,#a35bff 70%,#3a1c8f 100%);background-size:300% 100%;animation:saiReflexo 7s cubic-bezier(.37,0,.63,1) -3.5s infinite alternate}
+        .sai-logo-luz{mix-blend-mode:screen;background:linear-gradient(105deg,transparent 40%,rgba(255,233,168,.75) 50%,transparent 60%);background-size:300% 100%;animation:saiLogoLuz 5s ease-in-out infinite}
+        .sai-halo{position:absolute;z-index:-1;left:50%;top:50%;width:120%;height:220%;margin-left:-60%;border-radius:50%;background:radial-gradient(closest-side,rgba(123,63,228,.4),rgba(70,120,255,.18) 55%,transparent);filter:blur(10px);animation:saiHalo 5s ease-in-out infinite}
         .sai-cadente{position:absolute;left:50%;top:50%;width:7.5rem;height:2px;margin-top:var(--y);border-radius:2px;opacity:0;pointer-events:none;
             background:linear-gradient(90deg,transparent,rgba(255,215,120,.55) 70%,#fff);
             animation:saiCadente var(--d) linear var(--e) infinite}
@@ -5225,8 +5215,12 @@
         @keyframes saiPulsa{0%,100%{transform:scale(.88);filter:brightness(.9)}50%{transform:scale(1.04);filter:brightness(1.2)}}
         @keyframes saiBrilho{from{background-position:200% 0}to{background-position:-200% 0}}
         @keyframes saiHalo{0%,100%{opacity:.6;transform:translateY(-50%) scale(.92)}50%{opacity:1;transform:translateY(-50%) scale(1.08)}}
+        @keyframes saiOrbX{from{transform:translateX(-5.4rem)}to{transform:translateX(5.4rem)}}
+        @keyframes saiOrbY{from{transform:translateY(-1.6rem) scale(.7);filter:brightness(.72)}to{transform:translateY(1.6rem) scale(1.08);filter:brightness(1.08)}}
+        @keyframes saiOrbZ{0%{z-index:1}25%{z-index:3}75%{z-index:1}}
+        @keyframes saiCentral{0%,100%{transform:scale(.95)}50%{transform:scale(1.05)}}
         @keyframes saiLogoEntra{from{opacity:0;transform:scale(.82);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
-        @keyframes saiLogoCor{to{background-position:-300% 0}}
+        @keyframes saiReflexo{from{background-position:32.5% 0}to{background-position:67.5% 0}}
         @keyframes saiLogoLuz{0%,35%{background-position:150% 0}75%,100%{background-position:-50% 0}}
         @keyframes saiCadente{0%{opacity:0;transform:rotate(var(--a)) translateX(calc(min(46vw,24rem) * -1))}4%{opacity:1}24%{opacity:1}30%{opacity:0;transform:rotate(var(--a)) translateX(min(38vw,18rem))}100%{opacity:0;transform:rotate(var(--a)) translateX(min(38vw,18rem))}}
         @keyframes saiTitulo{from{opacity:0;filter:blur(10px);letter-spacing:.05em}to{opacity:1;filter:none;letter-spacing:-.03em}}
@@ -5235,7 +5229,7 @@
         @keyframes saiPedidoBrilho{0%,45%{left:-45%}70%,100%{left:115%}}
         @keyframes saiCursor{from{opacity:1}to{opacity:0}}
         @media (prefers-reduced-motion:reduce){
-            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-pedido,.sai-logo,.sai-logo *),.sai-ov *::before,.sai-ov *:not(.sai-pedido)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
+            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-pedido,.sai-logo,.sai-logo *),.sai-ov *::before,.sai-ov *:not(.sai-pedido,.sai-central)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
             .sai-pensa .sai-txt{color:#b4b4c0;background:none}
             .sai-caixa:focus-within::before{background:linear-gradient(#ffc933,#a35bff)}
         }
@@ -5257,8 +5251,9 @@
 
         <div class="sai-corpo">
             <div class="sai-hero">
-                <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><img src="img/logo-caixa.webp?v=2" alt="" width="536" height="289" decoding="async"><i class="sai-logo-cor"></i><i class="sai-logo-luz"></i></div></div>
+                <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><span class="sai-esfera sai-central"></span><div class="sai-orb-x"><div class="sai-orb-y"><img src="img/saturno-planeta.webp" alt="" width="560" height="310" decoding="async"><i class="sai-logo-cor"></i><i class="sai-logo-luz"></i></div></div></div></div>
                 <h2>Como posso ajudar seu negócio hoje?</h2>
+                <p class="sai-desc">Me explique como funciona o seu negócio</p>
             </div>
             <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
             <span class="sai-voz" id="sai-voz" aria-live="polite"></span>
