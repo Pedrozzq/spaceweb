@@ -87,6 +87,12 @@ const API = DEMO ? demoApi() : {
   async atualizarPlataforma(id, patch) { chk(await sb.from('plataformas').update(patch).eq('id', id)); },
   async excluirPlataforma(id) { chk(await sb.from('plataformas').delete().eq('id', id)); },
 
+  // ---- fluxo de caixa (supabase/caixa.sql); null = tabela ainda não criada
+  async caixa(desde) { const r = await sb.from('caixa_lancamentos').select('*').gte('data', desde).order('data', {ascending: false}).order('criado_em', {ascending: false});
+    if (r.error && /caixa_lancamentos/.test(r.error.message)) return null; return chk(r); },
+  async salvarLancamento(l) { const {id, ...d} = l; chk(id ? await sb.from('caixa_lancamentos').update(d).eq('id', id) : await sb.from('caixa_lancamentos').insert(d)); },
+  async excluirLancamento(id) { chk(await sb.from('caixa_lancamentos').delete().eq('id', id)); },
+
   // ---- assinaturas
   async assinaturas() { return chk(await sb.from('assinaturas').select('*, clientes(id,nome,telefone,empresa)').order('proximo_vencimento')); },
   async salvarAssinatura(a) { const {id, ...row} = a; return id ? chk(await sb.from('assinaturas').update(row).eq('id', id).select().single()) : chk(await sb.from('assinaturas').insert(row).select().single()); },
@@ -143,7 +149,7 @@ const API = DEMO ? demoApi() : {
 
   realtime(cb) {
     const ch = sb.channel('sat-crm');
-    ['leads', 'lead_atividades', 'tarefas', 'pedidos', 'clientes', 'produtos', 'assinaturas', 'plataformas'].forEach(t => ch.on('postgres_changes', {event: '*', schema: 'public', table: t}, cb));
+    ['leads', 'lead_atividades', 'tarefas', 'pedidos', 'clientes', 'produtos', 'assinaturas', 'plataformas', 'caixa_lancamentos'].forEach(t => ch.on('postgres_changes', {event: '*', schema: 'public', table: t}, cb));
     ch.subscribe();
   }
 };
@@ -173,6 +179,12 @@ function demoApi() {
     ['Cartão Google Avaliação', 9.5], ['Kit 2 Cartões Google Avaliação', 19], ['Espelho Instagramável', 310]]
     .map(([n, custo]) => ({produto_id: P(n).id, custo, frete: n.includes('Espelho') ? 45 : 0, taxa_pct: 6, fornecedor: null}));
 
+  const dia = ms => dayKey(ms);
+  const caixa = [
+    {id: uid(), data: dia(now - 2 * D), tipo: 'saida', categoria: 'Produção (cartões, espelhos)', descricao: 'Lote de 100 cartões NFC', valor: 850, forma: 'Pix', criado_por: 'demo@saturno.com', criado_em: iso(now - 2 * D)},
+    {id: uid(), data: dia(now - 4 * D), tipo: 'saida', categoria: 'Impostos', descricao: 'DAS do mês', valor: 180, forma: 'Boleto', criado_por: 'demo@saturno.com', criado_em: iso(now - 4 * D)},
+    {id: uid(), data: dia(now - 33 * D), tipo: 'saida', categoria: 'Marketing e anúncios', descricao: 'Anúncios Instagram', valor: 300, forma: 'Cartão', criado_por: 'demo@saturno.com', criado_em: iso(now - 33 * D)},
+    {id: uid(), data: dia(now - 60 * D), tipo: 'entrada', categoria: 'Aporte de sócio', descricao: 'Capital de giro', valor: 2000, forma: 'Pix', criado_por: 'demo@saturno.com', criado_em: iso(now - 60 * D)}];
   const plataformas = [['Supabase', 'Infraestrutura', 135, 'mensal', 'https://supabase.com/dashboard'], ['Easypanel (VPS)', 'Infraestrutura', 79.9, 'mensal', null],
     ['Domínio saturnonfc.com.br', 'Domínio e e-mail', 40, 'anual', 'https://registro.br'], ['Google Workspace', 'Domínio e e-mail', 33.6, 'mensal', null],
     ['n8n', 'Automação e IA', 120, 'mensal', null], ['Canva Pro', 'Design', 34.9, 'mensal', 'https://www.canva.com'], ['CapCut Pro', 'Design', 44.9, 'mensal', null, false]]
@@ -325,6 +337,9 @@ function demoApi() {
     async salvarPlataforma(p) { await wait(); const n = {categoria: null, link: null, ...p, id: uid(), criado_em: iso(Date.now())}; plataformas.push(n); return clone(n); },
     async atualizarPlataforma(id, patch) { await wait(); Object.assign(plataformas.find(p => p.id === id), patch); },
     async excluirPlataforma(id) { await wait(); plataformas.splice(plataformas.findIndex(p => p.id === id), 1); },
+    async caixa(desde) { await wait(); return clone(caixa.filter(l => l.data >= desde)).sort((a, b) => b.data.localeCompare(a.data)); },
+    async salvarLancamento(l) { await wait(); if (l.id) Object.assign(caixa.find(x => x.id === l.id), l); else caixa.push({...l, id: uid(), criado_em: iso(Date.now())}); },
+    async excluirLancamento(id) { await wait(); caixa.splice(caixa.findIndex(x => x.id === id), 1); },
 
     async assinaturas() { await wait(); return clone(assinaturas.map(a => ({...a, clientes: clientes.find(c => c.id === a.cliente_id)}))).sort((a, b) => a.proximo_vencimento.localeCompare(b.proximo_vencimento)); },
     async salvarAssinatura(a) { await wait(); if (a.id) { Object.assign(assinaturas.find(x => x.id === a.id), a); return clone(a); }

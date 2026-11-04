@@ -131,13 +131,13 @@ function enter(s) {
 // ------------------------------------------------------------------ rotas
 const VIEWS = {
   dashboard: viewDashboard, leads: viewLeads, tarefas: viewTarefas, pedidos: viewPedidos, clientes: viewClientes,
-  assinaturas: viewAssinaturas, produtos: viewProdutos, margem: viewMargem, plataformas: viewPlataformas, whatsapp: viewWhatsapp, mensagens: viewMensagens, integracao: viewIntegracao, analytics: viewAnalytics
+  assinaturas: viewAssinaturas, produtos: viewProdutos, margem: viewMargem, plataformas: viewPlataformas, fluxo: viewFluxo, prolabore: viewProlabore, whatsapp: viewWhatsapp, mensagens: viewMensagens, integracao: viewIntegracao, analytics: viewAnalytics
 };
 let current = '';
 async function route(silent) {
   const r = (location.hash.slice(1) || 'dashboard').split('?')[0];
   const v = VIEWS[r] ? r : 'dashboard';
-  document.querySelectorAll('#nav a, #tabbar a').forEach(a => a.classList.toggle('on', a.dataset.r === v));
+  document.querySelectorAll('#nav a, #tabbar a').forEach(a => a.classList.toggle('on', a.dataset.r === v || (v === 'prolabore' && a.dataset.r === 'fluxo')));
   document.querySelector('.side').classList.remove('open');
   // atualização silenciosa (tempo real) não redesenha quem está digitando
   if (silent && document.activeElement?.matches?.('#view input:not([type=checkbox]), #view textarea')) return atualizarContadores();
