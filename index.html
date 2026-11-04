@@ -5105,10 +5105,19 @@
 
         /* tela inicial */
         .sai-hero{margin-top:auto;padding:0 1.25rem 1.6rem;text-align:center;animation:saiSobe .6s cubic-bezier(.2,.8,.2,1) both}
-        .sai-hero .sai-esfera{width:3.6rem;height:3.6rem;margin:0 auto 1.3rem;box-shadow:0 0 36px rgba(255,190,90,.45),0 0 70px rgba(138,80,255,.4);animation:saiFlutua 5s ease-in-out infinite}
+        .sai-globo{position:relative;display:grid;place-items:center;height:7rem;margin-bottom:1.2rem}
+        .sai-hero .sai-esfera{z-index:1;width:5.4rem;height:5.4rem;animation:saiFlutua 5s ease-in-out infinite,saiHalo 5s ease-in-out infinite}
         .sai-hero .sai-esfera::after{animation-duration:6s}
+        .sai-cadente{position:absolute;left:50%;top:50%;width:7.5rem;height:2px;margin-top:var(--y);border-radius:2px;opacity:0;pointer-events:none;
+            background:linear-gradient(90deg,transparent,rgba(255,215,120,.55) 70%,#fff);
+            animation:saiCadente var(--d) linear var(--e) infinite}
+        .sai-cadente::after{content:'';position:absolute;right:-1px;top:-1.5px;width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 10px 2px rgba(255,225,150,.9)}
+        .sai-cadente:nth-child(1){--a:16deg;--y:-1.6rem;--d:7s;--e:.4s}
+        .sai-cadente:nth-child(2){--a:-14deg;--y:1.5rem;--d:9s;--e:3.6s}
+        .sai-cadente:nth-child(3){--a:32deg;--y:-.6rem;--d:11s;--e:6.8s}
         .sai-hero h2{margin:0;font-size:clamp(1.65rem,4.6vw,2.4rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;text-wrap:balance;
-            background:linear-gradient(100deg,#fff 20%,#ffe3a0 55%,#c9a6ff 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+            background:linear-gradient(90deg,#fff,#ffe3a0,#c9a6ff,#8fb4ff,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+            animation:saiTitulo .9s cubic-bezier(.2,.8,.2,1) both,saiBrilho 14s linear infinite}
         .sai-hero p{margin:.7rem auto 0;max-width:30rem;color:#9b9ba8;font-size:.95rem;line-height:1.45}
         .sai-ov.conversa .sai-hero{display:none}
 
@@ -5125,7 +5134,8 @@
         .sai-txt strong{font-weight:700;color:#fff}
         .sai-txt a{color:#ffd778;text-decoration:underline;text-decoration-color:rgba(255,215,120,.4);text-underline-offset:3px}
         .sai-txt.aviso{color:#b4b4c0}
-        .sai-p{animation:saiPalavra .45s ease both}
+        .sai-cursor{display:inline-block;width:2px;height:1.05em;margin-left:2px;vertical-align:-.16em;border-radius:1px;background:linear-gradient(#ffc933,#a35bff);animation:saiCursor .9s steps(2,jump-none) infinite}
+        .sai-voz{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
         .sai-pensa .sai-av{animation:saiPulsa 1.3s ease-in-out infinite}
         .sai-pensa .sai-av::after{animation-duration:1.1s}
         .sai-pensa .sai-txt{font-weight:600;font-size:.92rem;background:linear-gradient(90deg,#6f6f7d 25%,#f4f4f7 50%,#6f6f7d 75%);background-size:200% 100%;
@@ -5148,16 +5158,22 @@
         .sai-caixa textarea{flex:1;min-width:0;height:2.5rem;max-height:9.5rem;padding:.5rem 0;border:0;outline:0;resize:none;overflow-y:hidden;background:transparent;color:#fff;
             font:500 16px/1.5 "Plus Jakarta Sans",sans-serif;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
         .sai-caixa textarea::placeholder{color:#7d7d8a}
+        .sai-mic{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#b4b4c0;font-size:1.25rem;cursor:pointer;transition:background .2s,color .2s}
+        .sai-mic[hidden]{display:none}
+        .sai-mic:hover{background:rgba(255,255,255,.08);color:#fff}
+        .sai-mic.on{background:#ef4444;color:#fff;animation:saiMic 1.4s ease-out infinite}
         .sai-env{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:#fff;color:#0b0b12;font-size:1.1rem;cursor:pointer;transition:transform .15s,background .2s,color .2s}
         .sai-env:hover:not(:disabled){transform:scale(1.06)}
         .sai-env:active:not(:disabled){transform:scale(.92)}
         .sai-env:disabled{background:#33333d;color:#6f6f7d;cursor:default}
-        .sai-sug{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin-bottom:.8rem;animation:saiSobe .7s .08s cubic-bezier(.2,.8,.2,1) both}
+        .sai-sug{display:flex;gap:.45rem;margin-bottom:.75rem;overflow-x:auto;scrollbar-width:none;animation:saiSobe .7s .08s cubic-bezier(.2,.8,.2,1) both}
+        .sai-sug::-webkit-scrollbar{display:none}
         .sai-ov.conversa .sai-sug{display:none}
-        .sai-sug button{display:flex;align-items:center;gap:.6rem;min-width:0;min-height:3.1rem;padding:.55rem .85rem;border-radius:1rem;border:1px solid rgba(255,255,255,.09);
-            background:rgba(255,255,255,.035);color:#d4d4dc;font:600 .84rem/1.25 "Plus Jakarta Sans",sans-serif;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-        .sai-sug button:hover{background:rgba(255,255,255,.08);border-color:rgba(255,201,51,.4);transform:translateY(-1px)}
-        .sai-sug i{flex:none;font-size:1.1rem;color:#ffc933}
+        .sai-sug button{flex:none;height:2.1rem;padding:0 .85rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#b4b4c0;
+            font:500 .8rem/1 "Plus Jakarta Sans",sans-serif;white-space:nowrap;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+        .sai-sug button:first-child{margin-left:auto}
+        .sai-sug button:last-child{margin-right:auto}
+        .sai-sug button:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.22);color:#fff}
         .sai-nota{margin:.6rem 0 0;color:#6f6f7d;font-size:.72rem;line-height:1.35;text-align:center}
         .sai-ov button:focus-visible,.sai-ov a:focus-visible{outline:2px solid #ffc933;outline-offset:2px}
 
@@ -5165,11 +5181,13 @@
             .sai-hero{flex:1;margin:0;display:flex;flex-direction:column;justify-content:center;padding-bottom:1rem}
             .sai-ov:not(.conversa) .sai-rodape{margin-bottom:0}
             
-            .sai-sug button{font-size:.8rem;padding:.5rem .7rem}
+            
             .sai-fio{padding-left:.9rem;padding-right:.9rem;gap:1.15rem}
             .sai-linha{gap:.6rem}
             .sai-rodape{padding-left:.7rem;padding-right:.7rem}
         }
+
+        @media (max-height:560px){.sai-globo{display:none}}
 
         @keyframes saiGira{to{transform:rotate(360deg)}}
         @keyframes saiBorda{to{--sai-giro:360deg}}
@@ -5178,9 +5196,13 @@
         @keyframes saiFlutua{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
         @keyframes saiPulsa{0%,100%{transform:scale(.88);filter:brightness(.9)}50%{transform:scale(1.04);filter:brightness(1.2)}}
         @keyframes saiBrilho{from{background-position:200% 0}to{background-position:-200% 0}}
-        @keyframes saiPalavra{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:none}}
+        @keyframes saiHalo{0%,100%{box-shadow:0 0 34px rgba(255,190,90,.4),0 0 70px rgba(138,80,255,.35)}50%{box-shadow:0 0 50px rgba(255,190,90,.6),0 0 110px rgba(138,80,255,.55)}}
+        @keyframes saiCadente{0%{opacity:0;transform:rotate(var(--a)) translateX(calc(min(46vw,24rem) * -1))}4%{opacity:1}24%{opacity:1}30%{opacity:0;transform:rotate(var(--a)) translateX(min(38vw,18rem))}100%{opacity:0;transform:rotate(var(--a)) translateX(min(38vw,18rem))}}
+        @keyframes saiTitulo{from{opacity:0;filter:blur(10px);letter-spacing:.05em}to{opacity:1;filter:none;letter-spacing:-.03em}}
+        @keyframes saiMic{from{box-shadow:0 0 0 0 rgba(239,68,68,.55)}to{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+        @keyframes saiCursor{from{opacity:1}to{opacity:0}}
         @media (prefers-reduced-motion:reduce){
-            .sai-ov,.sai-ov *,.sai-ov *::before,.sai-ov *::after,.sai-esfera::after{animation:none!important;transition:none!important}
+            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-hero .sai-esfera),.sai-ov *:not(.sai-hero .sai-esfera)::before,.sai-ov *:not(.sai-hero .sai-esfera)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
             .sai-pensa .sai-txt{color:#b4b4c0;background:none}
             .sai-caixa:focus-within::before{background:linear-gradient(#ffc933,#a35bff)}
         }
@@ -5202,23 +5224,25 @@
 
         <div class="sai-corpo">
             <div class="sai-hero">
-                <span class="sai-esfera" aria-hidden="true"></span>
-                <h2>Como posso ajudar seu negócio?</h2>
+                <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><span class="sai-esfera"></span></div>
+                <h2>Como posso ajudar seu negócio hoje?</h2>
                 <p>Oi! Aqui é o Rafael, o assistente de IA da Saturno NFC.</p>
             </div>
-            <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio" aria-live="polite"></div></div>
+            <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
+            <span class="sai-voz" id="sai-voz" aria-live="polite"></span>
             <button type="button" class="sai-desce" id="sai-desce" aria-label="Ir para a última mensagem"><i class="ph-bold ph-arrow-down" aria-hidden="true"></i></button>
         </div>
 
         <div class="sai-rodape">
             <div class="sai-sug" id="sai-sug">
-                <button type="button"><i class="ph ph-currency-circle-dollar" aria-hidden="true"></i>Quanto custa um site com cartões?</button>
-                <button type="button"><i class="ph ph-contactless-payment" aria-hidden="true"></i>Como funciona o cartão NFC?</button>
-                <button type="button"><i class="ph ph-sparkle" aria-hidden="true"></i>Qual plano é ideal para mim?</button>
-                <button type="button"><i class="ph ph-users-three" aria-hidden="true"></i>O que a CRM faz pela minha empresa?</button>
+                <button type="button">Quanto custa?</button>
+                <button type="button">Como funciona?</button>
+                <button type="button">Qual plano escolher?</button>
+                <button type="button">O que é CRM?</button>
             </div>
             <div class="sai-caixa" id="sai-caixa">
                 <textarea id="sai-texto" rows="1" maxlength="1000" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
+                <button type="button" class="sai-mic" id="sai-mic" aria-label="Falar em vez de digitar" aria-pressed="false" title="Falar" hidden><i class="ph ph-microphone" aria-hidden="true"></i></button>
                 <button type="button" class="sai-env" id="sai-env" aria-label="Enviar" disabled><i class="ph-bold ph-arrow-up" aria-hidden="true"></i></button>
             </div>
             <p class="sai-nota">A IA pode errar. Confirme valores e condições com a nossa equipe.</p>
@@ -5275,51 +5299,99 @@
         msgsEl.addEventListener('scroll', function () { desce.classList.toggle('on', !pertoDoFim()); }, { passive: true });
         desce.addEventListener('click', function () { vaiProFim(true); });
 
-        // ---------- texto das respostas: *negrito* do WhatsApp, links e palavras surgindo em sequência ----------
-        function escreve(el, texto, animar) {
-            var total = texto.split(/\s+/).length, passo = Math.min(24, 1300 / total), n = 0;
-            function palavras(destino, t) {
-                if (!animar) { destino.appendChild(document.createTextNode(t)); return; }
-                t.split(/(\s+)/).forEach(function (p) {
-                    if (!p) return;
-                    if (/^\s+$/.test(p)) { destino.appendChild(document.createTextNode(p)); return; }
-                    var s = document.createElement('span');
-                    s.className = 'sai-p'; s.style.animationDelay = Math.round(n++ * passo) + 'ms'; s.textContent = p;
-                    destino.appendChild(s);
-                });
+        // ---------- texto das respostas: *negrito* do WhatsApp e links ----------
+        function escreve(el, texto) {
+            var partes = [];
+            function poe(destino, t) {
+                if (!t) return;
+                var n = document.createTextNode('');
+                destino.appendChild(n);
+                partes.push({ n: n, s: t });
             }
             var re = /\*([^*\n]+)\*|((?:https?:\/\/|www\.)[^\s<]+)/g, m, resto = 0;
             while ((m = re.exec(texto))) {
-                palavras(el, texto.slice(resto, m.index));
+                poe(el, texto.slice(resto, m.index));
                 if (m[1]) {
-                    var b = document.createElement('strong'); palavras(b, m[1]); el.appendChild(b);
+                    var b = document.createElement('strong'); poe(b, m[1]); el.appendChild(b);
                     resto = re.lastIndex;
                 } else {
                     var url = m[2].replace(/[.,;:!?)]+$/, ''), a = document.createElement('a');
                     a.href = /^https?:/i.test(url) ? url : 'https://' + url;
                     a.target = '_blank'; a.rel = 'noopener noreferrer';
-                    palavras(a, url); el.appendChild(a);
+                    poe(a, url); el.appendChild(a);
                     resto = m.index + url.length; re.lastIndex = resto;
                 }
             }
-            palavras(el, texto.slice(resto));
+            poe(el, texto.slice(resto));
+            return partes;
         }
+        function mostraTudo(partes) { partes.forEach(function (p) { p.n.nodeValue = p.s; }); }
 
-        function linhaEu(texto) {
+function linhaEu(texto) {
             var l = document.createElement('div'); l.className = 'sai-linha eu';
             var b = document.createElement('div'); b.className = 'sai-bal'; b.textContent = texto;
             l.appendChild(b); fio.appendChild(l);
         }
-        function linhaIa(texto, animar, aviso) {
+        function criaLinhaIa(aviso) {
             var ant = linhaPensa ? linhaPensa.previousElementSibling : fio.lastElementChild;
             var l = document.createElement('div');
             l.className = 'sai-linha ia' + (ant && ant.classList.contains('ia') ? ' seq' : '');
             var av = document.createElement('span'); av.className = 'sai-esfera sai-av'; av.setAttribute('aria-hidden', 'true');
             var t = document.createElement('div'); t.className = 'sai-txt' + (aviso ? ' aviso' : '');
-            escreve(t, texto, animar && !calmo);
             l.appendChild(av); l.appendChild(t);
             fio.insertBefore(l, linhaPensa || null);
-            return l;
+            return t;
+        }
+
+        // ---------- efeito de digitação: uma resposta por vez, com pausa nas pontuações ----------
+        var fila = [], digitando = null, tDigita = null;
+        function custo(c) { return /[.!?]/.test(c) ? 7 : /[,;:]/.test(c) ? 3 : c === '\n' ? 5 : 1; }
+        function proxima() {
+            clearTimeout(tDigita);
+            if (digitando || !fila.length) return;
+            var item = fila.shift(), partes = escreve(criaLinhaIa(item.aviso), item.texto);
+            var peso = 0;
+            partes.forEach(function (p) { for (var k = 0; k < p.s.length; k++) peso += custo(p.s.charAt(k)); });
+            // respostas longas aceleram para terminar em até 7 s
+            var ritmo = Math.max(65, peso / 7), ip = 0, ic = 0, saldo = 0, ult = performance.now();
+            var cursor = document.createElement('span'); cursor.className = 'sai-cursor'; cursor.setAttribute('aria-hidden', 'true');
+            digitando = {
+                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; }
+            };
+            function passo() {
+                // conta pelo tempo real: se a aba ficar em segundo plano, o texto alcança ao voltar
+                var agora = performance.now(), segue = pertoDoFim();
+                saldo += (agora - ult) / 1000 * ritmo; ult = agora;
+                while (saldo > 0 && ip < partes.length) {
+                    var p = partes[ip];
+                    saldo -= custo(p.s.charAt(ic));
+                    var cod = p.s.charCodeAt(ic); ic += cod >= 0xD800 && cod <= 0xDBFF ? 2 : 1;   // não corta emoji ao meio
+                    p.n.nodeValue = p.s.slice(0, ic);
+                    p.n.parentNode.insertBefore(cursor, p.n.nextSibling);
+                    if (ic >= p.s.length) { ip++; ic = 0; }
+                }
+                if (segue) vaiProFim(false);
+                if (ip >= partes.length) {
+                    digitando.fim();
+                    if (fila.length) tDigita = setTimeout(proxima, 350);
+                    return;
+                }
+                tDigita = setTimeout(passo, 28);
+            }
+            passo();
+        }
+        // termina na hora o que falta digitar (a pessoa enviou outra mensagem ou fechou o chat)
+        function terminaDigitacao() {
+            clearTimeout(tDigita);
+            if (digitando) digitando.fim();
+            while (fila.length) { var item = fila.shift(); mostraTudo(escreve(criaLinhaIa(item.aviso), item.texto)); }
+        }
+        function cancelaDigitacao() { clearTimeout(tDigita); fila = []; digitando = null; }
+
+        function linhaIa(texto, animar, aviso) {
+            if (animar) $('sai-voz').textContent = texto;   // leitor de tela recebe a mensagem inteira, uma vez
+            if (animar) { fila.push({ texto: texto, aviso: aviso }); proxima(); return; }
+            mostraTudo(escreve(criaLinhaIa(aviso), texto));
         }
         function mostraPensando() {
             tiraPensando();
@@ -5395,6 +5467,7 @@
             texto = (texto || '').trim();
             if (!texto) return;
             entraConversa(true);
+            terminaDigitacao();
             if (sessao && sessao.qtd >= LIMITE) {
                 linhaEu(texto);
                 linhaIa('Para continuar a conversa, fale com a gente no WhatsApp, no botão aqui em cima.', true, true);
@@ -5436,7 +5509,49 @@
             txt.style.overflowY = txt.scrollHeight > 152 ? 'auto' : 'hidden';
             env.disabled = !txt.value.trim();
         }
-        function enviaTexto() { var t = txt.value; txt.value = ''; ajusta(); envia(t); if (!toque) txt.focus(); }
+        function enviaTexto() { paraMic(); var t = txt.value; txt.value = ''; ajusta(); envia(t); if (!toque) txt.focus(); }
+
+        // ---------- microfone: o navegador transcreve a fala para o campo de texto ----------
+        var micBtn = $('sai-mic'), rec = null, DICA = txt.placeholder;
+        function reconhecedor() { return window.SpeechRecognition || window.webkitSpeechRecognition; }
+        micBtn.hidden = !reconhecedor();   // navegador sem suporte: o botão não aparece
+        function micVisual(ligado) {
+            micBtn.classList.toggle('on', ligado);
+            micBtn.setAttribute('aria-pressed', ligado ? 'true' : 'false');
+            micBtn.setAttribute('aria-label', ligado ? 'Parar de ouvir' : 'Falar em vez de digitar');
+        }
+        function paraMic() {
+            if (!rec) return;
+            var r = rec; rec = null;
+            r.onresult = r.onerror = r.onend = null;
+            try { r.abort(); } catch (e) {}
+            micVisual(false); txt.placeholder = DICA;
+        }
+        function ligaMic() {
+            var SR = reconhecedor();
+            if (!SR) return;
+            var r = new SR(), base = txt.value.trim();
+            if (base) base += ' ';
+            r.lang = 'pt-BR'; r.interimResults = true; r.continuous = false;
+            r.onresult = function (e) {
+                var dito = '';
+                for (var i = 0; i < e.results.length; i++) dito += e.results[i][0].transcript;
+                txt.value = (base + dito).slice(0, 1000); ajusta();
+            };
+            r.onerror = function (e) {
+                var negado = e.error === 'not-allowed' || e.error === 'service-not-allowed';
+                paraMic();
+                if (negado) txt.placeholder = 'Permita o microfone no navegador ou digite aqui';
+            };
+            r.onend = function () { rec = null; micVisual(false); txt.placeholder = DICA; if (!toque) txt.focus(); };
+            try { r.start(); } catch (e) { return; }
+            rec = r; micVisual(true); txt.placeholder = 'Ouvindo…';
+        }
+        micBtn.addEventListener('click', function () {
+            if (!rec) { ligaMic(); return; }
+            // parar de ouvir mantém o que já foi transcrito
+            rec.stop();
+        });
         txt.addEventListener('input', ajusta);
         txt.addEventListener('keydown', function (e) {
             // no celular, Enter pula linha; envia pelo botão
@@ -5445,7 +5560,7 @@
         env.addEventListener('click', enviaTexto);
         $('sai-sug').addEventListener('click', function (e) {
             var b = e.target.closest('button');
-            if (b) envia(b.textContent);
+            if (b) { paraMic(); envia(b.textContent); }
         });
 
         // ---------- abrir, fechar e nova conversa ----------
@@ -5465,13 +5580,13 @@
             if (!toque) setTimeout(function () { txt.focus(); }, 120);
         }
         function fecha() {
-            aberto = false; clearTimeout(tVigia); espera = null; tiraPensando();
+            aberto = false; clearTimeout(tVigia); espera = null; tiraPensando(); terminaDigitacao(); paraMic();
             ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sai-aberto');
             ov.style.height = ''; ov.style.top = '';
             abridor.focus({ preventScroll: true });
         }
         function novaConversa() {
-            geracao++; clearTimeout(tVigia); espera = null; linhaPensa = null;
+            geracao++; clearTimeout(tVigia); espera = null; linhaPensa = null; cancelaDigitacao(); paraMic();
             sessao = null; guardaSessao(); ultimoId = 0; carregado = false; historico = [];
             fio.textContent = ''; desce.classList.remove('on'); $('sai-wa').classList.remove('on');
             ov.classList.remove('conversa');
