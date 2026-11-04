@@ -1585,7 +1585,8 @@
             color: #8a8a9c; font-size: 17px; cursor: pointer; display: grid; place-items: center; transition: color .2s, background .2s; }
         .plm-x:hover { color: #fff; background: rgba(255,255,255,.08); }
         /* montador de pedido no estilo Apple: blocos limpos, tipografia SF, entrada gradual */
-        #escolher-plano-panel .sp-head, #escolher-plano-panel .sp-cfg { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+        .sps-cfg { width: 100%; max-width: 560px; margin: 0 auto 3.5rem; }
+        #escolher-plano-panel .sp-head, #escolher-plano-panel .sp-cfg, .sps-cfg { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
         .sp-head { text-align: center; margin-bottom: 4px; }
         .sp-head h3 { margin: 0; color: #f5f5f7; font-size: 26px; font-weight: 600; letter-spacing: -.022em; line-height: 1.1; }
                 .sp-cfg { display: flex; flex-direction: column; gap: 8px; }
@@ -2730,7 +2731,7 @@
                         <div class="sp-cfg" id="sp-cfg">
                             <div class="sp-row sp-anim" style="--i:1">
                                 <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></div>
-                                <div class="sp-txt"><em class="sp-val">R$ 597</em><b>Site personalizado</b><span>Pronto e configurado</span></div>
+                                <div class="sp-txt"><em class="sp-val">R$ 597</em><b>Site personalizado</b><span>Com domínio próprio</span></div>
                                 <i class="ph-fill ph-check-circle sp-inc" aria-hidden="true"></i>
                             </div>
                             <div class="sp-row sp-anim" style="--i:2">
@@ -2963,7 +2964,7 @@
         </div>
         <!-- /stack-wrap (Vantagens Exclusivas + Como Funciona na Prática) -->
 
-        <!-- ===================== SEÇÃO DE PLANOS ===================== -->
+        <!-- ===================== SEÇÃO MONTE SEU PLANO ===================== -->
         <section id="planos" class="plans-section px-4 mt-8 mb-20" style="width: 100vw; max-width: 100vw;">
             <div class="max-w-[1200px] mx-auto flex flex-col items-center">
 
@@ -2973,223 +2974,47 @@
     Maior Crescimento e Conversão
 </p>
 <h2 class="text-4xl md:text-6xl title-highlight uppercase">
-    <span class="text-white">Escolha Seu</span> <span class="text-saturno-gold inline-block">Plano</span>
+    <span class="text-white">Monte Seu</span> <span class="text-saturno-gold inline-block">Plano</span>
 </h2>
                 </header>
 
-                <!-- GRID DOS 3 PLANOS -->
-                <div id="plansViewport" class="w-full relative mb-6 md:mb-12">
-                    <div class="orbit-fx">
-                        <div class="orbit-glow"></div>
-                        <div class="orbit-stars"></div>
-                        <div class="orbit-planet">
-                            <svg viewBox="0 0 240 170" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <radialGradient id="planSphere" cx="34%" cy="30%" r="82%">
-                                        <stop offset="0%"  stop-color="#fff4da"/>
-                                        <stop offset="20%" stop-color="#f2cf88"/>
-                                        <stop offset="45%" stop-color="#d9a24f"/>
-                                        <stop offset="68%" stop-color="#b07a2f"/>
-                                        <stop offset="86%" stop-color="#7c531c"/>
-                                        <stop offset="100%" stop-color="#3f2a0d"/>
-                                    </radialGradient>
-                                    <radialGradient id="planShade" cx="33%" cy="29%" r="80%">
-                                        <stop offset="0%"   stop-color="rgba(0,0,0,0)"/>
-                                        <stop offset="52%"  stop-color="rgba(0,0,0,0)"/>
-                                        <stop offset="74%"  stop-color="rgba(45,24,4,0.20)"/>
-                                        <stop offset="90%"  stop-color="rgba(22,11,0,0.52)"/>
-                                        <stop offset="100%" stop-color="rgba(6,3,0,0.82)"/>
-                                    </radialGradient>
-                                    <radialGradient id="planSpec" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%"   stop-color="rgba(255,250,235,0.65)"/>
-                                        <stop offset="100%" stop-color="rgba(255,250,235,0)"/>
-                                    </radialGradient>
-                                    <linearGradient id="planRingB" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%"   stop-color="rgba(226,205,160,0.12)"/>
-                                        <stop offset="15%"  stop-color="rgba(236,216,175,0.92)"/>
-                                        <stop offset="50%"  stop-color="rgba(251,238,208,0.96)"/>
-                                        <stop offset="85%"  stop-color="rgba(236,216,175,0.92)"/>
-                                        <stop offset="100%" stop-color="rgba(226,205,160,0.12)"/>
-                                    </linearGradient>
-                                    <linearGradient id="planRingA" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%"   stop-color="rgba(200,180,145,0.08)"/>
-                                        <stop offset="18%"  stop-color="rgba(206,186,150,0.72)"/>
-                                        <stop offset="50%"  stop-color="rgba(222,202,167,0.82)"/>
-                                        <stop offset="82%"  stop-color="rgba(206,186,150,0.72)"/>
-                                        <stop offset="100%" stop-color="rgba(200,180,145,0.08)"/>
-                                    </linearGradient>
-                                    <linearGradient id="planRingC" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%"   stop-color="rgba(180,165,140,0)"/>
-                                        <stop offset="25%"  stop-color="rgba(186,171,146,0.38)"/>
-                                        <stop offset="75%"  stop-color="rgba(186,171,146,0.38)"/>
-                                        <stop offset="100%" stop-color="rgba(180,165,140,0)"/>
-                                    </linearGradient>
-                                    <clipPath id="planSphereClip"><circle cx="120" cy="85" r="42"/></clipPath>
-                                    <clipPath id="planFront"><rect x="0" y="85" width="240" height="85"/></clipPath>
-                                    <clipPath id="planShadowRing"><rect x="120" y="50" width="46" height="35"/></clipPath>
-                                    <filter id="planSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.1"/></filter>
-                                    <filter id="planShadowBlur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.2"/></filter>
-                                </defs>
-                                <g transform="rotate(-20 120 85)">
-                                    <g>
-                                        <ellipse cx="120" cy="85" rx="66"  ry="19.8" fill="none" stroke="url(#planRingC)" stroke-width="11"/>
-                                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="url(#planRingB)" stroke-width="23"/>
-                                        <ellipse cx="120" cy="85" rx="100" ry="30"   fill="none" stroke="rgba(12,9,5,0.6)" stroke-width="4"/>
-                                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="url(#planRingA)" stroke-width="14"/>
-                                    </g>
-                                    <g clip-path="url(#planShadowRing)" filter="url(#planShadowBlur)">
-                                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="rgba(0,0,0,0.55)" stroke-width="23"/>
-                                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="rgba(0,0,0,0.5)"  stroke-width="14"/>
-                                    </g>
-                                    <g>
-                                        <circle cx="120" cy="85" r="42" fill="url(#planSphere)"/>
-                                        <g clip-path="url(#planSphereClip)" filter="url(#planSoft)">
-                                            <rect x="78" y="49" width="84" height="4" fill="rgba(180,130,60,0.22)"/>
-                                            <rect x="78" y="59" width="84" height="6" fill="rgba(120,80,30,0.30)"/>
-                                            <rect x="78" y="70" width="84" height="4" fill="rgba(255,240,205,0.22)"/>
-                                            <rect x="78" y="79" width="84" height="7" fill="rgba(150,100,40,0.28)"/>
-                                            <rect x="78" y="91" width="84" height="5" fill="rgba(255,235,195,0.18)"/>
-                                            <rect x="78" y="99" width="84" height="6" fill="rgba(120,78,28,0.30)"/>
-                                            <rect x="78" y="109" width="84" height="5" fill="rgba(110,70,25,0.28)"/>
-                                        </g>
-                                        <circle cx="120" cy="85" r="42" fill="url(#planShade)"/>
-                                        <ellipse cx="105" cy="67" rx="16" ry="11" fill="url(#planSpec)" clip-path="url(#planSphereClip)"/>
-                                    </g>
-                                    <g clip-path="url(#planSphereClip)">
-                                        <ellipse cx="120" cy="90" rx="42" ry="6.5" fill="none" stroke="rgba(0,0,0,0.30)" stroke-width="6" filter="url(#planSoft)"/>
-                                    </g>
-                                    <g clip-path="url(#planFront)">
-                                        <ellipse cx="120" cy="85" rx="66"  ry="19.8" fill="none" stroke="url(#planRingC)" stroke-width="11"/>
-                                        <ellipse cx="120" cy="85" rx="86"  ry="25.8" fill="none" stroke="url(#planRingB)" stroke-width="23"/>
-                                        <ellipse cx="120" cy="85" rx="100" ry="30"   fill="none" stroke="rgba(12,9,5,0.6)" stroke-width="4"/>
-                                        <ellipse cx="120" cy="85" rx="111" ry="33.3" fill="none" stroke="url(#planRingA)" stroke-width="14"/>
-                                    </g>
-                                </g>
-                            </svg>
+                <!-- MONTADOR NA PÁGINA: usa os mesmos valores do montador em popup -->
+                <div class="sp-cfg sps-cfg" id="sps-cfg">
+                    <div class="sp-row">
+                        <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" loading="lazy" decoding="async"></div>
+                        <div class="sp-txt"><em class="sp-val">R$ 597</em><b>Site personalizado</b><span>Com domínio próprio</span></div>
+                        <i class="ph-fill ph-check-circle sp-inc" aria-hidden="true"></i>
+                    </div>
+                    <div class="sp-row">
+                        <div class="sp-thumb sp-3d sp-3d-card"><img src="img/caixa-cartao.webp" alt="" width="156" height="120" loading="lazy" decoding="async"></div>
+                        <div class="sp-txt"><em class="sp-val">R$ 35 cada</em><b>Cartões NFC <em class="sp-opc">Opcional</em></b><span>Aproximou, abriu</span></div>
+                        <div class="sp-qtd" role="group" aria-label="Quantidade de cartões NFC">
+                            <button type="button" data-passo="-1" data-alvo="sp-n" aria-label="Remover um cartão"><i class="ph ph-minus"></i></button>
+                            <input id="sps-n" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de cartões NFC">
+                            <button type="button" data-passo="1" data-alvo="sp-n" aria-label="Adicionar um cartão"><i class="ph ph-plus"></i></button>
                         </div>
                     </div>
-
-                    <button type="button" id="plansPrevBtn" aria-label="Plano anterior" class="slider-arrow md:hidden absolute left-1 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
-                        <i class="ph ph-caret-left text-lg"></i>
-                    </button>
-                    <button type="button" id="plansNextBtn" aria-label="Próximo plano" class="slider-arrow md:hidden absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center z-20 backdrop-blur-sm">
-                        <i class="ph ph-caret-right text-lg"></i>
-                    </button>
-
-                <div id="plansGrid" class="w-full grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-
-                    <!-- PLANO ESSENCIAL (Mais Vendido - Azul) -->
-                    <div id="plan-card-0" class="plan-card card-saturno-white p-8 flex flex-col relative">
-                        <div class="badge-saturno-white absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
-                            Mais Vendido
+                    <div class="sp-row">
+                        <div class="sp-thumb sp-thumb-tag"><img src="img/tapreview-card.webp" alt="" loading="lazy" decoding="async"></div>
+                        <div class="sp-txt"><em class="sp-val">R$ 40 cada</em><b>Tag Google <em class="sp-opc">Opcional</em></b><span>Avaliação em um toque</span></div>
+                        <div class="sp-qtd" role="group" aria-label="Quantidade de tags Avaliação Google">
+                            <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
+                            <input id="sps-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
+                            <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
                         </div>
-                        <div class="mb-6 mt-2">
-                            <h3 class="text-saturno-white text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Essencial</h3>
-                            <p class="flex items-center gap-2 max-w-full">
-                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/10 border border-white/25 shrink-0" style="box-shadow: 0 0 8px rgba(255,255,255,0.35);">
-                                    <i class="ph-fill ph-sparkle text-[11px] text-white"></i>
-                                </span>
-                                <span class="text-saturno-white text-[10px] md:text-xs font-black uppercase tracking-wide truncate min-w-0">Ter presença digital profissional</span>
-                            </p>
-                        </div>
-                        <div class="plan-img-wrap glow-white mb-6">
-                            <img src="img/plano-essencial.webp" alt="Cartão NFC - Plano Essencial" class="w-32 md:w-40 h-auto">
-                        </div>
-                        <div class="mb-8">
-                            <span class="text-4xl md:text-5xl font-black text-white">R$ 600</span>
-                            <span class="text-saturno-white block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$300,00</span>
-                        </div>
-                        <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site exclusivo</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">4 cartões NFC personalizados</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Design profissional e adaptado para celulares</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Botões animados e efeitos visuais modernos</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">WhatsApp, localização, redes sociais e agendamento</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Opção para salvar seu contato com apenas um toque</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR Code integrado aos cartões</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 2 a 3 dias úteis</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Você recebe tudo configurado e funcionando</span></li>
-                        </ul>
-                        <a href="https://wa.link/304efy" class="btn btn-saturno-white w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
                     </div>
-
-                    <!-- PLANO PROFISSIONAL (Custo Benefício - Laranja) -->
-                    <div id="plan-card-1" class="plan-card card-silver p-8 flex flex-col relative">
-                        <div class="badge-saturno-silver absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
-                            Custo Benefício
-                        </div>
-                        <div class="mb-6 mt-2">
-                            <h3 class="text-saturno-silver text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Profissional</h3>
-                            <p class="flex items-center gap-2 max-w-full">
-                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#c0c5ce]/10 border border-[#c0c5ce]/30 shrink-0" style="box-shadow: 0 0 8px rgba(200,205,214,0.4);">
-                                    <i class="ph-fill ph-target text-[11px] text-[#dfe3e8]"></i>
-                                </span>
-                                <span class="text-saturno-silver text-[10px] md:text-xs font-black uppercase tracking-wide truncate min-w-0">Captar clientes e facilitar atendimentos</span>
-                            </p>
-                        </div>
-                        <div class="plan-img-wrap glow-silver mb-6">
-                            <img src="img/plano-profissional.webp" alt="Cartão NFC - Plano Profissional" class="w-32 md:w-40 h-auto">
-                        </div>
-                        <div class="mb-8">
-                            <span class="text-4xl md:text-5xl font-black text-white">R$ 1.000</span>
-                            <span class="text-saturno-silver block text-xs font-bold mt-2 uppercase tracking-widest">Em até 2x sem juros de R$500,00</span>
-                        </div>
-                        <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-stack icon-bonus"></i><span class="list-text">Tudo do plano Essencial incluso</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site profissional com animações avançadas</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">12 cartões NFC personalizados</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-google-logo icon-google"></i><span class="list-text list-google">1 Cartão Google Review</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Animações avançadas e experiência visual diferenciada</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 3 a 4 dias úteis</span></li>
-                        </ul>
-                        <a href="https://wa.link/bu191w" class="btn btn-saturno-silver w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
+                    <label class="sp-row" for="sps-crm">
+                        <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
+                        <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Clientes e vendas</span></span>
+                        <span class="sp-tog"><input id="sps-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
+                    </label>
+                    <a class="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+                    <div class="sp-total">
+                        <div><span class="sp-rot">Total</span><span class="sp-det" id="sps-det">Site personalizado</span></div>
+                        <strong id="sps-preco" aria-live="polite">R$ 597,00</strong>
                     </div>
-
-                    <!-- PLANO FORA DE ÓRBITA (Para Grandes Empresas - Roxo) -->
-                    <div id="plan-card-2" class="plan-card card-gold p-8 flex flex-col relative">
-                        <div class="badge-saturno-gold absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] font-black uppercase tracking-widest py-1.5 px-6 rounded-full whitespace-nowrap">
-                            Para Grandes Empresas
-                        </div>
-                        <div class="mb-6 mt-2">
-                            <h3 class="text-saturno-gold text-xl md:text-2xl font-black uppercase tracking-wide mb-2 inline-block">Plano Fora de Órbita</h3>
-                            <p class="flex items-center gap-2 max-w-full">
-                                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand-gold/10 border border-brand-gold/30 shrink-0" style="box-shadow: 0 0 8px rgba(255,184,0,0.4);">
-                                    <i class="ph-fill ph-rocket-launch text-[11px] text-brand-gold"></i>
-                                </span>
-                                <span class="text-saturno-gold text-[10px] md:text-xs font-black uppercase tracking-wide truncate min-w-0">Digitalizar toda a operação da empresa</span>
-                            </p>
-                        </div>
-                        <div class="plan-img-wrap glow-gold mb-6">
-                            <img src="img/plano-fora-de-orbita.webp" alt="Cartão NFC - Plano Fora de Órbita" class="w-32 md:w-40 h-auto">
-                        </div>
-                        <div class="mb-8">
-                            <span class="text-4xl md:text-5xl font-black text-white">R$ 2.000</span>
-                            <span class="text-saturno-gold block text-xs font-bold mt-2 uppercase tracking-widest">Em até 4x sem juros de R$500,00</span>
-                        </div>
-                        <ul class="space-y-5 mb-10 flex-1">
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-stack icon-bonus"></i><span class="list-text">Tudo do plano Profissional incluso</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-star icon-star"></i><span class="list-text">Site profissional sob medida, com identidade exclusiva</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">30 cartões NFC personalizados</span></li>
-                            <li class="flex items-start gap-3"><i class="ph-fill ph-google-logo icon-google"></i><span class="list-text list-google">2 Cartões Google Review</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">30 tags NFC para mesas, cardápios, quartos ou pontos de atendimento</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">1 chaveiro NFC direcionado para o Instagram</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Animações imersivas e experiência visual premium</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Catálogo, cardápio ou página de apresentação personalizada</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">QR Code integrado aos materiais</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Relatório de acessos, cliques e interações</span></li>
-                            <li class="flex items-start gap-3"><i class="ph ph-check icon-check"></i><span class="list-text">Entrega em até 4 a 5 dias úteis</span></li>
-                        </ul>
-                        <a href="https://wa.link/qq7evn" class="btn btn-saturno-gold w-full py-4 rounded-full flex items-center justify-center mt-auto shadow-lg">Escolher Plano</a>
-                    </div>
-
-                </div>
-                </div>
-
-                <!-- Indicadores dos planos (somente mobile) -->
-                <div id="plansDots" class="md:hidden flex items-center justify-center gap-2 mb-12">
-                    <span class="plan-dot active" data-plan-index="0"></span>
-                    <span class="plan-dot" data-plan-index="1"></span>
-                    <span class="plan-dot" data-plan-index="2"></span>
+                    <button type="button" class="sp-pedir" id="sps-pedir">Fazer meu pedido</button>
+                    <span class="sp-frete sp-frete-neon"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
                 </div>
 
                 <!-- ASSINATURA / GESTÃO SATURNO -->
@@ -3750,102 +3575,6 @@
         }, { threshold: 0.3 });
         document.querySelectorAll('#vantagens-grid').forEach(el => vantagensObserver.observe(el));
 
-        // --- Planos: lista de recursos (abaixo do valor) em efeito cascata, por card, ao chegar na seção ---
-        const planListObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const items = entry.target.querySelectorAll(':scope > li');
-                    items.forEach((li, i) => { li.style.transitionDelay = (i * 0.16) + 's'; });
-                    entry.target.classList.add('active');
-                    planListObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-        document.querySelectorAll('.plan-card ul.space-y-5').forEach(ul => planListObserver.observe(ul));
-
-        // --- Carrossel de Planos (mobile): 1 plano por vez, com troca automática a cada 4s ---
-        (function () {
-            const section = document.getElementById('planos');
-            const viewport = document.getElementById('plansViewport');
-            const grid = document.getElementById('plansGrid');
-            const prevBtn = document.getElementById('plansPrevBtn');
-            const nextBtn = document.getElementById('plansNextBtn');
-            const dots = document.querySelectorAll('#plansDots .plan-dot');
-            if (!section || !viewport || !grid || !prevBtn || !nextBtn || !dots.length) return;
-
-            const total = dots.length;
-            let current = 0;
-            let autoTimer = null;
-            let warpTimer = null;
-            let userStopped = false;
-
-            const isMobile = () => window.innerWidth < 768;
-
-            function render() {
-                if (!isMobile()) { grid.style.transform = ''; return; }
-                grid.style.transform = `translateX(-${current * 100}%)`;
-                dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
-            }
-
-            function triggerWarp() {
-                viewport.classList.remove('warping');
-                void viewport.offsetWidth; // força reflow para permitir repetir a animação
-                viewport.classList.add('warping');
-                clearTimeout(warpTimer);
-                warpTimer = setTimeout(() => viewport.classList.remove('warping'), 900);
-            }
-
-            function goTo(index) {
-                current = (index + total) % total;
-                triggerWarp();
-                render();
-            }
-
-            function next() { goTo(current + 1); }
-            function prev() { goTo(current - 1); }
-
-            // Pula direto para um plano específico, sem a animação de alternância (warp/slide)
-            function jumpTo(index) {
-                current = (index + total) % total;
-                const prevTransition = grid.style.transition;
-                grid.style.transition = 'none';
-                render();
-                void grid.offsetWidth; // força reflow antes de restaurar a transição
-                grid.style.transition = prevTransition;
-            }
-            window.saturnoJumpToPlan = jumpTo;
-
-            function startAuto() {
-                if (autoTimer || !isMobile()) return;
-                autoTimer = setInterval(() => { if (!document.body.classList.contains('popup-aberto')) next(); }, 5000);
-            }
-            function stopAuto() {
-                clearInterval(autoTimer);
-                autoTimer = null;
-            }
-            function restartAuto() {
-                stopAuto();
-                startAuto();
-            }
-
-            nextBtn.addEventListener('click', () => { next(); userStopped = true; stopAuto(); });
-            prevBtn.addEventListener('click', () => { prev(); userStopped = true; stopAuto(); });
-            dots.forEach((dot, i) => {
-                dot.addEventListener('click', () => { goTo(i); restartAuto(); });
-            });
-
-            const plansAutoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && isMobile() && !userStopped) startAuto();
-                    else stopAuto();
-                });
-            }, { threshold: 0.4 });
-            plansAutoObserver.observe(section);
-
-            window.addEventListener('resize', render);
-            render();
-        })();
-
         // --- Painéis "nome + iniciar conversa" (personalizado, dúvidas, atendimento agora) ---
         // Desativa o sticky de #linktree-buttons enquanto algum painel dentro dela
         // estiver aberto, para o usuário conseguir rolar e ler o conteúdo todo.
@@ -3872,7 +3601,7 @@
                         '<span class="block text-[11px] font-bold uppercase tracking-widest text-gray-400">Ou escolha uma sugestão</span>' +
                         '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">' +
                             '<button type="button" class="wa-chip" data-frase="Quero fazer meu cartão personalizado">Quero fazer meu cartão personalizado</button>' +
-                            '<button type="button" class="wa-chip" data-frase="Qual plano é ideal para mim?">Qual plano é ideal para mim?</button>' +
+                            '<button type="button" class="wa-chip" data-frase="O que é ideal para o meu negócio?">O que é ideal para o meu negócio?</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero meu cartão para campanha política">Quero meu cartão para campanha política</button>' +
                             '<button type="button" class="wa-chip" data-frase="Quero conhecer mais sobre a tecnologia NFC">Quero conhecer mais sobre a tecnologia NFC</button>' +
                         '</div>' +
@@ -3952,7 +3681,7 @@
         initWaPanel({ btnId: 'btn-wa-duvidas', panelId: 'wa-duvidas-panel', phone: '5531920067518' });
         initWaPanel({ btnId: 'btn-wa-agora', panelId: 'wa-agora-panel', phone: '5531920067518' });
 
-        // --- Botão principal: abre o box de planos; cada plano redireciona ao WhatsApp ---
+        // --- Botão principal: abre o montador em popup; a seção Monte Seu Plano usa os mesmos valores ---
         (function () {
             var btn = document.getElementById('btn-escolher-plano');
             var panel = document.getElementById('escolher-plano-panel');
@@ -3964,7 +3693,7 @@
             ov.className = 'plm-ov'; ov.id = 'planosOv'; ov.setAttribute('aria-hidden', 'true');
             document.body.appendChild(ov);
             ov.appendChild(panel);
-            panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-label', 'Escolha seu plano');
+            panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-modal', 'true'); panel.setAttribute('aria-label', 'Monte seu pedido');
             panel.insertAdjacentHTML('afterbegin',
                 '<button type="button" class="plm-x" aria-label="Fechar"><i class="ph ph-x"></i></button>' +
                 '<div class="plm-ceu" aria-hidden="true">' +
@@ -4014,15 +3743,30 @@
             var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
             var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
             function val(inp) { var n = parseInt(inp.value, 10), min = +inp.min, max = +inp.max; return isNaN(n) ? min : Math.min(max, Math.max(min, n)); }
-            function resumoTxt() {
-                var c = val(cIn), g = val(gIn);
-                return (c || g || crmIn.checked ? 'Site' : 'Site personalizado') +
+            function calcula(c, g, crm) { return BASE + c * POR_CARTAO + g * POR_TAG + (crm ? PRECO_CRM : 0); }
+            function resumoDe(c, g, crm) {
+                return (c || g || crm ? 'Site' : 'Site personalizado') +
                     (c ? ' + ' + c + (c === 1 ? ' cartão NFC' : ' cartões NFC') : '') +
                     (g ? ' + ' + g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google') : '') +
-                    (crmIn.checked ? ' + CRM' : '');
+                    (crm ? ' + CRM' : '');
+            }
+            function resumoTxt() { return resumoDe(val(cIn), val(gIn), crmIn.checked); }
+            window.saturnoMontador = {calcula: calcula, resumo: resumoDe, brl: brl, val: val};   // o pedido montado pela IA usa as mesmas regras
+            var sec = document.getElementById('sps-cfg');
+            function espelhaSecao(total) {
+                if (!sec) return;
+                document.getElementById('sps-n').value = val(cIn);
+                document.getElementById('sps-g').value = val(gIn);
+                document.getElementById('sps-crm').checked = crmIn.checked;
+                document.getElementById('sps-preco').textContent = brl(total);
+                document.getElementById('sps-det').textContent = resumoTxt();
+                sec.querySelectorAll('.sp-qtd button').forEach(function (b) {
+                    var inp = document.getElementById(b.getAttribute('data-alvo')), v = val(inp);
+                    b.disabled = +b.getAttribute('data-passo') < 0 ? v <= +inp.min : v >= +inp.max;
+                });
             }
             function atualizaPreco(pular) {
-                var total = BASE + val(cIn) * POR_CARTAO + val(gIn) * POR_TAG + (crmIn.checked ? PRECO_CRM : 0), preco = document.getElementById('sp-preco');
+                var total = calcula(val(cIn), val(gIn), crmIn.checked), preco = document.getElementById('sp-preco');
                 preco.textContent = brl(total);
                 document.getElementById('sp-det').textContent = resumoTxt();
                 panel.querySelectorAll('.sp-qtd button').forEach(function (b) {
@@ -4030,6 +3774,7 @@
                     b.disabled = +b.getAttribute('data-passo') < 0 ? v <= +inp.min : v >= +inp.max;
                 });
                 if (pular) { preco.classList.remove('pulo'); void preco.offsetWidth; preco.classList.add('pulo'); setTimeout(function () { preco.classList.remove('pulo'); }, 200); }
+                espelhaSecao(total);
                 return total;
             }
             panel.querySelectorAll('.sp-qtd button').forEach(function (b) {
@@ -4043,6 +3788,24 @@
                 inp.addEventListener('blur', function () { inp.value = val(inp); atualizaPreco(); });
             });
             crmIn.addEventListener('change', function () { atualizaPreco(true); });
+            if (sec) {
+                sec.querySelectorAll('.sp-qtd button').forEach(function (b) {
+                    b.addEventListener('click', function () {
+                        var inp = document.getElementById(b.getAttribute('data-alvo'));
+                        inp.value = val(inp) + (+b.getAttribute('data-passo')); inp.value = val(inp); atualizaPreco(true);
+                    });
+                });
+                [['sps-n', cIn], ['sps-g', gIn]].forEach(function (par) {
+                    var campo = document.getElementById(par[0]);
+                    campo.addEventListener('input', function () { if (campo.value !== '') { par[1].value = campo.value; par[1].value = val(par[1]); atualizaPreco(true); } });
+                    campo.addEventListener('blur', function () { atualizaPreco(); });
+                });
+                document.getElementById('sps-crm').addEventListener('change', function () { crmIn.checked = this.checked; atualizaPreco(true); });
+                document.getElementById('sps-pedir').addEventListener('click', function () { document.getElementById('sp-pedir').click(); });
+                sec.querySelector('.sp-oque').addEventListener('click', function () {
+                    try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked})); } catch (err) {}
+                });
+            }
             atualizaPreco();
 
             // "O que é CRM?": guarda o que já foi escolhido; ao voltar da página da CRM, o pedido reabre igual
@@ -4065,30 +3828,12 @@
                 var total = atualizaPreco(), resumo = resumoTxt() + ' (' + brl(total) + ')';
                 if (window.saturnoEscolherPlano) {
                     fecharPlanos(true);
-                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total); }, 300);
+                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total, {cartoes: val(cIn), tags: val(gIn), crm: crmIn.checked}); }, 300);
                 }
                 window.open('https://wa.me/5531920067518?text=' + encodeURIComponent('Olá! Vim pelo site e quero fazer o pedido: ' + resumo + '. Pode me passar os detalhes?'), '_blank', 'noopener');
             });
 
-            var WA_PLANO = {
-                'Essencial': 'https://wa.link/304efy',
-                'Profissional': 'https://wa.link/bu191w',
-                'Fora de Órbita': 'https://wa.link/qq7evn'
-            };
-            // escolheu o plano: antes de ir ao WhatsApp, pergunta o nome (janela "Antes de decolar", no fim da página)
-            panel.querySelectorAll('button[data-plano]').forEach(function (b) {
-                b.addEventListener('click', function () {
-                    if (window.saturnoEscolherPlano) {
-                        // fecha o popup de planos e abre a caixa do nome
-                        fecharPlanos(true);
-                        var plano = b.getAttribute('data-plano'), cartoes = b.getAttribute('data-cartoes');
-                        return setTimeout(function () { window.saturnoEscolherPlano(plano, cartoes); }, 300);
-                    }
-                    var link = WA_PLANO[b.getAttribute('data-plano')];
-                    if (link) window.open(link, '_blank', 'noopener');
-                });
-            });
-        })();
+            })();
 
         // --- 5. COMO FUNCIONA NA PRÁTICA: mesma cena do tapreview.html, com os cartões do portfólio ---
         // Cada cartão ocupa um trecho da rolagem. Dentro do trecho dele (t de 0 a 1):
@@ -4707,7 +4452,7 @@
          Nome e empresa no mesmo box, com um único botão "Continuar".
          ===================================================================== -->
     <style>
-        .orb-ov{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
+        .orb-ov{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;padding:20px;
             background:rgba(10,10,14,.45);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
             opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s;font-family:"Plus Jakarta Sans",sans-serif}
         .orb-ov.on{opacity:1;visibility:visible}
@@ -4823,6 +4568,38 @@
         .orb-btn .ph-check{display:none;font-size:16px;color:#30d158}
         .orb-btn.decolando .ph-check{display:inline}
         .orb-btn.decolando .orb-seta{display:none}
+        .orb-esc,.orb-res-btn,.orb-falha,.orb-volta,.orb-so-pagar{display:none}
+        .orb-card.m-pagar .orb-so-pagar{display:block}
+        .orb-card.m-pagar.sem-end .orb-end{display:none}
+        .orb-cep-st{display:block;min-height:0;margin:5px 0 0 4px;font-size:12.5px;color:#6e6e73}
+        .orb-cep-st:empty{display:none}
+        .orb-card.m-pagar{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto}
+        .orb-card.m-pagar .orb-campos{gap:10px;grid-template-columns:repeat(4,minmax(0,1fr))}
+        .orb-card.m-pagar .orb-campo{grid-column:span 4;min-width:0}
+        .orb-card.m-pagar .orb-m1{grid-column:span 1}
+        .orb-card.m-pagar .orb-m2,.orb-card.m-pagar #orbCampoNome,.orb-card.m-pagar #orbCampoEmp{grid-column:span 2}
+        .orb-card.m-pagar .orb-m3{grid-column:span 3}
+        .orb-card.m-pagar .orb-m1 input{padding:0 8px;text-align:center;text-transform:uppercase}
+        .orb-card.m-pagar .orb-campo input{height:46px;font-size:16px}
+        .orb-card.m-pagar .orb-rot{margin-bottom:4px}
+        @media (max-height:820px){.orb-card.m-pagar .orb-logo{display:none}}
+        .orb-card.m-escolha .orb-esc{display:grid;gap:10px}
+        .orb-card.m-escolha .orb-campos,.orb-card.m-escolha .orb-btn,.orb-card.m-escolha .orb-selos,.orb-card.m-resultado .orb-campos,.orb-card.m-resultado .orb-btn,.orb-card.m-resultado .orb-selos,.orb-card.m-pagar .orb-selos{display:none}
+        .orb-card.m-pagar .orb-volta,.orb-card.m-zap.com-escolha .orb-volta{display:inline-flex}
+        .orb-op{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;padding:12px 16px;border:1px solid #d2d2d7;border-radius:18px;background:#fff;color:#1d1d1f;font-family:inherit;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,transform .12s}
+        .orb-op:hover{background:#f5f5f7;border-color:#a1a1a6}
+        .orb-op:active{transform:scale(.98)}
+        .orb-op i{flex:none;font-size:25px}
+        .orb-op span{display:flex;flex-direction:column;gap:3px;min-width:0}
+        .orb-op b{font-size:15.5px;font-weight:600;letter-spacing:-.012em;line-height:1.2}
+        .orb-op small{color:#6e6e73;font-size:12.5px;line-height:1.3}
+        .orb-op-pg{border-color:#1d1d1f;background:#1d1d1f;color:#fff}
+        .orb-op-pg:hover{border-color:#000;background:#000}
+        .orb-op-pg small{color:#c7c7cc}
+        .orb-card.m-resultado .orb-res-btn{display:flex;align-items:center;justify-content:center;min-height:50px;padding:10px 18px;border-radius:999px;background:#1d1d1f;color:#fff;font-size:15.5px;font-weight:600;text-decoration:none}
+        .orb-falha.on{display:block;margin:0 0 14px;padding:10px 12px;border-radius:12px;background:#fff1f0;color:#b3261e;font-size:13.5px;line-height:1.35}
+        .orb-volta{align-items:center;gap:5px;margin:12px auto 0;padding:6px 10px;border:0;background:none;color:#6e6e73;font:inherit;font-size:13.5px;cursor:pointer}
+        .orb-volta:hover{color:#1d1d1f}
         @media (max-width:420px){.orb-card{padding:28px 20px 22px;border-radius:24px}.orb-tit{font-size:23px}.orb-logo{margin-bottom:8px}}
     </style>
 
@@ -4841,9 +4618,51 @@
             </div>
             <div class="orb-in d1">
                 <p class="orb-tit" id="orbPlanoTit">Seu plano <span id="orbPlanoNome"></span> está a um passo</p>
-                <p class="orb-sub">Vamos te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
+                <p class="orb-sub" id="orbSub">Vamos te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
             </div>
+            <div class="orb-esc orb-in d2" id="orbEsc">
+                <button type="button" class="orb-op orb-op-pg" id="orbPagar"><i class="ph ph-credit-card" aria-hidden="true"></i><span><b>Realizar pagamento pelo site</b><small>Cartão em até 12x com juros ou Pix</small></span></button>
+                <button type="button" class="orb-op" id="orbZap"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i><span><b>Continuar para o WhatsApp</b><small>Fale com a gente antes de pagar</small></span></button>
+            </div>
+            <a class="orb-res-btn orb-in d2" id="orbResBtn" target="_blank" rel="noopener noreferrer"></a>
+            <p class="orb-falha" id="orbFalha" role="alert"></p>
             <div class="orb-campos orb-in d2">
+                <div class="orb-campo orb-so-pagar" id="orbCampoCep">
+                    <label class="orb-rot" for="orbCep">CEP</label>
+                    <input id="orbCep" name="cep" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="Digite seu CEP">
+                    <span class="orb-erro">Digite os 8 números do CEP</span>
+                    <span class="orb-cep-st" id="orbCepSt" role="status"></span>
+                </div>
+                <div class="orb-campo orb-so-pagar orb-end " id="orbCampoRua">
+                    <label class="orb-rot" for="orbRua">Rua</label>
+                    <input id="orbRua" name="rua" type="text" autocomplete="address-line1" maxlength="120" placeholder="Rua, avenida...">
+                    <span class="orb-erro">Digite a rua</span>
+                </div>
+                <div class="orb-campo orb-so-pagar orb-end orb-m2" id="orbCampoNumero">
+                    <label class="orb-rot" for="orbNumero">Número</label>
+                    <input id="orbNumero" name="numero" type="text" autocomplete="address-line2" maxlength="12" placeholder="123">
+                    <span class="orb-erro">Digite o número</span>
+                </div>
+                <div class="orb-campo orb-so-pagar orb-end orb-m2" id="orbCampoCompl">
+                    <label class="orb-rot" for="orbCompl">Complemento</label>
+                    <input id="orbCompl" name="complemento" type="text" maxlength="60" placeholder="Opcional">
+                    
+                </div>
+                <div class="orb-campo orb-so-pagar orb-end " id="orbCampoBairro">
+                    <label class="orb-rot" for="orbBairro">Bairro</label>
+                    <input id="orbBairro" name="bairro" type="text" maxlength="60" placeholder="Bairro">
+                    <span class="orb-erro">Digite o bairro</span>
+                </div>
+                <div class="orb-campo orb-so-pagar orb-end orb-m3" id="orbCampoCidade">
+                    <label class="orb-rot" for="orbCidade">Cidade</label>
+                    <input id="orbCidade" name="cidade" type="text" autocomplete="address-level2" maxlength="60" placeholder="Cidade">
+                    <span class="orb-erro">Digite a cidade</span>
+                </div>
+                <div class="orb-campo orb-so-pagar orb-end orb-m1" id="orbCampoUf">
+                    <label class="orb-rot" for="orbUf">UF</label>
+                    <input id="orbUf" name="uf" type="text" autocomplete="address-level1" maxlength="2" placeholder="MG">
+                    <span class="orb-erro">UF?</span>
+                </div>
                 <div class="orb-campo" id="orbCampoNome">
                     <label class="orb-rot" for="orbNome">Seu nome</label>
                     <input id="orbNome" name="nome" type="text" autocomplete="given-name" maxlength="60" placeholder="Como podemos te chamar?">
@@ -4854,6 +4673,16 @@
                     <input id="orbEmpresa" name="empresa" type="text" autocomplete="organization" maxlength="80" placeholder="Nome que vai nos cartões">
                     <span class="orb-erro">Digite o nome da empresa</span>
                 </div>
+                <div class="orb-campo orb-so-pagar" id="orbCampoEmail">
+                    <label class="orb-rot" for="orbEmail">E-mail</label>
+                    <input id="orbEmail" name="email" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="voce@empresa.com.br">
+                    <span class="orb-erro">Digite um e-mail válido</span>
+                </div>
+                <div class="orb-campo orb-so-pagar" id="orbCampoFone">
+                    <label class="orb-rot" for="orbFone">WhatsApp</label>
+                    <input id="orbFone" name="telefone" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="16" placeholder="(31) 99999-9999">
+                    <span class="orb-erro">Digite o WhatsApp com DDD</span>
+                </div>
             </div>
             <button type="submit" class="orb-btn orb-in d4" id="orbBtn">
                 <span class="orb-btn-in">
@@ -4862,7 +4691,8 @@
                     <span class="orb-btn-tx" id="orbBtnTx">Enviar pedido</span>
                 </span>
             </button>
-            <p class="orb-selos orb-in d4"><span><i class="ph ph-handshake"></i>Sem compromisso</span></p>
+            <button type="button" class="orb-volta orb-in d4" id="orbVolta"><i class="ph ph-arrow-left" aria-hidden="true"></i> Voltar</button>
+            <p class="orb-selos orb-in d4" id="orbSelos"><span><i class="ph ph-handshake"></i>Sem compromisso</span></p>
         </form>
     </div>
 
@@ -4873,10 +4703,34 @@
             var ov = document.getElementById('orbOv'), card = document.getElementById('orbCard');
             var nome = document.getElementById('orbNome'), empresa = document.getElementById('orbEmpresa');
             var cNome = document.getElementById('orbCampoNome'), cEmp = document.getElementById('orbCampoEmp');
+            var email = document.getElementById('orbEmail'), fone = document.getElementById('orbFone');
+            var cEmail = document.getElementById('orbCampoEmail'), cFone = document.getElementById('orbCampoFone');
+            function ent(id) { return document.getElementById('orb' + id); }
+            function temTexto(id, min) { return function () { return ent(id).value.trim().length >= min; }; }
+            function cepDigitos() { return ent('Cep').value.replace(/\D/g, ''); }
+            // dados obrigatórios antes do pagamento, na ordem da tela
+            var PARA_PAGAR = [['Cep', function () { return cepDigitos().length === 8; }], ['Rua', temTexto('Rua', 3)], ['Numero', temTexto('Numero', 1)], ['Bairro', temTexto('Bairro', 2)],
+                ['Cidade', temTexto('Cidade', 2)], ['Uf', function () { return /^[a-zA-Z]{2}$/.test(ent('Uf').value.trim()); }], ['Email', emailOk], ['Fone', foneOk]];
+            function faltando() { for (var i = 0; i < PARA_PAGAR.length; i++) if (!PARA_PAGAR[i][1]()) return PARA_PAGAR[i][0]; return null; }
             var btn = document.getElementById('orbBtn');
             var plano = '', pedidoPersonalizado = false, valorPedido = 0, voltarFoco = null, tFecha = null;
-            var PRECO_PLANO = {'Essencial': 600, 'Profissional': 1000, 'Fora de Órbita': 2000};
-            try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
+            var modo = 'zap', itensPedido = null, dadosProntos = false, cepLocalizado = false;
+            var FN_PAGAMENTO = 'https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/mercadopago';
+            var tit = document.getElementById('orbPlanoTit'), sub = document.getElementById('orbSub'), falhaEl = document.getElementById('orbFalha'), btnTx = document.getElementById('orbBtnTx'), seta = btn.querySelector('.orb-seta');
+            var SUB_ZAP = sub.textContent;
+            function moeda(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
+            function avisa(t) { falhaEl.textContent = t || ''; falhaEl.classList.toggle('on', !!t); }
+            function poeModo(m) {
+                modo = m;
+                card.classList.remove('m-escolha', 'm-pagar', 'm-zap', 'm-resultado');
+                card.classList.add('m-' + m);
+                card.classList.toggle('com-escolha', !!itensPedido);
+                btn.disabled = false; btn.classList.remove('decolando');
+                if (m === 'escolha') { tit.textContent = 'Como quer continuar?'; sub.textContent = 'Total do pedido: ' + moeda(valorPedido); }
+                if (m === 'zap') { tit.textContent = 'Seu pedido está a um passo'; sub.textContent = SUB_ZAP; btnTx.textContent = 'Enviar pedido'; seta.className = 'ph-bold ph-whatsapp-logo orb-seta'; }
+                if (m === 'pagar') { tit.textContent = 'Dados para entrega'; sub.textContent = 'Depois, você paga no Mercado Pago.'; card.classList.toggle('sem-end', ent('Rua').value.trim().length < 3 && !cepLocalizado); btnTx.textContent = 'Ir para o pagamento'; seta.className = 'ph-bold ph-lock-simple orb-seta'; }
+            }
+                        try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
 
             // Festa: confete saindo do botão e dois canhões nos cantos de baixo, em duas ondas (mesmo efeito do pedido da Zoo)
             function confete(c) {
@@ -4938,21 +4792,22 @@
             function erro(campo, input) { campo.classList.remove('erro'); void campo.offsetWidth; campo.classList.add('erro'); input.focus(); }
             function foca(el, atraso) { setTimeout(function () { el.focus({preventScroll: true}); if (el.value) el.select(); }, atraso); }
 
-            function abrir(p, _cartoes, personalizado, valor) {
-                plano = p; pedidoPersonalizado = !!personalizado; valorPedido = personalizado ? (valor || 0) : (PRECO_PLANO[p] || 0);
-                document.getElementById('orbPlanoTit').firstChild.textContent = personalizado ? 'Seu pedido ' : 'Seu plano ';
+            function abrir(p, _cartoes, personalizado, valor, itens, cliente) {
+                plano = p; pedidoPersonalizado = !!personalizado; valorPedido = valor || 0; itensPedido = itens || null;
+                dadosProntos = !!(cliente && cliente.nome && cliente.empresa);
+                if (dadosProntos) { nome.value = cliente.nome; empresa.value = cliente.empresa; }
+                avisa('');
+                poeModo(itensPedido ? 'escolha' : 'zap');
                 clearTimeout(tFecha); ov.classList.remove('fechando', 'on'); void ov.offsetWidth;   // reinicia a animação
                 card.setAttribute('data-plano', p);
-                // pedido montado: só "Seu pedido está a um passo" (os itens seguem na mensagem do WhatsApp e na CRM)
-                document.getElementById('orbPlanoNome').textContent = personalizado ? '' : p;
-                cNome.classList.remove('erro'); cEmp.classList.remove('erro');
+                cNome.classList.remove('erro'); cEmp.classList.remove('erro'); PARA_PAGAR.forEach(function (c) { ent('Campo' + c[0]).classList.remove('erro'); });
                 btn.classList.remove('decolando'); btn.disabled = false;
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
                 document.body.style.overflow = 'hidden';
                 document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                 // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
-                foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
+                if (modo !== 'escolha') foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
             }
             function fechar() {
                 if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
@@ -4965,15 +4820,110 @@
                 }, 330);
             }
             window.saturnoEscolherPlano = abrir;
+            function focaCampo() {
+                if (modo === 'pagar') return foca(ent(faltando() || 'Cep'), 80);   // CEP vem primeiro
+                foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 80);
+            }
+            function emailOk() { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()); }
+            function foneDigitos() { return fone.value.replace(/\D/g, '').replace(/^55(?=\d{10,11}$)/, ''); }
+            function foneOk() { return /^[1-9]{2}\d{8,9}$/.test(foneDigitos()); }
+            function segue(m) {
+                avisa(''); poeModo(m);
+                if (!dadosProntos || m === 'pagar') return focaCampo();   // o pagamento sempre pede e-mail e WhatsApp
+                if (card.requestSubmit) card.requestSubmit(); else card.dispatchEvent(new Event('submit', {cancelable: true}));
+            }
+            document.getElementById('orbPagar').addEventListener('click', function () { segue('pagar'); });
+            document.getElementById('orbZap').addEventListener('click', function () { segue('zap'); });
+            document.getElementById('orbVolta').addEventListener('click', function () { avisa(''); poeModo('escolha'); });
+            // voltou do checkout pelo botão do navegador: o botão não pode ficar travado
+            window.addEventListener('pageshow', function (e) { if (e.persisted && modo === 'pagar') poeModo('pagar'); });
+
+            function vaiParaPagamento(n, emp) {
+                btn.disabled = true; btnTx.textContent = 'Abrindo o pagamento…'; avisa('');
+                var ctl = new AbortController(), limite = setTimeout(function () { ctl.abort(); }, 20000);
+                fetch(FN_PAGAMENTO, {
+                    method: 'POST', signal: ctl.signal,
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({nome: n, empresa: emp, email: email.value.trim(), telefone: foneDigitos(),
+                        endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), complemento: ent('Compl').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
+                        cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm})
+                }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
+                .then(function (j) { clearTimeout(limite); location.href = j.url; })
+                .catch(function () {
+                    clearTimeout(limite);
+                    poeModo('zap');
+                    avisa('Não conseguimos abrir o pagamento agora. Envie o pedido pelo WhatsApp que a gente te ajuda.');
+                });
+            }
+
+            // volta do Mercado Pago: o aviso é só para a pessoa; a confirmação real vem pelo webhook
+            (function () {
+                var st = /[?&]pagamento=(aprovado|pendente|falhou)/.exec(location.search);
+                if (!st) return;
+                try { history.replaceState(null, '', location.pathname); } catch (err) {}
+                var T = {
+                    aprovado: ['Pagamento aprovado!', 'Agora é só combinar a entrega e os dados do seu site com a gente.', 'Combinar a entrega no WhatsApp', 'Olá! Acabei de pagar meu pedido pelo site e quero combinar a entrega.'],
+                    pendente: ['Pagamento em processamento', 'Assim que o Mercado Pago confirmar, seguimos com o seu pedido.', 'Falar no WhatsApp', 'Olá! Fiz um pedido pelo site e o pagamento está em processamento.'],
+                    falhou: ['O pagamento não foi concluído', 'Você pode tentar de novo ou falar com a gente para finalizar.', 'Falar no WhatsApp', 'Olá! Tentei pagar meu pedido pelo site e não consegui concluir.']
+                }[st[1]];
+                modo = 'resultado'; itensPedido = null;
+                card.classList.remove('m-escolha', 'm-pagar', 'm-zap');
+                card.classList.add('m-resultado');
+                tit.textContent = T[0]; sub.textContent = T[1];
+                var res = document.getElementById('orbResBtn');
+                res.textContent = T[2];
+                res.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(T[3]);
+                ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
+                if (st[1] === 'aprovado') setTimeout(function () { festa(res); }, 500);
+            })();
 
             document.getElementById('orbX').addEventListener('click', fechar);
             ov.addEventListener('click', function (e) { if (e.target === ov) fechar(); });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ov.classList.contains('on')) fechar(); });
             nome.addEventListener('input', function () { cNome.classList.remove('erro'); });
             empresa.addEventListener('input', function () { cEmp.classList.remove('erro'); });
+            PARA_PAGAR.forEach(function (c) { if (c[0] !== 'Fone') ent(c[0]).addEventListener('input', function () { ent('Campo' + c[0]).classList.remove('erro'); }); });
+            // CEP completo: busca rua, bairro e cidade. Se a consulta falhar, a pessoa digita.
+            var cepBuscado = '', cepSt = document.getElementById('orbCepSt');
+            function mostraEndereco(foco, aviso) {
+                cepLocalizado = true; card.classList.remove('sem-end');
+                cepSt.textContent = aviso || '';
+                if (document.activeElement === ent('Cep')) ent(foco).focus();
+            }
+            ent('Cep').addEventListener('input', function () {
+                var d = cepDigitos().slice(0, 8);
+                this.value = d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+                if (d.length !== 8) { cepBuscado = ''; cepSt.textContent = ''; return; }
+                if (d === cepBuscado) return;
+                cepBuscado = d;
+                cepSt.textContent = 'Localizando endereço…';
+                fetch('https://viacep.com.br/ws/' + d + '/json/').then(function (r) { return r.json(); }).then(function (j) {
+                    if (cepDigitos() !== d) return;
+                    if (j.erro) return mostraEndereco('Rua', 'CEP não localizado. Preencha o endereço.');
+                    [['Rua', j.logradouro], ['Bairro', j.bairro], ['Cidade', j.localidade], ['Uf', j.uf]].forEach(function (p) {
+                        if (p[1]) { ent(p[0]).value = p[1]; ent('Campo' + p[0]).classList.remove('erro'); }
+                    });
+                    mostraEndereco(j.logradouro ? 'Numero' : 'Rua');
+                }).catch(function () { if (cepDigitos() === d) mostraEndereco('Rua', 'Não conseguimos localizar agora. Preencha o endereço.'); });
+            });
+            fone.addEventListener('input', function () {
+                cFone.classList.remove('erro');
+                var d = foneDigitos().slice(0, 11);
+                fone.value = d.length > 6 ? '(' + d.slice(0, 2) + ') ' + d.slice(2, d.length - 4) + '-' + d.slice(-4) : d.length > 2 ? '(' + d.slice(0, 2) + ') ' + d.slice(2) : d;
+            });
 
             card.addEventListener('submit', function (e) {
                 e.preventDefault();
+                if (modo === 'pagar' && itensPedido) {
+                    if (cepDigitos().length === 8) mostraEndereco('Rua');
+                    var faltaEnd = faltando();
+                    if (faltaEnd && faltaEnd !== 'Email' && faltaEnd !== 'Fone') {
+                        PARA_PAGAR.forEach(function (c) { ent('Campo' + c[0]).classList.toggle('erro', !c[1]()); });
+                        return erro(ent('Campo' + faltaEnd), ent(faltaEnd));
+                    }
+                }
                 var n = limpa(nome);
                 var emp = limpa(empresa);
                 cNome.classList.toggle('erro', n.length < 2);
@@ -4982,8 +4932,14 @@
                 if (emp.length < 2) return erro(cEmp, empresa);
                 n = capitaliza(n);
                 try { localStorage.setItem('saturno_nome', n); localStorage.setItem('saturno_empresa', emp); } catch (err) {}
-                registrarNaCrm({nome: n, empresa: emp, pedido: pedidoPersonalizado ? plano : 'Plano ' + plano, valor: valorPedido});
-                var texto = 'Olá! Sou ' + n + ', da empresa ' + emp + '. Vim pelo site e ' + (pedidoPersonalizado ? 'quero fazer o pedido: ' : 'quero contratar o plano ') + plano + '. Pode me passar os detalhes?';
+                if (modo === 'pagar' && itensPedido) {
+                    PARA_PAGAR.forEach(function (c) { ent('Campo' + c[0]).classList.toggle('erro', !c[1]()); });
+                    var falta = faltando();
+                    if (falta) return erro(ent('Campo' + falta), ent(falta));
+                    return vaiParaPagamento(n, emp);
+                }
+                registrarNaCrm({nome: n, empresa: emp, pedido: plano, valor: valorPedido});
+                var texto = 'Olá! Sou ' + n + ', da empresa ' + emp + '. Vim pelo site e ' + 'quero fazer o pedido: ' + plano + '. Pode me passar os detalhes?';
                 var link = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(texto);
                 btn.disabled = true; btn.classList.add('decolando');
                 // festa primeiro, WhatsApp logo depois: abrir na hora esconderia o confete atrás da aba nova
@@ -4996,15 +4952,7 @@
                 }, 1200);
             });
 
-            // cartões da seção Planos ("Escolher Plano"): mesmo fluxo, sem sair direto para o WhatsApp
-            var LINKS = {'https://wa.link/304efy': 'Essencial', 'https://wa.link/bu191w': 'Profissional', 'https://wa.link/qq7evn': 'Fora de Órbita'};
-            document.querySelectorAll('a[href^="https://wa.link/"]').forEach(function (a) {
-                var p = LINKS[a.getAttribute('href')];
-                if (!p) return;
-                a.setAttribute('href', '#planos');   // o Lead do Meta Pixel é contado quando o WhatsApp abre
-                a.addEventListener('click', function (e) { e.preventDefault(); abrir(p); });
-            });
-        })();
+            })();
     </script>
 
     <!-- Meta Pixel - Evento Lead em cliques de WhatsApp -->
@@ -5154,6 +5102,9 @@
         .sai-pedido{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:.55rem;width:100%;max-width:22rem;min-height:3.25rem;margin-top:.9rem;padding:.7rem 1.4rem;border-radius:999px;background:#fff;color:#07150c;font-weight:700;font-size:.95rem;line-height:1.2;letter-spacing:-.012em;text-decoration:none;transition:transform .18s cubic-bezier(.2,.8,.2,1);animation:saiSobe .45s cubic-bezier(.2,.8,.2,1) both,saiPedidoCor 4.4s ease-in-out .5s infinite}
         .sai-pedido::after{content:'';position:absolute;z-index:-1;top:0;bottom:0;left:-45%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-18deg);animation:saiPedidoBrilho 4.4s ease-in-out .5s infinite}
         .sai-txt a.sai-pedido{color:#000;font-weight:400;text-decoration:none}
+        .sai-txt .sai-cfg{max-width:460px;margin:.9rem 0 .3rem;white-space:normal;line-height:1.3;overflow-wrap:normal}
+        .sai-txt .sai-cfg .sp-oque{font-weight:400;text-decoration:none}
+        @media (max-width:480px){.sai-cfg .sp-opc{display:none}}
         .sai-pedido:hover{transform:translateY(-2px) scale(1.012)}
         .sai-pedido:active{transform:scale(.975)}
         .sai-pedido i{flex:none;font-size:1.35rem}
@@ -5344,28 +5295,84 @@ function linhaEu(texto) {
             l.appendChild(b); fio.appendChild(l);
         }
         // o agente confirma o pedido com a linha: #PEDIDO# Nome | Empresa | Pedido | Valor
-        var PRECO_PLANO = { 'plano essencial': 600, 'plano profissional': 1000, 'plano fora de orbita': 2000 };
-        function extraiPedido(bruto) {
+                function extraiPedido(bruto) {
             var m = /^[ \t]*#PEDIDO#[ \t]*(.+?)[ \t]*$/m.exec(bruto), r = { texto: bruto, pedido: null };
             if (!m) return r;
             r.texto = bruto.replace(m[0], '').trim();
             var c = m[1].split('|').map(function (s) { return s.trim(); });
             if (c.length < 4 || c[0].length < 2 || c[1].length < 2 || !c[2]) return r;
-            var chave = c[2].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             var valor = Number(c[3].replace(/,\d{1,2}$/, '').replace(/\D/g, '')) || 0;
-            r.pedido = { nome: c[0], empresa: c[1], pedido: c[2], valor: PRECO_PLANO[chave] || valor };
+            r.pedido = { nome: c[0], empresa: c[1], pedido: c[2], valor: valor, itens: null };
+            var M = window.saturnoMontador, itens = M && document.getElementById('sps-cfg') ? lerItens(c[2]) : null;
+            if (itens) {   // o total sai da mesma regra do Monte Seu Plano, não do texto do agente
+                r.pedido.itens = itens;
+                r.pedido.valor = M.calcula(itens.c, itens.g, itens.crm);
+                r.pedido.pedido = M.resumo(itens.c, itens.g, itens.crm) + ' (' + M.brl(r.pedido.valor) + ')';
+            }
             return r;
+        }
+        // "Site + 4 cartões NFC + 1 tag + CRM" vira quantidades. Outro tipo de pedido volta null e segue pelo botão do WhatsApp.
+        function lerItens(txt) {
+            var t = String(txt || '').replace(/\bsem\s+\S+(\s+\S+)?/gi, ' ');
+            if (!/\bsite\b/i.test(t) || /espelho|campanha|card[aá]pio/i.test(t)) return null;
+            var NUM = {um: 1, uma: 1, dois: 2, duas: 2, 'três': 3, tres: 3, quatro: 4, cinco: 5, seis: 6, sete: 7, oito: 8, nove: 9, dez: 10};
+            function qtd(item) {
+                var m = new RegExp('(\\d+|' + Object.keys(NUM).join('|') + ')\\s+' + item, 'i').exec(t);
+                if (m) return /^\d/.test(m[1]) ? Math.min(200, parseInt(m[1], 10)) : NUM[m[1].toLowerCase()];
+                return new RegExp(item, 'i').test(t) ? 1 : 0;
+            }
+            return {c: qtd('cart'), g: qtd('tags?\\b'), crm: /\bcrm\b/i.test(t)};
         }
         function registraPedido(p) {
             var chave = [p.nome, p.empresa, p.pedido, p.valor].join('|');
             if (!sessao || sessao.crm === chave) return;   // o mesmo pedido entra uma vez só
             sessao.crm = chave; guardaSessao();
-            if (window.saturnoRegistrarPedido) window.saturnoRegistrarPedido(p);
+            if (window.saturnoRegistrarPedido) window.saturnoRegistrarPedido({ nome: p.nome, empresa: p.empresa, pedido: p.pedido, valor: p.valor });
+        }
+        // mesmo cartão do Monte Seu Plano, já preenchido e editável
+        function poeCartaoPedido(el, p) {
+            var M = window.saturnoMontador, base = document.getElementById('sps-cfg');
+            if (!p.itens || !M || !base) return poeBotaoPedido(el, p);
+            var c = base.cloneNode(true);
+            c.removeAttribute('id'); c.classList.add('sai-cfg');
+            c.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
+            c.querySelectorAll('label[for]').forEach(function (n) { n.removeAttribute('for'); });
+            var campos = c.querySelectorAll('.sp-qtd input'), cI = campos[0], gI = campos[1], crm = c.querySelector('.sp-tog input');
+            var det = c.querySelector('.sp-det'), preco = c.querySelector('.sp-total strong');
+            cI.value = p.itens.c; gI.value = p.itens.g; crm.checked = !!p.itens.crm;
+            function pinta() {
+                var nc = M.val(cI), ng = M.val(gI);
+                det.textContent = M.resumo(nc, ng, crm.checked);
+                preco.textContent = M.brl(M.calcula(nc, ng, crm.checked));
+                c.querySelectorAll('.sp-qtd button').forEach(function (b) {
+                    var inp = b.parentNode.querySelector('input'), v = M.val(inp);
+                    b.disabled = +b.getAttribute('data-passo') < 0 ? v <= +inp.min : v >= +inp.max;
+                });
+            }
+            c.querySelectorAll('.sp-qtd button').forEach(function (b) {
+                b.addEventListener('click', function () {
+                    var inp = b.parentNode.querySelector('input');
+                    inp.value = M.val(inp) + (+b.getAttribute('data-passo')); inp.value = M.val(inp); pinta();
+                });
+            });
+            [cI, gI].forEach(function (inp) {
+                inp.addEventListener('input', function () { if (inp.value !== '') pinta(); });
+                inp.addEventListener('blur', function () { inp.value = M.val(inp); pinta(); });
+            });
+            crm.addEventListener('change', pinta);
+            var oque = c.querySelector('.sp-oque');
+            if (oque) { oque.target = '_blank'; oque.rel = 'noopener'; }
+            c.querySelector('.sp-pedir').addEventListener('click', function () {
+                cI.value = M.val(cI); gI.value = M.val(gI);
+                var nc = +cI.value, ng = +gI.value, total = M.calcula(nc, ng, crm.checked);
+                window.saturnoEscolherPlano(M.resumo(nc, ng, crm.checked) + ' (' + M.brl(total) + ')', null, true, total, {cartoes: nc, tags: ng, crm: crm.checked}, {nome: p.nome, empresa: p.empresa});
+            });
+            pinta();
+            el.appendChild(c);
         }
         function poeBotaoPedido(el, p) {
-            var plano = /^plano\s+/i.test(p.pedido);
             var msg = 'Olá! Sou ' + p.nome + ', da empresa ' + p.empresa + '. Vim pelo site e ' +
-                (plano ? 'quero contratar o plano ' + p.pedido.replace(/^plano\s+/i, '') : 'quero fazer o pedido: ' + p.pedido) + '. Pode me passar os detalhes?';
+                'quero fazer o pedido: ' + p.pedido + '. Pode me passar os detalhes?';
             var a = document.createElement('a');
             a.className = 'sai-pedido'; a.target = '_blank'; a.rel = 'noopener noreferrer';
             a.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(msg);
@@ -5398,7 +5405,7 @@ function linhaEu(texto) {
             var ritmo = Math.max(65, peso / 7), ip = 0, ic = 0, saldo = 0, ult = performance.now();
             var cursor = document.createElement('span'); cursor.className = 'sai-cursor'; cursor.setAttribute('aria-hidden', 'true');
             digitando = {
-                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; if (item.pedido) { poeBotaoPedido(alvo, item.pedido); if (pertoDoFim()) vaiProFim(true); } }
+                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; if (item.pedido) { var perto = pertoDoFim(); poeCartaoPedido(alvo, item.pedido); if (perto) vaiProFim(true); } }
             };
             function passo() {
                 // conta pelo tempo real: se a aba ficar em segundo plano, o texto alcança ao voltar
@@ -5426,16 +5433,16 @@ function linhaEu(texto) {
         function terminaDigitacao() {
             clearTimeout(tDigita);
             if (digitando) digitando.fim();
-            while (fila.length) { var item = fila.shift(), alvo = criaLinhaIa(item.aviso); mostraTudo(escreve(alvo, item.texto)); if (item.pedido) poeBotaoPedido(alvo, item.pedido); }
+            while (fila.length) { var item = fila.shift(), alvo = criaLinhaIa(item.aviso); mostraTudo(escreve(alvo, item.texto)); if (item.pedido) poeCartaoPedido(alvo, item.pedido); }
         }
         function cancelaDigitacao() { clearTimeout(tDigita); fila = []; digitando = null; }
 
         function linhaIa(texto, animar, aviso, pedido) {
-            if (animar) $('sai-voz').textContent = texto || 'Pedido pronto para enviar no WhatsApp.';   // leitor de tela recebe a mensagem inteira, uma vez
+            if (animar) $('sai-voz').textContent = texto || 'Pedido pronto para conferir e enviar.';   // leitor de tela recebe a mensagem inteira, uma vez
             if (animar) { fila.push({ texto: texto, aviso: aviso, pedido: pedido }); proxima(); return; }
             var alvo = criaLinhaIa(aviso);
             mostraTudo(escreve(alvo, texto));
-            if (pedido) poeBotaoPedido(alvo, pedido);
+            if (pedido) poeCartaoPedido(alvo, pedido);
         }
         function mostraPensando() {
             tiraPensando();
@@ -5662,7 +5669,7 @@ function linhaEu(texto) {
         $('sai-fechar').addEventListener('click', fecha);
         $('sai-nova').addEventListener('click', novaConversa);
         document.addEventListener('keydown', function (e) {
-            if (!aberto) return;
+            if (!aberto || document.getElementById('orbOv').classList.contains('on')) return;   // a tela de escolha está por cima
             if (e.key === 'Escape') { fecha(); return; }
             if (e.key !== 'Tab') return;
             // o foco fica dentro do chat
