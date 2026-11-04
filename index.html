@@ -1588,38 +1588,31 @@
         #escolher-plano-panel .sp-head, #escolher-plano-panel .sp-cfg { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif; -webkit-font-smoothing: antialiased; }
         .sp-head { text-align: center; margin-bottom: 4px; }
         .sp-head h3 { margin: 0; color: #f5f5f7; font-size: 26px; font-weight: 600; letter-spacing: -.022em; line-height: 1.1; }
-        .sp-head p { margin: 6px 0 0; color: #86868b; font-size: 14px; letter-spacing: -.01em; }
-        .sp-cfg { display: flex; flex-direction: column; gap: 10px; }
+                .sp-cfg { display: flex; flex-direction: column; gap: 8px; }
         .sp-anim { opacity: 0; transform: translateY(18px); filter: blur(6px); }
         .plm-ov.on .sp-anim { animation: spSobe .75s cubic-bezier(.16,1,.3,1) calc(.2s + var(--i, 0) * .09s) forwards; }
         @keyframes spSobe { to { opacity: 1; transform: none; filter: none; } }
-        .sp-row { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; background: rgba(28,28,30,.92); border: 1px solid rgba(255,255,255,.06); transition: background .25s ease; }
+        .sp-row { display: flex; align-items: center; gap: 11px; padding: 9px 12px 9px 10px; border-radius: 16px; background: rgba(28,28,30,.92); border: 1px solid rgba(255,255,255,.06); transition: background .25s ease; }
         .sp-row:hover { background: rgba(38,38,41,.95); }
-        .sp-thumb { flex: none; width: 56px; height: 56px; border-radius: 12px; overflow: hidden; display: grid; place-items: center; background: linear-gradient(160deg, #2c2c2e, #18181a); }
+        .sp-thumb { flex: none; width: 44px; height: 44px; border-radius: 11px; overflow: hidden; display: grid; place-items: center; background: linear-gradient(160deg, #2c2c2e, #18181a); }
         .sp-thumb img { width: 100%; height: 100%; object-fit: contain; }
         .plm-ov.on .sp-thumb img { animation: spImg 1s cubic-bezier(.16,1,.3,1) calc(.35s + var(--i, 0) * .09s) both; }
         @keyframes spImg { from { opacity: 0; transform: scale(1.12); } to { opacity: 1; transform: none; } }
         /* mockups 3D: celular com o site e cartão NFC, sem fundo, com sombra suave */
         .sp-3d { background: radial-gradient(circle at 50% 60%, rgba(255,255,255,.10), rgba(255,255,255,0) 70%); overflow: visible; }
-        .sp-thumb.sp-3d img { height: 62px; width: auto; max-width: none; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.55)); }
-        .sp-thumb.sp-3d-card img { width: 64px; height: auto; transform: rotate(-8deg); }
+        .sp-thumb.sp-3d img { height: 48px; width: auto; max-width: none; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.55)); }
+        .sp-thumb.sp-3d-card img { width: 50px; height: auto; transform: rotate(-8deg); }
         .plm-ov.on .sp-3d-card img { animation-name: spImgCard; }
         @keyframes spImgCard { from { opacity: 0; transform: rotate(-8deg) scale(1.12); } to { opacity: 1; transform: rotate(-8deg); } }
         .sp-thumb-tag img { width: 74%; height: 88%; }
         .sp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; text-align: left; }
         .sp-txt b { color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.012em; line-height: 1.2; }
         .sp-txt span { color: #86868b; font-size: 12px; line-height: 1.35; letter-spacing: -.005em; }
-        .sp-row-site { flex-wrap: wrap; }
-        .sp-desc { flex: 0 0 100%; min-width: 0; text-align: left; }
-        .sp-desc-t { display: block; color: #a1a1a6; font-size: 12.5px; line-height: 1.4; letter-spacing: -.005em; }
-        .sp-oque { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; margin-top: 8px; padding: 8px 14px; border-radius: 12px; color: #ffd84d; font-size: 13px; font-weight: 700; border: 1px solid rgba(255,216,77,.45); background: rgba(255,216,77,.08); transition: background .2s ease; }
-        .sp-oque:hover { background: rgba(255,216,77,.18); }
-        .sp-desc p { margin: 0; color: #a1a1a6; font-size: 12.5px; line-height: 1.4; letter-spacing: -.005em; }
+        .sp-oque { align-self: flex-end; display: inline-flex; align-items: center; gap: 4px; min-height: 28px; margin: -3px 4px -3px 0; color: #a1a1a6; font-size: 12.5px; font-weight: 500; letter-spacing: -.005em; transition: color .2s ease; }
+        .sp-oque:hover { color: #fff; }
         .sp-frete.sp-frete-neon, .sp-frete.sp-frete-neon i { color: #39ff14; text-shadow: 0 0 10px rgba(57,255,20,.55); }
-        .sp-lista { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
-        .sp-lista li { display: flex; align-items: flex-start; gap: 6px; color: #c7c7cc; font-size: 12px; line-height: 1.3; letter-spacing: -.005em; }
-        .sp-lista i { flex: none; margin-top: 1px; color: #ffd84d; font-size: 12px; }
-        .sp-val { flex: none; color: #f5f5f7; font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+        .sp-val { color: #ffd84d; font-style: normal; font-weight: 600; font-size: 11px; line-height: 1.15; letter-spacing: .01em; }
+        .sp-inc { flex: none; margin-right: 4px; color: #6e6e73; font-size: 20px; }
         .sp-qtd { flex: none; display: flex; align-items: center; gap: 2px; }
         .sp-qtd button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(255,255,255,.18); background: transparent; color: #f5f5f7; font-size: 13px; cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s, transform .12s, opacity .2s; }
         .sp-qtd button:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.35); }
@@ -1631,24 +1624,53 @@
         label.sp-row { cursor: pointer; }
         .sp-thumb-ic { color: #f5f5f7; font-size: 28px; }
         .sp-opc { display: inline-block; margin-left: 4px; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.1); color: #c7c7cc; font-size: 10px; font-style: normal; font-weight: 500; letter-spacing: 0; vertical-align: 1px; }
-        .sp-opc-dir { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
-        .sp-tog { position: relative; display: block; width: 44px; height: 26px; }
+                .sp-tog { position: relative; flex: none; display: block; width: 44px; height: 26px; }
         .sp-tog input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
         .sp-tog i { display: block; width: 100%; height: 100%; border-radius: 999px; background: rgba(255,255,255,.18); transition: background .2s ease; pointer-events: none; }
         .sp-tog i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); transition: transform .2s cubic-bezier(.2,.8,.3,1); }
         .sp-tog input:checked + i { background: #0071e3; }
         .sp-tog input:checked + i::after { transform: translateX(18px); }
         .sp-tog input:focus-visible + i { outline: 2px solid #fff; outline-offset: 2px; }
-        .sp-total { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 12px 4px 4px; border-top: 1px solid rgba(255,255,255,.08); margin-top: 4px; text-align: left; }
+        .sp-total { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 8px 4px 2px; border-top: 1px solid rgba(255,255,255,.08); margin-top: 2px; text-align: left; }
         .sp-rot { display: block; color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
         .sp-det { display: block; color: #86868b; font-size: 12px; margin-top: 3px; line-height: 1.35; }
         .sp-total strong { color: #f5f5f7; font-size: 28px; font-weight: 600; letter-spacing: -.025em; line-height: 1; white-space: nowrap; transition: transform .2s ease; }
         .sp-total strong.pulo { transform: scale(1.05); }
-        .sp-pedir { width: 100%; padding: 15px 18px; border-radius: 999px; border: 0; background: #0071e3; color: #fff; font: 500 16px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Plus Jakarta Sans", sans-serif; letter-spacing: -.01em; cursor: pointer; transition: background .2s ease, transform .12s ease; }
-        .sp-pedir:hover { background: #0077ed; }
+        .sp-pedir { width: 100%; padding: 14px 18px; border-radius: 999px; border: 0; background: #fff; color: #0b0b12; font: 600 16px/1 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Plus Jakarta Sans", sans-serif; letter-spacing: -.01em; cursor: pointer; transition: background .2s ease, transform .12s ease; }
+        .sp-pedir:hover { background: #e8e8ed; }
         .sp-pedir:active { transform: scale(.98); }
         .sp-frete { display: flex; align-items: center; justify-content: center; gap: 6px; color: #86868b; font-size: 12px; }
-        @media (max-width: 380px) { .sp-row { padding: 10px; gap: 10px; } .sp-thumb { width: 48px; height: 48px; } .sp-total strong { font-size: 25px; } }
+        @media (max-width: 380px) { .sp-row { padding: 10px; gap: 10px; } .sp-total strong { font-size: 25px; } }
+        @media (max-width: 767px) {
+            .plm-ov { padding: 8px; }
+            #escolher-plano-panel { max-height: calc(100dvh - 16px); }
+            .plm-ceu { height: 88px; }
+            .plm-sistema { top: 0; transform: scale(.68); transform-origin: 50% 0; }
+            .plm-horizonte { top: 78px; }
+            .sp-txt b, .sp-txt span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .sp-qtd button { width: 28px; height: 28px; font-size: 12px; }
+            .sp-qtd input { width: 26px; }
+            .sp-opc { margin-left: 2px; padding: 1px 6px; font-size: 9.5px; }
+        }
+        @media (max-width: 767px) and (max-height: 680px) {
+            #escolher-plano-panel .btn-plano-tech { display: none; }
+            .plm-ceu { height: 62px; }
+            .plm-sistema { transform: scale(.48); }
+            .plm-horizonte { top: 54px; }
+            .sp-cfg { gap: 6px; }
+            .sp-row { padding-top: 6px; padding-bottom: 6px; }
+            .sp-head h3 { font-size: 22px; }
+            .sp-pedir { padding-top: 13px; padding-bottom: 13px; }
+        }
+        @media (max-width: 380px) {
+            .sp-row { gap: 8px; padding-left: 8px; padding-right: 8px; }
+            .sp-thumb { width: 36px; height: 36px; }
+            .sp-thumb.sp-3d img { height: 40px; }
+            .sp-thumb.sp-3d-card img { width: 42px; }
+            .sp-txt b { font-size: 14px; }
+            .sp-qtd button { width: 26px; height: 26px; }
+            .sp-qtd input { width: 22px; }
+        }
         @media (prefers-reduced-motion: reduce) { .sp-anim { opacity: 1; transform: none; filter: none; } .plm-ov.on .sp-anim { animation: none; } }
         /* botões dos planos entram em cascata depois da abertura */
         #escolher-plano-panel.wa-panel-open .btn-plano-select:nth-of-type(1) { transition-delay: .26s; }
@@ -2703,51 +2725,38 @@
                 <div class="p-4 sm:p-5 flex flex-col gap-3">
                     <div class="sp-head sp-anim" style="--i:0">
                         <h3>Monte seu pedido.</h3>
-                        <p>Escolha o que vai no seu projeto.</p>
                     </div>
                     <div class="flex flex-col gap-2 md:gap-3 w-full">
                         <div class="sp-cfg" id="sp-cfg">
-                            <div class="sp-row sp-row-site sp-anim" style="--i:1">
+                            <div class="sp-row sp-anim" style="--i:1">
                                 <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></div>
-                                <div class="sp-txt"><b>Site personalizado</b><span>Sua presença digital completa</span></div>
-                                <span class="sp-val">R$ 597</span>
-                                <div class="sp-desc">
-                                    <p>Criado com a identidade da sua empresa e entregue pronto para receber clientes. Um único link que transforma quem conhece você em contato, visita e venda.</p>
-                                    <ul class="sp-lista">
-                                        <li><i class="ph ph-check" aria-hidden="true"></i>Entregue configurado: você não precisa montar nada</li>
-                                    </ul>
-                                </div>
+                                <div class="sp-txt"><em class="sp-val">R$ 597</em><b>Site personalizado</b><span>Pronto e configurado</span></div>
+                                <i class="ph-fill ph-check-circle sp-inc" aria-hidden="true"></i>
                             </div>
                             <div class="sp-row sp-anim" style="--i:2">
                                 <div class="sp-thumb sp-3d sp-3d-card"><img src="img/caixa-cartao.webp" alt="" width="156" height="120" decoding="async"></div>
-                                <div class="sp-txt"><b>Cartões NFC</b><span>Personalizado com a cara do seu negócio, aproximou seu site abriu! R$ 60 cada.</span></div>
+                                <div class="sp-txt"><em class="sp-val">R$ 35 cada</em><b>Cartões NFC <em class="sp-opc">Opcional</em></b><span>Aproximou, abriu</span></div>
                                 <div class="sp-qtd" role="group" aria-label="Quantidade de cartões NFC">
-                                    <button type="button" data-passo="-1" data-alvo="sp-n" aria-label="Remover um cartão"><i class="ph ph-minus"></i></button>
-                                    <input id="sp-n" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de cartões NFC">
-                                    <button type="button" data-passo="1" data-alvo="sp-n" aria-label="Adicionar um cartão"><i class="ph ph-plus"></i></button>
+                                        <button type="button" data-passo="-1" data-alvo="sp-n" aria-label="Remover um cartão"><i class="ph ph-minus"></i></button>
+                                        <input id="sp-n" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de cartões NFC">
+                                        <button type="button" data-passo="1" data-alvo="sp-n" aria-label="Adicionar um cartão"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
                             <div class="sp-row sp-anim" style="--i:3">
                                 <div class="sp-thumb sp-thumb-tag"><img src="img/tapreview-card.webp" alt="" decoding="async"></div>
-                                <div class="sp-txt"><b>Tag Avaliação Google</b><span>O cliente aproxima o celular e avalia na hora. R$ 50 cada.</span></div>
+                                <div class="sp-txt"><em class="sp-val">R$ 40 cada</em><b>Tag Google <em class="sp-opc">Opcional</em></b><span>Avaliação em um toque</span></div>
                                 <div class="sp-qtd" role="group" aria-label="Quantidade de tags Avaliação Google">
-                                    <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
-                                    <input id="sp-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
-                                    <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
+                                        <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
+                                        <input id="sp-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
+                                        <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
-                            <label class="sp-row sp-row-site sp-anim" style="--i:4" for="sp-crm">
+                            <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                                <span class="sp-txt"><b>CRM <em class="sp-opc">Opcional</em></b><span>Seu comercial sob controle</span></span>
-                                <span class="sp-opc-dir">
-                                    <span class="sp-val">R$ 1.500</span>
-                                    <span class="sp-tog"><input id="sp-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
-                                </span>
-                                <span class="sp-desc">
-                                    <span class="sp-desc-t">Leads, conversas do WhatsApp, pedidos e mensalidades em um só painel. Você vê quem precisa de resposta, o que está para vencer e quanto está entrando.</span>
-                                    <a class="sp-oque" id="sp-oque" href="crm.html">O que é CRM?<i class="ph-bold ph-arrow-right" aria-hidden="true"></i></a>
-                                </span>
+                                <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Clientes e vendas</span></span>
+                                <span class="sp-tog"><input id="sp-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
                             </label>
+                            <a class="sp-oque sp-anim" style="--i:4" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                             <div class="sp-total sp-anim" style="--i:5">
                                 <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site personalizado</span></div>
                                 <strong id="sp-preco" aria-live="polite">R$ 597,00</strong>
@@ -2756,7 +2765,7 @@
                             <span class="sp-frete sp-frete-neon sp-anim" style="--i:7"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
                         </div>
                         <a href="#conheca-tecnologia" class="btn-plano-tech">
-                            <span class="bp-desk"><svg class="bp-nfc" viewBox="0 0 22 16" width="20" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="1" y="2" width="8" height="12" rx="1.6"/><path d="M13 5.2a4 4 0 0 1 0 5.6M16.2 3a7.2 7.2 0 0 1 0 10"/></svg> Entenda como funciona a aproximação NFC <i class="ph ph-caret-right"></i></span>
+                            <span class="bp-desk"><svg class="bp-nfc" viewBox="0 0 22 16" width="20" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="1" y="2" width="8" height="12" rx="1.6"/><path d="M13 5.2a4 4 0 0 1 0 5.6M16.2 3a7.2 7.2 0 0 1 0 10"/></svg> Como funciona o NFC <i class="ph ph-caret-right"></i></span>
                         </a>
                     </div>
                 </div>
@@ -4013,8 +4022,8 @@
                 setTimeout(function () { var alvo = document.getElementById('conheca-tecnologia'); if (alvo) alvo.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 360);
             });
 
-            // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 60; cada tag Google R$ 50; CRM opcional R$ 1.500
-            var BASE = 597, POR_CARTAO = 60, POR_TAG = 50, PRECO_CRM = 1500;
+            // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 35; cada tag Google R$ 40; CRM opcional R$ 1.500
+            var BASE = 597, POR_CARTAO = 35, POR_TAG = 40, PRECO_CRM = 1500;
             var crmIn = document.getElementById('sp-crm');
             var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
             var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
@@ -4926,6 +4935,7 @@
                 }, 380);
             }
             // cadastra o cliente e o lead na CRM. Se falhar, a pessoa segue para o WhatsApp do mesmo jeito.
+            window.saturnoRegistrarPedido = registrarNaCrm;   // também usada pelo chat de IA
             function registrarNaCrm(dados) {
                 try {
                     fetch('https://lrthxbchqafcjbvjwcne.supabase.co/rest/v1/rpc/site_registrar_pedido', {
@@ -5063,6 +5073,7 @@
         .sai-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 30px rgba(138,43,226,.45)}
         .sai-btn small{display:block;font-weight:600;font-size:.66rem;color:rgba(255,255,255,.6);margin-top:.24rem}
         @media (max-width:767px){.sai-btn{left:1rem;bottom:1.5rem}body.tour-on .sai-btn{opacity:0;pointer-events:none}}
+        html:has(body.sai-aberto){overflow:hidden;overscroll-behavior:none}
         body.sai-aberto{overflow:hidden}
         body.sai-aberto .sai-btn,body.sai-aberto #chat-widget{opacity:0;pointer-events:none}
 
@@ -5080,6 +5091,11 @@
             padding-top:env(safe-area-inset-top);opacity:0;visibility:hidden;transform:scale(1.015);
             transition:opacity .3s ease,transform .4s cubic-bezier(.2,.8,.2,1),visibility .3s}
         .sai-ov.on{opacity:1;visibility:visible;transform:none}
+        .sai-ov{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+        .sai-ov.baixa .sai-globo{display:none}
+        .sai-ov.baixa .sai-hero{padding-bottom:.6rem}
+        .sai-ov.baixa .sai-hero h2{font-size:1.35rem}
+        .sai-ov.baixa .sai-nota{display:none}
         .sai-ov ::selection{background:rgba(255,190,90,.3)}
         .sai-aurora{position:absolute;z-index:-1;left:-10%;right:-10%;top:-38vh;height:90vh;pointer-events:none;
             background:radial-gradient(38% 52% at 32% 55%,rgba(123,63,228,.42),transparent 72%),
@@ -5089,7 +5105,7 @@
         .sai-ov.conversa .sai-aurora{opacity:.35}
 
         .sai-topo{flex:none;display:flex;align-items:center;gap:.5rem;height:3.6rem;padding:0 .9rem}
-        .sai-marca{display:flex;align-items:center;gap:.6rem;margin-right:auto;font-weight:700;font-size:.98rem;letter-spacing:-.01em}
+        .sai-marca{white-space:nowrap;display:flex;align-items:center;gap:.6rem;margin-right:auto;font-weight:700;font-size:.98rem;letter-spacing:-.01em}
         .sai-marca .sai-esfera{width:1.6rem;height:1.6rem}
         .sai-ico{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border:0;border-radius:.8rem;background:transparent;color:#b4b4c0;font-size:1.25rem;cursor:pointer;transition:background .2s,color .2s}
         .sai-ico:hover{background:rgba(255,255,255,.08);color:#fff}
@@ -5106,8 +5122,13 @@
         /* tela inicial */
         .sai-hero{margin-top:auto;padding:0 1.25rem 1.6rem;text-align:center;animation:saiSobe .6s cubic-bezier(.2,.8,.2,1) both}
         .sai-globo{position:relative;display:grid;place-items:center;height:7rem;margin-bottom:1.2rem}
-        .sai-hero .sai-esfera{z-index:1;width:5.4rem;height:5.4rem;animation:saiFlutua 5s ease-in-out infinite,saiHalo 5s ease-in-out infinite}
-        .sai-hero .sai-esfera::after{animation-duration:6s}
+        .sai-logo{position:relative;z-index:1;width:11.5rem;aspect-ratio:536/289;animation:saiLogoEntra .9s cubic-bezier(.16,1,.3,1) both,saiFlutua 6s ease-in-out .9s infinite}
+        .sai-logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:brightness(1.35) contrast(1.05)}
+        .sai-logo-cor,.sai-logo-luz{position:absolute;inset:0;-webkit-mask:url(img/logo-caixa.webp?v=2) center/contain no-repeat;mask:url(img/logo-caixa.webp?v=2) center/contain no-repeat}
+        .sai-logo{isolation:isolate}
+        .sai-logo-cor{mix-blend-mode:color;background:linear-gradient(100deg,#a35bff,#5b8cff,#ffc933,#ff9d4d,#a35bff);background-size:300% 100%;animation:saiLogoCor 9s linear infinite}
+        .sai-logo-luz{mix-blend-mode:screen;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.85) 50%,transparent 60%);background-size:300% 100%;animation:saiLogoLuz 5s ease-in-out infinite}
+        .sai-halo{position:absolute;z-index:-1;left:50%;top:50%;width:150%;height:190%;margin:-95% 0 0 -75%;margin-top:0;transform:translateY(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(123,63,228,.42),rgba(70,120,255,.2) 55%,transparent);filter:blur(10px);animation:saiHalo 5s ease-in-out infinite}
         .sai-cadente{position:absolute;left:50%;top:50%;width:7.5rem;height:2px;margin-top:var(--y);border-radius:2px;opacity:0;pointer-events:none;
             background:linear-gradient(90deg,transparent,rgba(255,215,120,.55) 70%,#fff);
             animation:saiCadente var(--d) linear var(--e) infinite}
@@ -5139,6 +5160,12 @@
         .sai-pensa .sai-av::after{animation-duration:1.1s}
         .sai-pensa .sai-txt{font-weight:600;font-size:.92rem;background:linear-gradient(90deg,#6f6f7d 25%,#f4f4f7 50%,#6f6f7d 75%);background-size:200% 100%;
             -webkit-background-clip:text;background-clip:text;color:transparent;animation:saiBrilho 1.8s linear infinite}
+        .sai-pedido{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:.55rem;width:100%;max-width:22rem;min-height:3.25rem;margin-top:.9rem;padding:.7rem 1.4rem;border-radius:999px;background:#fff;color:#07150c;font-weight:700;font-size:.95rem;line-height:1.2;letter-spacing:-.012em;text-decoration:none;transition:transform .18s cubic-bezier(.2,.8,.2,1);animation:saiSobe .45s cubic-bezier(.2,.8,.2,1) both,saiPedidoCor 4.4s ease-in-out .5s infinite}
+        .sai-pedido::after{content:'';position:absolute;z-index:-1;top:0;bottom:0;left:-45%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-18deg);animation:saiPedidoBrilho 4.4s ease-in-out .5s infinite}
+        .sai-txt a.sai-pedido{color:#000;font-weight:400;text-decoration:none}
+        .sai-pedido:hover{transform:translateY(-2px) scale(1.012)}
+        .sai-pedido:active{transform:scale(.975)}
+        .sai-pedido i{flex:none;font-size:1.35rem}
         .sai-desce{position:absolute;left:50%;bottom:.7rem;width:2.25rem;height:2.25rem;margin-left:-1.125rem;display:grid;place-items:center;border-radius:50%;
             border:1px solid rgba(255,255,255,.14);background:#23232c;color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.5);
             opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
@@ -5183,6 +5210,8 @@
             
             .sai-fio{padding-left:.9rem;padding-right:.9rem;gap:1.15rem}
             .sai-linha{gap:.6rem}
+            .sai-sug{gap:.35rem}
+            .sai-sug button{padding:0 .66rem;font-size:.77rem}
             .sai-rodape{padding-left:.7rem;padding-right:.7rem}
         }
 
@@ -5195,13 +5224,18 @@
         @keyframes saiFlutua{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
         @keyframes saiPulsa{0%,100%{transform:scale(.88);filter:brightness(.9)}50%{transform:scale(1.04);filter:brightness(1.2)}}
         @keyframes saiBrilho{from{background-position:200% 0}to{background-position:-200% 0}}
-        @keyframes saiHalo{0%,100%{box-shadow:0 0 34px rgba(255,190,90,.4),0 0 70px rgba(138,80,255,.35)}50%{box-shadow:0 0 50px rgba(255,190,90,.6),0 0 110px rgba(138,80,255,.55)}}
+        @keyframes saiHalo{0%,100%{opacity:.6;transform:translateY(-50%) scale(.92)}50%{opacity:1;transform:translateY(-50%) scale(1.08)}}
+        @keyframes saiLogoEntra{from{opacity:0;transform:scale(.82);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+        @keyframes saiLogoCor{to{background-position:-300% 0}}
+        @keyframes saiLogoLuz{0%,35%{background-position:150% 0}75%,100%{background-position:-50% 0}}
         @keyframes saiCadente{0%{opacity:0;transform:rotate(var(--a)) translateX(calc(min(46vw,24rem) * -1))}4%{opacity:1}24%{opacity:1}30%{opacity:0;transform:rotate(var(--a)) translateX(min(38vw,18rem))}100%{opacity:0;transform:rotate(var(--a)) translateX(min(38vw,18rem))}}
         @keyframes saiTitulo{from{opacity:0;filter:blur(10px);letter-spacing:.05em}to{opacity:1;filter:none;letter-spacing:-.03em}}
         @keyframes saiMic{from{box-shadow:0 0 0 0 rgba(239,68,68,.55)}to{box-shadow:0 0 0 12px rgba(239,68,68,0)}}
+        @keyframes saiPedidoCor{0%,100%{background-color:#fff;box-shadow:0 10px 30px rgba(255,255,255,.14),0 0 0 1px rgba(255,255,255,.3)}50%{background-color:#2be277;box-shadow:0 12px 38px rgba(43,226,119,.45),0 0 0 1px rgba(150,255,195,.55)}}
+        @keyframes saiPedidoBrilho{0%,45%{left:-45%}70%,100%{left:115%}}
         @keyframes saiCursor{from{opacity:1}to{opacity:0}}
         @media (prefers-reduced-motion:reduce){
-            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-hero .sai-esfera),.sai-ov *:not(.sai-hero .sai-esfera)::before,.sai-ov *:not(.sai-hero .sai-esfera)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
+            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-pedido,.sai-logo,.sai-logo *),.sai-ov *::before,.sai-ov *:not(.sai-pedido)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
             .sai-pensa .sai-txt{color:#b4b4c0;background:none}
             .sai-caixa:focus-within::before{background:linear-gradient(#ffc933,#a35bff)}
         }
@@ -5223,7 +5257,7 @@
 
         <div class="sai-corpo">
             <div class="sai-hero">
-                <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><span class="sai-esfera"></span></div>
+                <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><img src="img/logo-caixa.webp?v=2" alt="" width="536" height="289" decoding="async"><i class="sai-logo-cor"></i><i class="sai-logo-luz"></i></div></div>
                 <h2>Como posso ajudar seu negócio hoje?</h2>
             </div>
             <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
@@ -5233,10 +5267,10 @@
 
         <div class="sai-rodape">
             <div class="sai-sug" id="sai-sug">
-                <button type="button">Quanto custa?</button>
-                <button type="button">Como funciona?</button>
-                <button type="button">Qual plano escolher?</button>
-                <button type="button">O que é CRM?</button>
+                <button type="button" data-q="Quanto custa?">Preço</button>
+                <button type="button" data-q="Como funciona?">Como funciona</button>
+                <button type="button" data-q="Qual plano escolher?">Qual plano?</button>
+                <button type="button" data-q="O que é CRM?">CRM</button>
             </div>
             <div class="sai-caixa" id="sai-caixa">
                 <textarea id="sai-texto" rows="1" maxlength="1000" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
@@ -5330,6 +5364,37 @@ function linhaEu(texto) {
             var b = document.createElement('div'); b.className = 'sai-bal'; b.textContent = texto;
             l.appendChild(b); fio.appendChild(l);
         }
+        // o agente confirma o pedido com a linha: #PEDIDO# Nome | Empresa | Pedido | Valor
+        var PRECO_PLANO = { 'plano essencial': 600, 'plano profissional': 1000, 'plano fora de orbita': 2000 };
+        function extraiPedido(bruto) {
+            var m = /^[ \t]*#PEDIDO#[ \t]*(.+?)[ \t]*$/m.exec(bruto), r = { texto: bruto, pedido: null };
+            if (!m) return r;
+            r.texto = bruto.replace(m[0], '').trim();
+            var c = m[1].split('|').map(function (s) { return s.trim(); });
+            if (c.length < 4 || c[0].length < 2 || c[1].length < 2 || !c[2]) return r;
+            var chave = c[2].toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            var valor = Number(c[3].replace(/,\d{1,2}$/, '').replace(/\D/g, '')) || 0;
+            r.pedido = { nome: c[0], empresa: c[1], pedido: c[2], valor: PRECO_PLANO[chave] || valor };
+            return r;
+        }
+        function registraPedido(p) {
+            var chave = [p.nome, p.empresa, p.pedido, p.valor].join('|');
+            if (!sessao || sessao.crm === chave) return;   // o mesmo pedido entra uma vez só
+            sessao.crm = chave; guardaSessao();
+            if (window.saturnoRegistrarPedido) window.saturnoRegistrarPedido(p);
+        }
+        function poeBotaoPedido(el, p) {
+            var plano = /^plano\s+/i.test(p.pedido);
+            var msg = 'Olá! Sou ' + p.nome + ', da empresa ' + p.empresa + '. Vim pelo site e ' +
+                (plano ? 'quero contratar o plano ' + p.pedido.replace(/^plano\s+/i, '') : 'quero fazer o pedido: ' + p.pedido) + '. Pode me passar os detalhes?';
+            var a = document.createElement('a');
+            a.className = 'sai-pedido'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+            a.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(msg);
+            a.innerHTML = '<i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>';
+            a.appendChild(document.createTextNode('Enviar pedido no WhatsApp'));
+            el.appendChild(a);
+        }
+
         function criaLinhaIa(aviso) {
             var ant = linhaPensa ? linhaPensa.previousElementSibling : fio.lastElementChild;
             var l = document.createElement('div');
@@ -5347,14 +5412,14 @@ function linhaEu(texto) {
         function proxima() {
             clearTimeout(tDigita);
             if (digitando || !fila.length) return;
-            var item = fila.shift(), partes = escreve(criaLinhaIa(item.aviso), item.texto);
+            var item = fila.shift(), alvo = criaLinhaIa(item.aviso), partes = escreve(alvo, item.texto);
             var peso = 0;
             partes.forEach(function (p) { for (var k = 0; k < p.s.length; k++) peso += custo(p.s.charAt(k)); });
             // respostas longas aceleram para terminar em até 7 s
             var ritmo = Math.max(65, peso / 7), ip = 0, ic = 0, saldo = 0, ult = performance.now();
             var cursor = document.createElement('span'); cursor.className = 'sai-cursor'; cursor.setAttribute('aria-hidden', 'true');
             digitando = {
-                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; }
+                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; if (item.pedido) { poeBotaoPedido(alvo, item.pedido); if (pertoDoFim()) vaiProFim(true); } }
             };
             function passo() {
                 // conta pelo tempo real: se a aba ficar em segundo plano, o texto alcança ao voltar
@@ -5382,14 +5447,16 @@ function linhaEu(texto) {
         function terminaDigitacao() {
             clearTimeout(tDigita);
             if (digitando) digitando.fim();
-            while (fila.length) { var item = fila.shift(); mostraTudo(escreve(criaLinhaIa(item.aviso), item.texto)); }
+            while (fila.length) { var item = fila.shift(), alvo = criaLinhaIa(item.aviso); mostraTudo(escreve(alvo, item.texto)); if (item.pedido) poeBotaoPedido(alvo, item.pedido); }
         }
         function cancelaDigitacao() { clearTimeout(tDigita); fila = []; digitando = null; }
 
-        function linhaIa(texto, animar, aviso) {
-            if (animar) $('sai-voz').textContent = texto;   // leitor de tela recebe a mensagem inteira, uma vez
-            if (animar) { fila.push({ texto: texto, aviso: aviso }); proxima(); return; }
-            mostraTudo(escreve(criaLinhaIa(aviso), texto));
+        function linhaIa(texto, animar, aviso, pedido) {
+            if (animar) $('sai-voz').textContent = texto || 'Pedido pronto para enviar no WhatsApp.';   // leitor de tela recebe a mensagem inteira, uma vez
+            if (animar) { fila.push({ texto: texto, aviso: aviso, pedido: pedido }); proxima(); return; }
+            var alvo = criaLinhaIa(aviso);
+            mostraTudo(escreve(alvo, texto));
+            if (pedido) poeBotaoPedido(alvo, pedido);
         }
         function mostraPensando() {
             tiraPensando();
@@ -5432,9 +5499,10 @@ function linhaEu(texto) {
                     if (m.private || !m.content) return;
                     if (m.message_type === 1) {
                         if (espera) { espera.recebeuEm = Date.now(); tiraPensando(); }
-                        var texto = String(m.content);
-                        linhaIa(texto, !restaurando);
-                        historico.push({ role: 'assistant', content: texto });
+                        var lida = extraiPedido(String(m.content));
+                        linhaIa(lida.texto, !restaurando, false, lida.pedido);
+                        if (lida.pedido) registraPedido(lida.pedido);
+                        historico.push({ role: 'assistant', content: lida.texto });
                         novas++;
                     } else if (m.message_type === 0 && restaurando) { linhaEu(String(m.content)); novas++; }
                 });
@@ -5558,7 +5626,7 @@ function linhaEu(texto) {
         env.addEventListener('click', enviaTexto);
         $('sai-sug').addEventListener('click', function (e) {
             var b = e.target.closest('button');
-            if (b) { paraMic(); envia(b.textContent); }
+            if (b) { paraMic(); envia(b.getAttribute('data-q')); }
         });
 
         // ---------- abrir, fechar e nova conversa ----------
@@ -5566,12 +5634,35 @@ function linhaEu(texto) {
         function ajustaTela() {
             var v = window.visualViewport;
             if (!aberto || !v) return;
+            // o navegador tenta rolar a página ao abrir o teclado: o chat acompanha a área visível
+            if (window.scrollY) window.scrollTo({ top: 0, behavior: 'instant' });
             ov.style.height = v.height + 'px'; ov.style.top = v.offsetTop + 'px';
+            ov.classList.toggle('baixa', v.height < 560);
             if (pertoDoFim()) vaiProFim(false);
         }
         if (window.visualViewport) { visualViewport.addEventListener('resize', ajustaTela); visualViewport.addEventListener('scroll', ajustaTela); }
 
+        // trava a página de trás: sem isso, ela rola quando o teclado do celular abre
+        var yTrava = 0, bTrava = document.body;
+        function travaPagina() {
+            yTrava = window.scrollY;
+            bTrava.style.position = 'fixed'; bTrava.style.top = -yTrava + 'px'; bTrava.style.left = '0'; bTrava.style.right = '0'; bTrava.style.width = '100%';
+        }
+        function soltaPagina() {
+            bTrava.style.position = ''; bTrava.style.top = ''; bTrava.style.left = ''; bTrava.style.right = ''; bTrava.style.width = '';
+            window.scrollTo({ top: yTrava, behavior: 'instant' });
+        }
+        // só a conversa, as sugestões e o campo rolam; arrastar o resto não mexe em nada
+        ov.addEventListener('touchmove', function (e) {
+            if (!e.target.closest('.sai-msgs,.sai-sug,textarea')) e.preventDefault();
+        }, { passive: false });
+        txt.addEventListener('focus', function () {
+            ajustaTela();
+            setTimeout(ajustaTela, 120); setTimeout(ajustaTela, 350);
+        });
+
         function abre() {
+            travaPagina();
             aberto = true; ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false'); document.body.classList.add('sai-aberto');
             ajustaTela();
             if (sessao) { if (!carregado) entraConversa(false); buscaMsgs(); }
@@ -5580,7 +5671,8 @@ function linhaEu(texto) {
         function fecha() {
             aberto = false; clearTimeout(tVigia); espera = null; tiraPensando(); terminaDigitacao(); paraMic();
             ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sai-aberto');
-            ov.style.height = ''; ov.style.top = '';
+            ov.style.height = ''; ov.style.top = ''; ov.classList.remove('baixa');
+            soltaPagina();
             abridor.focus({ preventScroll: true });
         }
         function novaConversa() {
