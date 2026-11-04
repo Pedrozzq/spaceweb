@@ -12,7 +12,9 @@ window.SATURNO_CONFIG = {
   // WhatsApp da CRM: 'chatwoot' (caixa "Canal da API" do Chatwoot) ou 'meta' (API oficial da Meta)
   WHATSAPP_VIA: 'chatwoot',
   CHATWOOT_URL: 'https://whatsapp-chatwoot.fycoqq.easypanel.host',
-  CHATWOOT_ACCOUNT_ID: 2
+  CHATWOOT_ACCOUNT_ID: 2,
+  // Google Analytics na CRM: função da Vercel (projeto saturno-nfc, pasta /api do repositório)
+  GA_API: 'https://saturno-nfc.vercel.app/api/ga-relatorio'
 };
 
 // Dados da empresa usados nas mensagens prontas e na etiqueta de envio

@@ -1,11 +1,11 @@
 // =====================================================================
 //  SATURNO NFC · CRM — Google Analytics (visitas do site × leads da CRM)
-//  Os dados vêm da Edge Function "ga" (supabase/functions/ga/index.ts).
+//  Os dados vêm de /api/ga-relatorio, no projeto saturno-nfc da Vercel (endereço em config.js → GA_API).
 // =====================================================================
 'use strict';
 // ======================================================================
-//  GOOGLE ANALYTICS (GA4) do site: Edge Function "ga" (Supabase) lê a Data API com a conta de serviço
-//  (secrets GA_PROPERTY_ID + GA_CREDENTIALS). Cruza com os leads que chegaram pelo site.
+//  GOOGLE ANALYTICS (GA4) do site: a função da Vercel lê a Data API com a conta de serviço
+//  (GA_PROPERTY_ID + GA_CREDENTIALS na Vercel). Cruza com os leads que chegaram pelo site.
 // ======================================================================
 const GA = {dias: 28, forcar: false};   // forcar: busca no Google sem o cache de 5 min (botão Atualizar)
 const GA_CANAL = {'Direct': 'Direto', 'Organic Search': 'Google (orgânico)', 'Organic Social': 'Redes sociais', 'Paid Search': 'Google Ads', 'Paid Social': 'Anúncio em rede social',
@@ -42,13 +42,14 @@ function gaDemo(dias) {
 
 async function gaBuscar(dias, forcar) {
   if (DEMO) { await new Promise(r => setTimeout(r, 200)); return gaDemo(dias); }
-  const {data, error} = await sb.functions.invoke('ga', {body: {dias, atualizar: !!forcar}});
-  if (error) {
-    const det = await error.context?.json?.().catch(() => null), semFn = /Failed to send|fetch/i.test(error.message);
-    const e = new Error(det?.mensagem || (semFn ? 'Função "ga" não publicada no Supabase' : error.message));
-    e.codigo = det?.erro || (semFn ? 'nao-configurado' : ''); throw e;
-  }
-  return data;
+  const s = await API.session();
+  const url = (CFG.GA_API || 'https://saturno-nfc.vercel.app/api/ga-relatorio') + `?dias=${dias}${forcar ? '&atualizar=1' : ''}`;
+  let r;
+  try { r = await fetch(url, {headers: {Authorization: 'Bearer ' + (s?.access_token || '')}}); }
+  catch { const e = new Error('Não foi possível falar com a Vercel (projeto saturno-nfc). Ele já foi publicado?'); e.codigo = 'nao-configurado'; throw e; }
+  let d = null; try { d = await r.json(); } catch { /* resposta sem JSON */ }
+  if (!r.ok) { const e = new Error(d?.mensagem || `Analytics indisponível (HTTP ${r.status})`); e.codigo = d?.erro || (r.status === 404 ? 'nao-configurado' : r.status); throw e; }
+  return d;
 }
 
 function gaGrafico(el, serie) {
@@ -95,8 +96,8 @@ async function viewAnalytics() {
     $('#view').innerHTML = header('Google Analytics', sub) + `<div class="card"><h3>${semConfig ? 'Falta ligar o Google Analytics à CRM' : 'Não foi possível ler o Google Analytics'}</h3>
       ${semConfig ? `<ol class="small" style="line-height:1.8;padding-left:18px;margin-top:8px">
         <li>No <b>Google Analytics</b>: Administrador → Gerenciamento de acesso à propriedade → <b>+</b> → e-mail da conta de serviço (…@…iam.gserviceaccount.com) como <b>Leitor</b>.</li>
-        <li>No <b>Supabase</b> → Edge Functions: publique a função <code>ga</code> (<code>supabase/functions/ga/index.ts</code>, sem Verify JWT).</li>
-        <li>Em <b>Edge Functions → Secrets</b>: <code>GA_PROPERTY_ID</code> = número da propriedade e <code>GA_CREDENTIALS</code> = o JSON inteiro da chave.</li></ol>`
+        <li>Na <b>Vercel</b> (projeto <code>saturno-nfc</code>) → Settings → Environment Variables: <code>GA_PROPERTY_ID</code> = número da propriedade e <code>GA_CREDENTIALS</code> = o JSON inteiro da chave. Depois, um novo deploy (push no GitHub).</li>
+        <li>Se o endereço do projeto na Vercel não for <code>saturno-nfc.vercel.app</code>, coloque o certo em <code>config.js</code> → <code>GA_API</code>.</li></ol>`
         : `<p class="small mut">${esc(e.message)}</p>`}
       <button class="btn pri" id="gaRetry" style="margin-top:12px">Tentar de novo</button></div>`;
     $('#gaRetry').onclick = () => { GA.forcar = true; viewAnalytics(); }; return;

@@ -1,41 +1,33 @@
-// =====================================================================
-//  SATURNO NFC · CRM — Google Analytics (GA4) dentro da CRM (menu Google Analytics)
-//  Supabase Edge Function "ga". Só quem está logado na CRM consegue ler.
-//  Os dados vêm da Google Analytics Data API com uma conta de serviço
-//  (o token do Google é assinado aqui, sem biblioteca extra).
-//
-//  Deploy:  npx supabase functions deploy ga --no-verify-jwt --use-api --project-ref lrthxbchqafcjbvjwcne
-//  Secrets: GA_PROPERTY_ID  número da propriedade GA4 (Admin → Detalhes da propriedade)
-//           GA_CREDENTIALS  o JSON inteiro da chave da conta de serviço
-//  No GA4: Admin → Gerenciamento de acesso à propriedade → e-mail da conta de serviço como "Leitor".
-//  Chamada (CRM): POST {dias: 7|28|90, atualizar?: true} com o token do login.
-// =====================================================================
-// @ts-nocheck
-import crypto from "node:crypto";
-import { Buffer } from "node:buffer";
+/**
+ * Saturno NFC — Google Analytics (GA4) dentro da CRM (crm-saturno, menu Google Analytics).
+ * A CRM fica no GitHub Pages (www.saturnonfc.com.br); esta função roda na Vercel (projeto saturno-nfc).
+ *
+ * GET /api/ga-relatorio?dias=7|28|90
+ *   Header Authorization: Bearer <token do login do CRM (Supabase)>
+ * Só quem está logado no CRM consegue ler. Os dados vêm da Google Analytics Data API
+ * com uma conta de serviço (sem biblioteca extra: o token do Google é assinado aqui).
+ *
+ * Configuração (Vercel → Project Settings → Environment Variables):
+ *   GA_PROPERTY_ID    número da propriedade GA4 (Admin → Detalhes da propriedade), ex.: 471234567
+ *   GA_CREDENTIALS    o JSON inteiro da chave da conta de serviço (Google Cloud → IAM → Contas de serviço → Chaves)
+ *     ou, no lugar dele:  GA_CLIENT_EMAIL + GA_PRIVATE_KEY
+ * E no GA4: Admin → Gerenciamento de acesso à propriedade → adicionar o e-mail da conta de serviço como "Leitor".
+ */
+const crypto = require('node:crypto');
 
-const env = (k) => Deno.env.get(k) ?? "";
-const SUPABASE_URL = env("SUPABASE_URL").replace(/\/+$/, "");
-const SUPABASE_KEY = env("SUPABASE_ANON_KEY");
-const PROPRIEDADE = String(env("GA_PROPERTY_ID")).replace(/^properties\//, "").trim();
-
-const cors = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
-const json = (b, status = 200) =>
-  new Response(JSON.stringify(b), { status, headers: { ...cors, "Content-Type": "application/json", "Cache-Control": "no-store" } });
+const SUPABASE_URL = (process.env.SUPABASE_URL || 'https://lrthxbchqafcjbvjwcne.supabase.co').replace(/\/+$/, '');
+const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'sb_publishable_iprhqxL36BQb7psuTS1wSQ_UAYlhbmi';
+const PROPRIEDADE = String(process.env.GA_PROPERTY_ID || '').replace(/^properties\//, '').trim();
 
 function credenciais() {
     try {
-        if (env('GA_CREDENTIALS')) {
-            const c = JSON.parse(env('GA_CREDENTIALS'));
+        if (process.env.GA_CREDENTIALS) {
+            const c = JSON.parse(process.env.GA_CREDENTIALS);
             return { email: c.client_email, chave: c.private_key };
         }
     } catch (e) { /* JSON inválido: tenta as variáveis separadas */ }
-    if (env('GA_CLIENT_EMAIL') && env('GA_PRIVATE_KEY')) {
-        return { email: env('GA_CLIENT_EMAIL'), chave: env('GA_PRIVATE_KEY').replace(/\\n/g, '\n') };
+    if (process.env.GA_CLIENT_EMAIL && process.env.GA_PRIVATE_KEY) {
+        return { email: process.env.GA_CLIENT_EMAIL, chave: process.env.GA_PRIVATE_KEY.replace(/\\n/g, '\n') };
     }
     return null;
 }
@@ -73,6 +65,21 @@ async function ga(token, metodo, corpo) {
     const d = await r.json();
     if (!r.ok) throw new Error((d.error && d.error.message) || ('Analytics HTTP ' + r.status));
     return d;
+}
+
+// login do CRM válido?
+async function usuarioCrm(req) {
+    const m = /^Bearer\s+(.+)$/i.exec(req.headers.authorization || '');
+    if (!m) return null;
+    try {
+        const r = await fetch(SUPABASE_URL + '/auth/v1/user', {
+            headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + m[1] },
+            signal: AbortSignal.timeout(5000)
+        });
+        if (!r.ok) return null;
+        const u = await r.json();
+        return u && u.id ? u : null;
+    } catch (e) { return null; }
 }
 
 // linhas do GA → [{d:[...dimensões], m:[...métricas]}]
@@ -143,38 +150,33 @@ async function montar(dias) {
     };
 }
 
-// login da CRM válido?
-async function usuarioCrm(req) {
-  const m = /^Bearer\s+(.+)$/i.exec(req.headers.get("authorization") || "");
-  if (!m) return null;
-  try {
-    const r = await fetch(SUPABASE_URL + "/auth/v1/user", {
-      headers: { apikey: SUPABASE_KEY, Authorization: "Bearer " + m[1] },
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!r.ok) return null;
-    const u = await r.json();
-    return u && u.id ? u : null;
-  } catch { return null; }
-}
+// a CRM roda em outro endereço (GitHub Pages): libera só os endereços da Saturno
+const ORIGENS = /^https:\/\/(www\.)?(saturnonfc\.com\.br|saturnoweb\.com\.br)$|^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
 
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
-  if (req.method !== "POST") return json({ erro: "metodo" }, 405);
-  if (!(await usuarioCrm(req))) return json({ erro: "login", mensagem: "Entre na CRM para ver o Analytics." }, 401);
-  if (!PROPRIEDADE || !credenciais()) {
-    return json({ erro: "nao-configurado", mensagem: "Faltam os secrets GA_PROPERTY_ID e GA_CREDENTIALS no Supabase." }, 503);
-  }
-  const body = await req.json().catch(() => ({}));
-  const dias = [7, 28, 90].includes(Number(body.dias)) ? Number(body.dias) : 28;
-  const c = cache.get(dias);
-  if (c && Date.now() - c.em < CACHE_MS && !body.atualizar) return json(c.dados);
-  try {
-    const dados = await montar(dias);
-    cache.set(dias, { em: Date.now(), dados });
-    return json(dados);
-  } catch (e) {
-    console.error("Analytics:", e && e.message);
-    return json({ erro: "google", mensagem: e && e.message }, 502);
-  }
-});
+module.exports = async function handler(req, res) {
+    res.setHeader('Cache-Control', 'no-store');
+    const origem = req.headers.origin || '';
+    if (ORIGENS.test(origem)) {
+        res.setHeader('Access-Control-Allow-Origin', origem);
+        res.setHeader('Vary', 'Origin');
+        res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    }
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    if (req.method !== 'GET') return res.status(405).json({ erro: 'metodo' });
+    if (!(await usuarioCrm(req))) return res.status(401).json({ erro: 'login', mensagem: 'Entre na CRM para ver o Analytics.' });
+    if (!PROPRIEDADE || !credenciais()) {
+        return res.status(503).json({ erro: 'nao-configurado', mensagem: 'Faltam GA_PROPERTY_ID e GA_CREDENTIALS na Vercel.' });
+    }
+    const dias = [7, 28, 90].includes(Number(req.query && req.query.dias)) ? Number(req.query.dias) : 28;
+    const c = cache.get(dias);
+    if (c && Date.now() - c.em < CACHE_MS && !(req.query && req.query.atualizar)) return res.status(200).json(c.dados);
+    try {
+        const dados = await montar(dias);
+        cache.set(dias, { em: Date.now(), dados });
+        return res.status(200).json(dados);
+    } catch (e) {
+        console.error('Analytics:', e && e.message);
+        return res.status(502).json({ erro: 'google', mensagem: e && e.message });
+    }
+};
