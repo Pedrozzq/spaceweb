@@ -5048,243 +5048,197 @@
     <!-- End Meta Pixel - Lead -->
 
     <!-- =====================================================================
-         SATURNO IA: botão inferior "Fale com a IA" + conversa por voz no estilo
-         do modo de voz do ChatGPT (esfera animada que ouve, pensa e fala).
-         Back-end: Supabase Edge Function crm-saturno/supabase/functions/ia-site
+         FALE COM A IA: chat por texto com o mesmo agente do WhatsApp.
+         O site é a caixa "Site" do Chatwoot, que entrega as mensagens ao fluxo do n8n.
          ===================================================================== -->
     <style>
+        @property --sai-giro { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+        /* botão flutuante */
         .sai-btn{position:fixed;left:1.25rem;bottom:1.6rem;z-index:70;display:flex;align-items:center;gap:.6rem;
             padding:.45rem 1.05rem .45rem .45rem;border-radius:999px;border:1px solid rgba(255,255,255,.14);
-            background:rgba(12,12,20,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;
+            background:rgba(12,12,20,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;text-align:left;
             font:700 .82rem/1 "Plus Jakarta Sans",sans-serif;letter-spacing:.01em;cursor:pointer;
             box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 24px rgba(138,43,226,.28);transition:transform .25s ease,box-shadow .25s ease,opacity .3s}
         .sai-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 30px rgba(138,43,226,.45)}
-        .sai-btn small{display:block;font-weight:600;font-size:.62rem;color:rgba(255,255,255,.55);margin-top:.22rem;letter-spacing:.04em;text-transform:uppercase}
-        .sai-mini{position:relative;width:2.35rem;height:2.35rem;border-radius:50%;flex:none;overflow:hidden;
-            background:radial-gradient(circle at 35% 30%,#fff 0%,#cfe3ff 18%,#6aa8ff 42%,#7b3fe4 72%,#1b1040 100%);
-            box-shadow:0 0 14px rgba(106,168,255,.55)}
-        .sai-mini::after{content:'';position:absolute;inset:-30%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.55),transparent 40%);
-            animation:saiGira 3.2s linear infinite;mix-blend-mode:overlay}
+        .sai-btn small{display:block;font-weight:600;font-size:.66rem;color:rgba(255,255,255,.6);margin-top:.24rem}
         @media (max-width:767px){.sai-btn{left:1rem;bottom:1.5rem}body.tour-on .sai-btn{opacity:0;pointer-events:none}}
+        body.sai-aberto{overflow:hidden}
         body.sai-aberto .sai-btn,body.sai-aberto #chat-widget{opacity:0;pointer-events:none}
 
-        .sai-ov{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;
-            background:radial-gradient(circle at 50% 38%,#0e0b1c 0%,#050508 62%);color:#fff;font-family:"Plus Jakarta Sans",sans-serif;
-            opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
-        .sai-ov.on{opacity:1;visibility:visible}
-        .sai-topo{width:100%;max-width:640px;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem}
-        .sai-marca{display:flex;align-items:center;gap:.55rem;font-weight:800;font-size:.95rem}
-        .sai-marca span{font-weight:600;font-size:.7rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:.2rem .5rem}
-        .sai-status{font-size:.8rem;font-weight:600;color:rgba(255,255,255,.6);min-height:1em}
+        /* esfera da IA, com o anel da Saturno */
+        .sai-esfera{position:relative;display:block;flex:none;width:2.35rem;height:2.35rem;border-radius:50%;overflow:hidden;
+            background:radial-gradient(circle at 34% 28%,#fff 0%,#ffe9a8 14%,#ffb648 32%,#a35bff 62%,#3a1c8f 84%,#120a2e 100%);
+            box-shadow:0 0 16px rgba(255,190,90,.45),0 0 26px rgba(138,80,255,.35)}
+        .sai-esfera::after{content:'';position:absolute;inset:-35%;background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.6),transparent 42%);
+            mix-blend-mode:overlay;animation:saiGira 4s linear infinite}
+        .sai-av{width:1.75rem;height:1.75rem;box-shadow:0 0 12px rgba(255,190,90,.3)}
 
-        .sai-palco{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:0 1.5rem;min-height:0}
-        .sai-orb-wrap{position:relative;width:min(58vw,250px);aspect-ratio:1;cursor:pointer;-webkit-tap-highlight-color:transparent}
-        .sai-orb{position:absolute;inset:0;border-radius:50%;overflow:hidden;transform:scale(var(--s,1));transition:transform .18s ease-out;
-            background:radial-gradient(circle at 34% 28%,#ffffff 0%,#dbe9ff 14%,#8ab9ff 34%,#5b6cf0 56%,#6a2bd6 76%,#1a0f3d 100%);
-            box-shadow:0 0 60px rgba(106,140,255,.45),0 0 120px rgba(138,43,226,.25),inset -18px -22px 50px rgba(20,8,60,.55)}
-        .sai-orb::before,.sai-orb::after{content:'';position:absolute;inset:-25%;border-radius:45%;filter:blur(18px);opacity:.75}
-        .sai-orb::before{background:conic-gradient(from 0deg,rgba(255,255,255,.0),rgba(255,255,255,.75),rgba(120,200,255,.2),rgba(255,255,255,0) 60%);animation:saiGira 7s linear infinite}
-        .sai-orb::after{background:conic-gradient(from 180deg,rgba(186,120,255,0),rgba(186,120,255,.7),rgba(80,160,255,.3),rgba(186,120,255,0) 55%);animation:saiGira 11s linear infinite reverse}
-        .sai-anel{position:absolute;left:-16%;right:-16%;top:43%;height:14%;border-radius:50%;pointer-events:none;
-            border:2px solid rgba(245,214,122,.55);transform:rotate(-14deg);box-shadow:0 0 18px rgba(245,214,122,.25);
-            -webkit-mask:linear-gradient(#000 0 46%,transparent 46% 100%);mask:linear-gradient(#000 0 46%,transparent 46% 100%);opacity:.8;transition:opacity .4s}
-        .sai-anel.frente{-webkit-mask:linear-gradient(transparent 0 46%,#000 46% 100%);mask:linear-gradient(transparent 0 46%,#000 46% 100%);z-index:2}
-        .sai-ov.ouvindo .sai-orb{animation:saiRespira 2.6s ease-in-out infinite}
-        .sai-ov.pensando .sai-orb{animation:saiPensa 1.1s ease-in-out infinite}
-        .sai-ov.pensando .sai-orb::before{animation-duration:1.6s}
-        .sai-ov.pensando .sai-orb::after{animation-duration:2.4s}
-        .sai-ov.falando .sai-orb::before{animation-duration:3s}
-        .sai-ov.parado .sai-orb{filter:saturate(.55) brightness(.75)}
-        .sai-ov.parado .sai-anel{opacity:.35}
-        @keyframes saiGira{to{transform:rotate(360deg)}}
-        @keyframes saiRespira{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-        @keyframes saiPensa{0%,100%{transform:scale(.86)}50%{transform:scale(.94)}}
+        /* tela do chat */
+        .sai-ov{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;z-index:10000;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;
+            background:#08080d;color:#ececf1;font-family:"Plus Jakarta Sans",sans-serif;
+            padding-top:env(safe-area-inset-top);opacity:0;visibility:hidden;transform:scale(1.015);
+            transition:opacity .3s ease,transform .4s cubic-bezier(.2,.8,.2,1),visibility .3s}
+        .sai-ov.on{opacity:1;visibility:visible;transform:none}
+        .sai-ov ::selection{background:rgba(255,190,90,.3)}
+        .sai-aurora{position:absolute;z-index:-1;left:-10%;right:-10%;top:-38vh;height:90vh;pointer-events:none;
+            background:radial-gradient(38% 52% at 32% 55%,rgba(123,63,228,.42),transparent 72%),
+                radial-gradient(34% 48% at 68% 50%,rgba(255,170,50,.26),transparent 72%),
+                radial-gradient(30% 42% at 50% 72%,rgba(70,120,255,.3),transparent 72%);
+            filter:blur(70px);animation:saiAurora 16s ease-in-out infinite alternate;transition:opacity .6s ease}
+        .sai-ov.conversa .sai-aurora{opacity:.35}
 
-        .sai-legenda{max-width:520px;min-height:4.2em;text-align:center;font-size:1.05rem;line-height:1.5;font-weight:500;color:rgba(255,255,255,.88);
-            display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-        .sai-legenda.voce{color:rgba(255,255,255,.55);font-style:italic}
-
-        .sai-wa{display:none;align-items:center;gap:.5rem;padding:.6rem 1.1rem;border-radius:999px;background:#25D366;color:#06210f;
-            font-weight:800;font-size:.85rem;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,.35)}
+        .sai-topo{flex:none;display:flex;align-items:center;gap:.5rem;height:3.6rem;padding:0 .9rem}
+        .sai-marca{display:flex;align-items:center;gap:.6rem;margin-right:auto;font-weight:700;font-size:.98rem;letter-spacing:-.01em}
+        .sai-marca .sai-esfera{width:1.6rem;height:1.6rem}
+        .sai-ico{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border:0;border-radius:.8rem;background:transparent;color:#b4b4c0;font-size:1.25rem;cursor:pointer;transition:background .2s,color .2s}
+        .sai-ico:hover{background:rgba(255,255,255,.08);color:#fff}
+        .sai-nova{display:none}
+        .sai-ov.conversa .sai-nova{display:grid}
+        .sai-wa{display:none;align-items:center;gap:.4rem;height:2.25rem;padding:0 .8rem;border-radius:999px;border:1px solid rgba(37,211,102,.45);
+            background:rgba(37,211,102,.1);color:#5ee08f;font-weight:700;font-size:.8rem;text-decoration:none;white-space:nowrap;transition:background .2s}
+        .sai-wa:hover{background:rgba(37,211,102,.2)}
+        .sai-wa i{font-size:1.05rem}
         .sai-wa.on{display:inline-flex}
 
-        .sai-chat{display:none;flex:1;width:100%;max-width:640px;min-height:0;flex-direction:column;padding:0 1rem}
-        .sai-ov.texto .sai-palco{display:none}
-        .sai-ov.texto .sai-chat{display:flex}
-        .sai-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:.6rem;padding:.5rem 0 1rem;overscroll-behavior:contain}
-        .sai-msg{max-width:85%;padding:.7rem .95rem;border-radius:1.1rem;font-size:.92rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
-        .sai-msg.ia{align-self:flex-start;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);border-bottom-left-radius:.35rem}
-        .sai-msg.eu{align-self:flex-end;background:linear-gradient(135deg,#5b6cf0,#7b3fe4);border-bottom-right-radius:.35rem}
-        .sai-compor{display:flex;gap:.5rem;align-items:flex-end;padding:.5rem 0}
-        .sai-compor textarea{flex:1;resize:none;max-height:7rem;padding:.75rem 1rem;border-radius:1.4rem;border:1px solid rgba(255,255,255,.14);
-            background:rgba(255,255,255,.06);color:#fff;font:500 16px/1.35 "Plus Jakarta Sans",sans-serif;outline:none}
-        .sai-compor textarea:focus{border-color:rgba(123,63,228,.8)}
-        .sai-env{width:2.9rem;height:2.9rem;border-radius:50%;border:none;background:#fff;color:#0b0b12;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
-        .sai-env:disabled{opacity:.35;cursor:default}
+        .sai-corpo{position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
 
-        .sai-barra{display:flex;align-items:center;justify-content:center;gap:1.1rem;padding:1rem 1rem 1.6rem}
-        .sai-ctl{width:3.6rem;height:3.6rem;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;
-            background:rgba(255,255,255,.1);color:#fff;font-size:1.45rem;transition:background .2s,transform .15s}
-        .sai-ctl:active{transform:scale(.92)}
-        .sai-ctl:hover{background:rgba(255,255,255,.16)}
-        .sai-ctl.ativo{background:#fff;color:#0b0b12}
-        .sai-ctl.fechar{background:#ef4444}
-        .sai-ctl.fechar:hover{background:#dc2626}
-        .sai-dica{font-size:.72rem;color:rgba(255,255,255,.4);text-align:center;padding:0 1rem}
-        @media (prefers-reduced-motion:reduce){.sai-orb,.sai-orb::before,.sai-orb::after,.sai-mini::after{animation:none!important}}
+        /* tela inicial */
+        .sai-hero{margin-top:auto;padding:0 1.25rem 1.6rem;text-align:center;animation:saiSobe .6s cubic-bezier(.2,.8,.2,1) both}
+        .sai-hero .sai-esfera{width:3.6rem;height:3.6rem;margin:0 auto 1.3rem;box-shadow:0 0 36px rgba(255,190,90,.45),0 0 70px rgba(138,80,255,.4);animation:saiFlutua 5s ease-in-out infinite}
+        .sai-hero .sai-esfera::after{animation-duration:6s}
+        .sai-hero h2{margin:0;font-size:clamp(1.65rem,4.6vw,2.4rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;text-wrap:balance;
+            background:linear-gradient(100deg,#fff 20%,#ffe3a0 55%,#c9a6ff 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+        .sai-hero p{margin:.7rem auto 0;max-width:30rem;color:#9b9ba8;font-size:.95rem;line-height:1.45}
+        .sai-ov.conversa .sai-hero{display:none}
+
+        /* conversa */
+        .sai-msgs{display:none;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
+        .sai-ov.conversa .sai-msgs{display:block}
+        .sai-fio{width:min(46rem,100%);margin:0 auto;padding:.75rem 1.1rem 1.5rem;display:flex;flex-direction:column;gap:1.35rem}
+        .sai-linha{display:flex;gap:.8rem;min-width:0;animation:saiSobe .4s cubic-bezier(.2,.8,.2,1) both}
+        .sai-linha.eu{justify-content:flex-end}
+        .sai-linha.seq{margin-top:-.75rem}
+        .sai-linha.seq .sai-av{visibility:hidden}
+        .sai-bal{max-width:82%;padding:.65rem 1.05rem;border-radius:1.4rem;background:#23232c;color:#f4f4f7;font-size:.97rem;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+        .sai-txt{flex:1;min-width:0;padding-top:.14rem;font-size:.97rem;line-height:1.62;color:#ececf1;white-space:pre-wrap;overflow-wrap:anywhere}
+        .sai-txt strong{font-weight:700;color:#fff}
+        .sai-txt a{color:#ffd778;text-decoration:underline;text-decoration-color:rgba(255,215,120,.4);text-underline-offset:3px}
+        .sai-txt.aviso{color:#b4b4c0}
+        .sai-p{animation:saiPalavra .45s ease both}
+        .sai-pensa .sai-av{animation:saiPulsa 1.3s ease-in-out infinite}
+        .sai-pensa .sai-av::after{animation-duration:1.1s}
+        .sai-pensa .sai-txt{font-weight:600;font-size:.92rem;background:linear-gradient(90deg,#6f6f7d 25%,#f4f4f7 50%,#6f6f7d 75%);background-size:200% 100%;
+            -webkit-background-clip:text;background-clip:text;color:transparent;animation:saiBrilho 1.8s linear infinite}
+        .sai-desce{position:absolute;left:50%;bottom:.7rem;width:2.25rem;height:2.25rem;margin-left:-1.125rem;display:grid;place-items:center;border-radius:50%;
+            border:1px solid rgba(255,255,255,.14);background:#23232c;color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.5);
+            opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .2s,transform .2s}
+        .sai-desce.on{opacity:1;pointer-events:auto;transform:none}
+
+        /* campo de mensagem */
+        .sai-rodape{flex:none;display:flex;flex-direction:column;width:min(46rem,100%);margin:0 auto;padding:0 1rem calc(.65rem + env(safe-area-inset-bottom))}
+        .sai-ov:not(.conversa) .sai-rodape{margin-bottom:auto}
+        @media (min-width:768px){.sai-ov:not(.conversa) .sai-corpo{flex:none;margin-top:auto}}
+        .sai-caixa{position:relative;display:flex;align-items:flex-end;gap:.5rem;padding:.55rem .55rem .55rem 1.15rem;border-radius:1.75rem;background:#191921;
+            box-shadow:0 0 0 1px rgba(255,255,255,.1),0 16px 44px rgba(0,0,0,.45);transition:box-shadow .3s}
+        .sai-caixa::before{content:'';position:absolute;inset:-1.5px;z-index:-1;border-radius:inherit;opacity:0;transition:opacity .35s;
+            background:conic-gradient(from var(--sai-giro),#ffc933,#a35bff,#5b8cff,#ffc933);animation:saiBorda 5s linear infinite}
+        .sai-caixa:focus-within{box-shadow:0 0 0 1px transparent,0 16px 50px rgba(123,63,228,.28)}
+        .sai-caixa:focus-within::before{opacity:1}
+        .sai-caixa textarea{flex:1;min-width:0;height:2.5rem;max-height:9.5rem;padding:.5rem 0;border:0;outline:0;resize:none;overflow-y:hidden;background:transparent;color:#fff;
+            font:500 16px/1.5 "Plus Jakarta Sans",sans-serif;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
+        .sai-caixa textarea::placeholder{color:#7d7d8a}
+        .sai-env{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:#fff;color:#0b0b12;font-size:1.1rem;cursor:pointer;transition:transform .15s,background .2s,color .2s}
+        .sai-env:hover:not(:disabled){transform:scale(1.06)}
+        .sai-env:active:not(:disabled){transform:scale(.92)}
+        .sai-env:disabled{background:#33333d;color:#6f6f7d;cursor:default}
+        .sai-sug{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin-bottom:.8rem;animation:saiSobe .7s .08s cubic-bezier(.2,.8,.2,1) both}
+        .sai-ov.conversa .sai-sug{display:none}
+        .sai-sug button{display:flex;align-items:center;gap:.6rem;min-width:0;min-height:3.1rem;padding:.55rem .85rem;border-radius:1rem;border:1px solid rgba(255,255,255,.09);
+            background:rgba(255,255,255,.035);color:#d4d4dc;font:600 .84rem/1.25 "Plus Jakarta Sans",sans-serif;text-align:left;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+        .sai-sug button:hover{background:rgba(255,255,255,.08);border-color:rgba(255,201,51,.4);transform:translateY(-1px)}
+        .sai-sug i{flex:none;font-size:1.1rem;color:#ffc933}
+        .sai-nota{margin:.6rem 0 0;color:#6f6f7d;font-size:.72rem;line-height:1.35;text-align:center}
+        .sai-ov button:focus-visible,.sai-ov a:focus-visible{outline:2px solid #ffc933;outline-offset:2px}
+
+        @media (max-width:767px){
+            .sai-hero{flex:1;margin:0;display:flex;flex-direction:column;justify-content:center;padding-bottom:1rem}
+            .sai-ov:not(.conversa) .sai-rodape{margin-bottom:0}
+            
+            .sai-sug button{font-size:.8rem;padding:.5rem .7rem}
+            .sai-fio{padding-left:.9rem;padding-right:.9rem;gap:1.15rem}
+            .sai-linha{gap:.6rem}
+            .sai-rodape{padding-left:.7rem;padding-right:.7rem}
+        }
+
+        @keyframes saiGira{to{transform:rotate(360deg)}}
+        @keyframes saiBorda{to{--sai-giro:360deg}}
+        @keyframes saiAurora{from{transform:translate3d(-4%,0,0) scale(1)}to{transform:translate3d(4%,5%,0) scale(1.12)}}
+        @keyframes saiSobe{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        @keyframes saiFlutua{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+        @keyframes saiPulsa{0%,100%{transform:scale(.88);filter:brightness(.9)}50%{transform:scale(1.04);filter:brightness(1.2)}}
+        @keyframes saiBrilho{from{background-position:200% 0}to{background-position:-200% 0}}
+        @keyframes saiPalavra{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:none}}
+        @media (prefers-reduced-motion:reduce){
+            .sai-ov,.sai-ov *,.sai-ov *::before,.sai-ov *::after,.sai-esfera::after{animation:none!important;transition:none!important}
+            .sai-pensa .sai-txt{color:#b4b4c0;background:none}
+            .sai-caixa:focus-within::before{background:linear-gradient(#ffc933,#a35bff)}
+        }
     </style>
 
     <button type="button" class="sai-btn" id="sai-btn" aria-label="Conversar com o assistente de IA da Saturno NFC">
-        <span class="sai-mini" aria-hidden="true"></span>
-        <span>Fale com a IA<small>Por voz ou texto</small></span>
+        <span class="sai-esfera" aria-hidden="true"></span>
+        <span>Fale com a IA<small>Tire suas dúvidas agora</small></span>
     </button>
 
-    <div class="sai-ov parado" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
-        <div class="sai-topo">
-            <div class="sai-marca">Saturno IA <span>Beta</span></div>
-            <div class="sai-status" id="sai-status" aria-live="polite"></div>
-        </div>
+    <div class="sai-ov" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
+        <div class="sai-aurora" aria-hidden="true"></div>
+        <header class="sai-topo">
+            <div class="sai-marca"><span class="sai-esfera" aria-hidden="true"></span>Saturno IA</div>
+            <a class="sai-wa" id="sai-wa" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer"><i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>WhatsApp</a>
+            <button type="button" class="sai-ico sai-nova" id="sai-nova" aria-label="Nova conversa" title="Nova conversa"><i class="ph ph-note-pencil" aria-hidden="true"></i></button>
+            <button type="button" class="sai-ico" id="sai-fechar" aria-label="Fechar" title="Fechar"><i class="ph ph-x" aria-hidden="true"></i></button>
+        </header>
 
-        <div class="sai-palco">
-            <div class="sai-orb-wrap" id="sai-orb" role="button" tabindex="0" aria-label="Tocar para falar ou interromper">
-                <div class="sai-anel"></div>
-                <div class="sai-orb"></div>
-                <div class="sai-anel frente"></div>
+        <div class="sai-corpo">
+            <div class="sai-hero">
+                <span class="sai-esfera" aria-hidden="true"></span>
+                <h2>Como posso ajudar seu negócio?</h2>
+                <p>Oi! Aqui é o Rafael, o assistente de IA da Saturno NFC.</p>
             </div>
-            <p class="sai-legenda" id="sai-legenda"></p>
-            <a class="sai-wa" id="sai-wa" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer"><i class="ph-fill ph-whatsapp-logo"></i> Continuar no WhatsApp</a>
+            <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio" aria-live="polite"></div></div>
+            <button type="button" class="sai-desce" id="sai-desce" aria-label="Ir para a última mensagem"><i class="ph-bold ph-arrow-down" aria-hidden="true"></i></button>
         </div>
 
-        <div class="sai-chat">
-            <div class="sai-msgs" id="sai-msgs" aria-live="polite"></div>
-            <a class="sai-wa" id="sai-wa2" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer" style="align-self:center;margin-bottom:.4rem"><i class="ph-fill ph-whatsapp-logo"></i> Continuar no WhatsApp</a>
-            <div class="sai-compor">
-                <textarea id="sai-texto" rows="1" placeholder="Escreva sua mensagem" aria-label="Mensagem"></textarea>
-                <button type="button" class="sai-env" id="sai-env" aria-label="Enviar" disabled><i class="ph-bold ph-arrow-up"></i></button>
+        <div class="sai-rodape">
+            <div class="sai-sug" id="sai-sug">
+                <button type="button"><i class="ph ph-currency-circle-dollar" aria-hidden="true"></i>Quanto custa um site com cartões?</button>
+                <button type="button"><i class="ph ph-contactless-payment" aria-hidden="true"></i>Como funciona o cartão NFC?</button>
+                <button type="button"><i class="ph ph-sparkle" aria-hidden="true"></i>Qual plano é ideal para mim?</button>
+                <button type="button"><i class="ph ph-users-three" aria-hidden="true"></i>O que a CRM faz pela minha empresa?</button>
             </div>
+            <div class="sai-caixa" id="sai-caixa">
+                <textarea id="sai-texto" rows="1" maxlength="1000" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
+                <button type="button" class="sai-env" id="sai-env" aria-label="Enviar" disabled><i class="ph-bold ph-arrow-up" aria-hidden="true"></i></button>
+            </div>
+            <p class="sai-nota">A IA pode errar. Confirme valores e condições com a nossa equipe.</p>
         </div>
-
-        <div class="sai-barra">
-            <button type="button" class="sai-ctl" id="sai-mic" aria-label="Desligar microfone"><i class="ph-fill ph-microphone"></i></button>
-            <button type="button" class="sai-ctl" id="sai-modo" aria-label="Conversar por texto"><i class="ph ph-chat-centered-text"></i></button>
-            <button type="button" class="sai-ctl fechar" id="sai-fechar" aria-label="Encerrar conversa"><i class="ph-bold ph-x"></i></button>
-        </div>
-        <p class="sai-dica" id="sai-dica">Toque na esfera para falar ou para interromper a IA.</p>
     </div>
 
     <script>
     (function () {
-        // mesmo agente do WhatsApp: o site é uma caixa do Chatwoot que entrega as mensagens ao fluxo do n8n
         var CW = 'https://whatsapp-chatwoot.fycoqq.easypanel.host/public/api/v1/inboxes/1CvoySLVaeBG4xfmzCx7vkzd';
         var CHAVE = 'saturno_ia', VALIDADE = 24 * 3600 * 1000, LIMITE = 30, SEM_RESPOSTA = 60000, SILENCIO = 4000;
         var FONE = '5531920067518';
-        var SAUDACAO = 'Oi! Aqui é o Rafael, o assistente de IA da Saturno NFC. Me conta: qual é o seu negócio?';
-        var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        var TEM_VOZ = 'speechSynthesis' in window;
 
         var $ = function (id) { return document.getElementById(id); };
-        var ov = $('sai-ov'), legenda = $('sai-legenda'), status = $('sai-status'), msgsEl = $('sai-msgs');
-        var txt = $('sai-texto'), env = $('sai-env'), micBtn = $('sai-mic'), modoBtn = $('sai-modo');
+        var ov = $('sai-ov'), msgsEl = $('sai-msgs'), fio = $('sai-fio'), txt = $('sai-texto'), env = $('sai-env'), caixa = $('sai-caixa'), desce = $('sai-desce'), abridor = $('sai-btn');
+        var calmo = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        var historico = [];          // o que foi dito nesta visita (usado no link do WhatsApp)
-        var aberto = false, mudo = false, modoTexto = false;
-        var estado = 'parado';       // parado | ouvindo | pensando | falando
-        var rec = null, tentativas = 0, geracao = 0, pedido = null;
-        var falasPendentes = 0, respostaTerminou = true, vozPt = null;
+        var aberto = false, historico = [];     // historico: o que foi dito nesta visita (usado no link do WhatsApp)
+        var sessao = leSessao(), ultimoId = 0, carregado = false, espera = null, tVigia = null, linhaPensa = null, geracao = 0;
 
-        // ---------- voz da IA (síntese do navegador, pt-BR) ----------
-        function escolheVoz() {
-            if (!TEM_VOZ) return;
-            var vs = speechSynthesis.getVoices().filter(function (v) { return /^pt(-|_)BR/i.test(v.lang); });
-            if (!vs.length) vs = speechSynthesis.getVoices().filter(function (v) { return /^pt/i.test(v.lang); });
-            var pref = [/natural/i, /google/i, /francisca|thalita|luciana|maria/i];
-            for (var i = 0; i < pref.length && !vozPt; i++) vozPt = vs.filter(function (v) { return pref[i].test(v.name); })[0] || null;
-            vozPt = vozPt || vs[0] || null;
-        }
-        if (TEM_VOZ) { escolheVoz(); speechSynthesis.onvoiceschanged = escolheVoz; }
-
-        function paraFala() {
-            if (TEM_VOZ) speechSynthesis.cancel();
-            falasPendentes = 0;
-            $('sai-orb').querySelector('.sai-orb').style.setProperty('--s', 1);
-        }
-
-        function fala(trecho, minhaGeracao) {
-            trecho = trecho.replace(/[*_#`>\[\]]/g, '').replace(/https?:\/\/\S+/g, '').trim();
-            if (!trecho || !TEM_VOZ || modoTexto) return;
-            var u = new SpeechSynthesisUtterance(trecho);
-            u.lang = 'pt-BR'; if (vozPt) u.voice = vozPt; u.rate = 1.06; u.pitch = 1;
-            var orb = $('sai-orb').querySelector('.sai-orb');
-            u.onstart = function () { if (minhaGeracao === geracao) define('falando'); };
-            u.onboundary = function () { orb.style.setProperty('--s', (1.04 + Math.random() * 0.1).toFixed(3)); setTimeout(function () { orb.style.setProperty('--s', 1); }, 140); };
-            u.onend = u.onerror = function () {
-                if (minhaGeracao !== geracao) return;
-                falasPendentes = Math.max(0, falasPendentes - 1);
-                if (!falasPendentes && respostaTerminou) depoisDeFalar();
-            };
-            falasPendentes++;
-            speechSynthesis.speak(u);
-        }
-
-        function depoisDeFalar() {
-            if (!aberto || modoTexto) return;
-            if (mudo) define('parado', 'Microfone desligado'); else ouve();
-        }
-
-        // ---------- estados visuais ----------
-        var ROTULO = { parado: 'Toque para falar', ouvindo: 'Ouvindo…', pensando: 'Pensando…', falando: 'Falando…' };
-        function define(e, rotulo) {
-            estado = e;
-            ov.classList.remove('parado', 'ouvindo', 'pensando', 'falando');
-            ov.classList.add(e);
-            status.textContent = modoTexto ? (e === 'pensando' ? 'Digitando…' : '') : (rotulo || ROTULO[e]);
-        }
-        function mostraLegenda(t, doVisitante) { legenda.textContent = t; legenda.classList.toggle('voce', !!doVisitante); }
-
-        // ---------- reconhecimento de voz (o visitante fala) ----------
-        function ouve() {
-            if (!SR || mudo || modoTexto || !aberto) { define('parado', SR ? undefined : 'Seu navegador não ouve voz: use o texto'); return; }
-            paraOuvir();
-            var r = new SR(), final = '', parcial = '';
-            r.lang = 'pt-BR'; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
-            r.onstart = function () { define('ouvindo'); };
-            r.onresult = function (ev) {
-                parcial = '';
-                for (var i = ev.resultIndex; i < ev.results.length; i++) {
-                    if (ev.results[i].isFinal) final += ev.results[i][0].transcript; else parcial += ev.results[i][0].transcript;
-                }
-                mostraLegenda((final + ' ' + parcial).trim(), true);
-            };
-            r.onerror = function (ev) {
-                if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
-                    mudo = true; atualizaMic(); define('parado', 'Permita o microfone ou use o texto');
-                }
-            };
-            r.onend = function () {
-                if (rec !== r) return;
-                rec = null;
-                var dito = (final || parcial).trim();
-                if (dito) { tentativas = 0; envia(dito); return; }
-                if (aberto && !mudo && !modoTexto && estado === 'ouvindo' && ++tentativas < 3) { setTimeout(ouve, 250); return; }
-                tentativas = 0;
-                if (estado === 'ouvindo') define('parado');
-            };
-            rec = r;
-            try { r.start(); } catch (e) { rec = null; define('parado'); }
-        }
-        function paraOuvir() { if (rec) { var r = rec; rec = null; try { r.abort(); } catch (e) {} } }
-
-        // ---------- conversa com a IA ----------
-        function bolha(quem, texto) {
-            var b = document.createElement('div');
-            b.className = 'sai-msg ' + quem; b.textContent = texto;
-            msgsEl.appendChild(b); msgsEl.scrollTop = msgsEl.scrollHeight;
-            return b;
-        }
-
-        // ---------- conversa no Chatwoot (o agente responde por lá) ----------
-        var sessao = leSessao(), ultimoId = 0, carregado = false, espera = null, tVigia = null;
-
+        // ---------- sessão ----------
         function leSessao() {
             try {
                 var s = JSON.parse(localStorage.getItem(CHAVE) || 'null');
@@ -5295,6 +5249,8 @@
         function guardaSessao() {
             try { if (sessao) localStorage.setItem(CHAVE, JSON.stringify(sessao)); else localStorage.removeItem(CHAVE); } catch (e) {}
         }
+
+        // ---------- Chatwoot ----------
         function cw(caminho, corpo) {
             return fetch(CW + caminho, corpo ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) } : undefined)
                 .then(function (res) {
@@ -5311,170 +5267,231 @@
                 });
             });
         }
-        function caminhoMsgs() { return '/contacts/' + sessao.src + '/conversations/' + sessao.conv + '/messages'; }
-        function mostraWhats() { atualizaWhats(); $('sai-wa').classList.add('on'); $('sai-wa2').classList.add('on'); }
+        function caminhoMsgs(s) { return '/contacts/' + s.src + '/conversations/' + s.conv + '/messages'; }
 
-        function chegouResposta(texto) {
-            if (pedido && pedido.bolha) { pedido.bolha.textContent = texto; pedido.bolha = null; msgsEl.scrollTop = msgsEl.scrollHeight; }
-            else bolha('ia', texto);
-            historico.push({ role: 'assistant', content: texto });
-            mostraLegenda(texto);
-            mostraWhats();
-            if (espera) { espera.recebeuEm = Date.now(); fala(texto, espera.geracao); }
+        // ---------- rolagem ----------
+        function pertoDoFim() { return msgsEl.scrollHeight - msgsEl.scrollTop - msgsEl.clientHeight < 90; }
+        function vaiProFim(suave) { msgsEl.scrollTo({ top: msgsEl.scrollHeight, behavior: suave && !calmo ? 'smooth' : 'auto' }); }
+        msgsEl.addEventListener('scroll', function () { desce.classList.toggle('on', !pertoDoFim()); }, { passive: true });
+        desce.addEventListener('click', function () { vaiProFim(true); });
+
+        // ---------- texto das respostas: *negrito* do WhatsApp, links e palavras surgindo em sequência ----------
+        function escreve(el, texto, animar) {
+            var total = texto.split(/\s+/).length, passo = Math.min(24, 1300 / total), n = 0;
+            function palavras(destino, t) {
+                if (!animar) { destino.appendChild(document.createTextNode(t)); return; }
+                t.split(/(\s+)/).forEach(function (p) {
+                    if (!p) return;
+                    if (/^\s+$/.test(p)) { destino.appendChild(document.createTextNode(p)); return; }
+                    var s = document.createElement('span');
+                    s.className = 'sai-p'; s.style.animationDelay = Math.round(n++ * passo) + 'ms'; s.textContent = p;
+                    destino.appendChild(s);
+                });
+            }
+            var re = /\*([^*\n]+)\*|((?:https?:\/\/|www\.)[^\s<]+)/g, m, resto = 0;
+            while ((m = re.exec(texto))) {
+                palavras(el, texto.slice(resto, m.index));
+                if (m[1]) {
+                    var b = document.createElement('strong'); palavras(b, m[1]); el.appendChild(b);
+                    resto = re.lastIndex;
+                } else {
+                    var url = m[2].replace(/[.,;:!?)]+$/, ''), a = document.createElement('a');
+                    a.href = /^https?:/i.test(url) ? url : 'https://' + url;
+                    a.target = '_blank'; a.rel = 'noopener noreferrer';
+                    palavras(a, url); el.appendChild(a);
+                    resto = m.index + url.length; re.lastIndex = resto;
+                }
+            }
+            palavras(el, texto.slice(resto));
         }
 
-        // procura mensagens novas: rápido enquanto espera uma resposta; devagar com o chat aberto (a equipe pode assumir a conversa)
+        function linhaEu(texto) {
+            var l = document.createElement('div'); l.className = 'sai-linha eu';
+            var b = document.createElement('div'); b.className = 'sai-bal'; b.textContent = texto;
+            l.appendChild(b); fio.appendChild(l);
+        }
+        function linhaIa(texto, animar, aviso) {
+            var ant = linhaPensa ? linhaPensa.previousElementSibling : fio.lastElementChild;
+            var l = document.createElement('div');
+            l.className = 'sai-linha ia' + (ant && ant.classList.contains('ia') ? ' seq' : '');
+            var av = document.createElement('span'); av.className = 'sai-esfera sai-av'; av.setAttribute('aria-hidden', 'true');
+            var t = document.createElement('div'); t.className = 'sai-txt' + (aviso ? ' aviso' : '');
+            escreve(t, texto, animar && !calmo);
+            l.appendChild(av); l.appendChild(t);
+            fio.insertBefore(l, linhaPensa || null);
+            return l;
+        }
+        function mostraPensando() {
+            tiraPensando();
+            var l = document.createElement('div'); l.className = 'sai-linha ia sai-pensa';
+            l.innerHTML = '<span class="sai-esfera sai-av" aria-hidden="true"></span><div class="sai-txt" role="status">Pensando…</div>';
+            fio.appendChild(l); linhaPensa = l;
+        }
+        function tiraPensando() { if (linhaPensa) { linhaPensa.remove(); linhaPensa = null; } }
+
+        function mostraWhats() {
+            var ultimas = historico.filter(function (m) { return m.role === 'user'; }).slice(-2).map(function (m) { return m.content; }).join(' / ');
+            var t = 'Olá! Vim pelo assistente de IA do site da Saturno NFC e quero continuar o atendimento.' + (ultimas ? '\n\nO que eu falei: ' + ultimas.slice(0, 400) : '');
+            var wa = $('sai-wa'); wa.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(t); wa.classList.add('on');
+        }
+
+        // a caixa de texto desliza do centro para o rodapé quando a conversa começa
+        function entraConversa(animar) {
+            if (ov.classList.contains('conversa')) return;
+            var antes = caixa.getBoundingClientRect();
+            ov.classList.add('conversa');
+            if (!animar || calmo || !caixa.animate) return;
+            var dy = antes.top - caixa.getBoundingClientRect().top;
+            if (dy) caixa.animate([{ transform: 'translateY(' + dy + 'px)' }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.2,.8,.2,1)' });
+        }
+
+        // ---------- mensagens novas: rápido enquanto espera uma resposta; devagar com o chat aberto (a equipe pode assumir) ----------
         function agendaBusca(ms) {
             clearTimeout(tVigia);
             if (aberto || espera) tVigia = setTimeout(buscaMsgs, ms);
         }
         function buscaMsgs() {
-            if (!sessao) return;
-            cw(caminhoMsgs()).then(function (lista) {
+            var s = sessao;
+            if (!s) return;
+            cw(caminhoMsgs(s)).then(function (lista) {
+                if (s !== sessao) return;
+                var restaurando = !carregado, fim = pertoDoFim(), novas = 0;
                 (Array.isArray(lista) ? lista : []).forEach(function (m) {
                     if (m.id <= ultimoId) return;
                     ultimoId = m.id;
                     if (m.private || !m.content) return;
-                    if (m.message_type === 1) chegouResposta(String(m.content));
-                    else if (m.message_type === 0 && !carregado) bolha('eu', String(m.content)); // visita anterior
+                    if (m.message_type === 1) {
+                        if (espera) { espera.recebeuEm = Date.now(); tiraPensando(); }
+                        var texto = String(m.content);
+                        linhaIa(texto, !restaurando);
+                        historico.push({ role: 'assistant', content: texto });
+                        novas++;
+                    } else if (m.message_type === 0 && restaurando) { linhaEu(String(m.content)); novas++; }
                 });
                 carregado = true;
-            }).catch(function () {}).then(function () {
+                if (novas) {
+                    entraConversa(false); mostraWhats();
+                    if (restaurando || fim) vaiProFim(!restaurando);
+                }
+            }).catch(function (e) {
+                // conversa que não existe mais: volta para o começo
+                if (e && (e.status === 404 || e.status === 401) && s === sessao && !espera) { sessao = null; guardaSessao(); }
+            }).then(function () {
                 if (espera) {
-                    var agora = Date.now(), e = espera;
-                    if (e.recebeuEm && agora - e.recebeuEm > SILENCIO) { espera = null; terminou(e.geracao); }
-                    else if (!e.recebeuEm && agora - e.desde > SEM_RESPOSTA) {
-                        espera = null;
-                        avisoFalha('Estou demorando para responder. Se preferir, continue comigo no WhatsApp.', e.geracao);
+                    var agora = Date.now(), ep = espera;
+                    if (ep.recebeuEm && agora - ep.recebeuEm > SILENCIO) espera = null;
+                    else if (!ep.recebeuEm && agora - ep.desde > SEM_RESPOSTA) {
+                        espera = null; tiraPensando();
+                        linhaIa('Estou demorando para responder. Se preferir, continue pelo WhatsApp, no botão aqui em cima.', true, true);
+                        mostraWhats(); vaiProFim(true);
                     }
                 }
                 agendaBusca(espera ? 1500 : 6000);
             });
         }
-        function avisoFalha(aviso, minha) {
-            if (pedido && pedido.bolha) { pedido.bolha.textContent = aviso; pedido.bolha = null; } else bolha('ia', aviso);
-            mostraLegenda(aviso);
-            mostraWhats();
-            terminou(minha);
-        }
 
+        // ---------- enviar ----------
         function envia(texto) {
             texto = (texto || '').trim();
             if (!texto) return;
-            paraOuvir(); paraFala(); cancelaPedido();
+            entraConversa(true);
+            if (sessao && sessao.qtd >= LIMITE) {
+                linhaEu(texto);
+                linhaIa('Para continuar a conversa, fale com a gente no WhatsApp, no botão aqui em cima.', true, true);
+                mostraWhats(); vaiProFim(true);
+                return;
+            }
             var minha = ++geracao;
             historico.push({ role: 'user', content: texto });
-            bolha('eu', texto);
-            mostraLegenda(texto, true);
-            respostaTerminou = false;
-            pedido = { bolha: null };
-            if (sessao && sessao.qtd >= LIMITE) {
-                return avisoFalha('Para continuar a conversa, fale com a gente no WhatsApp. É só tocar no botão.', minha);
-            }
-            define('pensando');
-            pedido.bolha = bolha('ia', '…');
+            tiraPensando(); linhaEu(texto); mostraPensando(); vaiProFim(true);
+            espera = null;
 
             function manda(jaTentou) {
                 garanteConversa().then(function () {
-                    return cw(caminhoMsgs(), { content: texto.slice(0, 1000) });
+                    return cw(caminhoMsgs(sessao), { content: texto });
                 }).then(function (m) {
+                    if (minha !== geracao) return;
                     carregado = true;
                     if (m && m.id > ultimoId) ultimoId = m.id;
                     sessao.qtd = (sessao.qtd || 0) + 1; guardaSessao();
-                    if (minha !== geracao) return;
-                    espera = { geracao: minha, desde: Date.now(), recebeuEm: 0 };
+                    espera = { desde: Date.now(), recebeuEm: 0 };
                     agendaBusca(1500);
                 }).catch(function (e) {
-                    // conversa antiga que não existe mais: começa outra uma vez
-                    if (!jaTentou && e && (e.status === 404 || e.status === 401)) { sessao = null; guardaSessao(); return manda(true); }
                     if (minha !== geracao) return;
-                    historico.pop();
-                    avisoFalha('Tive um probleminha de conexão. Pode repetir? Se preferir, fale com a gente no WhatsApp.', minha);
+                    if (!jaTentou && e && (e.status === 404 || e.status === 401)) { sessao = null; guardaSessao(); return manda(true); }
+                    historico.pop(); tiraPensando();
+                    linhaIa('Tive um problema de conexão e sua mensagem não foi enviada. Tente de novo ou fale com a gente pelo WhatsApp.', true, true);
+                    if (!txt.value) { txt.value = texto; ajusta(); }
+                    mostraWhats(); vaiProFim(true);
                 });
             }
             manda(false);
         }
 
-        // para de esperar a resposta atual; se ela ainda chegar, aparece na conversa sem ser lida em voz alta
-        function cancelaPedido() {
-            espera = null;
-            if (!pedido) return;
-            var p = pedido; pedido = null;
-            if (p.bolha) p.bolha.remove();
+        // ---------- campo de texto ----------
+        var toque = window.matchMedia && matchMedia('(pointer: coarse)').matches;
+        function ajusta() {
+            txt.style.height = 'auto';
+            txt.style.height = Math.min(txt.scrollHeight, 152) + 'px';
+            txt.style.overflowY = txt.scrollHeight > 152 ? 'auto' : 'hidden';
+            env.disabled = !txt.value.trim();
         }
+        function enviaTexto() { var t = txt.value; txt.value = ''; ajusta(); envia(t); if (!toque) txt.focus(); }
+        txt.addEventListener('input', ajusta);
+        txt.addEventListener('keydown', function (e) {
+            // no celular, Enter pula linha; envia pelo botão
+            if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !toque) { e.preventDefault(); if (txt.value.trim()) enviaTexto(); }
+        });
+        env.addEventListener('click', enviaTexto);
+        $('sai-sug').addEventListener('click', function (e) {
+            var b = e.target.closest('button');
+            if (b) envia(b.textContent);
+        });
 
-        function terminou(minha) {
-            if (minha !== geracao) return;
-            respostaTerminou = true; pedido = null;
-            if (modoTexto || !TEM_VOZ || !falasPendentes) { define('parado'); depoisDeFalar(); }
+        // ---------- abrir, fechar e nova conversa ----------
+        // mantém o campo acima do teclado do celular
+        function ajustaTela() {
+            var v = window.visualViewport;
+            if (!aberto || !v) return;
+            ov.style.height = v.height + 'px'; ov.style.top = v.offsetTop + 'px';
+            if (pertoDoFim()) vaiProFim(false);
         }
+        if (window.visualViewport) { visualViewport.addEventListener('resize', ajustaTela); visualViewport.addEventListener('scroll', ajustaTela); }
 
-        function atualizaWhats() {
-            var ultimas = historico.filter(function (m) { return m.role === 'user'; }).slice(-2).map(function (m) { return m.content; }).join(' / ');
-            var t = 'Olá! Vim pelo assistente de IA do site da Saturno NFC e quero continuar o atendimento.' + (ultimas ? '\n\nO que eu falei: ' + ultimas.slice(0, 400) : '');
-            var href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(t);
-            $('sai-wa').href = href; $('sai-wa2').href = href;
-        }
-
-        // ---------- abrir / fechar / controles ----------
         function abre() {
             aberto = true; ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false'); document.body.classList.add('sai-aberto');
-            if (!SR) defineModoTexto(true);
-            if (!msgsEl.childNodes.length) bolha('ia', SAUDACAO);
-            mostraLegenda(SAUDACAO);
-            if (sessao) buscaMsgs();
-            geracao++; respostaTerminou = true;
-            if (TEM_VOZ && !modoTexto) { speechSynthesis.cancel(); fala(SAUDACAO, geracao); } // dentro do toque: libera o áudio no iPhone
-            else depoisDeFalar();
+            ajustaTela();
+            if (sessao) { if (!carregado) entraConversa(false); buscaMsgs(); }
+            if (!toque) setTimeout(function () { txt.focus(); }, 120);
         }
         function fecha() {
-            aberto = false; geracao++; paraOuvir(); paraFala(); cancelaPedido(); clearTimeout(tVigia);
+            aberto = false; clearTimeout(tVigia); espera = null; tiraPensando();
             ov.classList.remove('on'); ov.setAttribute('aria-hidden', 'true'); document.body.classList.remove('sai-aberto');
-            define('parado');
+            ov.style.height = ''; ov.style.top = '';
+            abridor.focus({ preventScroll: true });
         }
-        function atualizaMic() {
-            micBtn.classList.toggle('ativo', mudo);
-            micBtn.innerHTML = mudo ? '<i class="ph-fill ph-microphone-slash"></i>' : '<i class="ph-fill ph-microphone"></i>';
-            micBtn.setAttribute('aria-label', mudo ? 'Ligar microfone' : 'Desligar microfone');
+        function novaConversa() {
+            geracao++; clearTimeout(tVigia); espera = null; linhaPensa = null;
+            sessao = null; guardaSessao(); ultimoId = 0; carregado = false; historico = [];
+            fio.textContent = ''; desce.classList.remove('on'); $('sai-wa').classList.remove('on');
+            ov.classList.remove('conversa');
+            txt.value = ''; ajusta();
+            if (!toque) txt.focus();
         }
-        function defineModoTexto(on) {
-            modoTexto = on; ov.classList.toggle('texto', on);
-            modoBtn.classList.toggle('ativo', on);
-            modoBtn.innerHTML = on ? '<i class="ph-fill ph-waveform"></i>' : '<i class="ph ph-chat-centered-text"></i>';
-            modoBtn.setAttribute('aria-label', on ? 'Voltar para a voz' : 'Conversar por texto');
-            micBtn.style.display = on ? 'none' : '';
-            $('sai-dica').style.visibility = on ? 'hidden' : '';
-            if (on) { paraOuvir(); paraFala(); define(pedido ? 'pensando' : 'parado'); setTimeout(function () { txt.focus(); }, 50); }
-            else if (!pedido) ouve();
-        }
-
-        $('sai-btn').addEventListener('click', abre);
+        abridor.addEventListener('click', abre);
         $('sai-fechar').addEventListener('click', fecha);
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && aberto) fecha(); });
-
-        function toqueOrb() {
-            if (estado === 'falando' || estado === 'pensando') {        // interrompe a IA e passa a ouvir
-                geracao++; paraFala(); cancelaPedido(); respostaTerminou = true;
-                mudo = false; atualizaMic(); ouve();
-            } else if (estado === 'ouvindo') {                          // para de ouvir e envia o que já foi dito
-                if (rec) try { rec.stop(); } catch (e) {}
-            } else { mudo = false; atualizaMic(); tentativas = 0; ouve(); }
-        }
-        $('sai-orb').addEventListener('click', toqueOrb);
-        $('sai-orb').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toqueOrb(); } });
-
-        micBtn.addEventListener('click', function () {
-            mudo = !mudo; atualizaMic();
-            if (mudo) { paraOuvir(); if (estado === 'ouvindo') define('parado', 'Microfone desligado'); }
-            else if (estado === 'parado') { tentativas = 0; ouve(); }
+        $('sai-nova').addEventListener('click', novaConversa);
+        document.addEventListener('keydown', function (e) {
+            if (!aberto) return;
+            if (e.key === 'Escape') { fecha(); return; }
+            if (e.key !== 'Tab') return;
+            // o foco fica dentro do chat
+            var itens = [].filter.call(ov.querySelectorAll('a,button,textarea'), function (el) { return !el.disabled && el.offsetParent !== null; });
+            if (!itens.length) return;
+            var primeiro = itens[0], ultimo = itens[itens.length - 1];
+            if (e.shiftKey && document.activeElement === primeiro) { e.preventDefault(); ultimo.focus(); }
+            else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primeiro.focus(); }
         });
-        modoBtn.addEventListener('click', function () { defineModoTexto(!modoTexto); });
-
-        function enviaTexto() { var t = txt.value; txt.value = ''; ajusta(); envia(t); }
-        function ajusta() { txt.style.height = 'auto'; txt.style.height = Math.min(txt.scrollHeight, 112) + 'px'; env.disabled = !txt.value.trim(); }
-        txt.addEventListener('input', ajusta);
-        txt.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (txt.value.trim()) enviaTexto(); } });
-        env.addEventListener('click', enviaTexto);
     })();
     </script>
 </body>
