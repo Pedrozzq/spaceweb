@@ -5177,6 +5177,8 @@
         .sai-hero h2{margin:0;font-size:clamp(1.65rem,4.6vw,2.4rem);font-weight:700;line-height:1.15;letter-spacing:-.03em;text-wrap:balance;
             background:linear-gradient(90deg,#fff,#ffe3a0,#c9a6ff,#8fb4ff,#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
             animation:saiTitulo .9s cubic-bezier(.2,.8,.2,1) both,saiBrilho 14s linear infinite}
+        .sai-hero-sub{margin:.7rem auto 0;max-width:34rem;color:rgba(255,255,255,.65);font-size:clamp(.95rem,2.4vw,1.05rem);line-height:1.45;text-wrap:balance}
+        .sai-ov.baixa .sai-hero-sub{margin-top:.35rem;font-size:.9rem}
         .sai-ov.conversa .sai-hero{display:none}
 
         /* conversa */
@@ -5292,6 +5294,7 @@
             <div class="sai-hero">
                 <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><span class="sai-esfera sai-central"></span><div class="sai-orb-x"><div class="sai-orb-y"><img src="img/saturno-planeta.webp" alt="" width="560" height="310" decoding="async"><i class="sai-logo-cor"></i><i class="sai-logo-luz"></i></div></div></div></div>
                 <h2>Oi! Fica à vontade, me conta do seu negócio</h2>
+                <p class="sai-hero-sub">O que você vende ou que serviço oferece?</p>
             </div>
             <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
             <span class="sai-voz" id="sai-voz" aria-live="polite"></span>
@@ -5300,7 +5303,7 @@
 
         <div class="sai-rodape">
             <div class="sai-caixa" id="sai-caixa">
-                <textarea id="sai-texto" rows="1" maxlength="1000" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
+                <textarea id="sai-texto" rows="1" maxlength="1000" enterkeyhint="send" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
                 <button type="button" class="sai-mic" id="sai-mic" aria-label="Falar em vez de digitar" aria-pressed="false" title="Falar" hidden><i class="ph ph-microphone" aria-hidden="true"></i></button>
                 <button type="button" class="sai-env" id="sai-env" aria-label="Enviar" disabled><i class="ph-bold ph-arrow-up" aria-hidden="true"></i></button>
             </div>
@@ -5393,14 +5396,26 @@ function linhaEu(texto) {
         }
         // o agente confirma o pedido com a linha: #PEDIDO# Nome | Empresa | Pedido | Valor (o fluxo pode tirar o # inicial)
                 function extraiPedido(bruto) {
-            var m = /^[ \t]*#?PEDIDO#[ \t]*(.+?)[ \t]*$/m.exec(bruto), r = { texto: bruto, pedido: null };
+            var m = /(^|[ \t])[*_]*#?[ \t]*PEDIDO[ \t]*#[*_]*[ \t]*/im.exec(bruto), r = { texto: bruto, pedido: null };
             if (!m) return r;
-            r.texto = bruto.replace(m[0], '').trim();
-            var c = m[1].split('|').map(function (s) { return s.trim(); });
-            if (c.length < 4 || c[0].length < 2 || c[1].length < 2 || !c[2]) return r;
-            var valor = Number(c[3].replace(/,\d{1,2}$/, '').replace(/\D/g, '')) || 0;
-            r.pedido = { nome: c[0], empresa: c[1], pedido: c[2], valor: valor, itens: null };
-            var M = window.saturnoMontador, itens = M && document.getElementById('sps-cfg') ? lerItens(c[2]) : null;
+            // os campos podem vir quebrados em mais de uma linha
+            var linhas = bruto.slice(m.index + m[0].length).split('\n'), dados = linhas.shift();
+            while (linhas.length && dados.split('|').length < 4 && (/\|\s*$/.test(dados) || !dados.trim() || linhas[0].indexOf('|') >= 0)) dados += ' ' + linhas.shift();
+            if (dados.indexOf('|') < 0) return r;   // "pedido #123" numa frase comum não é a linha do agente
+            var c = dados.split('|').map(function (s) { return s.replace(/^[\s*_]+|[\s*_]+$/g, ''); });
+            // nome e empresa podem faltar: a tela de pagamento pede o que não veio
+            var soValor = /^(R\$)?\s*[\d.,]+$/i, nome = c[0], empresa = '', pedido = '', txtValor = '';
+            if (c.length >= 4) { empresa = c[1]; pedido = c[2]; txtValor = c[3]; }
+            else if (c.length === 3 && soValor.test(c[2])) { pedido = c[1]; txtValor = c[2]; }
+            else if (c.length === 3) { empresa = c[1]; pedido = c[2]; }
+            else { pedido = c[1]; }
+            if (!pedido) return r;
+            r.texto = (bruto.slice(0, m.index) + '\n' + linhas.join('\n')).trim();
+            if (nome.length < 2) nome = '';
+            if (empresa.length < 2 || /^(n\/?a|n[aã]o informad[oa]|sem empresa)$/i.test(empresa)) empresa = '';
+            var valor = Number(txtValor.replace(/,\d{1,2}$/, '').replace(/\D/g, '')) || 0;
+            r.pedido = { nome: nome, empresa: empresa, pedido: pedido, valor: valor, itens: null };
+            var M = window.saturnoMontador, itens = M && document.getElementById('sps-cfg') ? lerItens(pedido) : null;
             if (itens) {   // o total sai da mesma regra do Monte Seu Plano, não do texto do agente
                 r.pedido.itens = itens;
                 r.pedido.valor = M.calcula(itens.c, itens.g, itens.crm);
@@ -5422,6 +5437,7 @@ function linhaEu(texto) {
         }
         function registraPedido(p) {
             var chave = [p.nome, p.empresa, p.pedido, p.valor].join('|');
+            if (!p.nome || !p.empresa) return;   // sem esses dados, quem registra é a tela de pagamento
             if (!sessao || sessao.crm === chave) return;   // o mesmo pedido entra uma vez só
             sessao.crm = chave; guardaSessao();
             if (window.saturnoRegistrarPedido) window.saturnoRegistrarPedido({ nome: p.nome, empresa: p.empresa, pedido: p.pedido, valor: p.valor });
@@ -5468,7 +5484,7 @@ function linhaEu(texto) {
             el.appendChild(c);
         }
         function poeBotaoPedido(el, p) {
-            var msg = 'Olá! Sou ' + p.nome + ', da empresa ' + p.empresa + '. Vim pelo site e ' +
+            var msg = 'Olá! ' + (p.nome ? 'Sou ' + p.nome + (p.empresa ? ', da empresa ' + p.empresa : '') + '. ' : '') + 'Vim pelo site e ' +
                 'quero fazer o pedido: ' + p.pedido + '. Pode me passar os detalhes?';
             var a = document.createElement('a');
             a.className = 'sai-pedido'; a.target = '_blank'; a.rel = 'noopener noreferrer';
@@ -5696,9 +5712,15 @@ function linhaEu(texto) {
             rec.stop();
         });
         txt.addEventListener('input', ajusta);
+        // Enter envia e nunca quebra a linha; Shift+Enter continua quebrando
+        var comShift = false;
         txt.addEventListener('keydown', function (e) {
-            // no celular, Enter pula linha; envia pelo botão
-            if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !toque) { e.preventDefault(); if (txt.value.trim()) enviaTexto(); }
+            comShift = e.shiftKey;
+            if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); if (txt.value.trim()) enviaTexto(); }
+        });
+        // teclados de celular nem sempre informam a tecla no keydown: pega a quebra de linha aqui
+        txt.addEventListener('beforeinput', function (e) {
+            if (e.inputType === 'insertLineBreak' && !comShift) { e.preventDefault(); if (txt.value.trim()) enviaTexto(); }
         });
         env.addEventListener('click', enviaTexto);
 
