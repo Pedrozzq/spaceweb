@@ -898,8 +898,9 @@
            para ele, e um selo "1" surge no botão enquanto o balão está visível */
         .chat-widget-bubble {
             position: absolute;
-            right: calc(100% + 0.35rem);
-            bottom: calc(100% - 0.7rem);
+            /* em cima do botão, para não cobrir o "Fale com a IA" no canto oposto */
+            right: 0;
+            bottom: calc(100% + 0.65rem);
             display: flex;
             align-items: center;
             gap: 0.3rem;
@@ -907,7 +908,7 @@
             background: #ffffff;
             color: #111b21;
             padding: 0.38rem 0.45rem 0.38rem 0.7rem;
-            border-radius: 0.85rem 0.85rem 0.2rem 0.85rem;
+            border-radius: 0.85rem;
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
             font-family: "Plus Jakarta Sans", sans-serif;
             font-size: 0.72rem;
@@ -935,16 +936,16 @@
             width: 6px; height: 6px; border-radius: 9999px; flex-shrink: 0;
             background: #25D366; box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.25);
         }
-        /* rabinho apontando para o botão (canto inferior direito, na diagonal) */
+        /* rabinho apontando para o botão, logo abaixo */
         .chat-widget-bubble::after {
             content: '';
             position: absolute;
-            right: -7px;
+            right: 1.25rem;
             bottom: -6px;
             width: 13px;
-            height: 12px;
+            height: 7px;
             background: #ffffff;
-            clip-path: polygon(0 0, 100% 100%, 0 45%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
         }
         /* selo de notificação no botão */
         .cw-count {
@@ -1050,6 +1051,23 @@
         }
 
         /* ===================== COMO FUNCIONA NA PRÁTICA ===================== */
+        /* Tag Google (igual à 1ª seção do tapreview.html) e perguntas frequentes */
+        .tg-eyebrow { background-image: linear-gradient(90deg, #6ea8ff, #b9d3ff, #ffffff, #b9d3ff, #6ea8ff); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: textShine 3s linear infinite; }
+        .tg-azul { display: inline-block; background-image: linear-gradient(90deg, #4285F4, #6ea8ff, #e3eeff, #6ea8ff, #4285F4); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: textShine 3s linear infinite; filter: drop-shadow(0 0 12px rgba(66, 133, 244, .45)); }
+        .tg-img { position: relative; margin: 0; }
+        .tg-img img { position: relative; z-index: 1; width: 100%; height: auto; display: block; animation: tg-flutua 6s ease-in-out infinite; }
+        .tg-img::before { content: ''; position: absolute; left: 15%; right: 15%; top: 25%; bottom: 20%; background: radial-gradient(circle, rgba(66, 133, 244, .45) 0%, rgba(66, 133, 244, 0) 70%); filter: blur(24px); z-index: 0; }
+        @keyframes tg-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .faq-lista { display: flex; flex-direction: column; gap: .5rem; }
+        .faq-item { border: 1px solid rgba(255, 255, 255, .09); border-radius: 1rem; background: rgba(15, 15, 22, .75); transition: border-color .2s; text-align: left; }
+        .faq-item[open] { border-color: rgba(255, 255, 255, .22); }
+        .faq-item summary { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 3.25rem; padding: .8rem 1rem; color: #fff; font-size: .95rem; font-weight: 600; line-height: 1.35; cursor: pointer; list-style: none; }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary i { flex: none; color: #a1a1aa; transition: transform .2s; }
+        .faq-item[open] summary i { transform: rotate(180deg); }
+        .faq-item summary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 1rem; }
+        .faq-item p { margin: 0; padding: 0 1rem 1rem; color: #b4b4bc; font-size: .9rem; line-height: 1.55; }
+        .faq-item a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
         .text-gradient-blue {
             background: linear-gradient(135deg, #3b82f6, #06b6d4);
             -webkit-background-clip: text;
@@ -3096,36 +3114,71 @@
                     </section>
                 </div>
 
-                <!-- Tag Cardápio Digital: aproximação do celular abrindo o cardápio premium -->
-                <div id="tag-cardapio" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
+                <!-- Tag Google: mesma apresentação da 1ª seção do tapreview.html -->
+                <div id="tag-google" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center text-center reveal-node">
+                    <span class="tg-eyebrow inline-block font-bold uppercase tracking-[0.4em] text-[10px]">Google Review</span>
+                    <h3 class="title-highlight text-white uppercase text-3xl leading-tight mt-3">Aproxime e abra a <span class="tg-azul">avaliação</span></h3>
+                    <p class="text-sm text-gray-400 leading-relaxed mt-3">O cliente aproxima o celular e a página de avaliação da sua empresa no Google abre em segundos.</p>
+                    <figure class="tg-img w-full mt-2">
+                        <img src="img/tapreview-sem-fundo.webp" alt="Google Review ao lado de um celular com a página de avaliação aberta" width="936" height="1200" loading="lazy" decoding="async">
+                    </figure>
+                </div>
+
+                <!-- Perguntas frequentes: respostas aprovadas na skill faq do agente -->
+                <div id="faq" class="w-full max-w-md mx-auto mb-10 reveal-node">
                     <div class="mb-6 text-center">
-                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Tag Cardápio Digital</span>
-                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">Cardápio Premium por aproximação</h3>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Aproxime o celular e o cardápio abre na hora.</p>
+                        <p class="text-saturno-gold font-bold uppercase tracking-[0.4em] text-[10px]">Tire suas dúvidas</p>
+                        <h3 class="title-highlight uppercase text-3xl leading-tight mt-2"><span class="text-white">Perguntas</span> <span class="text-saturno-gold inline-block">Frequentes</span></h3>
                     </div>
-
-                    <div class="relative w-[220px] h-[480px] flex justify-center pt-16">
-                        <div class="absolute bottom-10 w-40 h-40 bg-amber-500/10 blur-[40px] rounded-full"></div>
-
-                        <div class="absolute top-0 flex flex-col items-center z-10">
-                            <div class="absolute w-20 h-20 border-[2px] border-amber-400 rounded-full animate-sim-ripple"></div>
-                            <div class="w-16 h-16 rounded-full border border-amber-400/40 bg-amber-400/10 flex items-center justify-center shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative backdrop-blur-sm">
-                                <i class="ph-fill ph-fork-knife text-2xl text-amber-400 drop-shadow-lg"></i>
-                            </div>
-                        </div>
-
-                        <div class="absolute z-20 w-[200px] h-[400px] bg-slate-900 border-[5px] border-slate-800 rounded-[2.5rem] shadow-[0_20px_40px_rgba(0,0,0,0.6)] overflow-hidden animate-sim-phone">
-                            <div class="absolute top-2 left-1/2 -translate-x-1/2 w-16 h-5 bg-black rounded-full z-30"></div>
-
-                            <div class="absolute inset-0 bg-[#12100c] animate-sim-screen overflow-hidden">
-                                <img src="img/mockup-rest.webp" alt="Cardápio Digital" class="w-full h-full object-cover object-top">
-                            </div>
-
-                            <div class="absolute inset-0 bg-[#0B0E14] -z-10 flex flex-col items-center justify-center">
-                                <i class="ph ph-lock text-lg text-slate-700 mb-2"></i>
-                                <span class="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Aproximando...</span>
-                            </div>
-                        </div>
+                    <div class="faq-lista">
+                        <details class="faq-item" name="faq">
+                            <summary>Como funciona o cartão?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>É o mesmo chip do pagamento por aproximação. A pessoa aproxima o celular do cartão e o seu site abre no navegador, sem instalar aplicativo e sem digitar nada.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Precisa de bateria? Funciona em iPhone e Android?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Não usa bateria. Funciona por aproximação na maioria dos celulares recentes, iPhone e Android.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>E se o celular da pessoa não tiver NFC?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Os cartões também têm QR Code integrado. Quem tiver um aparelho sem NFC abre o site pela câmera.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Onde eu uso o cartão?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Ele fica com você ou com a sua equipe: no balcão, na recepção, em reuniões e em eventos. O cliente só aproxima o celular e sai com o site aberto e o contato salvo. O mesmo site também pode ir na bio do Instagram.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>O que tem no site?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Design profissional adaptado para celular, botões de WhatsApp, localização, redes sociais e agendamento, além de um botão para salvar o contato com um toque.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Quanto custa?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Você monta o seu pedido. O site personalizado custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, cada Tag Avaliação Google custa R$ 40, e o CRM é opcional, por R$ 1.500.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Como funciona a Tag Avaliação Google?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>O cliente aproxima o celular da tag e a página de avaliação da sua empresa no Google abre em segundos.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Posso parcelar?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Sim. No cartão de crédito, em até 12x com juros.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Vocês entregam para todo o Brasil?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Sim, enviamos para todo o Brasil. No pedido personalizado, o frete é grátis.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Qual é o prazo de entrega?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>O nosso time confirma o prazo com você. Tudo chega configurado e funcionando.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>E se eu quiser alterar o site depois?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Quem altera é a nossa equipe. Durante a produção, os ajustes já estão incluídos até você aprovar o site. Depois da entrega, as atualizações são feitas pela Gestão Saturno, um serviço opcional, e o cartão nunca precisa ser trocado.</p>
+                        </details>
+                        <details class="faq-item" name="faq">
+                            <summary>Posso ver trabalhos prontos?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
+                            <p>Sim. Veja os projetos de vários segmentos em <a href="projetos.html">nosso portfólio</a>.</p>
+                        </details>
                     </div>
                 </div>
 
@@ -5238,7 +5291,7 @@
         <div class="sai-corpo">
             <div class="sai-hero">
                 <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><span class="sai-esfera sai-central"></span><div class="sai-orb-x"><div class="sai-orb-y"><img src="img/saturno-planeta.webp" alt="" width="560" height="310" decoding="async"><i class="sai-logo-cor"></i><i class="sai-logo-luz"></i></div></div></div></div>
-                <h2>Me conta um pouco sobre o seu negócio</h2>
+                <h2>Oi! Fica à vontade, me conta do seu negócio</h2>
             </div>
             <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
             <span class="sai-voz" id="sai-voz" aria-live="polite"></span>
