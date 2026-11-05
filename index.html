@@ -4626,7 +4626,13 @@
         .orb-card.m-pagar.sem-end .orb-end{display:none}
         .orb-cep-st{display:block;min-height:0;margin:5px 0 0 4px;font-size:12.5px;color:#6e6e73}
         .orb-cep-st:empty{display:none}
-        .orb-card.m-pagar{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto}
+        /* o cartão nunca passa da área visível e rola por dentro: com o teclado do celular aberto, todos os campos continuam alcançáveis */
+        .orb-card{max-height:100%;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+        .orb-ov.baixa{padding:8px 12px}
+        .orb-ov.baixa .orb-logo{display:none}
+        .orb-ov.baixa .orb-card{padding-top:20px;padding-bottom:16px}
+        .orb-ov.baixa .orb-card.m-zap .orb-sub{display:none}
+        .orb-ov.baixa .orb-card.m-zap .orb-tit{margin-bottom:14px;padding-right:28px;font-size:20px}
         .orb-card.m-pagar .orb-campos{gap:10px;grid-template-columns:repeat(4,minmax(0,1fr))}
         .orb-card.m-pagar .orb-campo{grid-column:span 4;min-width:0}
         .orb-card.m-pagar .orb-m1{grid-column:span 1}
@@ -4845,6 +4851,24 @@
             function erro(campo, input) { campo.classList.remove('erro'); void campo.offsetWidth; campo.classList.add('erro'); input.focus(); }
             function foca(el, atraso) { setTimeout(function () { el.focus({preventScroll: true}); if (el.value) el.select(); }, atraso); }
 
+            // teclado do celular: o popup ocupa só a área visível e o campo em foco rola para dentro dela
+            function mostraCampo() {
+                var el = document.activeElement;
+                if (!el || !card.contains(el) || el.tagName !== 'INPUT') return;
+                var campo = el.closest('.orb-campo') || el, a = card.getBoundingClientRect(), b = campo.getBoundingClientRect();
+                if (b.top < a.top + 8) card.scrollTop -= a.top + 8 - b.top;
+                else if (b.bottom > a.bottom - 8) card.scrollTop += b.bottom - a.bottom + 8;
+            }
+            function ajustaAoTeclado() {
+                var v = window.visualViewport;
+                if (!v || !ov.classList.contains('on')) return;
+                ov.style.top = v.offsetTop + 'px'; ov.style.bottom = 'auto'; ov.style.height = v.height + 'px';
+                ov.classList.toggle('baixa', v.height < 560);
+                mostraCampo();
+            }
+            if (window.visualViewport) { visualViewport.addEventListener('resize', ajustaAoTeclado); visualViewport.addEventListener('scroll', ajustaAoTeclado); }
+            card.addEventListener('focusin', function () { setTimeout(mostraCampo, 60); });
+
             function abrir(p, _cartoes, personalizado, valor, itens, cliente) {
                 plano = p; pedidoPersonalizado = !!personalizado; valorPedido = valor || 0; itensPedido = itens || null;
                 dadosProntos = !!(cliente && cliente.nome && cliente.empresa);
@@ -4857,6 +4881,7 @@
                 btn.classList.remove('decolando'); btn.disabled = false;
                 voltarFoco = document.activeElement;
                 ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
+                ajustaAoTeclado();
                 document.body.style.overflow = 'hidden';
                 document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                 // começa pelo primeiro campo vazio (nome e empresa ficam salvos de visitas anteriores)
@@ -4867,7 +4892,8 @@
                 if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
                 ov.classList.add('fechando');
                 tFecha = setTimeout(function () {
-                    ov.classList.remove('on', 'fechando'); ov.setAttribute('aria-hidden', 'true');
+                    ov.classList.remove('on', 'fechando', 'baixa'); ov.setAttribute('aria-hidden', 'true');
+                    ov.style.top = ov.style.bottom = ov.style.height = '';
                     document.body.style.overflow = '';
                     document.body.classList.remove('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
                     if (voltarFoco && voltarFoco.focus) voltarFoco.focus();
@@ -4886,7 +4912,8 @@
                 if (!dadosProntos || m === 'pagar') return focaCampo();   // o pagamento sempre pede e-mail e WhatsApp
                 if (card.requestSubmit) card.requestSubmit(); else card.dispatchEvent(new Event('submit', {cancelable: true}));
             }
-            document.getElementById('orbPagar').addEventListener('click', function () { segue('pagar'); });
+            // festa antes de trocar a tela: o confete sai da posição do botão, que some em seguida
+            document.getElementById('orbPagar').addEventListener('click', function () { festa(this); segue('pagar'); });
             document.getElementById('orbZap').addEventListener('click', function () { segue('zap'); });
             document.getElementById('orbVolta').addEventListener('click', function () { avisa(''); poeModo('escolha'); });
             // voltou do checkout pelo botão do navegador: o botão não pode ficar travado
