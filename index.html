@@ -4810,6 +4810,7 @@
                 if (modo !== 'escolha') foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 750);
             }
             function fechar() {
+                if (aguardandoPg) guardaPg(null);   // desistiu de esperar: não reabre ao recarregar
                 if (!ov.classList.contains('on') || ov.classList.contains('fechando')) return;
                 ov.classList.add('fechando');
                 tFecha = setTimeout(function () {
@@ -4838,8 +4839,52 @@
             // voltou do checkout pelo botão do navegador: o botão não pode ficar travado
             window.addEventListener('pageshow', function (e) { if (e.persisted && modo === 'pagar') poeModo('pagar'); });
 
+            // O Mercado Pago nem sempre devolve a pessoa ao site depois do Pix: esta aba confere o pagamento sozinha.
+            var GUARDA_PG = 'saturno_pagamento', aguardandoPg = false, abaPg = null;
+            function guardaPg(v) { try { if (v) localStorage.setItem(GUARDA_PG, JSON.stringify(v)); else localStorage.removeItem(GUARDA_PG); } catch (err) {} }
+            function esperaPagamento(pedido, urlMp, desde) {
+                aguardandoPg = true; modo = 'resultado'; itensPedido = null;
+                card.classList.remove('m-escolha', 'm-pagar', 'm-zap');
+                card.classList.add('m-resultado');
+                tit.textContent = 'Aguardando o pagamento';
+                sub.textContent = 'Conclua o pagamento na aba do Mercado Pago. Quando ele for aprovado, a confirmação aparece aqui sozinha.';
+                var res = document.getElementById('orbResBtn');
+                res.textContent = 'Abrir o pagamento'; res.href = urlMp;
+                ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                document.body.classList.add('popup-aberto'); window.dispatchEvent(new Event('saturno-popup'));
+                var timer = null, ocupado = false, fim = desde + 3600000;
+                function confere() {
+                    if (ocupado || Date.now() > fim) return;
+                    ocupado = true; clearTimeout(timer);
+                    fetch(FN_PAGAMENTO, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({acompanha: {pedido: pedido}})})
+                        .then(function (r) { return r.ok ? r.json() : null; })
+                        .then(function (j) {
+                            if (!j || j.status !== 'approved' || !j.pagamento) return false;
+                            guardaPg(null);
+                            try { if (abaPg) abaPg.close(); } catch (err) {}
+                            location.href = 'obrigado.html?external_reference=' + encodeURIComponent(pedido) + '&payment_id=' + encodeURIComponent(j.pagamento);
+                            return true;
+                        })
+                        .catch(function () { return false; })
+                        .then(function (foi) { ocupado = false; if (!foi) timer = setTimeout(confere, 5000); });
+                }
+                document.addEventListener('visibilitychange', function () { if (!document.hidden) confere(); });
+                confere();
+            }
+            // voltou para o site na mesma aba ou recarregou a página: continua conferindo
+            (function () {
+                var g = null;
+                try { g = JSON.parse(localStorage.getItem(GUARDA_PG) || 'null'); } catch (err) {}
+                if (!g || !g.pedido || !g.url) return;
+                if (Date.now() - g.em > 3600000) return guardaPg(null);
+                esperaPagamento(g.pedido, g.url, g.em);
+            })();
+
             function vaiParaPagamento(n, emp) {
                 btn.disabled = true; btnTx.textContent = 'Abrindo o pagamento…'; avisa('');
+                // a nova aba precisa nascer no clique, senão o navegador bloqueia
+                try { abaPg = window.open('', '_blank'); } catch (err) { abaPg = null; }
                 var ctl = new AbortController(), limite = setTimeout(function () { ctl.abort(); }, 20000);
                 fetch(FN_PAGAMENTO, {
                     method: 'POST', signal: ctl.signal,
@@ -4848,9 +4893,17 @@
                         endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), complemento: ent('Compl').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
                         cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm})
                 }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
-                .then(function (j) { clearTimeout(limite); location.href = j.url; })
+                .then(function (j) {
+                    clearTimeout(limite);
+                    if (j.pedido) guardaPg({pedido: j.pedido, url: j.url, em: Date.now()});
+                    if (!abaPg) { location.href = j.url; return; }   // nova aba bloqueada: segue na mesma
+                    abaPg.location.href = j.url;
+                    if (j.pedido) esperaPagamento(j.pedido, j.url, Date.now()); else location.href = j.url;
+                })
                 .catch(function () {
                     clearTimeout(limite);
+                    try { if (abaPg) abaPg.close(); } catch (err) {}
+                    abaPg = null;
                     poeModo('zap');
                     avisa('Não conseguimos abrir o pagamento agora. Envie o pedido pelo WhatsApp que a gente te ajuda.');
                 });

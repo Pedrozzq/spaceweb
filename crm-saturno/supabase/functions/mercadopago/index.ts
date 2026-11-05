@@ -6,7 +6,9 @@
 //      o link do checkout (init_point).
 //   2. POST do obrigado.html { consulta: { pedido, pagamento } }: confere o pagamento na API
 //      do Mercado Pago e só devolve os dados se ele pertencer a esse pedido.
-//   3. POST ?webhook=1 do Mercado Pago: confere a assinatura, busca o pagamento
+//   3. POST do site { acompanha: { pedido } }: diz se o pedido já tem pagamento, porque o
+//      Mercado Pago nem sempre devolve a pessoa ao site (Pix). Devolve só número e situação.
+//   4. POST ?webhook=1 do Mercado Pago: confere a assinatura, busca o pagamento
 //      na API e, se aprovado, leva o lead para "ganho". Repetições não duplicam nada.
 //
 //  Secrets (Supabase > Edge Functions > Secrets):
@@ -52,6 +54,7 @@ Deno.serve(async (req) => {
   if (!origemOk(origem)) return json({ erro: "origem não permitida" }, 403, h);
   try {
     const corpo = await req.json();
+    if (corpo?.acompanha) return json(await acompanharPedido(corpo.acompanha), 200, h);
     return json(corpo?.consulta ? await consultarPedido(corpo.consulta) : await criarCheckout(corpo), 200, h);
   } catch (e) {
     const erro = e as Error & { status?: number };
@@ -132,7 +135,7 @@ async function criarCheckout(b: Any) {
   const pref = await r.json();
   if (!pref.init_point) throw new Error("preferência sem init_point");
   chk(await db.from("mp_pedidos").update({ preference_id: pref.id ?? null }).eq("id", reg.id));
-  return { url: pref.init_point };
+  return { url: pref.init_point, pedido: reg.id };
 }
 
 // Quem chama a função não tem login: só preenche o que está vazio, nunca troca contato já salvo.
@@ -181,6 +184,19 @@ async function consultarPedido(c: Any) {
     pedido: ped.pedido, itens, nome: ped.nome, empresa: ped.empresa, email: ped.email, telefone: ped.telefone,
     cep: ped.cep, endereco: ped.endereco, cidade: ped.cidade, uf: ped.uf,
   };
+}
+
+// O id do pedido é aleatório e só o navegador de quem o criou o recebe.
+async function acompanharPedido(c: Any) {
+  const pedido = String(c?.pedido ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(pedido)) throw falha("consulta inválida", 400);
+  const ped = chk(await db.from("mp_pedidos").select("id").eq("id", pedido).maybeSingle()) as Any;
+  if (!ped) throw falha("pedido não encontrado", 404);
+  const r = await fetch(`${API}/v1/payments/search?external_reference=${pedido}&sort=date_created&criteria=desc&limit=10`, { headers: { Authorization: `Bearer ${env("MP_ACCESS_TOKEN")}` } });
+  if (!r.ok) throw new Error(`busca do pagamento: HTTP ${r.status}`);
+  const lista = ((await r.json()).results ?? []) as Any[];
+  const pg = lista.find((p) => p.status === "approved") ?? lista[0];
+  return pg ? { pagamento: String(pg.id), status: pg.status } : { pagamento: null, status: null };
 }
 
 // ------------------------------------------------------------------ webhook
