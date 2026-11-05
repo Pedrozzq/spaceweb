@@ -5029,8 +5029,6 @@
         .sai-ov.baixa .sai-globo{display:none}
         .sai-ov.baixa .sai-hero{padding-bottom:.6rem}
         .sai-ov.baixa .sai-hero h2{font-size:1.35rem}
-        .sai-ov.baixa .sai-desc{display:none}
-        .sai-desc{margin:.6rem 0 0;color:rgba(255,255,255,.62);font-size:.95rem;font-weight:400;line-height:1.4;letter-spacing:-.005em;text-align:center}
         .sai-ov.baixa .sai-nota{display:none}
         .sai-ov ::selection{background:rgba(255,190,90,.3)}
         .sai-aurora{position:absolute;z-index:-1;left:-10%;right:-10%;top:-38vh;height:90vh;pointer-events:none;
@@ -5047,11 +5045,6 @@
         .sai-ico:hover{background:rgba(255,255,255,.08);color:#fff}
         .sai-nova{display:none}
         .sai-ov.conversa .sai-nova{display:grid}
-        .sai-wa{display:none;align-items:center;gap:.4rem;height:2.25rem;padding:0 .8rem;border-radius:999px;border:1px solid rgba(37,211,102,.45);
-            background:rgba(37,211,102,.1);color:#5ee08f;font-weight:700;font-size:.8rem;text-decoration:none;white-space:nowrap;transition:background .2s}
-        .sai-wa:hover{background:rgba(37,211,102,.2)}
-        .sai-wa i{font-size:1.05rem}
-        .sai-wa.on{display:inline-flex}
 
         .sai-corpo{position:relative;flex:1;min-height:0;display:flex;flex-direction:column}
 
@@ -5185,7 +5178,6 @@
         <div class="sai-aurora" aria-hidden="true"></div>
         <header class="sai-topo">
             <div class="sai-marca"><span class="sai-esfera" aria-hidden="true"></span>Saturno IA</div>
-            <a class="sai-wa" id="sai-wa" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer"><i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>WhatsApp</a>
             <button type="button" class="sai-ico sai-nova" id="sai-nova" aria-label="Nova conversa" title="Nova conversa"><i class="ph ph-note-pencil" aria-hidden="true"></i></button>
             <button type="button" class="sai-ico" id="sai-fechar" aria-label="Fechar" title="Fechar"><i class="ph ph-x" aria-hidden="true"></i></button>
         </header>
@@ -5193,8 +5185,7 @@
         <div class="sai-corpo">
             <div class="sai-hero">
                 <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><span class="sai-esfera sai-central"></span><div class="sai-orb-x"><div class="sai-orb-y"><img src="img/saturno-planeta.webp" alt="" width="560" height="310" decoding="async"><i class="sai-logo-cor"></i><i class="sai-logo-luz"></i></div></div></div></div>
-                <h2>Como posso ajudar seu negócio hoje?</h2>
-                <p class="sai-desc">Me explique como funciona o seu negócio</p>
+                <h2>Me conta um pouco sobre o seu negócio</h2>
             </div>
             <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
             <span class="sai-voz" id="sai-voz" aria-live="polite"></span>
@@ -5294,9 +5285,9 @@ function linhaEu(texto) {
             var b = document.createElement('div'); b.className = 'sai-bal'; b.textContent = texto;
             l.appendChild(b); fio.appendChild(l);
         }
-        // o agente confirma o pedido com a linha: #PEDIDO# Nome | Empresa | Pedido | Valor
+        // o agente confirma o pedido com a linha: #PEDIDO# Nome | Empresa | Pedido | Valor (o fluxo pode tirar o # inicial)
                 function extraiPedido(bruto) {
-            var m = /^[ \t]*#PEDIDO#[ \t]*(.+?)[ \t]*$/m.exec(bruto), r = { texto: bruto, pedido: null };
+            var m = /^[ \t]*#?PEDIDO#[ \t]*(.+?)[ \t]*$/m.exec(bruto), r = { texto: bruto, pedido: null };
             if (!m) return r;
             r.texto = bruto.replace(m[0], '').trim();
             var c = m[1].split('|').map(function (s) { return s.trim(); });
@@ -5452,12 +5443,6 @@ function linhaEu(texto) {
         }
         function tiraPensando() { if (linhaPensa) { linhaPensa.remove(); linhaPensa = null; } }
 
-        function mostraWhats() {
-            var ultimas = historico.filter(function (m) { return m.role === 'user'; }).slice(-2).map(function (m) { return m.content; }).join(' / ');
-            var t = 'Olá! Vim pelo assistente de IA do site da Saturno NFC e quero continuar o atendimento.' + (ultimas ? '\n\nO que eu falei: ' + ultimas.slice(0, 400) : '');
-            var wa = $('sai-wa'); wa.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(t); wa.classList.add('on');
-        }
-
         // a caixa de texto desliza do centro para o rodapé quando a conversa começa
         function entraConversa(animar) {
             if (ov.classList.contains('conversa')) return;
@@ -5494,7 +5479,7 @@ function linhaEu(texto) {
                 });
                 carregado = true;
                 if (novas) {
-                    entraConversa(false); mostraWhats();
+                    entraConversa(false);
                     if (restaurando || fim) vaiProFim(!restaurando);
                 }
             }).catch(function (e) {
@@ -5506,8 +5491,8 @@ function linhaEu(texto) {
                     if (ep.recebeuEm && agora - ep.recebeuEm > SILENCIO) espera = null;
                     else if (!ep.recebeuEm && agora - ep.desde > SEM_RESPOSTA) {
                         espera = null; tiraPensando();
-                        linhaIa('Estou demorando para responder. Se preferir, continue pelo WhatsApp, no botão aqui em cima.', true, true);
-                        mostraWhats(); vaiProFim(true);
+                        linhaIa('Estou demorando para responder. Se preferir, feche este chat e use o botão do WhatsApp no canto da página.', true, true);
+                        vaiProFim(true);
                     }
                 }
                 agendaBusca(espera ? 1500 : 6000);
@@ -5522,8 +5507,8 @@ function linhaEu(texto) {
             terminaDigitacao();
             if (sessao && sessao.qtd >= LIMITE) {
                 linhaEu(texto);
-                linhaIa('Para continuar a conversa, fale com a gente no WhatsApp, no botão aqui em cima.', true, true);
-                mostraWhats(); vaiProFim(true);
+                linhaIa('Para continuar a conversa, feche este chat e use o botão do WhatsApp no canto da página.', true, true);
+                vaiProFim(true);
                 return;
             }
             var minha = ++geracao;
@@ -5545,9 +5530,9 @@ function linhaEu(texto) {
                     if (minha !== geracao) return;
                     if (!jaTentou && e && (e.status === 404 || e.status === 401)) { sessao = null; guardaSessao(); return manda(true); }
                     historico.pop(); tiraPensando();
-                    linhaIa('Tive um problema de conexão e sua mensagem não foi enviada. Tente de novo ou fale com a gente pelo WhatsApp.', true, true);
+                    linhaIa('Tive um problema de conexão e sua mensagem não foi enviada. Tente de novo ou use o botão do WhatsApp no canto da página, fechando este chat.', true, true);
                     if (!txt.value) { txt.value = texto; ajusta(); }
-                    mostraWhats(); vaiProFim(true);
+                    vaiProFim(true);
                 });
             }
             manda(false);
@@ -5660,7 +5645,7 @@ function linhaEu(texto) {
         function novaConversa() {
             geracao++; clearTimeout(tVigia); espera = null; linhaPensa = null; cancelaDigitacao(); paraMic();
             sessao = null; guardaSessao(); ultimoId = 0; carregado = false; historico = [];
-            fio.textContent = ''; desce.classList.remove('on'); $('sai-wa').classList.remove('on');
+            fio.textContent = ''; desce.classList.remove('on');
             ov.classList.remove('conversa');
             txt.value = ''; ajusta();
             if (!toque) txt.focus();
