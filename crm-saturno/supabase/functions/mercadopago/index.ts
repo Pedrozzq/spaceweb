@@ -4,7 +4,9 @@
 //   1. POST do site { nome, empresa, email, telefone, endereco, cartoes, tags, crm }: calcula o total AQUI
 //      (o preço enviado pelo navegador nunca é usado), registra o lead e devolve
 //      o link do checkout (init_point).
-//   2. POST ?webhook=1 do Mercado Pago: confere a assinatura, busca o pagamento
+//   2. POST do obrigado.html { consulta: { pedido, pagamento } }: confere o pagamento na API
+//      do Mercado Pago e só devolve os dados se ele pertencer a esse pedido.
+//   3. POST ?webhook=1 do Mercado Pago: confere a assinatura, busca o pagamento
 //      na API e, se aprovado, leva o lead para "ganho". Repetições não duplicam nada.
 //
 //  Secrets (Supabase > Edge Functions > Secrets):
@@ -49,7 +51,8 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ erro: "método não suportado" }, 405, h);
   if (!origemOk(origem)) return json({ erro: "origem não permitida" }, 403, h);
   try {
-    return json(await criarCheckout(await req.json()), 200, h);
+    const corpo = await req.json();
+    return json(corpo?.consulta ? await consultarPedido(corpo.consulta) : await criarCheckout(corpo), 200, h);
   } catch (e) {
     const erro = e as Error & { status?: number };
     console.error(erro.message);
@@ -121,7 +124,7 @@ async function criarCheckout(b: Any) {
       external_reference: reg.id,
       statement_descriptor: "SATURNONFC",
       payment_methods: { installments: 12 },
-      back_urls: { success: `${SITE}/?pagamento=aprovado`, pending: `${SITE}/?pagamento=pendente`, failure: `${SITE}/?pagamento=falhou` },
+      back_urls: { success: `${SITE}/obrigado.html`, pending: `${SITE}/obrigado.html`, failure: `${SITE}/?pagamento=falhou` },
       auto_return: "approved",
     }),
   });
@@ -154,6 +157,30 @@ async function guardarContato(lead: Any, email: string, telefone: string, ent: R
   if (c && !c.endereco) chk(await db.from("clientes").update({ endereco: ent.linha, cidade: ent.cidade, uf: ent.uf, cep: ent.cep }).eq("id", lead.cliente_id));
   // telefone é único em clientes: se já for de outro cadastro, o contato fica no lead e no pedido
   if (c && !c.telefone) await db.from("clientes").update({ telefone }).eq("id", lead.cliente_id);
+}
+
+// ------------------------------------------------------------------ página de obrigado
+async function consultarPedido(c: Any) {
+  const pedido = String(c?.pedido ?? ""), pagamento = String(c?.pagamento ?? "");
+  if (!/^[0-9a-f-]{36}$/i.test(pedido) || !/^\d+$/.test(pagamento)) throw falha("consulta inválida", 400);
+  const r = await fetch(`${API}/v1/payments/${pagamento}`, { headers: { Authorization: `Bearer ${env("MP_ACCESS_TOKEN")}` } });
+  if (r.status === 404) throw falha("pedido não encontrado", 404);
+  if (!r.ok) throw new Error(`consulta do pagamento: HTTP ${r.status}`);
+  const pg = await r.json();
+  // o número do pagamento precisa ser deste pedido: sem isso, nenhum dado sai daqui
+  if (String(pg.external_reference ?? "").toLowerCase() !== pedido.toLowerCase()) throw falha("pedido não encontrado", 404);
+  const ped = chk(await db.from("mp_pedidos").select("*").eq("id", pedido).maybeSingle()) as Any;
+  if (!ped) throw falha("pedido não encontrado", 404);
+  // se o webhook atrasar, a CRM já fica certa aqui. O resultado do aviso não muda o que a pessoa vê.
+  try { await aplicarPagamento(pg); } catch (e) { console.error((e as Error).message); }
+  const itens = montarPedido({ cartoes: ped.cartoes, tags: ped.tags, crm: ped.crm }).itens
+    .map((i) => ({ nome: i.title, quantidade: i.quantity, preco: i.unit_price }));
+  return {
+    status: pg.status, pagamento_id: String(pg.id), tipo: pg.payment_type_id, parcelas: pg.installments,
+    valor: Number(ped.valor), total_pago: Number(pg.transaction_details?.total_paid_amount ?? pg.transaction_amount ?? 0),
+    pedido: ped.pedido, itens, nome: ped.nome, empresa: ped.empresa, email: ped.email, telefone: ped.telefone,
+    cep: ped.cep, endereco: ped.endereco, cidade: ped.cidade, uf: ped.uf,
+  };
 }
 
 // ------------------------------------------------------------------ webhook

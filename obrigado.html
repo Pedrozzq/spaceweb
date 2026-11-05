@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <title>Obrigado pelo seu pedido | Saturno NFC</title>
+    <link rel="icon" type="image/png" sizes="64x64" href="img/favicon-saturno-64.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-saturno.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        *{box-sizing:border-box}
+        html,body{margin:0;min-height:100%}
+        body{background:radial-gradient(90% 60% at 50% 0,#1b1533 0,#08080d 60%);background-color:#08080d;color:#f5f5f7;font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;padding:32px 16px 48px}
+        main{width:100%;max-width:560px;margin:0 auto}
+        .logo{display:block;width:150px;height:auto;margin:0 auto 28px}
+        .topo{text-align:center;margin-bottom:24px}
+        .selo{display:inline-grid;place-items:center;width:64px;height:64px;border-radius:50%;margin-bottom:16px;font-size:32px;background:rgba(52,199,89,.14);color:#4ade80}
+        .selo.espera{background:rgba(255,204,0,.14);color:#ffd60a}
+        h1{margin:0 0 8px;font-size:clamp(1.65rem,6vw,2.1rem);font-weight:700;letter-spacing:-.025em;line-height:1.15;text-wrap:balance}
+        .sub{margin:0;color:#a1a1aa;font-size:1rem;line-height:1.5;text-wrap:balance}
+        .bloco{border-radius:18px;background:rgba(28,28,30,.92);border:1px solid rgba(255,255,255,.07);padding:18px;margin-bottom:12px}
+        .bloco h2{margin:0 0 12px;font-size:.8rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#a1a1aa}
+        .item{display:flex;justify-content:space-between;gap:16px;padding:7px 0;font-size:.96rem;line-height:1.35}
+        .item span:first-child{min-width:0;overflow-wrap:anywhere}
+        .item span:last-child{flex:none;color:#d4d4d8}
+        .total{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);font-weight:700}
+        .total strong{font-size:1.45rem;letter-spacing:-.02em}
+        .obs{margin:8px 0 0;color:#a1a1aa;font-size:.84rem;line-height:1.4}
+        .dado{margin:0 0 10px;font-size:.96rem;line-height:1.4;overflow-wrap:anywhere}
+        .dado:last-child{margin-bottom:0}
+        .dado small{display:block;margin-bottom:2px;color:#a1a1aa;font-size:.78rem}
+        .wa{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:54px;margin-top:16px;padding:12px 18px;border-radius:999px;background:#25d366;color:#04210f;font-size:1.02rem;font-weight:700;text-decoration:none;text-align:center;transition:transform .15s,background .2s}
+        .wa:hover{background:#34e077;transform:translateY(-1px)}
+        .wa i{flex:none;font-size:1.4rem}
+        .volta{display:block;margin-top:16px;color:#a1a1aa;font-size:.9rem;text-align:center;text-decoration:none}
+        .volta:hover{color:#fff}
+        [hidden]{display:none!important}
+    </style>
+</head>
+<body>
+    <main>
+        <a href="index.html"><img class="logo" src="img/logo-saturnonfc.webp" alt="Saturno NFC"></a>
+        <header class="topo">
+            <span class="selo" id="selo"><i class="ph-fill ph-check-circle" id="seloIc" aria-hidden="true"></i></span>
+            <h1 id="tit" aria-live="polite">Obrigado pelo seu pedido!</h1>
+            <p class="sub" id="sub">Estamos carregando os dados da sua compra…</p>
+        </header>
+
+        <section class="bloco" id="bPedido" hidden>
+            <h2>Seu pedido</h2>
+            <div id="itens"></div>
+            <div class="total"><span>Valor do pedido</span><strong id="valor"></strong></div>
+            <p class="obs" id="pagoObs" hidden></p>
+        </section>
+
+        <section class="bloco" id="bPagamento" hidden>
+            <h2>Pagamento</h2>
+            <p class="dado"><small>Número do pagamento</small><span id="pgNum"></span></p>
+            <p class="dado"><small>Forma de pagamento</small><span id="pgForma"></span></p>
+        </section>
+
+        <section class="bloco" id="bCliente" hidden>
+            <h2>Seus dados</h2>
+            <p class="dado" id="dNome"></p>
+            <p class="dado" id="dContato"></p>
+        </section>
+
+        <section class="bloco" id="bEntrega" hidden>
+            <h2>Entrega</h2>
+            <p class="dado" id="dEnd"></p>
+        </section>
+
+        <a class="wa" id="wa" href="https://wa.me/5531920067518" target="_blank" rel="noopener noreferrer">
+            <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i><span id="waTx">Falar no WhatsApp</span>
+        </a>
+        <a class="volta" href="index.html">Voltar para o site</a>
+    </main>
+
+    <script>
+        (function () {
+            var FONE = '5531920067518', FN = 'https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/mercadopago';
+            var q = new URLSearchParams(location.search);
+            var pedido = q.get('external_reference') || '', pagamento = q.get('payment_id') || q.get('collection_id') || '';
+            var tentativas = 0;
+            function $(id) { return document.getElementById(id); }
+            function brl(v) { return Number(v || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}); }
+            function mostra(id) { $(id).hidden = false; }
+            function fone(d) { d = String(d || ''); return d.length >= 10 ? '(' + d.slice(0, 2) + ') ' + d.slice(2, -4) + '-' + d.slice(-4) : d; }
+            function cep(d) { d = String(d || ''); return d.length === 8 ? d.slice(0, 5) + '-' + d.slice(5) : d; }
+            function forma(p) {
+                var tipo = {credit_card: 'Cartão de crédito', debit_card: 'Cartão de débito', bank_transfer: 'Pix', ticket: 'Boleto', account_money: 'Saldo Mercado Pago', digital_currency: 'Mercado Crédito'}[p.tipo] || 'Mercado Pago';
+                return p.tipo === 'credit_card' && p.parcelas > 1 ? tipo + ' em ' + p.parcelas + 'x' : tipo;
+            }
+            function linha(rot, valor) {
+                var d = document.createElement('div'), a = document.createElement('span'), b = document.createElement('span');
+                d.className = 'item'; a.textContent = rot; b.textContent = valor;
+                d.appendChild(a); d.appendChild(b); $('itens').appendChild(d);
+            }
+            function dado(el, rot, valor) {
+                var s = document.createElement('small'), t = document.createElement('span');
+                s.textContent = rot; t.textContent = valor;
+                el.textContent = ''; el.appendChild(s); el.appendChild(t);
+            }
+            function estado(aprovado, tit, sub) {
+                $('selo').classList.toggle('espera', !aprovado);
+                $('seloIc').className = (aprovado ? 'ph-fill ph-check-circle' : 'ph-fill ph-clock');
+                $('tit').textContent = tit; $('sub').textContent = sub;
+            }
+            function linkWa(texto, rotulo) {
+                $('wa').href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(texto);
+                $('waTx').textContent = rotulo;
+            }
+            function semDados() {
+                estado(false, 'Recebemos seu retorno do pagamento', 'Não conseguimos carregar os dados da compra aqui. Fale com a gente no WhatsApp para confirmar seu pedido.');
+                linkWa('Olá! Fiz um pagamento pelo site da Saturno NFC' + (pagamento ? ' (pagamento nº ' + pagamento + ')' : '') + ' e quero confirmar meu pedido.', 'Falar no WhatsApp');
+            }
+            function pinta(p) {
+                var aprovado = p.status === 'approved', pendente = p.status === 'pending' || p.status === 'in_process' || p.status === 'authorized';
+                if (aprovado) estado(true, 'Obrigado pela sua compra, ' + p.nome.split(' ')[0] + '!', 'Seu pagamento foi aprovado. Agora é só falar com a gente para combinar os detalhes do seu site e dos seus cartões.');
+                else if (pendente) estado(false, 'Pedido recebido, ' + p.nome.split(' ')[0] + '!', 'Seu pagamento está em processamento. Assim que o Mercado Pago confirmar, seguimos com o pedido.');
+                else estado(false, 'O pagamento não foi aprovado', 'Fale com a gente no WhatsApp para finalizar seu pedido.');
+
+                $('itens').textContent = '';
+                (p.itens || []).forEach(function (i) { linha(i.quantidade > 1 ? i.quantidade + ' × ' + i.nome : i.nome, brl(i.quantidade * i.preco)); });
+                $('valor').textContent = brl(p.valor);
+                mostra('bPedido');
+                if (p.parcelas > 1 && p.total_pago > p.valor) {
+                    $('pagoObs').textContent = 'Total pago no cartão, em ' + p.parcelas + 'x: ' + brl(p.total_pago);
+                    $('pagoObs').hidden = false;
+                }
+                $('pgNum').textContent = p.pagamento_id; $('pgForma').textContent = forma(p);
+                mostra('bPagamento');
+                dado($('dNome'), 'Nome e empresa', p.nome + ' · ' + p.empresa);
+                if (p.email || p.telefone) { dado($('dContato'), 'Contato', [p.email, fone(p.telefone)].filter(Boolean).join(' · ')); } else { $('dContato').hidden = true; }
+                mostra('bCliente');
+                if (p.endereco) {
+                    dado($('dEnd'), 'Endereço', p.endereco + ', ' + p.cidade + '/' + p.uf + ' · CEP ' + cep(p.cep));
+                    mostra('bEntrega');
+                }
+
+                var t = (aprovado ? 'Olá! Acabei de comprar pelo site da Saturno NFC.' : 'Olá! Fiz um pedido pelo site da Saturno NFC.') +
+                    '\n\nNome: ' + p.nome + '\nEmpresa: ' + p.empresa + '\nPedido: ' + p.pedido + '\nValor: ' + brl(p.valor) +
+                    '\nPagamento nº ' + p.pagamento_id + ' (' + forma(p) + ')' +
+                    (p.email ? '\nE-mail: ' + p.email : '') + (p.telefone ? '\nWhatsApp: ' + fone(p.telefone) : '') +
+                    (p.endereco ? '\nEntrega: ' + p.endereco + ', ' + p.cidade + '/' + p.uf + ', CEP ' + cep(p.cep) : '');
+                linkWa(t, aprovado ? 'Enviar dados da compra no WhatsApp' : 'Falar sobre o pedido no WhatsApp');
+
+                // Pix e cartão em análise: confere de novo por alguns minutos
+                if (pendente && tentativas < 20) { tentativas++; setTimeout(busca, 15000); }
+            }
+            function busca() {
+                fetch(FN, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({consulta: {pedido: pedido, pagamento: pagamento}})})
+                    .then(function (r) { if (!r.ok) throw new Error('consulta'); return r.json(); })
+                    .then(pinta)
+                    .catch(function () { if (!$('bPedido').hidden) return; semDados(); });
+            }
+            if (!/^[0-9a-f-]{36}$/i.test(pedido) || !/^\d+$/.test(pagamento)) return semDados();
+            busca();
+        })();
+    </script>
+</body>
+</html>
