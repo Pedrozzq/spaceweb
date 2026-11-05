@@ -3471,12 +3471,12 @@
         })();
 
         // --- Widget de Chat: mostra o balão "Ajuda com seu pedido?"
-        // só enquanto a seção "Como Funciona na Prática" está na tela. ---
+        // só enquanto o card "Conquista Instantânea" está na tela. ---
         (function () {
             const bubble = document.getElementById('chat-widget-bubble');
             const closeBtn = document.getElementById('chat-widget-bubble-close');
             if (!bubble) return;
-            const secao = document.getElementById('pratica');
+            const secao = document.getElementById('card-conquista-instantanea');
             let dismissed = false;
             let obs = null;
             function stopWatching() { if (obs) { obs.disconnect(); obs = null; } }
