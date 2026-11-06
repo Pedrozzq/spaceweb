@@ -9,7 +9,9 @@ const waNome = c => c.clientes?.nome || c.leads?.nome || c.nome || fmtFone(c.tel
 // pela API oficial da Meta só dá texto livre até 24 h depois da última msg do contato; pelo Chatwoot (Canal da API) não tem esse limite
 const waJanela = c => VIA_CHATWOOT || (!!c.ultima_entrada_em && Date.now() - new Date(c.ultima_entrada_em) < JANELA);
 const hora = v => new Date(v).toLocaleTimeString('pt-BR', {timeZone: TZ, hour: '2-digit', minute: '2-digit'});
-const previaWa = t => String(t || '').replace(/^\[mensagem de voz\]|^\[áudio\]/, '🎤 Áudio').replace(/^\[imagem\]\s*/, '📷 ').replace(/^📷 $/, '📷 Imagem').replace(/^\[vídeo\]\s*/, '🎥 ').replace(/^🎥 $/, '🎥 Vídeo');
+// O Chatwoot pode mandar [audio]/[image] como texto do anexo, além do rótulo que a função grava
+const ROT_AUDIO = /^(\[(mensagem de voz|áudio|audio)\]\s*)+/i, ROT_IMG = /^(\[(imagem|image)\]\s*)+/i, ROT_VIDEO = /^(\[(vídeo|video)\]\s*)+/i;
+const previaWa = t => { const x = String(t || ''); return x.replace(ROT_AUDIO, '🎤 Áudio ').replace(ROT_IMG, '📷 ').replace(ROT_VIDEO, '🎥 ').trim().replace(/^📷$/, '📷 Imagem').replace(/^🎥$/, '🎥 Vídeo'); };
 const TICK_1 = '<svg width="13" height="11" viewBox="0 0 13 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6 4.8 9.2 11.5 1.8"/></svg>';
 const TICK_2 = '<svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.2 6 4.5 9.2 11.2 1.8M9 8l1.2 1.2 6-7.4"/></svg>';
 const STATUS_WA = {
@@ -145,7 +147,7 @@ function midiaWa(m) {
   return `<a class="wa-img" target="_blank" rel="noopener" data-midia="${esc(m.midia_path)}" ${url ? `href="${url}"` : ''}><img alt="Imagem da conversa" ${url ? `src="${url}"` : ''}></a>`;
 }
 // Com o arquivo na tela, tira o rótulo "[imagem]" ou "[áudio]" e deixa só a legenda
-const textoWa = m => m.midia_path ? (m.texto || '').replace(/^(\[(imagem|áudio|mensagem de voz)\]\s*)+/, '') : (m.texto || '');
+const textoWa = m => { const t = m.texto || ''; return m.midia_path ? t.replace(ROT_AUDIO, '').replace(ROT_IMG, '') : t.replace(ROT_AUDIO, '[áudio] ').replace(ROT_IMG, '[imagem] ').trim(); };
 
 // A onda real e a duração vêm do próprio arquivo, um áudio por vez e só quando ele aparece na tela
 let WA_FILA = Promise.resolve();
