@@ -109,6 +109,8 @@ const API = DEMO ? demoApi() : {
   async waConversas() { return chk(await sb.from('wa_conversas').select('*, clientes(id,nome), leads(id,nome,etapa)').order('ultima_msg_em', {ascending: false, nullsFirst: false}).limit(300)); },
   async waMensagens(id) { return chk(await sb.from('wa_mensagens').select('*').eq('conversa_id', id).order('criado_em').limit(500)); },
   async waLer(id) { chk(await sb.from('wa_conversas').update({nao_lidas: 0}).eq('id', id)); },
+  // links temporários (1 h) para as imagens e os áudios do bucket privado wa-midia
+  async waMidiaUrls(paths) { return chk(await sb.storage.from('wa-midia').createSignedUrls(paths, 3600)); },
   // Chatwoot: liga/desliga o agente pondo/tirando a etiqueta "humano" lá no Chatwoot
   async waBot(id, pausado) { if (VIA_CHATWOOT) return API.waFn({acao: 'bot', conversa_id: id, pausado}); chk(await sb.from('wa_conversas').update({bot_pausado: pausado}).eq('id', id)); },
   async waFn(body) {
@@ -353,6 +355,7 @@ function demoApi() {
     async waConversas() { await wait(); return clone(waConvs.map(c => ({...c, clientes: clientes.find(x => x.id === c.cliente_id) || null, leads: leads.find(x => x.id === c.lead_id) || null})))
       .sort((a, b) => b.ultima_msg_em.localeCompare(a.ultima_msg_em)); },
     async waMensagens(id) { await wait(); return clone(waMsgs.filter(m => m.conversa_id === id)); },
+    async waMidiaUrls() { return []; },
     async waLer(id) { waConvs.find(c => c.id === id).nao_lidas = 0; },
     async waBot(id, pausado) { waConvs.find(c => c.id === id).bot_pausado = pausado; },
     async waStatus() { return VIA_CHATWOOT ? {chatwoot: true, url: false, conta: false, caixa: false, token: false, webhook_token: false, conectado: false, etiqueta: 'humano'} : {token: false, phone_id: false, verify_token: false, app_secret: false, encaminhar: false}; },

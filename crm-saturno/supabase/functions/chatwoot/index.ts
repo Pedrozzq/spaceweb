@@ -8,6 +8,9 @@
 //      (a mesma que o fluxo do n8n usa para parar de responder).
 //  O token do Chatwoot fica só aqui (Secrets do Supabase), nunca no navegador.
 //
+//  Imagens e áudios: o Chatwoot manda só o link do anexo; a função baixa o arquivo e guarda no
+//  bucket privado wa-midia (rode o supabase/whatsapp-midia.sql). A CRM abre por link temporário.
+//
 //  Secrets (Supabase > Edge Functions > Secrets):
 //    CHATWOOT_URL             https://whatsapp-chatwoot.fycoqq.easypanel.host
 //    CHATWOOT_ACCOUNT_ID      2
@@ -79,7 +82,7 @@ function textoDe(m: Any): string {
   const t = String(m.content ?? "").trim();
   const anexos = (m.attachments ?? []).map((a: Any) =>
     ({ image: "[imagem]", audio: "[áudio]", video: "[vídeo]", file: "[arquivo]", location: "[localização]" } as Record<string, string>)[a.file_type] ?? "[anexo]");
-  return [t, ...anexos].filter(Boolean).join(" ") || "[mensagem]";
+  return [...anexos, t].filter(Boolean).join(" ") || "[mensagem]";   // rótulo antes da legenda: a CRM tira o rótulo ao mostrar o arquivo
 }
 
 // conversa da CRM para este telefone (cria, liga ao cliente/lead e guarda os ids do Chatwoot)
@@ -140,13 +143,82 @@ async function webhook(token: string, raw: string) {
     texto, status: entrada ? "recebida" : "enviada", criado_em: criado,
   }, { onConflict: "wa_message_id", ignoreDuplicates: true }).select("id");
   if (!nova?.length) return json({ ok: true, duplicada: true });   // já gravada (ex.: enviada pela própria CRM)
+  const direcao = entrada ? "entrada" : "saida";
 
   const { data: atual } = await db.from("wa_conversas").select("nao_lidas").eq("id", c.id).single();
   await db.from("wa_conversas").update({
     ultima_msg: texto.slice(0, 300), ultima_msg_em: criado,
     ...(entrada ? { ultima_entrada_em: criado, nao_lidas: (atual?.nao_lidas ?? 0) + 1 } : {}),
   }).eq("id", c.id);
+
+  // A mensagem já está salva (com o rótulo [imagem]/[áudio]); o arquivo baixa em segundo plano para não segurar o webhook
+  const anexos = (b.attachments ?? []).filter((a: Any) => ["image", "audio"].includes(a.file_type) && a.data_url);
+  if (anexos.length) {
+    const tarefa = guardarAnexos(anexos, { conversaId: c.id, mensagemId: nova[0].id, cwId: b.id, direcao, status: entrada ? "recebida" : "enviada", criado });
+    const rt = (globalThis as Any).EdgeRuntime;
+    if (rt?.waitUntil) rt.waitUntil(tarefa);
+    else await tarefa;
+  }
   return json({ ok: true });
+}
+
+// ------------------------------------------------------------------ imagens e áudios
+const MIDIA_MAX = 16 * 1024 * 1024;
+const EXTENSOES: Record<string, string> = {
+  "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif",
+  "audio/ogg": "ogg", "audio/opus": "ogg", "audio/mp4": "m4a", "audio/x-m4a": "m4a", "audio/m4a": "m4a", "audio/mpeg": "mp3", "audio/mp3": "mp3",
+  "audio/aac": "aac", "audio/amr": "amr", "audio/wav": "wav", "audio/x-wav": "wav", "audio/webm": "webm",
+};
+const POR_EXTENSAO: Record<string, string> = {
+  jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", gif: "image/gif",
+  ogg: "audio/ogg", oga: "audio/ogg", opus: "audio/ogg", m4a: "audio/mp4", mp3: "audio/mpeg", aac: "audio/aac", amr: "audio/amr", wav: "audio/wav", webm: "audio/webm",
+};
+
+async function guardarAnexos(anexos: Any[], m: { conversaId: string; mensagemId: string; cwId: number; direcao: string; status: string; criado: string }) {
+  for (let i = 0; i < anexos.length; i++) {
+    try {
+      const nome = `${m.cwId}${i ? `-${i}` : ""}`.replace(/[^0-9-]/g, "");
+      const arq = await baixarAnexo(anexos[i], `${m.conversaId}/${nome}`);
+      if (!i) {
+        const { error } = await db.from("wa_mensagens").update(arq).eq("id", m.mensagemId);
+        if (error) throw error;
+      } else {
+        // o Chatwoot pode juntar vários anexos numa mensagem: cada arquivo extra vira um balão próprio
+        const { error } = await db.from("wa_mensagens").upsert({
+          conversa_id: m.conversaId, wa_message_id: `cw:${m.cwId}:${i}`, direcao: m.direcao, tipo: anexos[i].file_type,
+          texto: anexos[i].file_type === "image" ? "[imagem]" : "[áudio]", status: m.status, criado_em: m.criado, ...arq,
+        }, { onConflict: "wa_message_id", ignoreDuplicates: true });
+        if (error) throw error;
+      }
+    } catch (e) {
+      // sem o arquivo, o balão continua com o rótulo [imagem]/[áudio]
+      console.error("mídia não guardada:", m.cwId, i, (e as Error).message);
+    }
+  }
+}
+
+async function baixarAnexo(a: Any, base: string) {
+  // baixa sempre pelo endereço do Chatwoot configurado (o link pode vir com outro domínio; nunca segue um domínio vindo de fora)
+  const u = new URL(a.data_url);
+  const r = await fetch(`${CW_URL}${u.pathname}${u.search}`, { redirect: "follow", signal: AbortSignal.timeout(60000) });
+  if (!r.ok) throw new Error(`Chatwoot não entregou o arquivo (erro ${r.status})`);
+  if (Number(r.headers.get("content-length") ?? 0) > MIDIA_MAX) throw new Error("arquivo maior que 16 MB");
+  const bytes = new Uint8Array(await r.arrayBuffer());
+  if (bytes.length > MIDIA_MAX) throw new Error("arquivo maior que 16 MB");
+
+  let mime = String(r.headers.get("content-type") ?? "").split(";")[0].trim().toLowerCase();
+  if (!EXTENSOES[mime]) {
+    // alguns armazenamentos entregam como application/octet-stream: usa a extensão do nome do arquivo
+    const ext = (decodeURIComponent(u.pathname).match(/\.([a-z0-9]+)$/i)?.[1] ?? String(a.extension ?? "")).replace(/^\./, "").toLowerCase();
+    mime = POR_EXTENSAO[ext] ?? mime;
+  }
+  const ext = EXTENSOES[mime];
+  if (!ext || !mime.startsWith(a.file_type + "/")) throw new Error(`tipo de arquivo não aceito: ${mime || "desconhecido"}`);
+
+  const path = `${base}.${ext}`;
+  const { error } = await db.storage.from("wa-midia").upload(path, bytes, { contentType: mime, upsert: true });
+  if (error) throw error;
+  return { midia_path: path, midia_mime: mime };
 }
 
 // ------------------------------------------------------------------ 2 e 3. chamadas da CRM (usuário logado)

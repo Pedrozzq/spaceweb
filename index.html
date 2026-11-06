@@ -5248,6 +5248,8 @@
         .sai-caixa textarea{flex:1;min-width:0;height:2.5rem;max-height:9.5rem;padding:.5rem 0;border:0;outline:0;resize:none;overflow-y:hidden;background:transparent;color:#fff;
             font:500 16px/1.5 "Plus Jakarta Sans",sans-serif;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
         .sai-caixa textarea::placeholder{color:#7d7d8a}
+        .sai-caixa.travada{opacity:.55}
+        .sai-caixa.travada textarea{cursor:not-allowed}
         .sai-mic{width:2.5rem;height:2.5rem;flex:none;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#b4b4c0;font-size:1.25rem;cursor:pointer;transition:background .2s,color .2s}
         .sai-mic[hidden]{display:none}
         .sai-mic:hover{background:rgba(255,255,255,.08);color:#fff}
@@ -5330,7 +5332,8 @@
     <script>
     (function () {
         var CW = 'https://whatsapp-chatwoot.fycoqq.easypanel.host/public/api/v1/inboxes/1CvoySLVaeBG4xfmzCx7vkzd';
-        var CHAVE = 'saturno_ia', VALIDADE = 24 * 3600 * 1000, LIMITE = 30, SEM_RESPOSTA = 60000, SILENCIO = 4000;
+        var CHAVE = 'saturno_ia', VALIDADE = 24 * 3600 * 1000, SEM_RESPOSTA = 60000, SILENCIO = 4000;
+        var LIMITE = 8, CHAVE_USO = 'saturno_ia_uso';   // mensagens por visitante; não zera com "Nova conversa" nem quando a sessão vence
         var FONE = '5531920067518';
 
         var $ = function (id) { return document.getElementById(id); };
@@ -5339,6 +5342,34 @@
 
         var aberto = false, historico = [];     // historico: o que foi dito nesta visita (usado no link do WhatsApp)
         var sessao = leSessao(), ultimoId = 0, carregado = false, espera = null, tVigia = null, linhaPensa = null, geracao = 0;
+        var usoMemoria = 0, despediu = false;
+
+        // ---------- limite de mensagens por visitante ----------
+        function leUso() {
+            var n = 0;
+            try { n = parseInt(localStorage.getItem(CHAVE_USO), 10) || 0; } catch (e) {}
+            return Math.max(n, usoMemoria, (sessao && sessao.qtd) || 0);   // sessao.qtd: contagem de quem já conversava antes deste limite
+        }
+        function gravaUso(n) {
+            usoMemoria = n;
+            try { localStorage.setItem(CHAVE_USO, String(n)); } catch (e) {}
+        }
+        function esgotou() { return leUso() >= LIMITE; }
+        function travaCampo() {
+            caixa.classList.add('travada');
+            txt.value = ''; txt.disabled = true; env.disabled = true; micBtn.hidden = true;
+            txt.placeholder = 'Continue pelo WhatsApp';
+            txt.style.height = '';
+        }
+        // última mensagem do agente, depois de terminar a resposta: leva o cliente para o WhatsApp
+        function despedida(animar) {
+            if (despediu || !esgotou()) return;
+            despediu = true;
+            travaCampo();
+            entraConversa(false);
+            linhaIa('Nossa conversa por aqui chegou ao limite, mas ela continua no WhatsApp. É só tocar no botão abaixo.', animar, false, { whatsapp: true });
+            vaiProFim(animar);
+        }
 
         // ---------- sessão ----------
         function leSessao() {
@@ -5460,6 +5491,7 @@ function linhaEu(texto) {
         }
         // mesmo cartão do Monte Seu Plano, já preenchido e editável
         function poeCartaoPedido(el, p) {
+            if (p.whatsapp) return poeBotaoWhatsApp(el);
             var M = window.saturnoMontador, base = document.getElementById('sps-cfg');
             if (!p.itens || !M || !base) return poeBotaoPedido(el, p);
             var c = base.cloneNode(true);
@@ -5507,6 +5539,14 @@ function linhaEu(texto) {
             a.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent(msg);
             a.innerHTML = '<i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>';
             a.appendChild(document.createTextNode('Enviar pedido no WhatsApp'));
+            el.appendChild(a);
+        }
+        function poeBotaoWhatsApp(el) {
+            var a = document.createElement('a');
+            a.className = 'sai-pedido'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+            a.href = 'https://wa.me/' + FONE + '?text=' + encodeURIComponent('Olá! Vim pelo chat do site e quero continuar o atendimento.');
+            a.innerHTML = '<i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>';
+            a.appendChild(document.createTextNode('Continuar no WhatsApp'));
             el.appendChild(a);
         }
 
@@ -5629,10 +5669,13 @@ function linhaEu(texto) {
                     if (ep.recebeuEm && agora - ep.recebeuEm > SILENCIO) espera = null;
                     else if (!ep.recebeuEm && agora - ep.desde > SEM_RESPOSTA) {
                         espera = null; tiraPensando();
-                        linhaIa('Estou demorando para responder. Se preferir, feche este chat e use o botão do WhatsApp no canto da página.', true, true);
-                        vaiProFim(true);
+                        if (!esgotou()) {
+                            linhaIa('Estou demorando para responder. Se preferir, feche este chat e use o botão do WhatsApp no canto da página.', true, true);
+                            vaiProFim(true);
+                        }
                     }
                 }
+                if (!espera) despedida(carregado && aberto && ultimoId > 0);
                 agendaBusca(espera ? 1500 : 6000);
             });
         }
@@ -5643,13 +5686,10 @@ function linhaEu(texto) {
             if (!texto) return;
             entraConversa(true);
             terminaDigitacao();
-            if (sessao && sessao.qtd >= LIMITE) {
-                linhaEu(texto);
-                linhaIa('Para continuar a conversa, feche este chat e use o botão do WhatsApp no canto da página.', true, true);
-                vaiProFim(true);
-                return;
-            }
+            if (esgotou()) { despedida(true); return; }
             var minha = ++geracao;
+            gravaUso(leUso() + 1);      // conta já no envio, para mensagens em sequência não passarem do limite
+            if (esgotou()) travaCampo();
             historico.push({ role: 'user', content: texto });
             tiraPensando(); linhaEu(texto); mostraPensando(); vaiProFim(true);
             espera = null;
@@ -5661,13 +5701,14 @@ function linhaEu(texto) {
                     if (minha !== geracao) return;
                     carregado = true;
                     if (m && m.id > ultimoId) ultimoId = m.id;
-                    sessao.qtd = (sessao.qtd || 0) + 1; guardaSessao();
                     espera = { desde: Date.now(), recebeuEm: 0 };
                     agendaBusca(1500);
                 }).catch(function (e) {
                     if (minha !== geracao) return;
                     if (!jaTentou && e && (e.status === 404 || e.status === 401)) { sessao = null; guardaSessao(); return manda(true); }
                     historico.pop(); tiraPensando();
+                    gravaUso(Math.max(0, leUso() - 1));   // não entregue: não conta
+                    destravaCampo();
                     linhaIa('Tive um problema de conexão e sua mensagem não foi enviada. Tente de novo ou use o botão do WhatsApp no canto da página, fechando este chat.', true, true);
                     if (!txt.value) { txt.value = texto; ajusta(); }
                     vaiProFim(true);
@@ -5682,7 +5723,12 @@ function linhaEu(texto) {
             txt.style.height = 'auto';
             txt.style.height = Math.min(txt.scrollHeight, 152) + 'px';
             txt.style.overflowY = txt.scrollHeight > 152 ? 'auto' : 'hidden';
-            env.disabled = !txt.value.trim();
+            env.disabled = txt.disabled || !txt.value.trim();
+        }
+        function destravaCampo() {
+            if (esgotou() || !txt.disabled) return;
+            caixa.classList.remove('travada');
+            txt.disabled = false; txt.placeholder = DICA; micBtn.hidden = !reconhecedor();
         }
         function enviaTexto() { paraMic(); var t = txt.value; txt.value = ''; ajusta(); envia(t); if (!toque) txt.focus(); }
 
@@ -5777,6 +5823,7 @@ function linhaEu(texto) {
             aberto = true; ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false'); document.body.classList.add('sai-aberto');
             ajustaTela();
             if (sessao) { if (!carregado) entraConversa(false); buscaMsgs(); }
+            else despedida(false);   // limite já usado e sem conversa guardada
             if (!toque) setTimeout(function () { txt.focus(); }, 120);
         }
         function fecha() {
@@ -5792,8 +5839,10 @@ function linhaEu(texto) {
             fio.textContent = ''; desce.classList.remove('on');
             ov.classList.remove('conversa');
             txt.value = ''; ajusta();
+            despediu = false; despedida(false);   // nova conversa não devolve mensagens: reapresenta o botão
             if (!toque) txt.focus();
         }
+        if (esgotou()) travaCampo();
         abridor.addEventListener('click', abre);
         $('sai-fechar').addEventListener('click', fecha);
         $('sai-nova').addEventListener('click', novaConversa);

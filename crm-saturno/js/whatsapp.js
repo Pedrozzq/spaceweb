@@ -9,7 +9,18 @@ const waNome = c => c.clientes?.nome || c.leads?.nome || c.nome || fmtFone(c.tel
 // pela API oficial da Meta só dá texto livre até 24 h depois da última msg do contato; pelo Chatwoot (Canal da API) não tem esse limite
 const waJanela = c => VIA_CHATWOOT || (!!c.ultima_entrada_em && Date.now() - new Date(c.ultima_entrada_em) < JANELA);
 const hora = v => new Date(v).toLocaleTimeString('pt-BR', {timeZone: TZ, hour: '2-digit', minute: '2-digit'});
-const STATUS_WA = {enviando: '🕓', enviada: '✓', entregue: '✓✓', lida: '<span style="color:var(--blue)">✓✓</span>', falhou: '⚠'};
+const previaWa = t => String(t || '').replace(/^\[mensagem de voz\]|^\[áudio\]/, '🎤 Áudio').replace(/^\[imagem\]\s*/, '📷 ').replace(/^📷 $/, '📷 Imagem').replace(/^\[vídeo\]\s*/, '🎥 ').replace(/^🎥 $/, '🎥 Vídeo');
+const TICK_1 = '<svg width="13" height="11" viewBox="0 0 13 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 6 4.8 9.2 11.5 1.8"/></svg>';
+const TICK_2 = '<svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.2 6 4.5 9.2 11.2 1.8M9 8l1.2 1.2 6-7.4"/></svg>';
+const STATUS_WA = {
+  enviando: '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-label="Enviando"><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 3.5v3l2 1.2"/></svg>',
+  enviada: TICK_1, entregue: TICK_2, lida: TICK_2.replace('<svg ', '<svg class="lida" '),
+  falhou: '<svg width="13" height="13" viewBox="0 0 13 13" fill="#ff9c9c" aria-label="Falhou"><path d="M6.5 1 12.5 12h-12z"/></svg>'};
+const ICON_WA_PLAY = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg>';
+const ICON_WA_PAUSE = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg>';
+const ICON_WA_MIC = '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 14.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 1 0-7 0v5a3.5 3.5 0 0 0 3.5 3.5zM18 11a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.9V22h2v-3.1A8 8 0 0 0 20 11z"/></svg>';
+const ICON_WA_SEND = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12 2-12 2z"/></svg>';
+const ICON_WA_DOWN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 const foneVariantes = t => { const d = normFone(t); return [d, d.replace(/^(55\d\d)(\d{8})$/, '$19$2'), d.replace(/^(55\d\d)9(\d{8})$/, '$1$2')]; };
 
 async function viewWhatsapp() {
@@ -44,14 +55,14 @@ function renderWaConvs() {
   el.innerHTML = list.map(c => `<div class="wa-conv ${WA.conv?.id === c.id ? 'on' : ''}" data-wc="${c.id}">
       <div class="av">${esc(initials(waNome(c)))}</div>
       <div class="grow">
-        <div class="l1"><b>${esc(waNome(c))}</b><span class="small mut">${c.ultima_msg_em ? ago(c.ultima_msg_em) : ''}</span></div>
-        <div class="l2"><span>${esc(c.ultima_msg || '')}</span>${c.nao_lidas ? `<span class="wa-unread">${c.nao_lidas}</span>` : c.bot_pausado ? '<span class="tag bad">humano</span>' : c.leads?.etapa && !c.clientes ? etapaPill(c.leads.etapa) : ''}</div>
+        <div class="l1 ${c.nao_lidas ? 'wa-sem-lida' : ''}"><b>${esc(waNome(c))}</b><span class="small">${c.ultima_msg_em ? ago(c.ultima_msg_em) : ''}</span></div>
+        <div class="l2"><span>${esc(previaWa(c.ultima_msg))}</span>${c.nao_lidas ? `<span class="wa-unread">${c.nao_lidas}</span>` : c.bot_pausado ? '<span class="tag bad">humano</span>' : c.leads?.etapa && !c.clientes ? etapaPill(c.leads.etapa) : ''}</div>
       </div></div>`).join('') || `<div class="empty">${WA.convs.length ? 'Nada encontrado' : 'Nenhuma conversa ainda.<br><span class="small">As mensagens recebidas no WhatsApp Business aparecem aqui.</span>'}</div>`;
   el.querySelectorAll('[data-wc]').forEach(d => d.onclick = () => abrirConversa(WA.convs.find(c => c.id === d.dataset.wc)));
 }
 
 async function abrirConversa(c) {
-  WA.conv = c; WA.msgs = c.nova ? [] : await API.waMensagens(c.id);
+  WA.conv = c; WA.naoVistas = 0; WA.msgs = c.nova ? [] : await API.waMensagens(c.id);
   $('#wa')?.classList.add('chat-open');
   renderWaConvs(); renderWaChat();
   if (c.nao_lidas) { c.nao_lidas = 0; renderWaConvs(); API.waLer(c.id).then(atualizarContadores).catch(() => {}); }
@@ -65,24 +76,34 @@ function renderWaChat() {
       <button class="x wa-back" id="waBack" aria-label="Voltar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div class="av">${esc(initials(waNome(c)))}</div>
       <div class="grow"><b>${esc(waNome(c))}</b><div class="small mut">${esc(fmtFone(c.telefone))}${c.leads?.etapa && !cid ? ` · ${esc(ETAPA[c.leads.etapa])}` : ''}</div></div>
-      ${lid ? '<button class="btn sm" id="waLead">Ficha do lead</button>' : ''}
-      ${cid ? '<button class="btn sm" id="waCli">Ficha do cliente</button>' : ''}
-      ${!lid && !cid ? '<button class="btn sm" id="waNovoLead">+ Criar lead</button>' : ''}
-      ${linkChatwoot(c.chatwoot_conversa_id) ? `<a class="btn sm ghost" href="${esc(linkChatwoot(c.chatwoot_conversa_id))}" target="_blank" rel="noopener" title="Abrir esta conversa no Chatwoot">Chatwoot ↗</a>` : ''}
+      ${lid ? '<button class="btn sm" id="waLead"><span class="wa-lbl-l">Ficha do lead</span><span class="wa-lbl-s">Lead</span></button>' : ''}
+      ${cid ? '<button class="btn sm" id="waCli"><span class="wa-lbl-l">Ficha do cliente</span><span class="wa-lbl-s">Cliente</span></button>' : ''}
+      ${!lid && !cid ? '<button class="btn sm" id="waNovoLead"><span class="wa-lbl-l">+ Criar lead</span><span class="wa-lbl-s">+ Lead</span></button>' : ''}
+      ${linkChatwoot(c.chatwoot_conversa_id) ? `<a class="btn sm ghost" href="${esc(linkChatwoot(c.chatwoot_conversa_id))}" target="_blank" rel="noopener" title="Abrir esta conversa no Chatwoot" aria-label="Abrir no Chatwoot"><span class="wa-lbl-l">Chatwoot ↗</span><span class="wa-lbl-s">↗</span></a>` : ''}
       ${c.nova ? '' : c.bot_pausado
-        ? `<button class="btn sm" id="waBotBtn" data-p="0" title="Tira a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA volta a responder">🤖 Devolver para a IA</button><span class="tag bad">humano</span>`
-        : `<button class="btn sm" id="waBotBtn" data-p="1" title="Põe a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA para de responder esta conversa">🧑 Assumir (humano)</button><span class="tag ok">IA respondendo</span>`}
+        ? `<button class="btn sm" id="waBotBtn" data-p="0" title="Tira a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA volta a responder" aria-label="Devolver para a IA">🤖<span class="wa-lbl-l"> Devolver para a IA</span></button><span class="tag bad">humano</span>`
+        : `<button class="btn sm" id="waBotBtn" data-p="1" title="Põe a etiqueta humano${VIA_CHATWOOT ? ' no Chatwoot' : ''}: o agente IA para de responder esta conversa" aria-label="Assumir (humano)">🧑<span class="wa-lbl-l"> Assumir (humano)</span></button><span class="tag ok">IA respondendo</span>`}
     </div>
-    <div class="wa-msgs" id="waMsgs"></div>
-    <div class="wa-quick"><span class="lbl">Prontas:</span>${MSG_PRONTAS.filter(m => !m.ctx || m.ctx === 'lead' || (cid && m.ctx !== 'ass')).filter((m, i) => i < 8 || m.id === 'gestao').map(m => `<button type="button" data-mp="${m.id}">${esc(m.t)}</button>`).join('')}</div>
+    <div class="wa-corpo">
+      <div class="wa-msgs" id="waMsgs"></div>
+      <button type="button" class="wa-fim oculto" id="waFim" aria-label="Ir para a última mensagem">${ICON_WA_DOWN}<span class="wa-unread hidden" id="waFimN"></span></button>
+    </div>
+    <div class="wa-rod"><div class="wa-quick"><span class="lbl">Prontas:</span>${MSG_PRONTAS.filter(m => !m.ctx || m.ctx === 'lead' || (cid && m.ctx !== 'ass')).filter((m, i) => i < 8 || m.id === 'gestao').map(m => `<button type="button" data-mp="${m.id}">${esc(m.t)}</button>`).join('')}</div>
     ${aberta ? `
-      <form class="wa-comp" id="waForm"><textarea class="in" id="waTxt" rows="1" placeholder="Digite uma mensagem (Enter envia, Shift+Enter quebra linha)" maxlength="4096"></textarea><button class="btn pri">Enviar</button></form>` : `
+      <form class="wa-comp" id="waForm"><textarea class="in" id="waTxt" rows="1" placeholder="Digite uma mensagem" title="Enter envia, Shift+Enter quebra linha" maxlength="4096"></textarea><button class="wa-send" aria-label="Enviar">${ICON_WA_SEND}</button></form>` : `
       <div class="wa-note">${c.nova || !c.ultima_entrada_em ? 'Para iniciar a conversa' : 'Passaram 24 h desde a última mensagem do contato:'} o WhatsApp só permite enviar um <b>modelo aprovado</b> (Meta › WhatsApp Manager › Modelos de mensagem). Quando a pessoa responder, o chat livre libera.</div>
       <form class="wa-comp" id="waTplForm"><input class="in" id="waTpl" placeholder="Nome do modelo, ex.: boas_vindas" required pattern="[a-z0-9_]+" title="letras minúsculas, números e _">
-        <input class="in" id="waLang" value="pt_BR" style="max-width:90px" title="Idioma do modelo"><button class="btn pri">Enviar modelo</button></form>`}`;
+        <input class="in" id="waLang" value="pt_BR" style="max-width:90px" title="Idioma do modelo"><button class="btn pri">Enviar modelo</button></form>`}</div>`;
+  const lista = $('#waMsgs'), fim = $('#waFim');
+  fim.onclick = () => lista.scrollTo({top: lista.scrollHeight, behavior: 'smooth'});
+  lista.addEventListener('scroll', () => {
+    if (lista.scrollHeight - lista.scrollTop - lista.clientHeight < 140) { WA.naoVistas = 0; $('#waFimN').classList.add('hidden'); fim.classList.add('oculto'); }
+    else fim.classList.remove('oculto');
+  }, {passive: true});
+  iniciarPlayers(lista);
   renderWaMsgs();
   el.querySelectorAll('[data-mp]').forEach(b => b.onclick = () => abrirMsgPronta(b.dataset.mp, {telefone: c.telefone, clienteId: cid, leadId: lid, nome: waNome(c)}));
-  $('#waBack').onclick = () => $('#wa').classList.remove('chat-open');
+  $('#waBack').onclick = () => { $('#wa').classList.remove('chat-open'); document.querySelectorAll('#waMsgs audio').forEach(a => a.pause()); };
   $('#waLead')?.addEventListener('click', () => openLead(lid));
   $('#waCli')?.addEventListener('click', () => openCliente(cid));
   $('#waNovoLead')?.addEventListener('click', () => formLead({nome: c.nome || '', telefone: c.telefone, origem: 'whatsapp'}));
@@ -99,26 +120,236 @@ function renderWaChat() {
   } else $('#waTplForm').onsubmit = e => { e.preventDefault(); enviarWa({template: $('#waTpl').value.trim(), idioma: $('#waLang').value.trim() || 'pt_BR'}); };
 }
 
+// Imagem ou player de áudio da mensagem (o link temporário entra depois, em hidratarMidia)
+const WA_URLS = new Map(); // caminho -> {url, ate}
+const WA_ONDAS = new Map(); // caminho -> {h: alturas reais das barras, dur: duração em segundos}
+const WA_BARRAS = 38;
+const urlMidia = p => { const u = WA_URLS.get(p); return u && u.ate > Date.now() ? u.url : ''; };
+const fmtAudio = s => !isFinite(s) || s < 0 ? '0:00' : `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+// Antes de ler o arquivo, a onda é um desenho que sempre sai igual para o mesmo áudio
+function ondaPadrao(semente) {
+  let x = 7; for (const ch of String(semente)) x = (x * 31 + ch.charCodeAt(0)) >>> 0;
+  return Array.from({length: WA_BARRAS}, () => { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; return .18 + .62 * (x >>> 24) / 255; });
+}
+const barrasHtml = h => h.map(v => `<i style="height:${Math.round(v * 100)}%"></i>`).join('');
+
+function playerWa(m) {
+  const url = urlMidia(m.midia_path), p = esc(m.midia_path), onda = WA_ONDAS.get(m.midia_path);
+  const quem = m.direcao === 'saida' ? 'S' : initials(waNome(WA.conv || {telefone: ''}));
+  return `<div class="wa-ap" data-midia="${p}"><audio preload="metadata" ${url ? `src="${esc(url)}"` : ''}></audio><button type="button" class="wa-ap-play" aria-label="Reproduzir áudio">${ICON_WA_PLAY}</button><div class="wa-ap-corpo"><div class="wa-ap-onda" role="slider" tabindex="0" aria-label="Posição do áudio" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">${barrasHtml(onda?.h || ondaPadrao(m.midia_path))}<b class="wa-ap-dot"></b></div><span class="wa-ap-t">${onda ? fmtAudio(onda.dur) : '0:00'}</span></div><div class="wa-ap-lado"><div class="wa-ap-av">${esc(quem)}${ICON_WA_MIC}</div><button type="button" class="wa-ap-vel" aria-label="Velocidade do áudio">${WA.vel || 1}×</button></div></div>`;
+}
+function midiaWa(m) {
+  if (!m.midia_path) return '';
+  if (m.midia_mime?.startsWith('audio/')) return playerWa(m);
+  const url = esc(urlMidia(m.midia_path));
+  return `<a class="wa-img" target="_blank" rel="noopener" data-midia="${esc(m.midia_path)}" ${url ? `href="${url}"` : ''}><img alt="Imagem da conversa" ${url ? `src="${url}"` : ''}></a>`;
+}
+// Com o arquivo na tela, tira o rótulo "[imagem]" ou "[áudio]" e deixa só a legenda
+const textoWa = m => m.midia_path ? (m.texto || '').replace(/^(\[(imagem|áudio|mensagem de voz)\]\s*)+/, '') : (m.texto || '');
+
+// A onda real e a duração vêm do próprio arquivo, um áudio por vez e só quando ele aparece na tela
+let WA_FILA = Promise.resolve();
+function pedirOnda(ap) {
+  const p = ap.dataset.midia, url = urlMidia(p);
+  if (!url || ap.dataset.onda) return;
+  ap.dataset.onda = 1;
+  if (WA_ONDAS.has(p)) return aplicarOnda(ap, WA_ONDAS.get(p));
+  WA_FILA = WA_FILA.then(async () => {
+    if (!ap.isConnected) { delete ap.dataset.onda; return; }
+    if (WA_ONDAS.has(p)) return aplicarOnda(ap, WA_ONDAS.get(p));
+    try {
+      const bruto = await (await fetch(url)).arrayBuffer();
+      const som = await new OfflineAudioContext(1, 1, 44100).decodeAudioData(bruto);
+      const d = som.getChannelData(0), passo = Math.max(1, Math.floor(d.length / WA_BARRAS)), salto = Math.max(1, Math.floor(passo / 200));
+      const brutas = Array.from({length: WA_BARRAS}, (_, i) => { let s = 0, n = 0; for (let j = i * passo; j < Math.min((i + 1) * passo, d.length); j += salto) { s += d[j] * d[j]; n++; } return Math.sqrt(s / (n || 1)); });
+      const max = Math.max(...brutas) || 1, onda = {h: brutas.map(v => Math.max(.12, Math.pow(v / max, .75))), dur: som.duration};
+      WA_ONDAS.set(p, onda);
+      aplicarOnda(ap, onda);
+    } catch (e) { console.warn('onda do áudio:', e.message); }
+  });
+}
+function aplicarOnda(ap, onda) {
+  const barras = ap.querySelectorAll('.wa-ap-onda i');
+  onda.h.forEach((v, i) => { if (barras[i]) barras[i].style.height = Math.round(v * 100) + '%'; });
+  ap._n = -1; pintarAudio(ap);
+}
+const duracaoAudio = ap => { const a = ap.querySelector('audio'); return isFinite(a.duration) && a.duration > 0 ? a.duration : WA_ONDAS.get(ap.dataset.midia)?.dur || 0; };
+function pintarAudio(ap) {
+  const a = ap.querySelector('audio'), dur = duracaoAudio(ap), t = a.currentTime || 0, frac = dur ? Math.min(1, t / dur) : 0, n = Math.round(frac * WA_BARRAS);
+  ap.querySelector('.wa-ap-dot').style.left = (frac * 100) + '%';
+  ap.querySelector('.wa-ap-onda').setAttribute('aria-valuenow', Math.round(frac * 100));
+  ap.querySelector('.wa-ap-t').textContent = fmtAudio(ap.classList.contains('ativo') || t > 0 ? t : dur);
+  if (ap._n !== n) { ap.querySelectorAll('.wa-ap-onda i').forEach((b, i) => b.classList.toggle('on', i < n)); ap._n = n; }
+}
+function iniciarPlayers(el) {
+  const apDe = e => e.target.closest?.('.wa-ap');
+  // saiu da tela (trocou de conversa ou de seção): o áudio para junto
+  const anima = ap => { const a = ap.querySelector('audio'); if (!ap.isConnected) { a.pause(); return; } if (a.paused) return; pintarAudio(ap); requestAnimationFrame(() => anima(ap)); };
+  const buscar = (ap, e) => {
+    const a = ap.querySelector('audio'), dur = duracaoAudio(ap), r = ap.querySelector('.wa-ap-onda').getBoundingClientRect();
+    if (!dur) return;
+    a.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * dur; pintarAudio(ap);
+  };
+  el.addEventListener('click', e => {
+    const img = e.target.closest('.wa-img');
+    if (img) {
+      e.preventDefault(); if (!img.href) return;
+      const lb = document.createElement('div'); lb.className = 'wa-lb'; lb.innerHTML = `<img alt="Imagem da conversa" src="${esc(img.href)}">`;
+      const fecha = () => { lb.remove(); document.removeEventListener('keydown', tecla); };
+      const tecla = k => { if (k.key === 'Escape') fecha(); };
+      lb.onclick = fecha; document.addEventListener('keydown', tecla); document.body.appendChild(lb);
+      return;
+    }
+    const ap = apDe(e); if (!ap) return;
+    const a = ap.querySelector('audio');
+    if (e.target.closest('.wa-ap-play')) {
+      if (!a.getAttribute('src')) return toast('O áudio ainda está carregando', true);
+      if (a.paused) a.play().catch(er => { if (er.name !== 'AbortError') toast(er.name === 'NotSupportedError' ? 'Este aparelho não toca esse formato de áudio' : 'Não foi possível tocar o áudio', true); }); else a.pause();
+    } else if (e.target.closest('.wa-ap-vel')) {
+      WA.vel = {1: 1.5, 1.5: 2, 2: 1}[WA.vel || 1];
+      el.querySelectorAll('.wa-ap-vel').forEach(b => { b.textContent = WA.vel + '×'; });
+      el.querySelectorAll('audio').forEach(x => { x.playbackRate = WA.vel; });
+    }
+  });
+  // arrastar na onda muda o ponto do áudio
+  el.addEventListener('pointerdown', e => { const o = e.target.closest('.wa-ap-onda'); if (!o) return; o.setPointerCapture(e.pointerId); o._arrasta = true; buscar(o.closest('.wa-ap'), e); });
+  el.addEventListener('pointermove', e => { const o = e.target.closest('.wa-ap-onda'); if (o?._arrasta) buscar(o.closest('.wa-ap'), e); });
+  el.addEventListener('pointerup', e => { const o = e.target.closest('.wa-ap-onda'); if (o) o._arrasta = false; });
+  el.addEventListener('pointercancel', e => { const o = e.target.closest('.wa-ap-onda'); if (o) o._arrasta = false; });
+  el.addEventListener('keydown', e => {
+    const o = e.target.closest('.wa-ap-onda'); if (!o || !['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    e.preventDefault(); const a = o.closest('.wa-ap').querySelector('audio'); a.currentTime = Math.max(0, a.currentTime + (e.key === 'ArrowLeft' ? -5 : 5)); pintarAudio(o.closest('.wa-ap'));
+  });
+  // eventos de áudio não sobem até a lista: escuta na fase de captura
+  const noAudio = (nome, fn) => el.addEventListener(nome, e => { const ap = apDe(e); if (ap) fn(ap, e.target); }, true);
+  noAudio('play', (ap, a) => {
+    el.querySelectorAll('audio').forEach(x => { if (x !== a) x.pause(); });
+    a.playbackRate = WA.vel || 1; ap.classList.add('ativo');
+    ap.querySelector('.wa-ap-play').innerHTML = ICON_WA_PAUSE; ap.querySelector('.wa-ap-play').setAttribute('aria-label', 'Pausar áudio');
+    anima(ap);
+  });
+  noAudio('pause', ap => { ap.querySelector('.wa-ap-play').innerHTML = ICON_WA_PLAY; ap.querySelector('.wa-ap-play').setAttribute('aria-label', 'Reproduzir áudio'); pintarAudio(ap); });
+  noAudio('ended', (ap, a) => { a.currentTime = 0; ap.classList.remove('ativo'); pintarAudio(ap); });
+  noAudio('loadedmetadata', pintarAudio);
+  noAudio('durationchange', pintarAudio);
+  noAudio('seeked', pintarAudio);
+  // link temporário vencido: pede outro uma vez antes de avisar
+  noAudio('error', (ap, a) => {
+    if (ap._refez || !a.getAttribute('src')) { ap.classList.add('erro'); ap.title = 'Não foi possível carregar o áudio'; return; }
+    ap._refez = true; WA_URLS.delete(ap.dataset.midia); a.removeAttribute('src'); hidratarMidia(el);
+  });
+  // as ondas reais só são lidas para os áudios que aparecem na tela
+  el._visao = new IntersectionObserver(es => es.forEach(x => {
+    if (!x.isIntersecting) return;
+    x.target.dataset.vis = 1; pedirOnda(x.target); el._visao.unobserve(x.target);
+  }), {root: el, rootMargin: '200px'});
+}
+
+async function hidratarMidia(el) {
+  const faltam = [...new Set([...el.querySelectorAll('[data-midia]')].map(x => x.dataset.midia))].filter(p => !urlMidia(p));
+  if (faltam.length) {
+    try {
+      (await API.waMidiaUrls(faltam)).forEach(r => { if (r.signedUrl) WA_URLS.set(r.path, {url: r.signedUrl, ate: Date.now() + 50 * 60e3}); });
+    } catch (e) { console.warn('mídia do WhatsApp:', e.message); return; }
+  }
+  el.querySelectorAll('[data-midia]').forEach(x => {
+    const url = urlMidia(x.dataset.midia); if (!url) return;
+    if (x.classList.contains('wa-ap')) {
+      const a = x.querySelector('audio'); if (!a.getAttribute('src')) a.src = url;
+      if (x.dataset.vis) pedirOnda(x);
+      return;
+    }
+    x.href = url;
+    const img = x.querySelector('img');
+    const carregou = () => { img.classList.add('pronta'); if (el.scrollHeight - el.scrollTop - el.clientHeight < 500) el.scrollTop = el.scrollHeight; };
+    if (img.complete && img.getAttribute('src')) img.classList.add('pronta');
+    else { img.onload = carregou; if (!img.getAttribute('src')) img.src = url; }
+  });
+}
+
+// Cria o balão de uma mensagem. O rodapé (hora e tiques) fica à parte para atualizar sem mexer no áudio.
+const metaWa = m => `<span class="bub-meta">${hora(m.criado_em)}${m.direcao === 'saida' ? ' ' + (STATUS_WA[m.status] || '') : ''}</span>${m.erro ? `<span class="er">${esc(m.erro)}</span>` : ''}`;
+const conteudoWa = m => (m.midia_path || '') + '|' + (m.texto || '');
+function classesWa(m, cab) {
+  const eAudio = m.midia_path && m.midia_mime?.startsWith('audio/'), eImg = m.midia_path && !eAudio;
+  return ['bub', m.direcao === 'saida' ? 'out' : 'in', cab && 'cab', m.status === 'falhou' && 'fail', eAudio && 'tem-audio', eImg && 'tem-img', eImg && !textoWa(m) && 'so-img'].filter(Boolean).join(' ');
+}
+function criarBalao(m, cab) {
+  const n = document.createElement('div'), t = textoWa(m), meta = metaWa(m);
+  n.className = classesWa(m, cab); n.dataset.k = m.id; n.dataset.conteudo = conteudoWa(m); n._meta = meta;
+  n.innerHTML = `${midiaWa(m)}${t ? `<span class="bub-txt">${esc(t)}</span><span class="bub-esp"></span>` : ''}${meta}`;
+  return n;
+}
+const pintarDepois = ap => requestAnimationFrame(() => { if (ap.isConnected) { ap._n = -1; pintarAudio(ap); } });
+
+// Só o que mudou é mexido na tela: nada pisca, o áudio não para e a rolagem fica onde está
 function renderWaMsgs() {
   const el = $('#waMsgs'); if (!el) return;
-  let dia = '';
-  el.innerHTML = WA.msgs.map(m => {
-    const d = dOnly(m.criado_em), sep = d !== dia ? `<div class="wa-day">${d === dOnly(Date.now()) ? 'Hoje' : d}</div>` : ''; dia = d;
-    const out = m.direcao === 'saida';
-    return `${sep}<div class="bub ${out ? 'out' : 'in'} ${m.status === 'falhou' ? 'fail' : ''}">${esc(m.texto || '')}<small>${hora(m.criado_em)}${out ? ' ' + (STATUS_WA[m.status] || '') : ''}</small>${m.erro ? `<span class="er">${esc(m.erro)}</span>` : ''}</div>`;
-  }).join('') || '<div class="empty" style="margin:auto">Nenhuma mensagem ainda</div>';
-  el.scrollTop = el.scrollHeight;
+  const primeira = !el.querySelector('[data-k]');
+  const perto = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
+  const itens = []; let dia = '', ant = null;
+  const ontem = dOnly(Date.now() - 864e5);
+  WA.msgs.forEach(m => {
+    const d = dOnly(m.criado_em);
+    if (d !== dia) { itens.push({k: 'dia' + d, dia: d === dOnly(Date.now()) ? 'Hoje' : d === ontem ? 'Ontem' : d}); dia = d; ant = null; }
+    itens.push({k: String(m.id), m, cab: ant !== m.direcao}); ant = m.direcao;
+  });
+  if (!itens.length) { el.innerHTML = '<div class="wa-vazio">Nenhuma mensagem ainda</div>'; return; }
+
+  const atuais = new Map([...el.children].map(n => [n.dataset.k, n])), chaves = new Set(itens.map(i => i.k));
+  atuais.forEach((n, k) => { if (!chaves.has(k)) n.remove(); });
+  const observar = n => { const ap = n.querySelector('.wa-ap'); if (ap) { pintarDepois(ap); el._visao?.observe(ap); } };
+  let cursor = el.firstElementChild, novasEntrada = 0, novas = 0;
+  itens.forEach(it => {
+    let n = atuais.get(it.k);
+    if (it.dia) {
+      if (!n) { n = document.createElement('div'); n.className = 'wa-day'; n.dataset.k = it.k; }
+      if (n.textContent !== it.dia) n.textContent = it.dia;
+    } else if (!n) {
+      n = criarBalao(it.m, it.cab);
+      if (!primeira) { n.classList.add('novo'); novas++; if (it.m.direcao === 'entrada') novasEntrada++; }
+      observar(n);
+    } else if (n.dataset.conteudo !== conteudoWa(it.m)) {
+      const novo = criarBalao(it.m, it.cab); n.replaceWith(novo); if (cursor === n) cursor = novo; n = novo;
+      observar(n);
+    } else {
+      const classes = classesWa(it.m, it.cab) + (n.classList.contains('novo') ? ' novo' : '');
+      if (n.className !== classes) n.className = classes;
+      const meta = metaWa(it.m);
+      if (n._meta !== meta) { n.querySelectorAll('.bub-meta,.er').forEach(x => x.remove()); n.insertAdjacentHTML('beforeend', meta); n._meta = meta; }
+    }
+    if (n === cursor) cursor = cursor.nextElementSibling; else el.insertBefore(n, cursor);
+  });
+
+  if (primeira) el.scrollTop = el.scrollHeight;
+  else if (WA.irAoFim || (perto && novas)) el.scrollTo({top: el.scrollHeight, behavior: 'smooth'});
+  else if (novasEntrada) {
+    WA.naoVistas = (WA.naoVistas || 0) + novasEntrada;
+    const b = $('#waFimN'); if (b) { b.textContent = WA.naoVistas; b.classList.remove('hidden'); }
+    $('#waFim')?.classList.remove('oculto');
+  }
+  WA.irAoFim = false;
+  hidratarMidia(el);
 }
 
 async function enviarWa(msg) {
   const c = WA.conv;
   const temp = {id: 'tmp' + Date.now(), direcao: 'saida', texto: msg.texto || `[modelo] ${msg.template}`, status: 'enviando', criado_em: new Date().toISOString()};
-  WA.msgs.push(temp); renderWaMsgs();
+  WA.msgs.push(temp); WA.irAoFim = true; renderWaMsgs();
   try {
     const r = await API.waEnviar({telefone: c.telefone, nome: waNome(c), ...msg});
     WA.convs = await API.waConversas();
     const nova = WA.convs.find(x => x.id === r.conversa_id);
-    if (nova && (c.nova || WA.conv === c)) { WA.conv = nova; WA.msgs = await API.waMensagens(nova.id); renderWaChat(); }
+    if (nova && c.nova) { WA.conv = nova; WA.msgs = await API.waMensagens(nova.id); renderWaChat(); }
+    else if (nova && WA.conv === c) {
+      // troca o balão provisório pelo real sem refazer a tela: o áudio que estiver tocando continua
+      WA.conv = nova;
+      const msgs = await API.waMensagens(nova.id);
+      const real = [...msgs].reverse().find(m => m.direcao === 'saida' && m.texto === temp.texto);
+      const balao = document.querySelector(`[data-k="${temp.id}"]`);
+      if (real && balao) { balao.dataset.k = real.id; balao.dataset.conteudo = conteudoWa(real); }
+      WA.msgs = msgs; renderWaMsgs();
+    }
     else { temp.status = 'enviada'; renderWaMsgs(); }
     renderWaConvs();
   } catch (e) {
@@ -141,7 +372,7 @@ async function avisarMsgWa(row) {
   const nome = c ? waNome(c) : 'WhatsApp';
   SOM.tocar('wa');
   if (document.hidden) { naoVistos++; document.title = `(${naoVistos}) ${TITULO()}`; }
-  notificar({titulo: nome, texto: String(row.texto || '').slice(0, 140), icone: '🟢', rotulo: 'Abrir conversa',
+  notificar({titulo: nome, texto: previaWa(row.texto).slice(0, 140), icone: '🟢', rotulo: 'Abrir conversa',
     acao: () => { if (c) { location.hash = '#whatsapp?tel=' + c.telefone; } else location.hash = '#whatsapp'; }});
 }
 

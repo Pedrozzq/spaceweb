@@ -86,6 +86,7 @@ A chave **Agente IA** de cada conversa põe/tira a etiqueta **humano** no Chatwo
    URL `https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/chatwoot?token=SUA-SENHA` (a mesma do passo 3), eventos **Mensagem criada** e **Conversa atualizada**.
    Isso não mexe no webhook da caixa que leva as mensagens ao n8n: o agente continua funcionando igual.
 5. Na CRM, tela **WhatsApp → Conexão** mostra se está tudo certo.
+6. **Imagens e áudios no chat**: rode o `supabase/whatsapp-midia.sql` no SQL Editor e publique de novo a função `chatwoot`. A função baixa cada anexo do Chatwoot para o bucket privado `wa-midia` (até 16 MB), e a CRM abre por link temporário de 1 hora. Mensagens antigas continuam só com o rótulo `[imagem]` ou `[áudio]`.
 
 > Prefere a API oficial da Meta? Troque `WHATSAPP_VIA` para `'meta'` no `config.js` e use a função `supabase/functions/whatsapp` (passo a passo no botão Conexão).
 
