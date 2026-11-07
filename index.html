@@ -2778,7 +2778,7 @@
                             <a class="sp-oque sp-anim" style="--i:4" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                             <div class="sp-total sp-anim" style="--i:5">
                                 <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site personalizado</span></div>
-                                <strong id="sp-preco" aria-live="polite">R$ 597,00</strong>
+                                <div class="sp-valores"><strong id="sp-preco" aria-live="polite">R$ 597,00</strong><small class="sp-parcelas">4x de R$ 149,25 sem juros</small></div>
                             </div>
                             <button type="button" class="sp-pedir sp-anim" id="sp-pedir" style="--i:6">Fazer meu pedido</button>
                             <span class="sp-frete sp-frete-neon sp-anim" style="--i:7"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
@@ -3029,7 +3029,7 @@
                     <a class="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                     <div class="sp-total">
                         <div><span class="sp-rot">Total</span><span class="sp-det" id="sps-det">Site personalizado</span></div>
-                        <strong id="sps-preco" aria-live="polite">R$ 597,00</strong>
+                        <div class="sp-valores"><strong id="sps-preco" aria-live="polite">R$ 597,00</strong><small class="sp-parcelas">4x de R$ 149,25 sem juros</small></div>
                     </div>
                     <button type="button" class="sp-pedir" id="sps-pedir">Fazer meu pedido</button>
                     <span class="sp-frete sp-frete-neon"><i class="ph ph-truck"></i> Frete grátis. Você recebe tudo configurado.</span>
@@ -3161,7 +3161,7 @@
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Posso parcelar?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
-                            <p>Sim. No cartão de crédito, em até 12x com juros.</p>
+                            <p>Sim. No cartão de crédito, em 4x sem juros.</p>
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Vocês entregam para todo o Brasil?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
@@ -3813,6 +3813,7 @@
                 document.getElementById('sps-g').value = val(gIn);
                 document.getElementById('sps-crm').checked = crmIn.checked;
                 document.getElementById('sps-preco').textContent = brl(total);
+                document.getElementById('sps-preco').parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + brl(total / 4) + ' sem juros';
                 document.getElementById('sps-det').textContent = resumoTxt();
                 sec.querySelectorAll('.sp-qtd button').forEach(function (b) {
                     var inp = document.getElementById(b.getAttribute('data-alvo')), v = val(inp);
@@ -3822,6 +3823,7 @@
             function atualizaPreco(pular) {
                 var total = calcula(val(cIn), val(gIn), crmIn.checked), preco = document.getElementById('sp-preco');
                 preco.textContent = brl(total);
+                preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + brl(total / 4) + ' sem juros';
                 document.getElementById('sp-det').textContent = resumoTxt();
                 panel.querySelectorAll('.sp-qtd button').forEach(function (b) {
                     var inp = document.getElementById(b.getAttribute('data-alvo')), v = val(inp);
@@ -4682,12 +4684,12 @@
                 <p class="orb-sub" id="orbSub">Vamos te atender no WhatsApp e montar a proposta sob medida para a sua empresa.</p>
             </div>
             <div class="orb-esc orb-in d2" id="orbEsc">
-                <button type="button" class="orb-op orb-op-pg" id="orbPagar"><i class="ph ph-credit-card" aria-hidden="true"></i><span><b>Realizar pagamento pelo site</b><small>Cartão em até 12x ou Pix</small></span></button>
+                <button type="button" class="orb-op orb-op-pg" id="orbPagar"><i class="ph ph-credit-card" aria-hidden="true"></i><span><b>Realizar pagamento pelo site</b><small>4x sem juros no cartão ou Pix</small></span></button>
                 <button type="button" class="orb-op" id="orbZap"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i><span><b>Continuar para o WhatsApp</b><small>Fale com a gente antes de pagar</small></span></button>
             </div>
             <a class="orb-res-btn orb-in d2" id="orbResBtn" target="_blank" rel="noopener noreferrer"></a>
             <p class="orb-falha" id="orbFalha" role="alert"></p>
-            <div class="checkout-resumo"><span id="orbProgresso"></span><strong id="orbResumo"></strong><small>Cartão em até 12x com juros ou Pix</small></div>
+            <div class="checkout-resumo"><span id="orbProgresso"></span><strong id="orbResumo"></strong><span id="orbParcelas"></span><small>4x sem juros no cartão ou Pix</small></div>
             <div class="orb-campos orb-in d2">
                 <div class="orb-campo orb-so-pagar" id="orbCampoCep">
                     <label class="orb-rot" for="orbCep">CEP</label>
@@ -4799,6 +4801,7 @@
                 btnTx.textContent = etapaPagamento === 1 ? 'Continuar para entrega' : 'Ir para o pagamento';
                 document.getElementById('orbProgresso').textContent = etapaPagamento === 1 ? '1 de 2 · Seus dados' : '2 de 2 · Entrega';
                 document.getElementById('orbResumo').textContent = 'Total do pedido: ' + moeda(valorPedido);
+                document.getElementById('orbParcelas').textContent = '4x de ' + moeda(valorPedido / 4) + ' sem juros';
                 scrollDados.scrollTop = 0;
             }
                         try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
@@ -5549,6 +5552,7 @@ function linhaEu(texto) {
                 var nc = M.val(cI), ng = M.val(gI);
                 det.textContent = M.resumo(nc, ng, crm.checked);
                 preco.textContent = M.brl(M.calcula(nc, ng, crm.checked));
+                preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + M.brl(M.calcula(nc, ng, crm.checked) / 4) + ' sem juros';
                 c.querySelectorAll('.sp-qtd button').forEach(function (b) {
                     var inp = b.parentNode.querySelector('input'), v = M.val(inp);
                     b.disabled = +b.getAttribute('data-passo') < 0 ? v <= +inp.min : v >= +inp.max;
@@ -5935,6 +5939,11 @@ function linhaEu(texto) {
 #orbCard.m-pagar .orb-btn{background:#15803d}
 #orbCard.m-pagar .orb-btn:disabled{opacity:.65;cursor:wait}
 @media(max-width:767px){#orbCard.m-pagar #orbBtn{background:#15803d}#orbCard.m-pagar{padding:24px 18px 16px}}
+</style>
+<style>
+.sp-valores{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.sp-parcelas{color:#a1a1aa;font-size:12px;font-weight:500;white-space:nowrap}
+#orbCard.m-pagar #orbParcelas{color:#15803d;font-size:14px;font-weight:600}
 </style>
 </body>
 </html>
