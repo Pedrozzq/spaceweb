@@ -3279,6 +3279,7 @@
             }, { passive: false });
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function (e) {
+                if (e.target.closest && e.target.closest('#orbCard')) return;
                 const now = Date.now();
                 if (now - lastTouchEnd <= 300) e.preventDefault();
                 lastTouchEnd = now;
@@ -4702,11 +4703,6 @@
                     <input id="orbNumero" name="numero" type="text" autocomplete="address-line2" maxlength="12" placeholder="123">
                     <span class="orb-erro">Digite o número</span>
                 </div>
-                <div class="orb-campo orb-so-pagar orb-end orb-m2" id="orbCampoCompl">
-                    <label class="orb-rot" for="orbCompl">Complemento</label>
-                    <input id="orbCompl" name="complemento" type="text" maxlength="60" placeholder="Opcional">
-                    
-                </div>
                 <div class="orb-campo orb-so-pagar orb-end " id="orbCampoBairro">
                     <label class="orb-rot" for="orbBairro">Bairro</label>
                     <input id="orbBairro" name="bairro" type="text" maxlength="60" placeholder="Bairro">
@@ -4787,7 +4783,7 @@
                 btn.disabled = false; btn.classList.remove('decolando');
                 if (m === 'escolha') { tit.textContent = 'Como quer continuar?'; sub.textContent = 'Total do pedido: ' + moeda(valorPedido); }
                 if (m === 'zap') { tit.textContent = 'Seu pedido está a um passo'; sub.textContent = SUB_ZAP; btnTx.textContent = 'Enviar pedido'; seta.className = 'ph-bold ph-whatsapp-logo orb-seta'; }
-                if (m === 'pagar') { tit.textContent = 'Dados para entrega'; sub.textContent = 'Depois, você paga no Mercado Pago.'; card.classList.toggle('sem-end', ent('Rua').value.trim().length < 3 && !cepLocalizado); btnTx.textContent = 'Ir para o pagamento'; seta.className = 'ph-bold ph-lock-simple orb-seta'; }
+                if (m === 'pagar') { tit.textContent = 'Dados para entrega'; sub.textContent = 'Frete grátis incluso no pedido'; card.classList.toggle('sem-end', ent('Rua').value.trim().length < 3 && !cepLocalizado); btnTx.textContent = 'Ir para o pagamento'; seta.className = 'ph-bold ph-lock-simple orb-seta'; }
             }
                         try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
 
@@ -4860,11 +4856,14 @@
                 else if (b.bottom > a.bottom - 8) card.scrollTop += b.bottom - a.bottom + 8;
             }
             function ajustaAoTeclado() {
+                if (!ov.classList.contains('on')) return;
                 var v = window.visualViewport;
-                if (!v || !ov.classList.contains('on')) return;
-                ov.style.top = v.offsetTop + 'px'; ov.style.bottom = 'auto'; ov.style.height = v.height + 'px';
-                ov.classList.toggle('baixa', v.height < 560);
-                mostraCampo();
+                var altura = v ? v.height : window.innerHeight;
+                ov.style.top = (v ? v.offsetTop : 0) + 'px';
+                ov.style.bottom = 'auto';
+                ov.style.height = altura + 'px';
+                ov.classList.toggle('baixa', altura < 560);
+                // A rolagem manual deve continuar livre, mesmo com um input focado.
             }
             if (window.visualViewport) { visualViewport.addEventListener('resize', ajustaAoTeclado); visualViewport.addEventListener('scroll', ajustaAoTeclado); }
             card.addEventListener('focusin', function () { setTimeout(mostraCampo, 60); });
@@ -4901,7 +4900,16 @@
             }
             window.saturnoEscolherPlano = abrir;
             function focaCampo() {
-                if (modo === 'pagar') return foca(ent(faltando() || 'Cep'), 80);   // CEP vem primeiro
+                if (modo === 'pagar') {
+                    if (window.matchMedia('(max-width: 767px)').matches) {
+                        var ativo = document.activeElement;
+                        if (ativo && ativo.tagName === 'INPUT') ativo.blur();
+                        card.scrollTop = 0;
+                        ajustaAoTeclado();
+                        return;
+                    }
+                    return foca(ent(faltando() || 'Cep'), 80);
+                }
                 foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 80);
             }
             function emailOk() { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()); }
@@ -4970,7 +4978,7 @@
                     method: 'POST', signal: ctl.signal,
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({nome: n, empresa: emp, email: email.value.trim(), telefone: foneDigitos(),
-                        endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), complemento: ent('Compl').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
+                        endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
                         cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm})
                 }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
                 .then(function (j) {
@@ -5859,5 +5867,17 @@ function linhaEu(texto) {
         });
     })();
     </script>
+
+    <style>
+        #orbCard.m-pagar #orbSub { color: #15803d; font-weight: 600; }
+        @media (max-width: 767px) {
+            #orbOv { height: 100dvh; box-sizing: border-box; overflow: hidden; }
+            #orbCard { box-sizing: border-box; min-height: 0; max-height: 100%;
+                overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+            #orbCard.m-pagar { scroll-padding-bottom: 76px; }
+            #orbCard.m-pagar #orbBtn { position: sticky; bottom: 0; z-index: 10;
+                background: #1d1d1f; box-shadow: 0 0 0 8px #fff; }
+        }
+    </style>
 </body>
 </html>
