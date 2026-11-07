@@ -4667,6 +4667,7 @@
         <span class="orb-fio" aria-hidden="true"></span>
         <form class="orb-card" id="orbCard" role="dialog" aria-modal="true" aria-label="Seus dados para o atendimento" novalidate>
             <button type="button" class="orb-x" id="orbX" aria-label="Fechar"><i class="ph ph-x"></i></button>
+            <div class="orb-scroll" id="orbScroll">
             <div class="orb-logo" aria-hidden="true">
                 <div class="orb-par">
                     <span class="orb-halo"></span>
@@ -4686,6 +4687,7 @@
             </div>
             <a class="orb-res-btn orb-in d2" id="orbResBtn" target="_blank" rel="noopener noreferrer"></a>
             <p class="orb-falha" id="orbFalha" role="alert"></p>
+            <div class="checkout-resumo"><span id="orbProgresso"></span><strong id="orbResumo"></strong><small>Cartão em até 12x com juros ou Pix</small></div>
             <div class="orb-campos orb-in d2">
                 <div class="orb-campo orb-so-pagar" id="orbCampoCep">
                     <label class="orb-rot" for="orbCep">CEP</label>
@@ -4739,6 +4741,7 @@
                     <span class="orb-erro">Digite o WhatsApp com DDD</span>
                 </div>
             </div>
+            </div>
             <button type="submit" class="orb-btn orb-in d4" id="orbBtn">
                 <span class="orb-btn-in">
                     <i class="ph-bold ph-check"></i>
@@ -4768,7 +4771,9 @@
                 ['Cidade', temTexto('Cidade', 2)], ['Uf', function () { return /^[a-zA-Z]{2}$/.test(ent('Uf').value.trim()); }], ['Email', emailOk], ['Fone', foneOk]];
             function faltando() { for (var i = 0; i < PARA_PAGAR.length; i++) if (!PARA_PAGAR[i][1]()) return PARA_PAGAR[i][0]; return null; }
             var btn = document.getElementById('orbBtn');
+            var scrollDados = document.getElementById('orbScroll');
             var plano = '', pedidoPersonalizado = false, valorPedido = 0, voltarFoco = null, tFecha = null;
+            var etapaPagamento = 1;
             var modo = 'zap', itensPedido = null, dadosProntos = false, cepLocalizado = false;
             var FN_PAGAMENTO = 'https://lrthxbchqafcjbvjwcne.supabase.co/functions/v1/mercadopago';
             var tit = document.getElementById('orbPlanoTit'), sub = document.getElementById('orbSub'), falhaEl = document.getElementById('orbFalha'), btnTx = document.getElementById('orbBtnTx'), seta = btn.querySelector('.orb-seta');
@@ -4777,6 +4782,7 @@
             function avisa(t) { falhaEl.textContent = t || ''; falhaEl.classList.toggle('on', !!t); }
             function poeModo(m) {
                 modo = m;
+                if (m === 'pagar') etapaPagamento = 1;
                 card.classList.remove('m-escolha', 'm-pagar', 'm-zap', 'm-resultado');
                 card.classList.add('m-' + m);
                 card.classList.toggle('com-escolha', !!itensPedido);
@@ -4784,6 +4790,16 @@
                 if (m === 'escolha') { tit.textContent = 'Como quer continuar?'; sub.textContent = 'Total do pedido: ' + moeda(valorPedido); }
                 if (m === 'zap') { tit.textContent = 'Seu pedido está a um passo'; sub.textContent = SUB_ZAP; btnTx.textContent = 'Enviar pedido'; seta.className = 'ph-bold ph-whatsapp-logo orb-seta'; }
                 if (m === 'pagar') { tit.textContent = 'Dados para entrega'; sub.textContent = 'Frete grátis incluso no pedido'; card.classList.toggle('sem-end', ent('Rua').value.trim().length < 3 && !cepLocalizado); btnTx.textContent = 'Ir para o pagamento'; seta.className = 'ph-bold ph-lock-simple orb-seta'; }
+                if (m === 'pagar') pintaEtapa();
+            }
+            function pintaEtapa() {
+                card.classList.toggle('contato-primeiro', etapaPagamento === 1);
+                card.classList.toggle('entrega-depois', etapaPagamento === 2);
+                tit.textContent = etapaPagamento === 1 ? 'Como podemos falar com você?' : 'Onde vamos entregar?';
+                btnTx.textContent = etapaPagamento === 1 ? 'Continuar para entrega' : 'Ir para o pagamento';
+                document.getElementById('orbProgresso').textContent = etapaPagamento === 1 ? '1 de 2 · Seus dados' : '2 de 2 · Entrega';
+                document.getElementById('orbResumo').textContent = 'Total do pedido: ' + moeda(valorPedido);
+                scrollDados.scrollTop = 0;
             }
                         try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
 
@@ -4851,9 +4867,10 @@
             function mostraCampo() {
                 var el = document.activeElement;
                 if (!el || !card.contains(el) || el.tagName !== 'INPUT') return;
-                var campo = el.closest('.orb-campo') || el, a = card.getBoundingClientRect(), b = campo.getBoundingClientRect();
-                if (b.top < a.top + 8) card.scrollTop -= a.top + 8 - b.top;
-                else if (b.bottom > a.bottom - 8) card.scrollTop += b.bottom - a.bottom + 8;
+                var area = modo === 'pagar' && window.matchMedia('(max-width: 767px)').matches ? scrollDados : card;
+                var campo = el.closest('.orb-campo') || el, a = area.getBoundingClientRect(), b = campo.getBoundingClientRect();
+                if (b.top < a.top + 8) area.scrollTop -= a.top + 8 - b.top;
+                else if (b.bottom > a.bottom - 8) area.scrollTop += b.bottom - a.bottom + 8;
             }
             function ajustaAoTeclado() {
                 if (!ov.classList.contains('on')) return;
@@ -4905,6 +4922,7 @@
                         var ativo = document.activeElement;
                         if (ativo && ativo.tagName === 'INPUT') ativo.blur();
                         card.scrollTop = 0;
+                        scrollDados.scrollTop = 0;
                         ajustaAoTeclado();
                         return;
                     }
@@ -4921,9 +4939,9 @@
                 if (card.requestSubmit) card.requestSubmit(); else card.dispatchEvent(new Event('submit', {cancelable: true}));
             }
             // festa antes de trocar a tela: o confete sai da posição do botão, que some em seguida
-            document.getElementById('orbPagar').addEventListener('click', function () { festa(this); segue('pagar'); });
+            document.getElementById('orbPagar').addEventListener('click', function () { segue('pagar'); });
             document.getElementById('orbZap').addEventListener('click', function () { segue('zap'); });
-            document.getElementById('orbVolta').addEventListener('click', function () { avisa(''); poeModo('escolha'); });
+            document.getElementById('orbVolta').addEventListener('click', function () { avisa(''); if (modo === 'pagar' && etapaPagamento === 2) { etapaPagamento = 1; pintaEtapa(); return; } poeModo('escolha'); });
             // voltou do checkout pelo botão do navegador: o botão não pode ficar travado
             window.addEventListener('pageshow', function (e) { if (e.persisted && modo === 'pagar') poeModo('pagar'); });
 
@@ -4973,6 +4991,7 @@
                 btn.disabled = true; btnTx.textContent = 'Abrindo o pagamento…'; avisa('');
                 // a nova aba precisa nascer no clique, senão o navegador bloqueia
                 try { abaPg = window.open('', '_blank'); } catch (err) { abaPg = null; }
+                if (card.contains(document.activeElement) && document.activeElement.tagName === 'INPUT') document.activeElement.blur();
                 var ctl = new AbortController(), limite = setTimeout(function () { ctl.abort(); }, 20000);
                 fetch(FN_PAGAMENTO, {
                     method: 'POST', signal: ctl.signal,
@@ -4992,8 +5011,8 @@
                     clearTimeout(limite);
                     try { if (abaPg) abaPg.close(); } catch (err) {}
                     abaPg = null;
-                    poeModo('zap');
-                    avisa('Não conseguimos abrir o pagamento agora. Envie o pedido pelo WhatsApp que a gente te ajuda.');
+                    poeModo('pagar'); etapaPagamento = 2; pintaEtapa();
+                    avisa('Não foi possível abrir o pagamento. Seus dados estão preenchidos: toque novamente para tentar.');
                 });
             }
 
@@ -5031,7 +5050,7 @@
             function mostraEndereco(foco, aviso) {
                 cepLocalizado = true; card.classList.remove('sem-end');
                 cepSt.textContent = aviso || '';
-                if (document.activeElement === ent('Cep')) ent(foco).focus();
+                if (foco && document.activeElement === ent('Cep')) ent(foco).focus();
             }
             ent('Cep').addEventListener('input', function () {
                 var d = cepDigitos().slice(0, 8);
@@ -5055,10 +5074,27 @@
                 fone.value = d.length > 6 ? '(' + d.slice(0, 2) + ') ' + d.slice(2, d.length - 4) + '-' + d.slice(-4) : d.length > 2 ? '(' + d.slice(0, 2) + ') ' + d.slice(2) : d;
             });
 
+            // Mantém o teclado e a geometria estáveis até o clique concluir.
+            // O botão fica fora da área dos campos e nunca encobre um input.
+            btn.addEventListener('pointerdown', function (e) {
+                if (modo === 'pagar' && e.isPrimary && e.button === 0) e.preventDefault();
+            });
+
             card.addEventListener('submit', function (e) {
                 e.preventDefault();
+                if (btn.disabled) return;
                 if (modo === 'pagar' && itensPedido) {
-                    if (cepDigitos().length === 8) mostraEndereco('Rua');
+                    var contato = [[cNome, nome, limpa(nome).length >= 2], [cEmp, empresa, limpa(empresa).length >= 2], [cEmail, email, emailOk()], [cFone, fone, foneOk()]];
+                    var invalido = contato.find(function (c) { return !c[2]; });
+                    contato.forEach(function (c) { c[0].classList.toggle('erro', !c[2]); });
+                    if (invalido) { etapaPagamento = 1; pintaEtapa(); return erro(invalido[0], invalido[1]); }
+                    if (etapaPagamento === 1) {
+                        if (card.contains(document.activeElement) && document.activeElement.blur) document.activeElement.blur();
+                        etapaPagamento = 2; pintaEtapa(); return;
+                    }
+                }
+                if (modo === 'pagar' && itensPedido) {
+                    if (cepDigitos().length === 8) mostraEndereco();
                     var faltaEnd = faltando();
                     if (faltaEnd && faltaEnd !== 'Email' && faltaEnd !== 'Fone') {
                         PARA_PAGAR.forEach(function (c) { ent('Campo' + c[0]).classList.toggle('erro', !c[1]()); });
@@ -5870,14 +5906,35 @@ function linhaEu(texto) {
 
     <style>
         #orbCard.m-pagar #orbSub { color: #15803d; font-weight: 600; }
+        #orbScroll { display: contents; }
         @media (max-width: 767px) {
             #orbOv { height: 100dvh; box-sizing: border-box; overflow: hidden; }
-            #orbCard { box-sizing: border-box; min-height: 0; max-height: 100%;
-                overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-            #orbCard.m-pagar { scroll-padding-bottom: 76px; }
-            #orbCard.m-pagar #orbBtn { position: sticky; bottom: 0; z-index: 10;
-                background: #1d1d1f; box-shadow: 0 0 0 8px #fff; }
+            #orbCard { box-sizing: border-box; min-height: 0; max-height: 100%; }
+            #orbCard.m-pagar { display: flex; flex-direction: column; overflow: hidden; }
+            #orbCard.m-pagar #orbScroll { display: block; flex: 1 1 auto; min-height: 0;
+                overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+                padding: 4px; scroll-padding-block: 12px; }
+            #orbCard.m-pagar #orbBtn { position: relative; flex: 0 0 auto; z-index: 10;
+                margin-top: 12px; background: #1d1d1f; animation: none; opacity: 1; transform: none;
+                touch-action: manipulation; }
+            #orbCard.m-pagar #orbBtn * { pointer-events: none; }
+            #orbCard.m-pagar #orbVolta { flex: 0 0 auto; margin-top: 6px; }
         }
     </style>
+<style>
+.checkout-resumo{display:none}
+#orbCard.m-pagar .checkout-resumo{display:flex;flex-direction:column;gap:6px;text-align:left;background:#f5f5f7;border:1px solid #e8e8ed;border-radius:16px;padding:16px;margin-bottom:20px}
+.checkout-resumo span{font-size:12px;color:#6e6e73;font-weight:600}.checkout-resumo strong{font-size:20px;color:#1d1d1f}.checkout-resumo small{font-size:12px;color:#6e6e73}
+#orbCard.m-pagar .orb-logo{display:none}
+#orbCard.m-pagar .orb-in{animation:none;opacity:1;transform:none}
+#orbCard.m-pagar.contato-primeiro .orb-end,#orbCard.m-pagar.contato-primeiro #orbCampoCep{display:none}
+#orbCard.m-pagar.entrega-depois #orbCampoNome,#orbCard.m-pagar.entrega-depois #orbCampoEmp,#orbCard.m-pagar.entrega-depois #orbCampoEmail,#orbCard.m-pagar.entrega-depois #orbCampoFone{display:none}
+#orbCard.m-pagar #orbCampoNome,#orbCard.m-pagar #orbCampoEmp{grid-column:span 4}
+#orbCard.m-pagar .orb-tit{font-size:24px;text-align:left;padding-right:24px}
+#orbCard.m-pagar .orb-sub{text-align:left;margin-bottom:16px}
+#orbCard.m-pagar .orb-btn{background:#15803d}
+#orbCard.m-pagar .orb-btn:disabled{opacity:.65;cursor:wait}
+@media(max-width:767px){#orbCard.m-pagar #orbBtn{background:#15803d}#orbCard.m-pagar{padding:24px 18px 16px}}
+</style>
 </body>
 </html>
