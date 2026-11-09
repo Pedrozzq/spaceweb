@@ -6074,12 +6074,9 @@ function linhaEu(texto) {
             var M = window.saturnoMontador;
             guia.fim = true; txt.placeholder = 'Ficou alguma dúvida? Pergunte aqui';
             if (esgotou()) travaCampo();
-            var g = guia, linhas = ['• *Site excepcional* com domínio próprio, a vitrine' + (g.empresa ? ' da ' + g.empresa : ' do seu negócio') + ' (R$ 597)'];
-            if (g.c) linhas.push('• *' + g.c + (g.c === 1 ? ' cartão' : ' cartões') + ' por aproximação*, ' + (g.c === 1 ? 'para você apresentar o negócio em um toque' : 'um para cada pessoa da equipe'));
-            if (g.g) linhas.push('• *' + g.g + (g.g === 1 ? ' tag' : ' tags') + ' de avaliação Google*, para transformar clientes satisfeitos em estrelas');
-            if (g.crm) linhas.push('• *CRM* para não perder nenhum contato e acompanhar cada venda');
-            var texto = 'Pronto! Montei o pedido ideal para ' + (g.empresa ? 'a *' + g.empresa + '*' : 'você') + ':\n\n' + linhas.join('\n') +
-                '\n\nConfira abaixo: dá para mudar as quantidades à vontade. Frete grátis e tudo chega configurado. Quando estiver certo, toque em *Fazer meu pedido*.';
+            var g = guia;
+            // texto curto: o pedido em si aparece só no cartão editável logo abaixo
+            var texto = 'Pronto! Montei o pedido ideal para ' + (g.empresa ? 'a *' + g.empresa + '*' : 'você') + '. Ajuste o que quiser e toque em *Fazer meu pedido*.';
             var pedido = null;
             if (M) {
                 var total = M.calcula(g.c, g.g, g.crm);
