@@ -2750,7 +2750,7 @@
                         <div class="sp-cfg" id="sp-cfg">
                             <label class="sp-row sp-anim" style="--i:1" for="sp-site">
                                 <span class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></span>
-                                <span class="sp-txt"><em class="sp-val">R$ 597</em><b>Site excepcional</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></span>
+                                <span class="sp-txt"><em class="sp-val">R$ 597</em><b>Site que atrai clientes</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></span>
                                 <span class="sp-tog"><input id="sp-site" data-item="site" type="checkbox" role="switch" checked aria-label="Incluir site por R$ 597"><i></i></span>
                             </label>
                             <div class="sp-row sp-anim" style="--i:2">
@@ -2773,12 +2773,12 @@
                             </div>
                             <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                                <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Clientes e vendas</span></span>
+                                <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Controle e gestão de clientes e vendas</span></span>
                                 <span class="sp-tog"><input id="sp-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
                             </label>
                             <a class="sp-oque sp-anim" style="--i:4" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                             <div class="sp-total sp-anim" style="--i:5">
-                                <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site excepcional</span></div>
+                                <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site que atrai clientes</span></div>
                                 <div class="sp-valores"><strong id="sp-preco" aria-live="polite">R$ 597,00</strong><small class="sp-parcelas">4x de R$ 149,25 sem juros</small></div>
                             </div>
                             <button type="button" class="sp-pedir sp-anim" id="sp-pedir" style="--i:6">Fazer meu pedido</button>
@@ -3001,7 +3001,7 @@
                 <div class="sp-cfg sps-cfg" id="sps-cfg">
                     <label class="sp-row" for="sps-site">
                         <span class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" loading="lazy" decoding="async"></span>
-                        <span class="sp-txt"><em class="sp-val">R$ 597</em><b>Site excepcional</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></span>
+                        <span class="sp-txt"><em class="sp-val">R$ 597</em><b>Site que atrai clientes</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></span>
                         <span class="sp-tog"><input id="sps-site" data-item="site" type="checkbox" role="switch" checked aria-label="Incluir site por R$ 597"><i></i></span>
                     </label>
                     <div class="sp-row">
@@ -3024,12 +3024,12 @@
                     </div>
                     <label class="sp-row" for="sps-crm">
                         <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                        <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Clientes e vendas</span></span>
+                        <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Controle e gestão de clientes e vendas</span></span>
                         <span class="sp-tog"><input id="sps-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
                     </label>
                     <a class="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                     <div class="sp-total">
-                        <div><span class="sp-rot">Total</span><span class="sp-det" id="sps-det">Site excepcional</span></div>
+                        <div><span class="sp-rot">Total</span><span class="sp-det" id="sps-det">Site que atrai clientes</span></div>
                         <div class="sp-valores"><strong id="sps-preco" aria-live="polite">R$ 597,00</strong><small class="sp-parcelas">4x de R$ 149,25 sem juros</small></div>
                     </div>
                     <button type="button" class="sp-pedir" id="sps-pedir">Fazer meu pedido</button>
@@ -3802,7 +3802,7 @@
             function calcula(c, g, crm, site) { return (site === false ? 0 : BASE) + c * POR_CARTAO + g * POR_TAG + (crm ? PRECO_CRM : 0); }
             function resumoDe(c, g, crm, site) {
                 var p = [];
-                if (site !== false) p.push(c || g || crm ? 'Site' : 'Site excepcional');
+                if (site !== false) p.push(c || g || crm ? 'Site' : 'Site que atrai clientes');
                 if (c) p.push(c + (c === 1 ? ' cartão NFC' : ' cartões NFC'));
                 if (g) p.push(g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google'));
                 if (crm) p.push('CRM');
