@@ -129,7 +129,7 @@ async function criarCheckout(b: Any) {
         address: { zip_code: ent.cep, street_name: ent.rua, street_number: ent.numero } },
       external_reference: reg.id,
       statement_descriptor: "SATURNONFC",
-      payment_methods: { installments: 12 },
+      payment_methods: { installments: 4 },   // até 4x sem juros (o "sem juros" é configurado na conta do Mercado Pago)
       back_urls: { success: `${SITE}/obrigado.html`, pending: `${SITE}/obrigado.html`, failure: `${SITE}/?pagamento=falhou` },
       auto_return: "approved",
     }),
