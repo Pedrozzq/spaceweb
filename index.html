@@ -1681,6 +1681,7 @@
             .sp-head h3 { font-size: 22px; }
             .sp-pedir { padding-top: 13px; padding-bottom: 13px; }
         }
+        .sp-pedir:disabled { opacity: .4; cursor: not-allowed; transform: none; }
         @media (max-width: 380px) {
             .sp-row { gap: 8px; padding-left: 8px; padding-right: 8px; }
             .sp-thumb { width: 36px; height: 36px; }
@@ -2747,11 +2748,11 @@
                     </div>
                     <div class="flex flex-col gap-2 md:gap-3 w-full">
                         <div class="sp-cfg" id="sp-cfg">
-                            <div class="sp-row sp-anim" style="--i:1">
-                                <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></div>
-                                <div class="sp-txt"><em class="sp-val">R$ 597</em><b>Site excepcional</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></div>
-                                <i class="ph-fill ph-check-circle sp-inc" aria-hidden="true"></i>
-                            </div>
+                            <label class="sp-row sp-anim" style="--i:1" for="sp-site">
+                                <span class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" decoding="async"></span>
+                                <span class="sp-txt"><em class="sp-val">R$ 597</em><b>Site excepcional</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></span>
+                                <span class="sp-tog"><input id="sp-site" data-item="site" type="checkbox" role="switch" checked aria-label="Incluir site por R$ 597"><i></i></span>
+                            </label>
                             <div class="sp-row sp-anim" style="--i:2">
                                 <div class="sp-thumb sp-3d sp-3d-card"><img src="img/caixa-cartao.webp" alt="" width="156" height="120" decoding="async"></div>
                                 <div class="sp-txt"><em class="sp-val">R$ 35 cada</em><b>Cartões por aproximação <em class="sp-opc">Opcional</em></b><span>Aproximou, seu site abre na hora.</span></div>
@@ -2773,7 +2774,7 @@
                             <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
                                 <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Clientes e vendas</span></span>
-                                <span class="sp-tog"><input id="sp-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
+                                <span class="sp-tog"><input id="sp-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
                             </label>
                             <a class="sp-oque sp-anim" style="--i:4" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                             <div class="sp-total sp-anim" style="--i:5">
@@ -2998,11 +2999,11 @@
 
                 <!-- MONTADOR NA PÁGINA: usa os mesmos valores do montador em popup -->
                 <div class="sp-cfg sps-cfg" id="sps-cfg">
-                    <div class="sp-row">
-                        <div class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" loading="lazy" decoding="async"></div>
-                        <div class="sp-txt"><em class="sp-val">R$ 597</em><b>Site excepcional</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></div>
-                        <i class="ph-fill ph-check-circle sp-inc" aria-hidden="true"></i>
-                    </div>
+                    <label class="sp-row" for="sps-site">
+                        <span class="sp-thumb sp-3d"><img src="img/pedido-site-3d.webp" alt="" width="136" height="260" loading="lazy" decoding="async"></span>
+                        <span class="sp-txt"><em class="sp-val">R$ 597</em><b>Site excepcional</b><span class="sp-beneficio">Sua marca em destaque, com domínio próprio.</span></span>
+                        <span class="sp-tog"><input id="sps-site" data-item="site" type="checkbox" role="switch" checked aria-label="Incluir site por R$ 597"><i></i></span>
+                    </label>
                     <div class="sp-row">
                         <div class="sp-thumb sp-3d sp-3d-card"><img src="img/caixa-cartao.webp" alt="" width="156" height="120" loading="lazy" decoding="async"></div>
                         <div class="sp-txt"><em class="sp-val">R$ 35 cada</em><b>Cartões por aproximação <em class="sp-opc">Opcional</em></b><span>Aproximou, seu site abre na hora.</span></div>
@@ -3024,7 +3025,7 @@
                     <label class="sp-row" for="sps-crm">
                         <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
                         <span class="sp-txt"><em class="sp-val">R$ 1.500</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Clientes e vendas</span></span>
-                        <span class="sp-tog"><input id="sps-crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
+                        <span class="sp-tog"><input id="sps-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM por R$ 1.500"><i></i></span>
                     </label>
                     <a class="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                     <div class="sp-total">
@@ -3793,18 +3794,21 @@
 
             // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 35; cada tag Google R$ 40; CRM opcional R$ 1.500
             var BASE = 597, POR_CARTAO = 35, POR_TAG = 40, PRECO_CRM = 1500;
-            var crmIn = document.getElementById('sp-crm');
+            var crmIn = document.getElementById('sp-crm'), siteIn = document.getElementById('sp-site');
             var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
             var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
             function val(inp) { var n = parseInt(inp.value, 10), min = +inp.min, max = +inp.max; return isNaN(n) ? min : Math.min(max, Math.max(min, n)); }
-            function calcula(c, g, crm) { return BASE + c * POR_CARTAO + g * POR_TAG + (crm ? PRECO_CRM : 0); }
-            function resumoDe(c, g, crm) {
-                return (c || g || crm ? 'Site' : 'Site excepcional') +
-                    (c ? ' + ' + c + (c === 1 ? ' cartão NFC' : ' cartões NFC') : '') +
-                    (g ? ' + ' + g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google') : '') +
-                    (crm ? ' + CRM' : '');
+            // o site vem marcado; só sai do pedido com site === false
+            function calcula(c, g, crm, site) { return (site === false ? 0 : BASE) + c * POR_CARTAO + g * POR_TAG + (crm ? PRECO_CRM : 0); }
+            function resumoDe(c, g, crm, site) {
+                var p = [];
+                if (site !== false) p.push(c || g || crm ? 'Site' : 'Site excepcional');
+                if (c) p.push(c + (c === 1 ? ' cartão NFC' : ' cartões NFC'));
+                if (g) p.push(g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google'));
+                if (crm) p.push('CRM');
+                return p.length ? p.join(' + ') : 'Escolha ao menos um item';
             }
-            function resumoTxt() { return resumoDe(val(cIn), val(gIn), crmIn.checked); }
+            function resumoTxt() { return resumoDe(val(cIn), val(gIn), crmIn.checked, siteIn.checked); }
             window.saturnoMontador = {calcula: calcula, resumo: resumoDe, brl: brl, val: val};   // o pedido montado pela IA usa as mesmas regras
             var sec = document.getElementById('sps-cfg');
             function espelhaSecao(total) {
@@ -3812,6 +3816,8 @@
                 document.getElementById('sps-n').value = val(cIn);
                 document.getElementById('sps-g').value = val(gIn);
                 document.getElementById('sps-crm').checked = crmIn.checked;
+                document.getElementById('sps-site').checked = siteIn.checked;
+                document.getElementById('sps-pedir').disabled = !total;
                 document.getElementById('sps-preco').textContent = brl(total);
                 document.getElementById('sps-preco').parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + brl(total / 4) + ' sem juros';
                 document.getElementById('sps-det').textContent = resumoTxt();
@@ -3821,7 +3827,8 @@
                 });
             }
             function atualizaPreco(pular) {
-                var total = calcula(val(cIn), val(gIn), crmIn.checked), preco = document.getElementById('sp-preco');
+                var total = calcula(val(cIn), val(gIn), crmIn.checked, siteIn.checked), preco = document.getElementById('sp-preco');
+                document.getElementById('sp-pedir').disabled = !total;   // nada escolhido: não há o que pedir
                 preco.textContent = brl(total);
                 preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + brl(total / 4) + ' sem juros';
                 document.getElementById('sp-det').textContent = resumoTxt();
@@ -3844,6 +3851,7 @@
                 inp.addEventListener('blur', function () { inp.value = val(inp); atualizaPreco(); });
             });
             crmIn.addEventListener('change', function () { atualizaPreco(true); });
+            siteIn.addEventListener('change', function () { atualizaPreco(true); });
             if (sec) {
                 sec.querySelectorAll('.sp-qtd button').forEach(function (b) {
                     b.addEventListener('click', function () {
@@ -3857,22 +3865,23 @@
                     campo.addEventListener('blur', function () { atualizaPreco(); });
                 });
                 document.getElementById('sps-crm').addEventListener('change', function () { crmIn.checked = this.checked; atualizaPreco(true); });
+                document.getElementById('sps-site').addEventListener('change', function () { siteIn.checked = this.checked; atualizaPreco(true); });
                 document.getElementById('sps-pedir').addEventListener('click', function () { document.getElementById('sp-pedir').click(); });
                 sec.querySelector('.sp-oque').addEventListener('click', function () {
-                    try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked})); } catch (err) {}
+                    try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked, s: siteIn.checked})); } catch (err) {}
                 });
             }
             atualizaPreco();
 
             // "O que é CRM?": guarda o que já foi escolhido; ao voltar da página da CRM, o pedido reabre igual
             document.getElementById('sp-oque').addEventListener('click', function () {
-                try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked})); } catch (err) {}
+                try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked, s: siteIn.checked})); } catch (err) {}
             });
             var volta = /[?&](crm|pedido)=1/.exec(location.search);
             if (volta) {
                 try {
                     var salvo = JSON.parse(sessionStorage.getItem('saturno_pedido') || 'null');
-                    if (salvo) { cIn.value = salvo.c; gIn.value = salvo.g; cIn.value = val(cIn); gIn.value = val(gIn); crmIn.checked = !!salvo.crm; }
+                    if (salvo) { cIn.value = salvo.c; gIn.value = salvo.g; cIn.value = val(cIn); gIn.value = val(gIn); crmIn.checked = !!salvo.crm; siteIn.checked = salvo.s !== false; }
                 } catch (err) {}
                 if (volta[1] === 'crm') crmIn.checked = true;
                 atualizaPreco();
@@ -3882,9 +3891,10 @@
             document.getElementById('sp-pedir').addEventListener('click', function () {
                 cIn.value = val(cIn); gIn.value = val(gIn);
                 var total = atualizaPreco(), resumo = resumoTxt() + ' (' + brl(total) + ')';
+                if (!total) return;
                 if (window.saturnoEscolherPlano) {
                     fecharPlanos(true);
-                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total, {cartoes: val(cIn), tags: val(gIn), crm: crmIn.checked}); }, 300);
+                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total, {cartoes: val(cIn), tags: val(gIn), crm: crmIn.checked, site: siteIn.checked}); }, 300);
                 }
                 window.open('https://wa.me/5531920067518?text=' + encodeURIComponent('Olá! Vim pelo site e quero fazer o pedido: ' + resumo + '. Pode me passar os detalhes?'), '_blank', 'noopener');
             });
@@ -5056,7 +5066,7 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({nome: n, empresa: emp, email: email.value.trim(), telefone: foneDigitos(),
                         endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
-                        cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm})
+                        site: itensPedido.site !== false, cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm})
                 }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
                 .then(function (j) { return festaAcaba.then(function () { return j; }); })
                 .then(function (j) {
@@ -5615,14 +5625,16 @@ function linhaEu(texto) {
             c.removeAttribute('id'); c.classList.add('sai-cfg');
             c.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
             c.querySelectorAll('label[for]').forEach(function (n) { n.removeAttribute('for'); });
-            var campos = c.querySelectorAll('.sp-qtd input'), cI = campos[0], gI = campos[1], crm = c.querySelector('.sp-tog input');
+            var campos = c.querySelectorAll('.sp-qtd input'), cI = campos[0], gI = campos[1], crm = c.querySelector('[data-item="crm"]'), site = c.querySelector('[data-item="site"]');
+            var pedir = c.querySelector('.sp-pedir');
             var det = c.querySelector('.sp-det'), preco = c.querySelector('.sp-total strong');
-            cI.value = p.itens.c; gI.value = p.itens.g; crm.checked = !!p.itens.crm;
+            cI.value = p.itens.c; gI.value = p.itens.g; crm.checked = !!p.itens.crm; site.checked = p.itens.site !== false;
             function pinta() {
-                var nc = M.val(cI), ng = M.val(gI);
-                det.textContent = M.resumo(nc, ng, crm.checked);
-                preco.textContent = M.brl(M.calcula(nc, ng, crm.checked));
-                preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + M.brl(M.calcula(nc, ng, crm.checked) / 4) + ' sem juros';
+                var nc = M.val(cI), ng = M.val(gI), total = M.calcula(nc, ng, crm.checked, site.checked);
+                det.textContent = M.resumo(nc, ng, crm.checked, site.checked);
+                preco.textContent = M.brl(total);
+                preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + M.brl(total / 4) + ' sem juros';
+                pedir.disabled = !total;
                 c.querySelectorAll('.sp-qtd button').forEach(function (b) {
                     var inp = b.parentNode.querySelector('input'), v = M.val(inp);
                     b.disabled = +b.getAttribute('data-passo') < 0 ? v <= +inp.min : v >= +inp.max;
@@ -5639,12 +5651,14 @@ function linhaEu(texto) {
                 inp.addEventListener('blur', function () { inp.value = M.val(inp); pinta(); });
             });
             crm.addEventListener('change', pinta);
+            site.addEventListener('change', pinta);
             var oque = c.querySelector('.sp-oque');
             if (oque) { oque.target = '_blank'; oque.rel = 'noopener'; }
-            c.querySelector('.sp-pedir').addEventListener('click', function () {
+            pedir.addEventListener('click', function () {
                 cI.value = M.val(cI); gI.value = M.val(gI);
-                var nc = +cI.value, ng = +gI.value, total = M.calcula(nc, ng, crm.checked);
-                window.saturnoEscolherPlano(M.resumo(nc, ng, crm.checked) + ' (' + M.brl(total) + ')', null, true, total, {cartoes: nc, tags: ng, crm: crm.checked}, {nome: p.nome, empresa: p.empresa});
+                var nc = +cI.value, ng = +gI.value, total = M.calcula(nc, ng, crm.checked, site.checked);
+                if (!total) return;
+                window.saturnoEscolherPlano(M.resumo(nc, ng, crm.checked, site.checked) + ' (' + M.brl(total) + ')', null, true, total, {cartoes: nc, tags: ng, crm: crm.checked, site: site.checked}, {nome: p.nome, empresa: p.empresa});
                 var campoEmp = document.getElementById('orbEmpresa');
                 if (p.empresa && campoEmp) campoEmp.value = p.empresa;
             });
@@ -6097,8 +6111,8 @@ function linhaEu(texto) {
             if (guia.obj) p.push('Objetivo: ' + OBJETIVOS[guia.obj]);
             var M = window.saturnoMontador, cards = fio.querySelectorAll('.sai-cfg'), cfg = cards[cards.length - 1];
             if (guia.fim && M && cfg) {
-                var ins = cfg.querySelectorAll('.sp-qtd input'), nc = M.val(ins[0]), ng = M.val(ins[1]), crm = cfg.querySelector('.sp-tog input').checked;
-                p.push('Pedido montado no site: ' + M.resumo(nc, ng, crm) + ' (' + M.brl(M.calcula(nc, ng, crm)) + ')');
+                var ins = cfg.querySelectorAll('.sp-qtd input'), nc = M.val(ins[0]), ng = M.val(ins[1]), crm = cfg.querySelector('[data-item="crm"]').checked, st = cfg.querySelector('[data-item="site"]').checked;
+                p.push('Pedido montado no site: ' + M.resumo(nc, ng, crm, st) + ' (' + M.brl(M.calcula(nc, ng, crm, st)) + ')');
             }
             return p.length ? '[Contexto do site] ' + p.join(' | ') : '';
         }

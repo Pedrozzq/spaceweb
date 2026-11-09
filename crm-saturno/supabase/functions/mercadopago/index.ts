@@ -1,7 +1,7 @@
 // =====================================================================
 //  SATURNO NFC · pagamento pelo site com o MERCADO PAGO (Checkout Pro)
 //  Supabase Edge Function "mercadopago":
-//   1. POST do site { nome, empresa, email, telefone, endereco, cartoes, tags, crm }: calcula o total AQUI
+//   1. POST do site { nome, empresa, email, telefone, endereco, site, cartoes, tags, crm }: calcula o total AQUI
 //      (o preço enviado pelo navegador nunca é usado), registra o lead e devolve
 //      o link do checkout (init_point).
 //   2. POST do obrigado.html { consulta: { pedido, pagamento } }: confere o pagamento na API
@@ -74,14 +74,17 @@ function quantidade(v: unknown) {
 
 // Único lugar que define o total cobrado.
 export function montarPedido(b: Any) {
-  const cartoes = quantidade(b?.cartoes), tags = quantidade(b?.tags), crm = b?.crm === true;
-  const itens = [{ id: "site", title: "Site personalizado", quantity: 1, unit_price: PRECOS.site, currency_id: "BRL" }];
-  const partes = ["Site"];
+  // site vem marcado por padrão; só sai do pedido quando o cliente desliga (site: false)
+  const cartoes = quantidade(b?.cartoes), tags = quantidade(b?.tags), crm = b?.crm === true, site = b?.site !== false;
+  const itens: { id: string; title: string; quantity: number; unit_price: number; currency_id: string }[] = [];
+  const partes: string[] = [];
+  if (site) { itens.push({ id: "site", title: "Site personalizado", quantity: 1, unit_price: PRECOS.site, currency_id: "BRL" }); partes.push("Site"); }
   if (cartoes) { itens.push({ id: "cartao-nfc", title: "Cartão NFC", quantity: cartoes, unit_price: PRECOS.cartao, currency_id: "BRL" }); partes.push(`${cartoes} ${cartoes === 1 ? "cartão NFC" : "cartões NFC"}`); }
   if (tags) { itens.push({ id: "tag-google", title: "Tag Avaliação Google", quantity: tags, unit_price: PRECOS.tag, currency_id: "BRL" }); partes.push(`${tags} ${tags === 1 ? "tag" : "tags"} Avaliação Google`); }
   if (crm) { itens.push({ id: "crm", title: "CRM Saturno", quantity: 1, unit_price: PRECOS.crm, currency_id: "BRL" }); partes.push("CRM"); }
+  if (!itens.length) throw falha("escolha ao menos um item", 400);
   const valor = itens.reduce((s, i) => s + i.quantity * i.unit_price, 0);
-  return { cartoes, tags, crm, itens, valor, pedido: partes.join(" + ") };
+  return { site, cartoes, tags, crm, itens, valor, pedido: partes.join(" + ") };
 }
 
 async function criarCheckout(b: Any) {
