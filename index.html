@@ -4669,6 +4669,7 @@
         <span class="orb-fio" aria-hidden="true"></span>
         <form class="orb-card" id="orbCard" role="dialog" aria-modal="true" aria-label="Seus dados para o atendimento" novalidate>
             <button type="button" class="orb-x" id="orbX" aria-label="Fechar"><i class="ph ph-x"></i></button>
+            <div class="orb-passo" aria-hidden="true"><span id="orbPassoTx"></span><span class="orb-barra"><i id="orbBarra"></i></span></div>
             <div class="orb-scroll" id="orbScroll">
             <div class="orb-logo" aria-hidden="true">
                 <div class="orb-par">
@@ -4697,44 +4698,45 @@
                     <span class="orb-erro">Digite os 8 números do CEP</span>
                     <span class="orb-cep-st" id="orbCepSt" role="status"></span>
                 </div>
+                <div class="orb-end-res" id="orbEndRes"><i class="ph ph-map-pin" aria-hidden="true"></i><span id="orbEndTx"></span><button type="button" id="orbEndEdita">Alterar</button></div>
                 <div class="orb-campo orb-so-pagar orb-end " id="orbCampoRua">
                     <label class="orb-rot" for="orbRua">Rua</label>
-                    <input id="orbRua" name="rua" type="text" autocomplete="address-line1" maxlength="120" placeholder="Rua, avenida...">
+                    <input id="orbRua" name="rua" type="text" autocapitalize="words" autocomplete="address-line1" maxlength="120" placeholder="Rua, avenida...">
                     <span class="orb-erro">Digite a rua</span>
                 </div>
                 <div class="orb-campo orb-so-pagar orb-end orb-m2" id="orbCampoNumero">
                     <label class="orb-rot" for="orbNumero">Número</label>
-                    <input id="orbNumero" name="numero" type="text" autocomplete="address-line2" maxlength="12" placeholder="123">
+                    <input id="orbNumero" name="numero" type="text" inputmode="text" autocomplete="address-line2" maxlength="12" placeholder="123">
                     <span class="orb-erro">Digite o número</span>
                 </div>
                 <div class="orb-campo orb-so-pagar orb-end " id="orbCampoBairro">
                     <label class="orb-rot" for="orbBairro">Bairro</label>
-                    <input id="orbBairro" name="bairro" type="text" maxlength="60" placeholder="Bairro">
+                    <input id="orbBairro" name="bairro" type="text" autocapitalize="words" maxlength="60" placeholder="Bairro">
                     <span class="orb-erro">Digite o bairro</span>
                 </div>
                 <div class="orb-campo orb-so-pagar orb-end orb-m3" id="orbCampoCidade">
                     <label class="orb-rot" for="orbCidade">Cidade</label>
-                    <input id="orbCidade" name="cidade" type="text" autocomplete="address-level2" maxlength="60" placeholder="Cidade">
+                    <input id="orbCidade" name="cidade" type="text" autocapitalize="words" autocomplete="address-level2" maxlength="60" placeholder="Cidade">
                     <span class="orb-erro">Digite a cidade</span>
                 </div>
                 <div class="orb-campo orb-so-pagar orb-end orb-m1" id="orbCampoUf">
                     <label class="orb-rot" for="orbUf">UF</label>
-                    <input id="orbUf" name="uf" type="text" autocomplete="address-level1" maxlength="2" placeholder="MG">
+                    <input id="orbUf" name="uf" type="text" autocapitalize="characters" autocomplete="address-level1" maxlength="2" placeholder="MG">
                     <span class="orb-erro">UF?</span>
                 </div>
                 <div class="orb-campo" id="orbCampoNome">
                     <label class="orb-rot" for="orbNome">Seu nome</label>
-                    <input id="orbNome" name="nome" type="text" autocomplete="given-name" maxlength="60" placeholder="Como podemos te chamar?">
+                    <input id="orbNome" name="nome" type="text" autocapitalize="words" enterkeyhint="next" autocomplete="given-name" maxlength="60" placeholder="Como podemos te chamar?">
                     <span class="orb-erro">Digite seu nome para continuar</span>
                 </div>
                 <div class="orb-campo orb-in d3" id="orbCampoEmp">
                     <label class="orb-rot" for="orbEmpresa">Empresa</label>
-                    <input id="orbEmpresa" name="empresa" type="text" autocomplete="organization" maxlength="80" placeholder="Nome que vai nos cartões">
+                    <input id="orbEmpresa" name="empresa" type="text" autocapitalize="words" enterkeyhint="next" autocomplete="organization" maxlength="80" placeholder="Nome que vai nos cartões">
                     <span class="orb-erro">Digite o nome da empresa</span>
                 </div>
                 <div class="orb-campo orb-so-pagar" id="orbCampoEmail">
                     <label class="orb-rot" for="orbEmail">E-mail</label>
-                    <input id="orbEmail" name="email" type="email" inputmode="email" autocomplete="email" maxlength="120" placeholder="voce@empresa.com.br">
+                    <input id="orbEmail" name="email" type="email" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="email" autocomplete="email" maxlength="120" placeholder="voce@empresa.com.br">
                     <span class="orb-erro">Digite um e-mail válido</span>
                 </div>
                 <div class="orb-campo orb-so-pagar" id="orbCampoFone">
@@ -4751,7 +4753,8 @@
                     <span class="orb-btn-tx" id="orbBtnTx">Enviar pedido</span>
                 </span>
             </button>
-            <button type="button" class="orb-volta orb-in d4" id="orbVolta"><i class="ph ph-arrow-left" aria-hidden="true"></i> Voltar</button>
+            <p class="orb-total" id="orbTotal"></p>
+            <button type="button" class="orb-volta orb-in d4" id="orbVolta" aria-label="Voltar"><i class="ph ph-arrow-left" aria-hidden="true"></i> Voltar</button>
             <p class="orb-selos orb-in d4" id="orbSelos"><span><i class="ph ph-handshake"></i>Sem compromisso</span></p>
         </form>
     </div>
@@ -4784,7 +4787,7 @@
             function avisa(t) { falhaEl.textContent = t || ''; falhaEl.classList.toggle('on', !!t); }
             function poeModo(m) {
                 modo = m;
-                if (m === 'pagar') etapaPagamento = 1;
+                if (m === 'pagar') etapaPagamento = etapaInicial();   // pula o que já está preenchido (nome e empresa salvos)
                 card.classList.remove('m-escolha', 'm-pagar', 'm-zap', 'm-resultado');
                 card.classList.add('m-' + m);
                 card.classList.toggle('com-escolha', !!itensPedido);
@@ -4794,16 +4797,72 @@
                 if (m === 'pagar') { tit.textContent = 'Dados para entrega'; sub.textContent = 'Frete grátis incluso no pedido'; card.classList.toggle('sem-end', ent('Rua').value.trim().length < 3 && !cepLocalizado); btnTx.textContent = 'Ir para o pagamento'; seta.className = 'ph-bold ph-lock-simple orb-seta'; }
                 if (m === 'pagar') pintaEtapa();
             }
+            // Etapas do pagamento. No celular: uma pergunta por tela, para o teclado nunca cobrir o campo nem o botão.
+            // No computador: contato numa tela e entrega na outra.
+            var mqCel = window.matchMedia('(max-width: 767px)');
+            function celular() { return mqCel.matches; }
+            var ENTREGA = ['Cep', 'Rua', 'Numero', 'Bairro', 'Cidade', 'Uf'], END_AUTO = ['Rua', 'Bairro', 'Cidade', 'Uf'];
+            var TODOS = ['Nome', 'Emp', 'Email', 'Fone'].concat(ENTREGA);
+            var PASSOS_CEL = [
+                {campos: ['Nome'], tit: 'Qual é o seu nome?', sub: 'Para sabermos como te chamar.'},
+                {campos: ['Emp'], tit: 'Qual o nome da sua empresa?', sub: 'É o nome que vai nos cartões.'},
+                {campos: ['Fone'], tit: 'Qual o seu WhatsApp?', sub: 'Avisamos por lá cada etapa do pedido.'},
+                {campos: ['Email'], tit: 'Qual o seu e-mail?', sub: 'O comprovante do pagamento chega nele.'},
+                {campos: ENTREGA, tit: 'Onde vamos entregar?', sub: 'Digite o CEP e completamos o endereço. Frete grátis.'}
+            ];
+            var PASSOS_PC = [
+                {campos: ['Nome', 'Emp', 'Email', 'Fone'], tit: 'Como podemos falar com você?', rot: 'Seus dados'},
+                {campos: ENTREGA, tit: 'Onde vamos entregar?', rot: 'Entrega'}
+            ];
+            var editaEnd = false;
+            function passos() { return celular() ? PASSOS_CEL : PASSOS_PC; }
+            function entrada(k) { return k === 'Emp' ? empresa : ent(k); }
+            function caixa(k) { return ent('Campo' + k); }
+            function valido(k) {
+                if (k === 'Nome') return limpa(nome).length >= 2;
+                if (k === 'Emp') return limpa(empresa).length >= 2;
+                for (var i = 0; i < PARA_PAGAR.length; i++) if (PARA_PAGAR[i][0] === k) return PARA_PAGAR[i][1]();
+                return true;
+            }
+            function primeiroInvalido(campos) { for (var i = 0; i < campos.length; i++) if (!valido(campos[i])) return campos[i]; return null; }
+            function etapaInicial() { var ps = passos(); for (var i = 0; i < ps.length; i++) if (primeiroInvalido(ps[i].campos)) return i + 1; return ps.length; }
+            // celular: com o CEP encontrado, rua/bairro/cidade viram um resumo e só o número fica para digitar
+            function resumoEnd() {
+                var ok = celular() && cepLocalizado && !editaEnd && END_AUTO.every(valido);
+                card.classList.toggle('end-resumido', ok);
+                if (ok) document.getElementById('orbEndTx').textContent = ent('Rua').value.trim() + ', ' + ent('Bairro').value.trim() + ' · ' + ent('Cidade').value.trim() + '/' + ent('Uf').value.trim().toUpperCase();
+            }
             function pintaEtapa() {
-                card.classList.toggle('contato-primeiro', etapaPagamento === 1);
-                card.classList.toggle('entrega-depois', etapaPagamento === 2);
-                tit.textContent = etapaPagamento === 1 ? 'Como podemos falar com você?' : 'Onde vamos entregar?';
-                btnTx.textContent = etapaPagamento === 1 ? 'Continuar para entrega' : 'Ir para o pagamento';
-                document.getElementById('orbProgresso').textContent = etapaPagamento === 1 ? '1 de 2 · Seus dados' : '2 de 2 · Entrega';
+                var ps = passos(), cel = celular();
+                if (etapaPagamento > ps.length) etapaPagamento = ps.length;
+                var p = ps[etapaPagamento - 1], ultima = etapaPagamento === ps.length;
+                card.classList.toggle('passo-a-passo', cel);
+                card.classList.toggle('passo-unico', p.campos.length === 1);
+                card.classList.toggle('passo-entrega', p.campos === ENTREGA);
+                TODOS.forEach(function (k) { caixa(k).classList.toggle('fora', p.campos.indexOf(k) < 0); if (p.campos.indexOf(k) < 0) caixa(k).classList.remove('erro'); });
+                p.campos.forEach(function (k) { entrada(k).setAttribute('enterkeyhint', ultima && k !== 'Cep' ? 'go' : 'next'); });
+                tit.textContent = p.tit;
+                sub.textContent = p.sub || 'Frete grátis incluso no pedido';
+                btnTx.textContent = ultima ? 'Ir para o pagamento' : cel ? 'Continuar' : 'Continuar para entrega';
+                seta.className = 'ph-bold ' + (ultima ? 'ph-lock-simple' : 'ph-arrow-right') + ' orb-seta';
+                document.getElementById('orbPassoTx').textContent = 'Passo ' + etapaPagamento + ' de ' + ps.length;
+                document.getElementById('orbBarra').style.width = (etapaPagamento / ps.length * 100) + '%';
+                document.getElementById('orbProgresso').textContent = etapaPagamento + ' de ' + ps.length + ' · ' + (p.rot || '');
                 document.getElementById('orbResumo').textContent = 'Total do pedido: ' + moeda(valorPedido);
                 document.getElementById('orbParcelas').textContent = '4x de ' + moeda(valorPedido / 4) + ' sem juros';
+                document.getElementById('orbTotal').innerHTML = '<i class="ph ph-lock-simple" aria-hidden="true"></i> Total <b>' + moeda(valorPedido) + '</b> · até 4x de ' + moeda(valorPedido / 4) + ' sem juros';
+                resumoEnd();
                 scrollDados.scrollTop = 0;
             }
+            // foco no primeiro campo a preencher da etapa, na hora (no iPhone o teclado só abre/continua aberto se o foco vier do toque)
+            function focaEtapa() {
+                var p = passos()[etapaPagamento - 1];
+                var k = primeiroInvalido(p.campos) || p.campos[0];
+                if (ENTREGA.indexOf(k) > 0 && card.classList.contains('sem-end')) k = 'Cep';
+                try { entrada(k).focus({preventScroll: true}); } catch (err) { entrada(k).focus(); }
+            }
+            function trocaTela() { if (modo === 'pagar' && itensPedido) { etapaPagamento = etapaInicial(); pintaEtapa(); } }
+            if (mqCel.addEventListener) mqCel.addEventListener('change', trocaTela); else if (mqCel.addListener) mqCel.addListener(trocaTela);
                         try { nome.value = localStorage.getItem('saturno_nome') || ''; empresa.value = localStorage.getItem('saturno_empresa') || ''; } catch (e) {}
 
             // Festa: confete saindo do botão e dois canhões nos cantos de baixo, em duas ondas (mesmo efeito do pedido da Zoo)
@@ -4920,17 +4979,7 @@
             }
             window.saturnoEscolherPlano = abrir;
             function focaCampo() {
-                if (modo === 'pagar') {
-                    if (window.matchMedia('(max-width: 767px)').matches) {
-                        var ativo = document.activeElement;
-                        if (ativo && ativo.tagName === 'INPUT') ativo.blur();
-                        card.scrollTop = 0;
-                        scrollDados.scrollTop = 0;
-                        ajustaAoTeclado();
-                        return;
-                    }
-                    return foca(ent(faltando() || 'Cep'), 80);
-                }
+                if (modo === 'pagar') { card.scrollTop = 0; return focaEtapa(); }
                 foca(limpa(nome).length < 2 || limpa(empresa).length >= 2 ? nome : empresa, 80);
             }
             function emailOk() { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim()); }
@@ -4944,7 +4993,11 @@
             // festa antes de trocar a tela: o confete sai da posição do botão, que some em seguida
             document.getElementById('orbPagar').addEventListener('click', function () { segue('pagar'); });
             document.getElementById('orbZap').addEventListener('click', function () { segue('zap'); });
-            document.getElementById('orbVolta').addEventListener('click', function () { avisa(''); if (modo === 'pagar' && etapaPagamento === 2) { etapaPagamento = 1; pintaEtapa(); return; } poeModo('escolha'); });
+            var volta = document.getElementById('orbVolta');
+            volta.addEventListener('click', function () { avisa(''); if (modo === 'pagar' && etapaPagamento > 1) { etapaPagamento--; pintaEtapa(); return focaEtapa(); } poeModo('escolha'); });
+            // voltar uma etapa sem fechar o teclado
+            volta.addEventListener('pointerdown', function (e) { if (modo === 'pagar' && etapaPagamento > 1 && e.isPrimary && e.button === 0) e.preventDefault(); });
+            document.getElementById('orbEndEdita').addEventListener('click', function () { editaEnd = true; resumoEnd(); ent('Rua').focus(); });
             // voltou do checkout pelo botão do navegador: o botão não pode ficar travado
             window.addEventListener('pageshow', function (e) { if (e.persisted && modo === 'pagar') poeModo('pagar'); });
 
@@ -5014,7 +5067,7 @@
                     clearTimeout(limite);
                     try { if (abaPg) abaPg.close(); } catch (err) {}
                     abaPg = null;
-                    poeModo('pagar'); etapaPagamento = 2; pintaEtapa();
+                    poeModo('pagar'); etapaPagamento = passos().length; pintaEtapa();
                     avisa('Não foi possível abrir o pagamento. Seus dados estão preenchidos: toque novamente para tentar.');
                 });
             }
@@ -5053,6 +5106,8 @@
             function mostraEndereco(foco, aviso) {
                 cepLocalizado = true; card.classList.remove('sem-end');
                 cepSt.textContent = aviso || '';
+                if (aviso) editaEnd = true;   // CEP não achado: os campos do endereço aparecem para digitar
+                resumoEnd();
                 if (foco && document.activeElement === ent('Cep')) ent(foco).focus();
             }
             ent('Cep').addEventListener('input', function () {
@@ -5065,6 +5120,7 @@
                 fetch('https://viacep.com.br/ws/' + d + '/json/').then(function (r) { return r.json(); }).then(function (j) {
                     if (cepDigitos() !== d) return;
                     if (j.erro) return mostraEndereco('Rua', 'CEP não localizado. Preencha o endereço.');
+                    editaEnd = false;
                     [['Rua', j.logradouro], ['Bairro', j.bairro], ['Cidade', j.localidade], ['Uf', j.uf]].forEach(function (p) {
                         if (p[1]) { ent(p[0]).value = p[1]; ent('Campo' + p[0]).classList.remove('erro'); }
                     });
@@ -5087,22 +5143,22 @@
                 e.preventDefault();
                 if (btn.disabled) return;
                 if (modo === 'pagar' && itensPedido) {
-                    var contato = [[cNome, nome, limpa(nome).length >= 2], [cEmp, empresa, limpa(empresa).length >= 2], [cEmail, email, emailOk()], [cFone, fone, foneOk()]];
-                    var invalido = contato.find(function (c) { return !c[2]; });
-                    contato.forEach(function (c) { c[0].classList.toggle('erro', !c[2]); });
-                    if (invalido) { etapaPagamento = 1; pintaEtapa(); return erro(invalido[0], invalido[1]); }
-                    if (etapaPagamento === 1) {
-                        if (card.contains(document.activeElement) && document.activeElement.blur) document.activeElement.blur();
-                        etapaPagamento = 2; pintaEtapa(); return;
+                    var ps = passos(), p = ps[etapaPagamento - 1];
+                    if (p.campos === ENTREGA && cepDigitos().length === 8 && card.classList.contains('sem-end')) mostraEndereco();
+                    var falta = primeiroInvalido(p.campos);
+                    if (falta) {
+                        var alvo = entrada(falta), ativo = document.activeElement;
+                        // "próximo" do teclado: o campo seguinte ainda está vazio, então só leva o cursor até ele, sem marcar erro
+                        if (!alvo.value.trim() && ativo !== alvo && p.campos.some(function (k) { return entrada(k) === ativo && valido(k); })) { alvo.focus(); return; }
+                        if (END_AUTO.indexOf(falta) >= 0 && card.classList.contains('end-resumido')) { editaEnd = true; resumoEnd(); }
+                        p.campos.forEach(function (k) { caixa(k).classList.toggle('erro', k === falta || (!valido(k) && entrada(k).value.trim() !== '')); });
+                        return erro(caixa(falta), alvo);
                     }
-                }
-                if (modo === 'pagar' && itensPedido) {
-                    if (cepDigitos().length === 8) mostraEndereco();
-                    var faltaEnd = faltando();
-                    if (faltaEnd && faltaEnd !== 'Email' && faltaEnd !== 'Fone') {
-                        PARA_PAGAR.forEach(function (c) { ent('Campo' + c[0]).classList.toggle('erro', !c[1]()); });
-                        return erro(ent('Campo' + faltaEnd), ent(faltaEnd));
-                    }
+                    p.campos.forEach(function (k) { caixa(k).classList.remove('erro'); });
+                    if (etapaPagamento < ps.length) { etapaPagamento++; pintaEtapa(); return focaEtapa(); }
+                    // última etapa: confere se nada ficou para trás nas anteriores
+                    var volta1 = etapaInicial();
+                    if (volta1 < etapaPagamento) { etapaPagamento = volta1; pintaEtapa(); var k1 = primeiroInvalido(ps[volta1 - 1].campos); return erro(caixa(k1), entrada(k1)); }
                 }
                 var n = limpa(nome);
                 var emp = limpa(empresa);
@@ -5931,14 +5987,57 @@ function linhaEu(texto) {
 .checkout-resumo span{font-size:12px;color:#6e6e73;font-weight:600}.checkout-resumo strong{font-size:20px;color:#1d1d1f}.checkout-resumo small{font-size:12px;color:#6e6e73}
 #orbCard.m-pagar .orb-logo{display:none}
 #orbCard.m-pagar .orb-in{animation:none;opacity:1;transform:none}
-#orbCard.m-pagar.contato-primeiro .orb-end,#orbCard.m-pagar.contato-primeiro #orbCampoCep{display:none}
-#orbCard.m-pagar.entrega-depois #orbCampoNome,#orbCard.m-pagar.entrega-depois #orbCampoEmp,#orbCard.m-pagar.entrega-depois #orbCampoEmail,#orbCard.m-pagar.entrega-depois #orbCampoFone{display:none}
+#orbCard.m-pagar .orb-campo.fora{display:none}
 #orbCard.m-pagar #orbCampoNome,#orbCard.m-pagar #orbCampoEmp{grid-column:span 4}
 #orbCard.m-pagar .orb-tit{font-size:24px;text-align:left;padding-right:24px}
 #orbCard.m-pagar .orb-sub{text-align:left;margin-bottom:16px}
 #orbCard.m-pagar .orb-btn{background:#15803d}
 #orbCard.m-pagar .orb-btn:disabled{opacity:.65;cursor:wait}
 @media(max-width:767px){#orbCard.m-pagar #orbBtn{background:#15803d}#orbCard.m-pagar{padding:24px 18px 16px}}
+</style>
+<style>
+/* ===== Checkout no celular: uma pergunta por tela =====
+   O cartão fica preso no topo da área visível, então o teclado (que sobe de baixo)
+   nunca cobre o campo nem o botão. O botão "próximo" do teclado avança de etapa. */
+.orb-passo,.orb-total,.orb-end-res{display:none}
+@media (max-width:767px){
+  .orb-ov:has(#orbCard.m-pagar.passo-a-passo){align-items:flex-start;padding:10px}
+  #orbCard.m-pagar.passo-a-passo{width:100%;padding:60px 18px 14px;border-radius:24px}
+  #orbCard.m-pagar.passo-a-passo .checkout-resumo{display:none}
+  /* topo: voltar · passo X de N + barra · fechar */
+  #orbCard.m-pagar.passo-a-passo .orb-passo{display:flex;flex-direction:column;justify-content:center;gap:6px;position:absolute;top:16px;left:58px;right:58px;height:30px}
+  #orbPassoTx{font-size:12.5px;font-weight:600;color:#6e6e73;text-align:center;line-height:1}
+  .orb-barra{display:block;height:4px;border-radius:99px;background:#e8e8ed;overflow:hidden}
+  .orb-barra i{display:block;height:100%;width:0;border-radius:inherit;background:#15803d;transition:width .35s ease}
+  #orbCard.m-pagar.passo-a-passo #orbVolta{position:absolute;top:16px;left:16px;z-index:2;width:30px;height:30px;margin:0;padding:0;border-radius:50%;
+    justify-content:center;background:#f5f5f7;color:#1d1d1f;font-size:0}
+  #orbCard.m-pagar.passo-a-passo #orbVolta i{font-size:15px}
+  /* pergunta grande, campo grande */
+  #orbCard.m-pagar.passo-a-passo .orb-tit{font-size:22px;padding-right:0;margin-bottom:4px}
+  #orbCard.m-pagar.passo-a-passo .orb-sub{font-size:14px;margin-bottom:16px}
+  #orbCard.m-pagar.passo-a-passo .orb-campo input{height:54px;font-size:17px}
+  #orbCard.m-pagar.passo-unico .orb-rot{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  #orbCard.m-pagar.passo-a-passo #orbScroll{padding:2px}
+  #orbCard.m-pagar.passo-a-passo .orb-total{display:block;margin:10px 0 0;text-align:center;font-size:12.5px;line-height:1.35;color:#6e6e73}
+  .orb-total b{color:#15803d;font-weight:700}
+  .orb-total i{font-size:13px;vertical-align:-1px}
+  /* entrega: CEP e número lado a lado; o resto vem do CEP e vira um resumo */
+  #orbCard.m-pagar.passo-entrega #orbCampoCep{order:1}
+  #orbCard.m-pagar.passo-entrega #orbCampoNumero{order:2}
+  #orbCard.m-pagar.passo-entrega .orb-end-res,#orbCard.m-pagar.passo-entrega #orbCampoRua,#orbCard.m-pagar.passo-entrega #orbCampoBairro,
+  #orbCard.m-pagar.passo-entrega #orbCampoCidade,#orbCard.m-pagar.passo-entrega #orbCampoUf{order:3}
+  #orbCard.m-pagar.passo-entrega:not(.sem-end) #orbCampoCep,#orbCard.m-pagar.passo-entrega:not(.sem-end) #orbCampoNumero{grid-column:span 2}
+  #orbCard.m-pagar.passo-entrega #orbCampoUf{order:4}
+  #orbCard.m-pagar.end-resumido #orbCampoRua,#orbCard.m-pagar.end-resumido #orbCampoBairro,#orbCard.m-pagar.end-resumido #orbCampoCidade,#orbCard.m-pagar.end-resumido #orbCampoUf{display:none}
+  #orbCard.m-pagar.passo-entrega.end-resumido .orb-end-res{display:flex;grid-column:span 4;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;
+    background:#f0fdf4;border:1px solid #bbf7d0;text-align:left;font-size:14px;line-height:1.35;color:#1d1d1f}
+  .orb-end-res i{flex:none;font-size:20px;color:#15803d}
+  .orb-end-res span{flex:1;min-width:0}
+  .orb-end-res button{flex:none;border:0;background:none;padding:6px 2px;color:#0071e3;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer}
+  /* teclado aberto em tela baixa: some o texto de apoio */
+  .orb-ov.baixa #orbCard.m-pagar.passo-a-passo .orb-sub{display:none}
+  .orb-ov.baixa #orbCard.m-pagar.passo-a-passo .orb-tit{margin-bottom:12px}
+}
 </style>
 <style>
 .sp-valores{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
