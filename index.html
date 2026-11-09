@@ -5044,10 +5044,12 @@
             })();
 
             function vaiParaPagamento(n, emp) {
-                btn.disabled = true; btnTx.textContent = 'Abrindo o pagamento…'; avisa('');
-                // a nova aba precisa nascer no clique, senão o navegador bloqueia
-                try { abaPg = window.open('', '_blank'); } catch (err) { abaPg = null; }
+                btn.disabled = true; btn.classList.add('decolando'); btnTx.textContent = 'Abrindo o pagamento…'; avisa('');
                 if (card.contains(document.activeElement) && document.activeElement.tagName === 'INPUT') document.activeElement.blur();
+                // festa primeiro: o link do pagamento é gerado enquanto o confete cai, e só depois a pessoa é levada ao Mercado Pago
+                festa(btn);
+                var festaAcaba = new Promise(function (ok) { setTimeout(ok, 1400); });
+                abaPg = null;
                 var ctl = new AbortController(), limite = setTimeout(function () { ctl.abort(); }, 20000);
                 fetch(FN_PAGAMENTO, {
                     method: 'POST', signal: ctl.signal,
@@ -5056,12 +5058,15 @@
                         endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
                         cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm})
                 }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
+                .then(function (j) { return festaAcaba.then(function () { return j; }); })
                 .then(function (j) {
                     clearTimeout(limite);
                     if (j.pedido) guardaPg({pedido: j.pedido, url: j.url, em: Date.now()});
+                    // celular: segue na mesma aba (o retorno do Mercado Pago e a conferência ao recarregar continuam valendo)
+                    if (celular() || !j.pedido) { location.href = j.url; return; }
+                    try { abaPg = window.open(j.url, '_blank'); } catch (err) { abaPg = null; }
                     if (!abaPg) { location.href = j.url; return; }   // nova aba bloqueada: segue na mesma
-                    abaPg.location.href = j.url;
-                    if (j.pedido) esperaPagamento(j.pedido, j.url, Date.now()); else location.href = j.url;
+                    esperaPagamento(j.pedido, j.url, Date.now());
                 })
                 .catch(function () {
                     clearTimeout(limite);
@@ -5331,6 +5336,15 @@
         .sai-txt .sai-cfg .sp-oque{font-weight:400;text-decoration:none}
         @media (max-width:480px){.sai-cfg .sp-opc{display:none}}
         .sai-pedido:hover{transform:translateY(-2px) scale(1.012)}
+        /* respostas rápidas da consultora */
+        .sai-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:.85rem 0 .15rem;white-space:normal;animation:saiSobe .35s cubic-bezier(.2,.8,.2,1) both}
+        .sai-chip{display:inline-flex;align-items:center;gap:.4rem;min-height:2.6rem;padding:.5rem 1rem;border-radius:999px;border:1px solid rgba(255,201,51,.35);
+            background:rgba(255,201,51,.06);color:#fff;font:inherit;font-size:.92rem;font-weight:500;line-height:1.2;text-align:left;cursor:pointer;
+            transition:background .2s,border-color .2s,transform .12s;-webkit-tap-highlight-color:transparent}
+        .sai-chip:hover{background:rgba(255,201,51,.16);border-color:#ffc933}
+        .sai-chip:active{transform:scale(.96)}
+        .sai-chip i{font-size:1.1rem;color:#ffd778}
+        @media (max-width:480px){.sai-chip{font-size:.9rem;padding:.5rem .9rem}}
         .sai-pedido:active{transform:scale(.975)}
         .sai-pedido i{flex:none;font-size:1.35rem}
         .sai-desce{position:absolute;left:50%;bottom:.7rem;width:2.25rem;height:2.25rem;margin-left:-1.125rem;display:grid;place-items:center;border-radius:50%;
@@ -5398,9 +5412,9 @@
         }
     </style>
 
-    <button type="button" class="sai-btn" id="sai-btn" aria-label="Conversar com o assistente de IA da Saturno NFC">
+    <button type="button" class="sai-btn" id="sai-btn" aria-label="Montar meu pedido com o assistente de IA da Saturno NFC">
         <span class="sai-esfera" aria-hidden="true"></span>
-        <span>Fale com a IA<small>Tire suas dúvidas agora</small></span>
+        <span>Monte seu pedido com a IA<small>Pronto em menos de 1 minuto</small></span>
     </button>
 
     <div class="sai-ov" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
@@ -5414,8 +5428,8 @@
         <div class="sai-corpo">
             <div class="sai-hero">
                 <div class="sai-globo" aria-hidden="true"><i class="sai-cadente"></i><i class="sai-cadente"></i><i class="sai-cadente"></i><div class="sai-logo"><i class="sai-halo"></i><span class="sai-esfera sai-central"></span></div></div>
-                <h2>Oi! Fica à vontade, me conta do seu negócio</h2>
-                <p class="sai-hero-sub">O que você vende ou que serviço oferece?</p>
+                <h2>Vamos montar o seu pedido juntos</h2>
+                <p class="sai-hero-sub">Algumas perguntas rápidas sobre o seu negócio e eu monto o pacote ideal.</p>
             </div>
             <div class="sai-msgs" id="sai-msgs"><div class="sai-fio" id="sai-fio"></div></div>
             <span class="sai-voz" id="sai-voz" aria-live="polite"></span>
@@ -5631,6 +5645,8 @@ function linhaEu(texto) {
                 cI.value = M.val(cI); gI.value = M.val(gI);
                 var nc = +cI.value, ng = +gI.value, total = M.calcula(nc, ng, crm.checked);
                 window.saturnoEscolherPlano(M.resumo(nc, ng, crm.checked) + ' (' + M.brl(total) + ')', null, true, total, {cartoes: nc, tags: ng, crm: crm.checked}, {nome: p.nome, empresa: p.empresa});
+                var campoEmp = document.getElementById('orbEmpresa');
+                if (p.empresa && campoEmp) campoEmp.value = p.empresa;
             });
             pinta();
             el.appendChild(c);
@@ -5678,7 +5694,7 @@ function linhaEu(texto) {
             var ritmo = Math.max(65, peso / 7), ip = 0, ic = 0, saldo = 0, ult = performance.now();
             var cursor = document.createElement('span'); cursor.className = 'sai-cursor'; cursor.setAttribute('aria-hidden', 'true');
             digitando = {
-                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; if (item.pedido) { var perto = pertoDoFim(); poeCartaoPedido(alvo, item.pedido); if (perto) vaiProFim(true); } }
+                fim: function () { clearTimeout(tDigita); mostraTudo(partes); cursor.remove(); digitando = null; if (item.pedido || item.depois) { var perto = pertoDoFim(); if (item.pedido) poeCartaoPedido(alvo, item.pedido); if (item.depois) item.depois(alvo); if (perto) vaiProFim(true); } }
             };
             function passo() {
                 // conta pelo tempo real: se a aba ficar em segundo plano, o texto alcança ao voltar
@@ -5706,16 +5722,17 @@ function linhaEu(texto) {
         function terminaDigitacao() {
             clearTimeout(tDigita);
             if (digitando) digitando.fim();
-            while (fila.length) { var item = fila.shift(), alvo = criaLinhaIa(item.aviso); mostraTudo(escreve(alvo, item.texto)); if (item.pedido) poeCartaoPedido(alvo, item.pedido); }
+            while (fila.length) { var item = fila.shift(), alvo = criaLinhaIa(item.aviso); mostraTudo(escreve(alvo, item.texto)); if (item.pedido) poeCartaoPedido(alvo, item.pedido); if (item.depois) item.depois(alvo); }
         }
         function cancelaDigitacao() { clearTimeout(tDigita); fila = []; digitando = null; }
 
-        function linhaIa(texto, animar, aviso, pedido) {
+        function linhaIa(texto, animar, aviso, pedido, depois) {
             if (animar) $('sai-voz').textContent = texto || 'Pedido pronto para conferir e enviar.';   // leitor de tela recebe a mensagem inteira, uma vez
-            if (animar) { fila.push({ texto: texto, aviso: aviso, pedido: pedido }); proxima(); return; }
+            if (animar) { fila.push({ texto: texto, aviso: aviso, pedido: pedido, depois: depois }); proxima(); return; }
             var alvo = criaLinhaIa(aviso);
             mostraTudo(escreve(alvo, texto));
             if (pedido) poeCartaoPedido(alvo, pedido);
+            if (depois) depois(alvo);
         }
         function mostraPensando() {
             tiraPensando();
@@ -5757,7 +5774,7 @@ function linhaEu(texto) {
                         if (lida.pedido) registraPedido(lida.pedido);
                         historico.push({ role: 'assistant', content: lida.texto });
                         novas++;
-                    } else if (m.message_type === 0 && restaurando) { linhaEu(String(m.content)); novas++; }
+                    } else if (m.message_type === 0 && restaurando) { linhaEu(semContexto(String(m.content))); novas++; }
                 });
                 carregado = true;
                 if (novas) {
@@ -5799,8 +5816,9 @@ function linhaEu(texto) {
             espera = null;
 
             function manda(jaTentou) {
+                var ctx = contextoGuia();
                 garanteConversa().then(function () {
-                    return cw(caminhoMsgs(sessao), { content: texto });
+                    return cw(caminhoMsgs(sessao), { content: ctx ? texto + '\n\n' + ctx : texto });
                 }).then(function (m) {
                     if (minha !== geracao) return;
                     carregado = true;
@@ -5834,7 +5852,11 @@ function linhaEu(texto) {
             caixa.classList.remove('travada');
             txt.disabled = false; txt.placeholder = DICA; micBtn.hidden = !reconhecedor();
         }
-        function enviaTexto() { paraMic(); var t = txt.value; txt.value = ''; ajusta(); envia(t); if (!toque) txt.focus(); }
+        function enviaTexto() {
+            paraMic(); var t = txt.value; txt.value = ''; ajusta();
+            if (t.trim() && guiaOuve(t)) { if (!toque) txt.focus(); return; }
+            envia(t); if (!toque) txt.focus();
+        }
 
         // ---------- microfone: o navegador transcreve a fala para o campo de texto ----------
         var micBtn = $('sai-mic'), rec = null, DICA = txt.placeholder;
@@ -5890,6 +5912,211 @@ function linhaEu(texto) {
         });
         env.addEventListener('click', enviaTexto);
 
+        // ---------- consultora: a IA conhece o projeto por etapas e monta o pedido ----------
+        // Respostas em botões (ou digitadas). No fim aparece o mesmo cartão do Monte Seu Plano, editável,
+        // e "Fazer meu pedido" leva ao mesmo funil (pagar pelo site ou WhatsApp). Perguntas livres vão para a IA com o contexto.
+        var guia = null;
+        var NUM_EXT = {um: 1, uma: 1, dois: 2, duas: 2, 'três': 3, tres: 3, quatro: 4, cinco: 5, seis: 6, sete: 7, oito: 8, nove: 9, dez: 10, vinte: 20};
+        function lerNumero(t) {
+            t = String(t || '').toLowerCase();
+            if (/\b(nenhum|nenhuma|zero|n[aã]o preciso|n[aã]o quero|agora n[aã]o)\b/.test(t)) return 0;
+            if (/\bs[oó] eu\b/.test(t)) return 1;
+            var m = /\d+/.exec(t);
+            if (m) return Math.min(200, parseInt(m[0], 10));
+            for (var k in NUM_EXT) if (new RegExp('(^|\\s)' + k + '(\\s|$)').test(t)) return NUM_EXT[k];
+            return undefined;
+        }
+        function naEmpresa() { return guia.empresa ? 'na *' + guia.empresa + '*' : 'no seu negócio'; }
+        // ramos: reconhecidos pelo nome da empresa ou pela resposta, cada um com o jeito que a Saturno ajuda a prosperar
+        var RAMOS = {
+            restaurante: {nome: 'Restaurante ou bar', frase: 'vi que vocês são do ramo de alimentação 🍽️',
+                re: /restaurante|pizzari|lanchonete|hamburg|burger|\bbar\b|boteco|\bcaf[eé]|cafeteria|padaria|panific|confeitaria|doceria|sorveteria|a[cç]a[ií]|bistr[oô]|churrascaria|sushi|temaki|japon[eê]s|cozinha|espetinho|pastel|marmit|delivery|cervejaria|chopp?eria|\bpub\b|gastro|food/i,
+                ajuda: 'Para restaurantes e bares, a Saturno ajuda assim:\n• *Avaliações no Google*: a tag na mesa ou no caixa leva o cliente direto para avaliar. Mais estrelas, mais gente te escolhe quando busca "onde comer".\n• *Site com cardápio e WhatsApp*: o cliente vê os pratos, o endereço e já chama para pedir.\n• *Cartão por aproximação*: a equipe passa o contato e o Instagram num toque, e o cliente volta.'},
+            saude: {nome: 'Saúde ou estética', frase: 'vi que vocês são da área de saúde e beleza 💆',
+                re: /cl[ií]nica|consult[oó]rio|odonto|dent[ai]|m[eé]dic|sa[uú]de|fisio|psic|nutri|est[eé]tica|sal[aã]o|barbearia|beleza|\bspa\b|manicure|\bunhas?\b|cabel|sobrancelha|depila|massag|pilates|academia|fitness|crossfit|yoga|veterin|laborat|terapi|derma|harmoniza|podolog|fonoaud/i,
+                ajuda: 'Para saúde, beleza e estética, a Saturno ajuda assim:\n• *Agenda cheia*: o site mostra seus serviços e leva direto para marcar pelo WhatsApp.\n• *Confiança*: a tag na recepção multiplica as avaliações no Google, que é onde o cliente decide onde ir.\n• *Cartão por aproximação*: cada profissional passa contato e Instagram num toque, e as indicações crescem.'},
+            imobiliaria: {nome: 'Imobiliária ou corretor', frase: 'vi que vocês são do mercado imobiliário 🏡',
+                re: /imobili|im[oó]ve(l|is)|corretor(?!a de seguro)|realty|empreendimento|incorporadora|loteamento|condom[ií]nio/i,
+                ajuda: 'Para imobiliárias e corretores, a Saturno ajuda assim:\n• *Cartão por aproximação*: o cliente aproxima o celular e salva seu contato e seus imóveis na hora, sem cartão de papel perdido.\n• *Site com seus imóveis*: um link profissional para mandar no WhatsApp e nos anúncios.\n• *CRM*: cada interessado vira um contato organizado, e você sabe quem está pronto para fechar.'},
+            loja: {nome: 'Loja ou varejo', frase: 'vi que vocês são do varejo 🛍️',
+                re: /\bloja|boutique|\bmoda\b|roupa|cal[cç]ado|[oó]tica|joalheri|semijoia|perfumaria|cosm[eé]tic|presente|papelaria|livraria|eletr[oô]nic|celulares|inform[aá]tica|m[oó]veis|decora[cç]|materia(l|is) de constru|supermercado|mercadinho|empor|varejo|\bstore\b|\bshop\b|magazine|atacad|distribuidora|pet ?shop|farm[aá]cia|drogaria|conveni[eê]ncia/i,
+                ajuda: 'Para lojas, a Saturno ajuda assim:\n• *Site vitrine*: seus produtos e o WhatsApp a um toque, vendendo até com a loja fechada.\n• *Avaliações no Google*: a tag no caixa transforma cada venda em estrela, e a loja aparece primeiro nas buscas da região.\n• *Cartão por aproximação*: o vendedor passa o contato num toque e o cliente volta para comprar de novo.'},
+            servicos: {nome: 'Serviços ou consultoria', frase: 'vi que vocês são uma empresa de serviços 💼',
+                re: /advoga|advocacia|jur[ií]dic|contab|consultor|ag[eê]ncia|marketing|engenharia|arquitet|seguro|financ|cr[eé]dito|escola|curso|educa|idioma|oficina|mec[aâ]nic|auto ?center|el[eé]tric|encanad|reforma|constru|limpeza|dedetiz|transport|log[ií]stic|eventos|fotogra|buffet|gr[aá]fica|tecnologia|software|\bti\b|servi[cç]o|solu[cç]|assessoria|coach|mentor|digital/i,
+                ajuda: 'Para empresas de serviço, a Saturno ajuda assim:\n• *Primeira impressão*: o cartão por aproximação abre seu site na hora e mostra que sua empresa é moderna e confiável.\n• *Site profissional*: seus serviços, resultados e contato reunidos para o cliente decidir rápido.\n• *CRM*: nenhum orçamento esquecido, com cada contato acompanhado até virar contrato.'}
+        };
+        function detectaRamo(t) { for (var k in RAMOS) if (RAMOS[k].re.test(t || '')) return k; return ''; }
+        // mensagem de benefícios do ramo, logo antes da pergunta do objetivo
+        function beneficios() {
+            var r = RAMOS[guia.ramoKey], ini;
+            if (guia.ramoAuto && r) ini = 'Prazer, *' + guia.empresa + '*! Pelo nome, ' + r.frase + '\n\n';
+            else ini = 'Ótimo! ';
+            var corpo = r ? r.ajuda : 'Para *' + guia.ramo.toLowerCase() + '*, a Saturno ajuda assim:\n• *Site profissional*: tudo sobre o seu negócio e o WhatsApp a um toque, trazendo clientes 24 horas por dia.\n• *Cartão por aproximação*: o cliente aproxima o celular e já tem seu contato e seu site, sem cartão de papel perdido.\n• *Avaliações no Google*: mais estrelas, mais gente confiando em você antes mesmo de chamar.';
+            return ini + corpo + '\n\nResultado: mais gente te encontra, confia e compra. É assim que ' + (guia.empresa ? 'a *' + guia.empresa + '*' : 'o seu negócio') + ' prospera. 🚀';
+        }
+        function corrigeRamo() {
+            linhaEu('Meu ramo é outro'); vaiProFim(true);
+            guia.ramo = ''; guia.ramoKey = ''; guia.ramoAuto = false;
+            for (var i = 0; i < ETAPAS.length; i++) if (ETAPAS[i].id === 'ramo') guia.etapa = i;
+            pergunta('Sem problema! Qual é o *ramo* do negócio?');
+        }
+        var OBJETIVOS = {prof: 'Passar uma imagem mais profissional', aval: 'Receber mais avaliações no Google', crm: 'Captar e organizar clientes', tudo: 'Um pouco de tudo'};
+        var ETAPAS = [
+            {id: 'empresa', dica: 'Digite o nome da empresa',
+                texto: function () { return 'Oi! Sou a IA da Saturno e vou montar o seu pedido com você, em menos de 1 minuto. 🚀\n\nPara começar: qual é o *nome da sua empresa*? É ele que vai nos cartões.'; },
+                opcoes: function () { return [{t: 'Sou profissional autônomo', v: ''}]; },
+                le: function (t, o) { if (o) return o.v; t = t.trim().replace(/\s+/g, ' '); return t.length >= 2 ? t.slice(0, 80) : undefined; },
+                grava: function (v) {
+                    guia.empresa = v;
+                    var k = detectaRamo(v);   // "Pizzaria Bella" já diz o ramo: pula a pergunta
+                    if (k) { guia.ramoKey = k; guia.ramo = RAMOS[k].nome; guia.ramoAuto = true; }
+                },
+                erro: 'Me diz o nome da empresa, por favor. Se ainda não tiver, toque em "Sou profissional autônomo".'},
+            {id: 'ramo', dica: 'Ou digite o seu ramo',
+                se: function () { return !guia.ramo; },
+                texto: function () { return (guia.empresa ? 'Prazer, *' + guia.empresa + '*! ' : 'Perfeito! ') + 'Qual é o *ramo* do negócio? Assim eu te mostro como a Saturno ajuda no seu caso.'; },
+                opcoes: function () { return ['restaurante', 'loja', 'saude', 'servicos', 'imobiliaria'].map(function (k) { return {t: RAMOS[k].nome, v: RAMOS[k].nome}; }); },
+                le: function (t, o) { if (o) return o.v; t = t.trim(); return t.length >= 2 ? t.slice(0, 60) : undefined; },
+                grava: function (v) { guia.ramo = v; guia.ramoKey = detectaRamo(v); guia.ramoAuto = false; },
+                erro: 'Qual é o ramo? Pode tocar numa opção ou escrever com suas palavras.'},
+            {id: 'obj', dica: 'Ou conte com suas palavras',
+                texto: function () { return beneficios() + '\n\nE o que você mais quer conquistar ' + naEmpresa() + ' agora?'; },
+                opcoes: function () {
+                    var o = Object.keys(OBJETIVOS).map(function (k) { return {t: OBJETIVOS[k], v: k}; });
+                    if (guia.ramoAuto) o.push({t: 'Meu ramo é outro', ic: 'ph-pencil-simple', acao: corrigeRamo});
+                    return o;
+                },
+                le: function (t, o) {
+                    if (o) return o.v;
+                    if (/tudo|todos|todas/i.test(t)) return 'tudo';
+                    if (/avalia|google|estrela|nota/i.test(t)) return 'aval';
+                    if (/client|venda|contato|lead|organiz|crm/i.test(t)) return 'crm';
+                    return t.trim().length >= 2 ? 'prof' : undefined;
+                },
+                grava: function (v) { guia.obj = v; }},
+            {id: 'cartoes', dica: 'Ou digite a quantidade',
+                texto: function () { return 'Quantas pessoas ' + naEmpresa() + ' vão usar o *cartão por aproximação*? Cada uma recebe o seu, por *R$ 35*. Aproximou do celular, o site abre na hora.'; },
+                opcoes: function () { return [{t: 'Só eu', v: 1}, {t: '2', v: 2}, {t: '3', v: 3}, {t: '5', v: 5}, {t: '10', v: 10}, {t: 'Nenhum por agora', v: 0}]; },
+                le: function (t, o) { return o ? o.v : lerNumero(t); },
+                grava: function (v) { guia.c = v; },
+                erro: 'Me diz só a quantidade de cartões, por exemplo "4". Se não quiser nenhum, toque em "Nenhum por agora".'},
+            {id: 'tags', dica: 'Ou digite a quantidade',
+                se: function () { return guia.obj === 'aval' || guia.obj === 'tudo' || ['restaurante', 'loja', 'saude'].indexOf(guia.ramoKey) >= 0 || /hotel|pousada/i.test(guia.ramo); },
+                texto: function () { return 'Para chover avaliação no Google: em quantos *balcões, mesas ou caixas* você quer a *tag de avaliação*? O cliente aproxima o celular e já cai na tela de avaliar. *R$ 40* cada.'; },
+                opcoes: function () { return [{t: '1', v: 1}, {t: '2', v: 2}, {t: '3', v: 3}, {t: '5', v: 5}, {t: 'Não preciso', v: 0}]; },
+                le: function (t, o) { return o ? o.v : lerNumero(t); },
+                grava: function (v) { guia.g = v; },
+                erro: 'Me diz só a quantidade de tags, por exemplo "2". Se não precisar, toque em "Não preciso".'},
+            {id: 'crm', dica: 'Sim ou não?',
+                se: function () { return guia.obj === 'crm' || guia.obj === 'tudo'; },
+                texto: function () { return 'Quer incluir o *CRM*? Ele guarda cada contato que chega pelo site e pelos cartões e organiza suas vendas num só lugar. *R$ 1.500*, pagamento único.'; },
+                opcoes: function (semDuvida) { var o = [{t: 'Quero o CRM', v: true}, {t: 'Agora não', v: false}]; if (!semDuvida) o.push({t: 'O que é CRM?', v: '?'}); return o; },
+                le: function (t, o) {
+                    if (o) return o.v;
+                    if (/o que [eé]|como funciona|\?/i.test(t)) return '?';
+                    if (/\b(n[aã]o|agora n[aã]o|depois|dispenso)\b/i.test(t)) return false;
+                    if (/\b(sim|quero|pode|claro|bora|inclui)\b/i.test(t)) return true;
+                    return undefined;
+                },
+                explica: 'O CRM é o seu painel de clientes: cada pessoa que toca no cartão ou chama pelo site vira um contato organizado, com histórico e etapa da venda. Assim nenhum cliente fica esquecido e você sabe exatamente quem está perto de fechar.\n\nQuer incluir no pedido?',
+                grava: function (v) { guia.crm = v; },
+                erro: 'Quer incluir o CRM no pedido? Toque em "Quero o CRM" ou "Agora não".'}
+        ];
+        function poeChips(alvo, opcoes) {
+            var box = document.createElement('div'); box.className = 'sai-chips';
+            opcoes.forEach(function (o) {
+                var b = document.createElement('button'); b.type = 'button'; b.className = 'sai-chip' + (o.forte ? ' forte' : '');
+                if (o.ic) b.innerHTML = '<i class="ph ' + o.ic + '" aria-hidden="true"></i>';
+                b.appendChild(document.createTextNode(o.t));
+                b.addEventListener('click', function () { if (!box.parentNode) return; if (o.acao) { box.remove(); return o.acao(); } responde(o.t, o); });
+                box.appendChild(b);
+            });
+            alvo.appendChild(box);
+            if (guia) guia.chips = box;
+        }
+        function fala(texto, opcoes, pedido) {
+            var g = guia;
+            mostraPensando(); vaiProFim(true);
+            setTimeout(function () {
+                if (g !== guia) return;
+                tiraPensando();
+                linhaIa(texto, true, false, pedido || null, opcoes && opcoes.length ? function (alvo) { poeChips(alvo, opcoes); } : null);
+                vaiProFim(true);
+            }, calmo ? 150 : 650);
+        }
+        function pergunta(texto, opcoes) {
+            var e = ETAPAS[guia.etapa];
+            txt.placeholder = e.dica || DICA;
+            fala(texto || e.texto(), opcoes || e.opcoes());
+        }
+        function avanca() {
+            for (var i = guia.etapa + 1; i < ETAPAS.length; i++) if (!ETAPAS[i].se || ETAPAS[i].se()) { guia.etapa = i; return pergunta(); }
+            finaliza();
+        }
+        // resposta do cliente (botão ou texto). Devolve false quando a mensagem deve ir para a IA.
+        function responde(t, o) {
+            if (!guia || guia.fim || guia.etapa < 0) return false;
+            var e = ETAPAS[guia.etapa], v = e.le(t, o);
+            terminaDigitacao();
+            if (guia.chips) { guia.chips.remove(); guia.chips = null; }
+            linhaEu(t); historico.push({ role: 'user', content: t }); vaiProFim(true);
+            if (v === undefined) return pergunta(e.erro, e.opcoes()), true;
+            if (v === '?' && e.explica) return pergunta(e.explica, e.opcoes(true)), true;
+            e.grava(v); avanca();
+            return true;
+        }
+        function guiaOuve(t) {
+            if (!guia || guia.fim || guia.etapa < 0) return false;
+            if (/\?\s*$/.test(t.trim()) && ETAPAS[guia.etapa].id !== 'crm') return false;   // dúvida no meio do caminho: a IA responde
+            return responde(t);
+        }
+        function finaliza() {
+            var M = window.saturnoMontador;
+            guia.fim = true; txt.placeholder = 'Ficou alguma dúvida? Pergunte aqui';
+            if (esgotou()) travaCampo();
+            var g = guia, linhas = ['• *Site excepcional* com domínio próprio, a vitrine' + (g.empresa ? ' da ' + g.empresa : ' do seu negócio') + ' (R$ 597)'];
+            if (g.c) linhas.push('• *' + g.c + (g.c === 1 ? ' cartão' : ' cartões') + ' por aproximação*, ' + (g.c === 1 ? 'para você apresentar o negócio em um toque' : 'um para cada pessoa da equipe'));
+            if (g.g) linhas.push('• *' + g.g + (g.g === 1 ? ' tag' : ' tags') + ' de avaliação Google*, para transformar clientes satisfeitos em estrelas');
+            if (g.crm) linhas.push('• *CRM* para não perder nenhum contato e acompanhar cada venda');
+            var texto = 'Pronto! Montei o pedido ideal para ' + (g.empresa ? 'a *' + g.empresa + '*' : 'você') + ':\n\n' + linhas.join('\n') +
+                '\n\nConfira abaixo: dá para mudar as quantidades à vontade. Frete grátis e tudo chega configurado. Quando estiver certo, toque em *Fazer meu pedido*.';
+            var pedido = null;
+            if (M) {
+                var total = M.calcula(g.c, g.g, g.crm);
+                pedido = { nome: '', empresa: g.empresa, pedido: M.resumo(g.c, g.g, g.crm) + ' (' + M.brl(total) + ')', valor: total, itens: { c: g.c, g: g.g, crm: g.crm } };
+            }
+            var opcoes = [
+                { t: 'Tirar uma dúvida', ic: 'ph-chat-circle-dots', acao: function () { liberaCampo(); txt.placeholder = 'Pergunte o que quiser sobre o pedido'; txt.focus(); } },
+                { t: 'Refazer do zero', ic: 'ph-arrow-counter-clockwise', acao: function () { novaConversa(); } }
+            ];
+            fala(texto, opcoes, pedido);
+        }
+        // o que o cliente contou e o pedido como está no cartão agora: vai junto das perguntas para a IA
+        function contextoGuia() {
+            if (!guia || guia.etapa < 1) return '';
+            var p = [];
+            if (guia.empresa) p.push('Empresa: ' + guia.empresa);
+            if (guia.ramo) p.push('Ramo: ' + guia.ramo);
+            if (guia.obj) p.push('Objetivo: ' + OBJETIVOS[guia.obj]);
+            var M = window.saturnoMontador, cards = fio.querySelectorAll('.sai-cfg'), cfg = cards[cards.length - 1];
+            if (guia.fim && M && cfg) {
+                var ins = cfg.querySelectorAll('.sp-qtd input'), nc = M.val(ins[0]), ng = M.val(ins[1]), crm = cfg.querySelector('.sp-tog input').checked;
+                p.push('Pedido montado no site: ' + M.resumo(nc, ng, crm) + ' (' + M.brl(M.calcula(nc, ng, crm)) + ')');
+            }
+            return p.length ? '[Contexto do site] ' + p.join(' | ') : '';
+        }
+        function semContexto(t) { return t.replace(/\s*\[Contexto do site\][\s\S]*$/, ''); }
+        function liberaCampo() {
+            if (despediu) return;
+            caixa.classList.remove('travada'); txt.disabled = false; micBtn.hidden = !reconhecedor(); ajusta();
+        }
+        function iniciaGuia() {
+            guia = { etapa: -1, empresa: '', ramo: '', ramoKey: '', ramoAuto: false, obj: '', c: 0, g: 0, crm: false, fim: false, chips: null };
+            liberaCampo();
+            entraConversa(false);
+            avanca();
+        }
+
         // ---------- abrir, fechar e nova conversa ----------
         // mantém o campo acima do teclado do celular
         function ajustaTela() {
@@ -5927,7 +6154,7 @@ function linhaEu(texto) {
             aberto = true; ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false'); document.body.classList.add('sai-aberto');
             ajustaTela();
             if (sessao) { if (!carregado) entraConversa(false); buscaMsgs(); }
-            else despedida(false);   // limite já usado e sem conversa guardada
+            else if (!guia) iniciaGuia();   // sem conversa guardada: a IA começa montando o pedido
             if (!toque) setTimeout(function () { txt.focus(); }, 120);
         }
         function fecha() {
@@ -5943,7 +6170,7 @@ function linhaEu(texto) {
             fio.textContent = ''; desce.classList.remove('on');
             ov.classList.remove('conversa');
             txt.value = ''; ajusta();
-            despediu = false; despedida(false);   // nova conversa não devolve mensagens: reapresenta o botão
+            despediu = false; guia = null; iniciaGuia();
             if (!toque) txt.focus();
         }
         if (esgotou()) travaCampo();
