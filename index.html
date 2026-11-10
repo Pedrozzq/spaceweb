@@ -1239,17 +1239,19 @@
             display: flex; justify-content: space-between; align-items: center;
             padding: 0 9%;
             font-size: calc(var(--ip-w) * 0.052); font-weight: 600;
-            color: #fff;
+            color: var(--ttx, #fff);
         }
         .ip-status i { font-size: 1.05em; margin-left: 2px; }
 
         /* tela de bloqueio */
         .ip-lock {
             position: absolute; inset: 0;
+            /* cores do site que vai abrir (tema do projeto da cena: --tc, --tbg1, --tbg2, --ttx) */
             background:
-                radial-gradient(120% 70% at 50% 0%, rgba(239, 68, 68, 0.55), transparent 60%),
-                linear-gradient(180deg, #3a0b10 0%, #140506 100%);
-            color: #fff; text-align: center;
+                radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--tc) 55%, transparent), transparent 60%),
+                linear-gradient(180deg, var(--tbg1) 0%, var(--tbg2) 100%);
+            color: var(--ttx); text-align: center;
+            transition: background .6s, color .6s;
             display: flex; flex-direction: column; align-items: center;
             padding-top: 18%;
         }
@@ -1260,7 +1262,7 @@
             display: flex; flex-direction: column; align-items: center; gap: 4px;
             font-size: calc(var(--ip-w) * 0.05); font-weight: 600; letter-spacing: 0.04em; opacity: 0.9;
         }
-        .ip-lock .nfc i { font-size: calc(var(--ip-w) * 0.11); color: #ff6b78; transform: rotate(90deg); }
+        .ip-lock .nfc i { font-size: calc(var(--ip-w) * 0.11); color: var(--tc); transform: rotate(90deg); }
 
         /* site do cliente (mockup do portfólio) que abre após o toque */
         .ip-site {
@@ -1272,7 +1274,7 @@
         .ip-site img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center top; }
         .ip-flash {
             position: absolute; inset: 0; z-index: 7; pointer-events: none;
-            background: radial-gradient(circle at 50% 18%, rgba(255, 200, 205, 0.95), rgba(239, 68, 68, 0.35) 35%, rgba(239, 68, 68, 0) 70%);
+            background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--tc) 30%, #fff 70%), color-mix(in srgb, var(--tc) 35%, transparent) 35%, transparent 70%);
             opacity: 0;
         }
 
@@ -2735,7 +2737,7 @@
                     </div>
                     <span class="flex flex-col min-w-0 text-left z-10 relative" style="text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 12px rgba(0,0,0,0.6);">
                         <span class="font-bold text-white main-btn-text tracking-tight whitespace-nowrap truncate">Crie seu plano personalizado agora!</span>
-                        <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Funciona sem app, em iPhone e Android, entrega configurada em 3 a 7 dias úteis (conforme o projeto), frete grátis e parcelamento sem juros.</span>
+                        <span class="btn-subtext text-gray-300 whitespace-nowrap truncate">Frete grátis, 4x sem juros e funciona sem app.</span>
                     </span>
                 </div>
                 <i id="escolher-plano-caret" class="ph ph-caret-right text-gray-300 group-hover:text-white transition-transform z-10 relative"></i>
@@ -2773,7 +2775,7 @@
                             </div>
                             <a class="sp-row sp-anim" style="--i:4 sp-row-gestao" href="#gestao-saturno">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                                <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Gestão Saturno</em></b><span>Assinatura mensal, à parte</span></span>
+                                <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Gestão Saturno</em></b><span>Controle e gestão de clientes e vendas</span></span>
                                 <i class="ph ph-caret-right sp-ir" aria-hidden="true"></i>
                                 <input id="sp-crm" data-item="crm" type="checkbox" hidden disabled tabindex="-1">
                             </a>
@@ -2869,6 +2871,12 @@
             </ul>
         </section>
 
+        <!-- Cena do celular espalhada pela página: projeto Kidestino (montada pelo script a partir de #tap-scene) -->
+        <section class="w-full cena-espalhada" aria-label="Kidestino na prática">
+            <p class="cena-olho">Projeto real na prática</p>
+            <div class="tap-scene" data-projeto="1"></div>
+        </section>
+
         <!-- STICKY STACK: Vantagens Exclusivas fica presa enquanto Como Funciona
              na Prática desliza por cima dela ao rolar. -->
         <div class="stack-wrap">
@@ -2930,7 +2938,7 @@
 
                 <!-- CENA: cada cartão do portfólio sobe até o celular e abre o site do cliente
                      (cartões e telas são montados pelo script da cena a partir de PRATICA_PROJECTS) -->
-                <div class="tap-scene" id="tap-scene">
+                <div class="tap-scene" id="tap-scene" data-projeto="0">
                     <div class="tap-stage">
                         <p class="tap-hint">Role para aproximar o cartão <i class="ph ph-caret-down"></i></p>
 
@@ -2955,7 +2963,7 @@
                         <!-- cartões do portfólio entram aqui -->
 
                         <div class="tap-caption">
-                            <span class="tap-count">1/5</span>
+                            <span class="tap-count">Projeto real</span>
                             <p class="text-white font-black uppercase tracking-wide text-sm mt-1"><span class="tap-name"></span></p>
                             <p class="text-[10px] font-bold tracking-[0.25em] uppercase text-gray-400 mt-1">Site aberto em segundos</p>
                         </div>
@@ -3005,11 +3013,6 @@
     <span class="text-white">Monte Seu</span> <span class="text-saturno-gold inline-block">Plano</span>
 </h2>
                     <ul class="selos-saturno mt-6" aria-label="Vantagens da compra">
-                        <li><i class="ph ph-device-mobile" aria-hidden="true"></i>Funciona sem app</li>
-                        <li><i class="ph ph-apple-logo" aria-hidden="true"></i><i class="ph ph-android-logo" aria-hidden="true"></i>iPhone e Android</li>
-                        <li><i class="ph ph-package" aria-hidden="true"></i>Entrega configurada</li>
-                        <li><i class="ph ph-truck" aria-hidden="true"></i>Frete grátis</li>
-                        <li><i class="ph ph-credit-card" aria-hidden="true"></i>Parcelamento sem juros</li>
                         <li><i class="ph ph-calendar-check" aria-hidden="true"></i>3 a 7 dias úteis, conforme o projeto</li>
                     </ul>
                 </header>
@@ -3041,7 +3044,7 @@
                     </div>
                     <a class="sp-row sp-row-gestao" href="#gestao-saturno">
                         <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                        <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Gestão Saturno</em></b><span>Assinatura mensal, à parte</span></span>
+                        <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Gestão Saturno</em></b><span>Controle e gestão de clientes e vendas</span></span>
                         <i class="ph ph-caret-right sp-ir" aria-hidden="true"></i>
                         <input id="sps-crm" data-item="crm" type="checkbox" hidden disabled tabindex="-1">
                     </a>
@@ -3053,6 +3056,12 @@
                     <button type="button" class="sp-pedir" id="sps-pedir">Fazer meu pedido</button>
                     <span class="sp-frete sp-frete-neon"><i class="ph ph-truck"></i> Frete grátis. Entrega em 3 a 7 dias úteis, conforme o projeto.</span>
                 </div>
+
+                <!-- Cena do celular espalhada pela página: projeto PorElas Sem Glúten (montada pelo script a partir de #tap-scene) -->
+                <section class="w-full cena-espalhada" aria-label="PorElas Sem Glúten na prática">
+                    <p class="cena-olho">Projeto real na prática</p>
+                    <div class="tap-scene" data-projeto="2"></div>
+                </section>
 
                 <!-- ASSINATURA / GESTÃO SATURNO -->
                 <div class="w-full max-w-4xl mx-auto mb-12">
@@ -3094,26 +3103,11 @@
                     </div>
                 </div>
 
-                <!-- VÍDEO: Entenda como funciona a tecnologia NFC -->
-                <div id="video-como-funciona" class="w-full max-w-md mx-auto mb-20 flex flex-col items-center reveal-node">
-                    <div class="mb-6 text-center">
-                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[9px]">Veja Na Prática</span>
-                        <h3 class="text-white font-black uppercase tracking-widest text-[16px] mt-2">Entenda como funciona a tecnologia NFC</h3>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-2">Assista ao vídeo direto no seu celular.</p>
-                    </div>
-
-                    <div class="relative w-[240px] sm:w-[280px] flex justify-center">
-                        <div class="relative z-10 w-full bg-slate-900 border-[6px] border-slate-800 rounded-[2.2rem] shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden p-1.5">
-                            <div class="absolute top-1.5 left-1/2 -translate-x-1/2 w-16 h-4 bg-black rounded-full z-30"></div>
-                            <div class="w-full aspect-[9/16] bg-black rounded-[1.6rem] overflow-hidden">
-                                <video id="video-nfc-demo" class="w-full h-full object-cover" controls playsinline muted preload="metadata">
-                                    <source src="video/11.mp4" type="video/mp4">
-                                    Seu navegador não suporta vídeo HTML5.
-                                </video>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Cena do celular espalhada pela página: projeto Vênus Distribuidora (montada pelo script a partir de #tap-scene) -->
+                <section class="w-full cena-espalhada" aria-label="Vênus Distribuidora na prática">
+                    <p class="cena-olho">Projeto real na prática</p>
+                    <div class="tap-scene" data-projeto="3"></div>
+                </section>
 
                 <!-- ===================== HERO SCROLL-MORPH (vitrine animada do portfólio,
                      entre "Entenda como funciona" e "5 Estrelas Sem Pesquisa") ===================== -->
@@ -3143,6 +3137,12 @@
                         <img src="img/tapreview-sem-fundo.webp" alt="Google Review ao lado de um celular com a página de avaliação aberta" width="936" height="1200" loading="lazy" decoding="async">
                     </figure>
                 </div>
+
+                <!-- Cena do celular espalhada pela página: projeto Maia Produtor (montada pelo script a partir de #tap-scene) -->
+                <section class="w-full cena-espalhada" aria-label="Maia Produtor na prática">
+                    <p class="cena-olho">Projeto real na prática</p>
+                    <div class="tap-scene" data-projeto="4"></div>
+                </section>
 
                 <!-- Perguntas frequentes: respostas aprovadas na skill faq do agente -->
                 <div id="faq" class="w-full max-w-md mx-auto mb-10 reveal-node">
@@ -3483,23 +3483,6 @@
         }
         initStickyFade('linktree-buttons', 'card-stack-front');
         initStickyFade('vantagens-exclusivas', 'pratica');
-
-        // --- Vídeo "Entenda como funciona a tecnologia NFC": toca automaticamente
-        // assim que a seção entra na tela e pausa ao sair. ---
-        (function () {
-            const video = document.getElementById('video-nfc-demo');
-            if (!video) return;
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        video.play().catch(() => {});
-                    } else {
-                        video.pause();
-                    }
-                });
-            }, { threshold: 0.5 });
-            observer.observe(video);
-        })();
 
         // --- Widget de Chat: mostra o balão "Ajuda com seu pedido?"
         // só enquanto o card "Conquista Instantânea" está na tela. ---
@@ -3941,7 +3924,7 @@
         (function () {
             // funcs: botões em destaque depois que o site abre, um por vez conforme a pessoa rola.
             // r = [esquerda, topo, direita, base] em % do print do site; ar = largura/altura do print.
-            var PRATICA_PROJECTS = [
+            var TODOS_PROJETOS = [
                 { name: "Comfort Transport's", card: 'cartoes/3.png', site: 'img/mockup-comfort.webp', ar: 740 / 1600,
                     tema: { tc: '#f7b928', tc2: '#d97706', tbg1: 'rgba(26,31,44,.95)', tbg2: 'rgba(11,13,21,.96)', ttx: '#ffffff', tdesc: '#d8cfb6' }, funcs: [
                     { r: [70.5, 6.7, 96.3, 11.5], ic: 'ph-translate', t: 'Site em 3 idiomas', d: 'Português, inglês e espanhol: perfeito para atender turistas.' },
@@ -3982,8 +3965,20 @@
             var FEAT = 0.4;    // rolagem extra para cada função em destaque (em "cartões": 0.4 x 55vh ≈ 22vh)
             var ABRE = 0.58;   // ponto do trecho do cartão em que o site já está aberto (começa o tour)
 
-            var scene = document.getElementById('tap-scene');
-            if (!scene) return;
+            // Uma cena por projeto: a de #tap-scene (seção "Como funciona na prática") e as que
+            // ficam espalhadas pela página (.tap-scene[data-projeto]), todas a partir do mesmo molde.
+            var molde = document.getElementById('tap-scene');
+            if (!molde) return;
+            var MOLDE_HTML = molde.innerHTML;
+            var emTour = [];
+            [molde].concat([].slice.call(document.querySelectorAll('.tap-scene[data-projeto]:not(#tap-scene)'))).forEach(function (cena, idx) {
+                var pr = TODOS_PROJETOS[+cena.getAttribute('data-projeto') || 0];
+                if (!pr) return;
+                if (cena !== molde) cena.innerHTML = MOLDE_HTML;
+                montaCena(cena, [pr], idx);
+            });
+
+            function montaCena(scene, PRATICA_PROJECTS, cenaIdx) {
             // A cena só anda quando a pessoa rola, então roda mesmo com "reduzir movimento"
             // ativo (no Windows, efeitos de animação desligados faziam ela ficar parada no PC).
             var stage = scene.querySelector('.tap-stage');
@@ -4045,11 +4040,11 @@
 
             function setCaption(i) {
                 capName.textContent = PRATICA_PROJECTS[i].name;
-                capCount.textContent = (i + 1) + '/' + N;
+                capCount.textContent = N > 1 ? (i + 1) + '/' + N : 'Projeto real';
             }
 
             scene.style.height = (100 + WT * SEG_VH) + 'vh';
-            var ticking = false;
+            var ticking = false, feita = false;
             var captionIndex = -1;
 
             // a camada do tour fica exatamente em cima do print (que aparece inteiro, alinhado ao topo)
@@ -4105,6 +4100,8 @@
             function render() {
                 ticking = false;
                 var r = scene.getBoundingClientRect();
+                if (feita && (r.bottom < -window.innerHeight || r.top > window.innerHeight * 2)) return;
+                feita = true;
                 var total = scene.offsetHeight - window.innerHeight;
                 var p = clamp(-r.top / total, 0, 1);
                 var P = p * WT;                      // progresso em "cartões" (cada função conta FEAT)
@@ -4200,7 +4197,8 @@
                     sobe = tourO * Math.max(0, fundo - (stage.clientHeight - func.offsetHeight - 26));
                 }
                 phone.style.transform = phoneBase + (mob ? ' translateY(' + (-sobe).toFixed(1) + 'px) scale(' + (1 - tourO * 0.1).toFixed(3) + ')' : '');
-                document.body.classList.toggle('tour-on', mob && tourO > 0.05);
+                emTour[cenaIdx] = mob && tourO > 0.05;   // várias cenas: o botão do WhatsApp some se qualquer uma estiver no tour
+                document.body.classList.toggle('tour-on', emTour.some(Boolean));
 
                 // instrução no topo: o que fazer agora (nas cores do cliente da vez)
                 setTema(tourK >= 0 ? tourK : atual);
@@ -4223,6 +4221,7 @@
             window.addEventListener('resize', function () { layoutTours(); request(); });
             layoutTours();
             render();
+            }
         })();
 
         // --- 6. CARTÃO 3D INTERATIVO (Lógica Importada) ---
@@ -6317,11 +6316,12 @@ function linhaEu(texto) {
 /* Selos de compra: sem app, iPhone/Android, entrega configurada, frete grátis, sem juros */
 .selos-saturno{list-style:none;margin-left:auto;margin-right:auto;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:640px}
 .selos-saturno li{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(15,15,22,.7);color:#e4e4e7;font-size:12.5px;font-weight:600;line-height:1.2;white-space:nowrap}
-.selos-saturno li i{color:#39ff14;font-size:15px}
+.selos-saturno li i{color:#fff;font-size:15px}
 .selos-saturno li i + i{margin-left:-3px}
 @media (max-width:380px){.selos-saturno{gap:6px}.selos-saturno li{font-size:11.5px;padding:6px 10px}}
 </style>
 <style>#gestao-saturno{scroll-margin-top:28px}a.sp-row-gestao{color:inherit;text-decoration:none;cursor:pointer}a.sp-row-gestao .sp-ir{flex:none;color:#a1a1a6;font-size:18px;margin-right:4px}a.sp-row-gestao:hover .sp-ir{color:#fff}</style>
+<style>.cena-espalhada{position:relative;margin:2rem 0 3rem}.cena-olho{text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.4em;font-size:9px;color:#ff4d5e;margin:0 0 -.5rem;position:relative;z-index:3;text-shadow:0 1px 6px rgba(0,0,0,.9)}.plans-section .cena-espalhada .tap-scene{margin:0 -1rem}</style>
 <style>.sp-txt span.sp-beneficio{white-space:normal;overflow:visible;text-overflow:clip}</style>
 </body>
 </html>
