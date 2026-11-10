@@ -198,6 +198,30 @@
         .js .sobe { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.7,.2,1); }
         .js .sobe.visto { opacity: 1; transform: none; }
 
+
+        /* "Por dentro da CRM": prints reais (modo demonstração) com explicação numerada */
+        .tour { display: flex; flex-direction: column; gap: 64px; }
+        .tela { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center; }
+        .tela:nth-child(even) { grid-template-columns: 1fr 1.35fr; }
+        .tela:nth-child(even) .tela-img { order: 2; }
+        .tela-img { position: relative; display: block; border-radius: 18px; border: 1px solid var(--linha); background: #0b0b0e; padding: 30px 8px 8px; box-shadow: 0 30px 70px -30px rgba(0,0,0,.9), 0 0 60px -30px rgba(255,170,30,.35); transition: border-color .25s ease, transform .25s ease; }
+        .tela-img:hover { border-color: rgba(255,201,51,.45); transform: translateY(-3px); }
+        .tela-img::before { content: ""; position: absolute; top: 12px; left: 14px; width: 8px; height: 8px; border-radius: 50%; background: #ff5f57; box-shadow: 14px 0 0 #febc2e, 28px 0 0 #28c840; }
+        .tela-img img { width: 100%; height: auto; border-radius: 10px; }
+        .tela-img.retrato { max-width: 380px; justify-self: center; width: 100%; }
+        .tela-txt .num { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 12px; font-weight: 800; font-size: 16px; color: #2a1a00; background: linear-gradient(145deg, #ffd84d, #ff9d1e); }
+        .tela-txt h3 { font-size: clamp(22px, 3vw, 28px); margin: 14px 0 10px; }
+        .tela-txt > p { color: var(--suave); font-size: 15.5px; }
+        .pontos { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+        .pontos li { display: flex; gap: 12px; align-items: flex-start; font-size: 14.5px; color: var(--suave); line-height: 1.5; }
+        .pontos li b { color: var(--texto); font-weight: 700; }
+        .pontos li i { flex: none; margin-top: 3px; color: var(--ouro); font-size: 17px; }
+        .aviso-demo { margin-top: 10px; color: var(--suave); font-size: 13px; opacity: .8; }
+        @media (max-width: 900px) {
+            .tela, .tela:nth-child(even) { grid-template-columns: 1fr; gap: 22px; }
+            .tela:nth-child(even) .tela-img { order: 0; }
+            .tour { gap: 54px; }
+        }
         @media (max-width: 900px) {
             .grade, .valor-grade { grid-template-columns: repeat(2, 1fr); }
             .caminho { grid-template-columns: repeat(2, 1fr); }
@@ -325,6 +349,87 @@
                     <article class="func sobe"><i class="ph ph-chart-line-up" aria-hidden="true"></i><h3>Relatórios que orientam</h3><p>Conversão, faturamento, ticket médio, ciclo de venda, origem dos leads e motivos de perda.</p></article>
                     <article class="func sobe"><i class="ph ph-percent" aria-hidden="true"></i><h3>Margem de lucro</h3><p>Custo, frete, impostos, lucro e margem de cada produto, com calculadora de preço pela margem desejada.</p></article>
                     <article class="func sobe"><i class="ph ph-chats-circle" aria-hidden="true"></i><h3>Mensagens prontas</h3><p>Textos para proposta, retorno, envio e cobrança. Copie ou abra direto no WhatsApp do cliente.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao" id="por-dentro">
+            <div class="caixa">
+                <div class="cabeca centro sobe">
+                    <span class="olho">Por dentro da CRM</span>
+                    <h2>Veja uma CRM <span class="dourado">funcionando de verdade.</span></h2>
+                    <p class="lead">Este é o painel que montamos para a Zoo Tabacaria, uma loja com pedidos pelo site e pelo WhatsApp. Cada tela abaixo mostra uma parte do dia a dia.</p>
+                    <p class="aviso-demo">Prints do modo demonstração: números ilustrativos e telefones, e-mails e endereços ocultos.</p>
+                </div>
+                <div class="tour">
+                    <div class="tela sobe">
+                        <a class="tela-img" href="img/crm/visao-geral.webp" target="_blank" rel="noopener"><img src="img/crm/visao-geral.webp" alt="Visão geral da CRM com faturamento do mês, pedidos em andamento e melhores clientes" width="1568" height="704" loading="lazy" decoding="async"></a>
+                        <div class="tela-txt">
+                            <span class="num">1</span>
+                            <h3>Visão geral: o dia inteiro em uma tela</h3>
+                            <p>É a primeira tela ao abrir a CRM. Em segundos você sabe como está o mês e o que precisa de atenção agora.</p>
+                            <ul class="pontos">
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Números do mês:</b> faturamento, pedidos de hoje, clientes e ticket médio, atualizados sozinhos.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Pedidos em andamento:</b> quem pediu, o valor, o status e quem da equipe está atendendo.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Melhores clientes:</b> o ranking de quem mais compra, para você cuidar de quem traz resultado.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Tarefas:</b> o que a equipe precisa fazer, com prioridade e prazo.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tela sobe">
+                        <a class="tela-img" href="img/crm/pedidos.webp" target="_blank" rel="noopener"><img src="img/crm/pedidos.webp" alt="Lista de pedidos com status, atendente e etiqueta de envio" width="1568" height="520" loading="lazy" decoding="async"></a>
+                        <div class="tela-txt">
+                            <span class="num">2</span>
+                            <h3>Pedidos: do site e do WhatsApp, no mesmo lugar</h3>
+                            <p>Todo pedido entra aqui automaticamente, venha do site ou da conversa no WhatsApp. Ninguém precisa digitar nada.</p>
+                            <ul class="pontos">
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Abas por situação:</b> em aberto, novos, saiu para entrega, entregues, cancelados.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Botão Aceitar:</b> quem pega o pedido vira o responsável, e dois atendentes nunca atendem o mesmo cliente.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Etiqueta pronta:</b> imprima a etiqueta de envio de um ou de vários pedidos de uma vez.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Agendamentos:</b> pedidos feitos fora do horário já chegam com o dia e a faixa de entrega.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tela sobe">
+                        <a class="tela-img" href="img/crm/whatsapp.webp" target="_blank" rel="noopener"><img src="img/crm/whatsapp.webp" alt="Caixa de entrada do WhatsApp dentro da CRM com mensagens prontas" width="1242" height="627" loading="lazy" decoding="async"></a>
+                        <div class="tela-txt">
+                            <span class="num">3</span>
+                            <h3>WhatsApp dentro da CRM</h3>
+                            <p>Converse com os clientes sem sair do painel. Cada conversa fica ligada à ficha do cliente, com todo o histórico.</p>
+                            <ul class="pontos">
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Mensagens prontas:</b> saudação, pedido confirmado, saiu para entrega, pedir avaliação no Google. Um toque e pronto.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Agente automático:</b> liga e desliga o atendimento automático por conversa.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Ficha a um clique:</b> veja o que o cliente já comprou antes de responder.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tela sobe">
+                        <a class="tela-img retrato" href="img/crm/ficha-cliente.webp" target="_blank" rel="noopener"><img src="img/crm/ficha-cliente.webp" alt="Ficha do cliente com total gasto, ticket médio, produtos favoritos e histórico de pedidos" width="538" height="857" loading="lazy" decoding="async"></a>
+                        <div class="tela-txt">
+                            <span class="num">4</span>
+                            <h3>Ficha do cliente: tudo sobre cada pessoa</h3>
+                            <p>Abra qualquer cliente e veja a relação inteira dele com a sua empresa, sem procurar em conversas antigas.</p>
+                            <ul class="pontos">
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Quanto ele vale:</b> número de pedidos, total gasto, ticket médio e lucro gerado.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Produtos favoritos:</b> o que ele mais compra, para oferecer na hora certa.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Histórico completo:</b> cada pedido com itens, valores, status e quem atendeu.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Dados de contato:</b> telefone, e-mail e endereço guardados com segurança, só para a equipe logada.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tela sobe">
+                        <a class="tela-img" href="img/crm/atendimento.webp" target="_blank" rel="noopener"><img src="img/crm/atendimento.webp" alt="Ranking de atendimento da equipe com pedidos, faturamento e tempo para aceitar" width="1254" height="389" loading="lazy" decoding="async"></a>
+                        <div class="tela-txt">
+                            <span class="num">5</span>
+                            <h3>Atendimento: sua equipe em números</h3>
+                            <p>Saiba quem da equipe atendeu mais, quanto vendeu e quanto tempo o cliente esperou até ser atendido.</p>
+                            <ul class="pontos">
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Ranking por período:</b> este mês, mês passado, últimos 30 dias ou tudo.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Tempo para aceitar:</b> mostra se algum pedido está ficando sem resposta.</span></li>
+                            <li><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span><b>Sem atendente:</b> avisa quantas vendas ninguém assumiu, para nada se perder.</span></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
