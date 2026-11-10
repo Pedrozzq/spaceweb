@@ -2773,12 +2773,11 @@
                                         <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
-                            <a class="sp-row sp-anim" style="--i:4 sp-row-gestao" href="#gestao-saturno">
+                            <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                                <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Gestão Saturno</em></b><span>Controle e gestão de clientes e vendas</span></span>
-                                <i class="ph ph-caret-right sp-ir" aria-hidden="true"></i>
-                                <input id="sp-crm" data-item="crm" type="checkbox" hidden disabled tabindex="-1">
-                            </a>
+                                <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Controle e gestão de clientes e vendas</span></span>
+                                <span class="sp-tog"><input id="sp-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM: 1º mês de R$ 89,90 junto com o pedido"><i></i></span>
+                            </label>
                             <a class="sp-oque sp-anim" style="--i:4" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                             <div class="sp-total sp-anim" style="--i:5">
                                 <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site que atrai clientes</span></div>
@@ -3042,12 +3041,11 @@
                             <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
                         </div>
                     </div>
-                    <a class="sp-row sp-row-gestao" href="#gestao-saturno">
+                    <label class="sp-row" for="sps-crm">
                         <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
-                        <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Gestão Saturno</em></b><span>Controle e gestão de clientes e vendas</span></span>
-                        <i class="ph ph-caret-right sp-ir" aria-hidden="true"></i>
-                        <input id="sps-crm" data-item="crm" type="checkbox" hidden disabled tabindex="-1">
-                    </a>
+                        <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Controle e gestão de clientes e vendas</span></span>
+                        <span class="sp-tog"><input id="sps-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM: 1º mês de R$ 89,90 junto com o pedido"><i></i></span>
+                    </label>
                     <a class="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
                     <div class="sp-total">
                         <div><span class="sp-rot">Total</span><span class="sp-det" id="sps-det">Site que atrai clientes</span></div>
@@ -3173,7 +3171,7 @@
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Quanto custa?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
-                            <p>Você monta o seu pedido. O site excepcional custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, e cada Tag Avaliação Google custa R$ 40. O CRM vem na Gestão Saturno, uma assinatura opcional de R$ 89,90/mês.</p>
+                            <p>Você monta o seu pedido. O site excepcional custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, e cada Tag Avaliação Google custa R$ 40. O CRM é opcional, por R$ 89,90/mês: o 1º mês vai junto com o pedido e, depois, a assinatura segue mensal.</p>
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Como funciona a Tag Avaliação Google?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
@@ -3805,19 +3803,21 @@
             });
 
             // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 35; cada tag Google R$ 40.
-            // O CRM faz parte da Gestão Saturno (assinatura de R$ 89,90/mês), então não entra no valor do pedido.
-            var BASE = 597, POR_CARTAO = 35, POR_TAG = 40;
+            // CRM: R$ 89,90/mês. O 1º mês é cobrado junto com o pedido; depois de 1 mês a equipe
+            // envia o link da assinatura (Stripe). Mesmo valor da função mercadopago (PRECOS.crm).
+            var BASE = 597, POR_CARTAO = 35, POR_TAG = 40, CRM_1MES = 89.9;
             var crmIn = document.getElementById('sp-crm'), siteIn = document.getElementById('sp-site');
             var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
             var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
             function val(inp) { var n = parseInt(inp.value, 10), min = +inp.min, max = +inp.max; return isNaN(n) ? min : Math.min(max, Math.max(min, n)); }
             // o site vem marcado; só sai do pedido com site === false
-            function calcula(c, g, crm, site) { return (site === false ? 0 : BASE) + c * POR_CARTAO + g * POR_TAG; }
+            function calcula(c, g, crm, site) { return Math.round(((site === false ? 0 : BASE) + c * POR_CARTAO + g * POR_TAG + (crm ? CRM_1MES : 0)) * 100) / 100; }
             function resumoDe(c, g, crm, site) {
                 var p = [];
-                if (site !== false) p.push(c || g ? 'Site' : 'Site que atrai clientes');
+                if (site !== false) p.push(c || g || crm ? 'Site' : 'Site que atrai clientes');
                 if (c) p.push(c + (c === 1 ? ' cartão NFC' : ' cartões NFC'));
                 if (g) p.push(g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google'));
+                if (crm) p.push('CRM (1º mês)');
                 return p.length ? p.join(' + ') : 'Escolha ao menos um item';
             }
             function resumoTxt() { return resumoDe(val(cIn), val(gIn), crmIn.checked, siteIn.checked); }
@@ -5094,7 +5094,7 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({nome: n, empresa: emp, email: email.value.trim(), telefone: foneDigitos(),
                         endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
-                        site: itensPedido.site !== false, cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: false})
+                        site: itensPedido.site !== false, cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm === true})
                 }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
                 .then(function (j) { return festaAcaba.then(function () { return j; }); })
                 .then(function (j) {
@@ -5635,7 +5635,7 @@ function linhaEu(texto) {
                 if (m) return /^\d/.test(m[1]) ? Math.min(200, parseInt(m[1], 10)) : NUM[m[1].toLowerCase()];
                 return new RegExp(item, 'i').test(t) ? 1 : 0;
             }
-            return {c: qtd('cart'), g: qtd('tags?\\b'), crm: false};   // CRM é da Gestão Saturno, fora do pedido
+            return {c: qtd('cart'), g: qtd('tags?\\b'), crm: /\bcrm\b/i.test(t)};
         }
         function registraPedido(p) {
             var chave = [p.nome, p.empresa, p.pedido, p.valor].join('|');
@@ -5682,8 +5682,6 @@ function linhaEu(texto) {
             site.addEventListener('change', pinta);
             var oque = c.querySelector('.sp-oque');
             if (oque) { oque.target = '_blank'; oque.rel = 'noopener'; }
-            var gest = c.querySelector('.sp-row-gestao');   // dentro do chat, a Gestão Saturno abre na página do CRM
-            if (gest) { gest.href = 'crm.html#investimento'; gest.target = '_blank'; gest.rel = 'noopener'; }
             pedir.addEventListener('click', function () {
                 cI.value = M.val(cI); gI.value = M.val(gI);
                 var nc = +cI.value, ng = +gI.value, total = M.calcula(nc, ng, crm.checked, site.checked);
@@ -6053,8 +6051,8 @@ function linhaEu(texto) {
                 erro: 'Me diz só a quantidade de tags, por exemplo "2". Se não precisar, toque em "Não preciso".'},
             {id: 'crm', dica: 'Sim ou não?',
                 se: function () { return guia.obj === 'crm' || guia.obj === 'tudo'; },
-                texto: function () { return 'Para organizar os clientes, o *CRM* vem na *Gestão Saturno*: ele guarda cada contato que chega pelo site e pelos cartões e organiza suas vendas num só lugar. É uma assinatura de *R$ 89,90/mês*, feita à parte do pedido. Quer assinar depois do pedido?'; },
-                opcoes: function (semDuvida) { var o = [{t: 'Quero a Gestão', v: true}, {t: 'Agora não', v: false}]; if (!semDuvida) o.push({t: 'O que é CRM?', v: '?'}); return o; },
+                texto: function () { return 'Quer incluir o *CRM*? Ele guarda cada contato que chega pelo site e pelos cartões e organiza suas vendas num só lugar. *R$ 89,90/mês*: o 1º mês vai junto com o pedido.'; },
+                opcoes: function (semDuvida) { var o = [{t: 'Quero o CRM', v: true}, {t: 'Agora não', v: false}]; if (!semDuvida) o.push({t: 'O que é CRM?', v: '?'}); return o; },
                 le: function (t, o) {
                     if (o) return o.v;
                     if (/o que [eé]|como funciona|\?/i.test(t)) return '?';
@@ -6062,9 +6060,9 @@ function linhaEu(texto) {
                     if (/\b(sim|quero|pode|claro|bora|inclui)\b/i.test(t)) return true;
                     return undefined;
                 },
-                explica: 'O CRM é o seu painel de clientes: cada pessoa que toca no cartão ou chama pelo site vira um contato organizado, com histórico e etapa da venda. Assim nenhum cliente fica esquecido e você sabe exatamente quem está perto de fechar.\n\nEle vem na Gestão Saturno, por R$ 89,90/mês. Quer assinar depois do pedido?',
+                explica: 'O CRM é o seu painel de clientes: cada pessoa que toca no cartão ou chama pelo site vira um contato organizado, com histórico e etapa da venda. Assim nenhum cliente fica esquecido e você sabe exatamente quem está perto de fechar.\n\nCusta R$ 89,90/mês, e o 1º mês vai junto com o pedido. Quer incluir?',
                 grava: function (v) { guia.crm = v; },
-                erro: 'Quer a Gestão Saturno com CRM? Toque em "Quero a Gestão" ou "Agora não".'}
+                erro: 'Quer incluir o CRM no pedido? Toque em "Quero o CRM" ou "Agora não".'}
         ];
         function poeChips(alvo, opcoes) {
             var box = document.createElement('div'); box.className = 'sai-chips';
@@ -6120,7 +6118,7 @@ function linhaEu(texto) {
             if (esgotou()) travaCampo();
             var g = guia;
             // texto curto: o pedido em si aparece só no cartão editável logo abaixo
-            var texto = 'Pronto! Montei o pedido ideal para ' + (g.empresa ? 'a *' + g.empresa + '*' : 'você') + '. Ajuste o que quiser e toque em *Fazer meu pedido*.' + (g.crm ? ' A *Gestão Saturno* com CRM (*R$ 89,90/mês*) você assina logo depois.' : '');
+            var texto = 'Pronto! Montei o pedido ideal para ' + (g.empresa ? 'a *' + g.empresa + '*' : 'você') + '. Ajuste o que quiser e toque em *Fazer meu pedido*.';
             var pedido = null;
             if (M) {
                 var total = M.calcula(g.c, g.g, g.crm);
@@ -6320,7 +6318,7 @@ function linhaEu(texto) {
 .selos-saturno li i + i{margin-left:-3px}
 @media (max-width:380px){.selos-saturno{gap:6px}.selos-saturno li{font-size:11.5px;padding:6px 10px}}
 </style>
-<style>#gestao-saturno{scroll-margin-top:28px}a.sp-row-gestao{color:inherit;text-decoration:none;cursor:pointer}a.sp-row-gestao .sp-ir{flex:none;color:#a1a1a6;font-size:18px;margin-right:4px}a.sp-row-gestao:hover .sp-ir{color:#fff}</style>
+<style>#gestao-saturno{scroll-margin-top:28px}</style>
 <style>.cena-espalhada{position:relative;margin:2rem 0 3rem}.cena-olho{text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.4em;font-size:9px;color:#ff4d5e;margin:0 0 -.5rem;position:relative;z-index:3;text-shadow:0 1px 6px rgba(0,0,0,.9)}.plans-section .cena-espalhada .tap-scene{margin:0 -1rem}</style>
 <style>.sp-txt span.sp-beneficio{white-space:normal;overflow:visible;text-overflow:clip}</style>
 </body>
