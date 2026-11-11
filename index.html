@@ -5558,17 +5558,22 @@
         .sai-ov .sai-env:disabled{background:#676767;color:#2f2f2f}
         .sai-ov .sai-nota{color:var(--gpt-fraco);font-size:.75rem}
         .sai-ov button:focus-visible,.sai-ov a:focus-visible{outline-color:#fff}
-        /* seletor de empresa e nicho no topo */
-        .sai-perfil-wrap{position:relative;margin-right:auto;min-width:0}
-        .sai-ov .sai-seletor{display:flex;align-items:center;gap:.55rem;min-width:0;max-width:min(26rem,calc(100vw - 7.5rem));margin:0;padding:.35rem .65rem .35rem .4rem;border:0;border-radius:.75rem;
-            background:transparent;color:var(--gpt-txt);font:inherit;font-weight:600;font-size:1.06rem;text-align:left;cursor:pointer;transition:background .2s}
-        .sai-ov .sai-seletor:hover,.sai-ov .sai-seletor[aria-expanded="true"]{background:#2f2f2f}
-        .sai-seletor-txt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
-        .sai-seletor-txt small{font-size:.74rem;font-weight:400;color:var(--gpt-fraco);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .sai-seletor-txt small.ok{color:var(--gpt-sub)}
-        .sai-ov .sai-seletor .ph-caret-down{flex:none;font-size:.95rem;color:var(--gpt-sub);transition:transform .2s}
+        /* seletor de empresa e nicho dentro da caixa de escrita (como os modelos do ChatGPT) */
+        .sai-ov .sai-caixa{flex-wrap:wrap;align-items:center;row-gap:.15rem;padding:.6rem .6rem .55rem .65rem}
+        .sai-ov .sai-caixa textarea{flex:1 1 100%;order:0;padding:.35rem .5rem .25rem}
+        .sai-perfil-wrap{position:relative;order:1;margin-right:auto;min-width:0}
+        .sai-ov .sai-mic{order:2}
+        .sai-ov .sai-env{order:3}
+        .sai-ov .sai-seletor{display:flex;align-items:center;gap:.4rem;min-width:0;max-width:min(20rem,calc(100vw - 9rem));height:2.25rem;padding:0 .75rem 0 .65rem;
+            border:1px solid var(--gpt-borda);border-radius:999px;background:transparent;color:var(--gpt-sub);font:inherit;font-size:.85rem;font-weight:500;cursor:pointer;transition:background .2s,color .2s}
+        .sai-ov .sai-seletor:hover,.sai-ov .sai-seletor[aria-expanded="true"]{background:#3a3a3a;color:#fff}
+        .sai-ov .sai-seletor span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .sai-ov .sai-seletor.ok{color:var(--gpt-txt);border-color:#5a5a5a}
+        .sai-ov .sai-seletor .ph-storefront{flex:none;font-size:1.05rem}
+        .sai-ov .sai-seletor .ph-caret-down{flex:none;font-size:.8rem;transition:transform .2s}
         .sai-ov .sai-seletor[aria-expanded="true"] .ph-caret-down{transform:rotate(180deg)}
-        .sai-pop{position:absolute;z-index:5;left:0;top:calc(100% + .4rem);width:min(23rem,calc(100vw - 1.5rem));display:flex;flex-direction:column;gap:.6rem;padding:1rem;
+        .sai-ov .sai-caixa.travada .sai-seletor{pointer-events:none}
+        .sai-pop{position:absolute;z-index:5;left:-.1rem;bottom:calc(100% + .7rem);width:min(23rem,calc(100vw - 1.5rem));display:flex;flex-direction:column;gap:.6rem;padding:1rem;
             border-radius:1rem;border:1px solid rgba(255,255,255,.08);background:#2f2f2f;box-shadow:0 18px 50px rgba(0,0,0,.5);animation:saiSobe .2s ease both}
         .sai-pop[hidden]{display:none}
         .sai-pop-tit{margin:0;font-size:.95rem;font-weight:600;color:#fff}
@@ -5609,21 +5614,7 @@
     <div class="sai-ov" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
         <div class="sai-aurora" aria-hidden="true"></div>
         <header class="sai-topo">
-            <div class="sai-perfil-wrap">
-                <button type="button" class="sai-marca sai-seletor" id="sai-perfil" aria-haspopup="dialog" aria-expanded="false">
-                    <span class="sai-esfera" aria-hidden="true"></span>
-                    <span class="sai-seletor-txt"><span>Saturno IA</span><small id="sai-perfil-sub">Personalize para o seu negócio</small></span>
-                    <i class="ph ph-caret-down" aria-hidden="true"></i>
-                </button>
-                <div class="sai-pop" id="sai-pop" role="dialog" aria-label="Personalizar a IA para o seu negócio" hidden>
-                    <p class="sai-pop-tit">Personalize a IA</p>
-                    <p class="sai-pop-sub">Diga o nome e o nicho da empresa e a IA monta o pedido pensando no seu negócio.</p>
-                    <label class="sai-pop-campo"><span>Nome da empresa</span><input id="sai-p-emp" maxlength="80" autocomplete="organization" placeholder="Ex.: Pizzaria Bella"></label>
-                    <label class="sai-pop-campo"><span>Nicho</span><input id="sai-p-nicho" maxlength="60" autocomplete="off" placeholder="Digite ou escolha abaixo"></label>
-                    <div class="sai-pop-lista" id="sai-p-lista" role="listbox" aria-label="Nichos"></div>
-                    <button type="button" class="sai-pop-ok" id="sai-p-ok">Aplicar</button>
-                </div>
-            </div>
+            <div class="sai-marca"><span class="sai-esfera" aria-hidden="true"></span>Saturno IA</div>
             <button type="button" class="sai-ico sai-nova" id="sai-nova" aria-label="Nova conversa" title="Nova conversa"><i class="ph ph-note-pencil" aria-hidden="true"></i></button>
             <button type="button" class="sai-ico" id="sai-fechar" aria-label="Fechar" title="Fechar"><i class="ph ph-x" aria-hidden="true"></i></button>
         </header>
@@ -5642,6 +5633,19 @@
         <div class="sai-rodape">
             <div class="sai-caixa" id="sai-caixa">
                 <textarea id="sai-texto" rows="1" maxlength="1000" enterkeyhint="send" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
+                <div class="sai-perfil-wrap">
+                    <button type="button" class="sai-seletor" id="sai-perfil" aria-haspopup="dialog" aria-expanded="false" title="Personalize a IA para o seu negócio">
+                        <i class="ph ph-storefront" aria-hidden="true"></i><span id="sai-perfil-sub">Personalizar IA</span><i class="ph ph-caret-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="sai-pop" id="sai-pop" role="dialog" aria-label="Personalizar a IA para o seu negócio" hidden>
+                        <p class="sai-pop-tit">Personalize a IA</p>
+                        <p class="sai-pop-sub">Diga o nome e o nicho da empresa e a IA monta o pedido pensando no seu negócio.</p>
+                        <label class="sai-pop-campo"><span>Nome da empresa</span><input id="sai-p-emp" maxlength="80" autocomplete="organization" placeholder="Ex.: Pizzaria Bella"></label>
+                        <label class="sai-pop-campo"><span>Nicho</span><input id="sai-p-nicho" maxlength="60" autocomplete="off" placeholder="Digite ou escolha abaixo"></label>
+                        <div class="sai-pop-lista" id="sai-p-lista" role="listbox" aria-label="Nichos"></div>
+                        <button type="button" class="sai-pop-ok" id="sai-p-ok">Aplicar</button>
+                    </div>
+                </div>
                 <button type="button" class="sai-mic" id="sai-mic" aria-label="Falar em vez de digitar" aria-pressed="false" title="Falar" hidden><i class="ph ph-microphone" aria-hidden="true"></i></button>
                 <button type="button" class="sai-env" id="sai-env" aria-label="Enviar" disabled><i class="ph-bold ph-arrow-up" aria-hidden="true"></i></button>
             </div>
@@ -6203,6 +6207,14 @@ function linhaEu(texto) {
                 le: function (t, o) { if (o) return o.v; t = t.trim(); return t.length >= 2 ? t.slice(0, 60) : undefined; },
                 grava: function (v) { guia.ramo = v; guia.ramoKey = detectaRamo(v); guia.ramoAuto = false; },
                 erro: 'Qual é o ramo? Pode tocar numa opção ou escrever com suas palavras.'},
+            {id: 'nome', dica: 'Digite o nome da empresa',
+                // quem tocou em "Sou profissional autônomo" ainda não disse o nome: pergunta de novo, já com o ramo em mãos
+                se: function () { return !guia.empresa && !guia.pediuNome; },
+                texto: function () { return 'Perfeito! E qual nome vai nos seus cartões e no site? Pode ser o *seu nome* ou o *nome do seu negócio*' + (guia.ramo ? ' de ' + guia.ramo.toLowerCase() : '') + '.'; },
+                opcoes: function () { return [{t: 'Prefiro informar depois', v: ''}]; },
+                le: function (t, o) { if (o) return o.v; t = t.trim().replace(/\s+/g, ' '); return t.length >= 2 ? t.slice(0, 80) : undefined; },
+                grava: function (v) { guia.pediuNome = true; guia.empresa = v; },
+                erro: 'Me diz o nome que vai nos cartões, por favor. Se preferir, toque em "Prefiro informar depois".'},
             {id: 'obj', dica: 'Ou conte com suas palavras',
                 texto: function () { return beneficios() + '\n\nE o que você mais quer conquistar ' + naEmpresa() + ' agora?'; },
                 opcoes: function () {
@@ -6324,6 +6336,7 @@ function linhaEu(texto) {
         // depois que a IA responde a dúvida, repete a etapa em que o cliente parou
         var RETOMA = {
             empresa: function () { return 'Agora, vamos continuar o seu pedido: qual é o *nome da sua empresa*?'; },
+            nome: function () { return 'Agora, vamos continuar o seu pedido: qual nome vai nos seus cartões e no site?'; },
             obj: function () { return 'Agora, vamos continuar o seu pedido: o que você mais quer conquistar ' + naEmpresa() + ' agora?'; }
         };
         function retomaGuia() {
@@ -6396,8 +6409,8 @@ function linhaEu(texto) {
         function semAcento(t) { return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); }
         function rotuloPerfil() {
             var sub = $('sai-perfil-sub'), partes = [perfil.empresa, perfil.nicho].filter(Boolean);
-            sub.textContent = partes.length ? partes.join(' · ') : 'Personalize para o seu negócio';
-            sub.classList.toggle('ok', partes.length > 0);
+            sub.textContent = partes.length ? partes.join(' · ') : 'Personalizar IA';
+            pBtn.classList.toggle('ok', partes.length > 0);
         }
         function listaNichos() {
             var busca = semAcento(pNicho.value), atual = semAcento(perfil.nicho), achou = false, qtd = 0;
