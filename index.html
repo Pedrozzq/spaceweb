@@ -2777,7 +2777,7 @@
                             </div>
                             <div class="sp-row sp-anim" style="--i:3">
                                 <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc-sem-fundo.webp" alt="" width="251" height="456" decoding="async"></div>
-                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro Instagram <em class="sp-opc">Opcional</em></b><span>Aproximou, abre o Instagram da sua marca.</span></div>
+                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro Instagram <em class="sp-opc">Opcional</em></b><span>Aproximou, abre o Instagram da sua empresa.</span></div>
                                 <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros Instagram">
                                         <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
                                         <input id="sp-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros Instagram">
@@ -3060,7 +3060,7 @@
                     </div>
                     <div class="sp-row">
                         <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc-sem-fundo.webp" alt="" width="251" height="456" loading="lazy" decoding="async"></div>
-                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro Instagram <em class="sp-opc">Opcional</em></b><span>Aproximou, abre o Instagram da sua marca.</span></div>
+                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro Instagram <em class="sp-opc">Opcional</em></b><span>Aproximou, abre o Instagram da sua empresa.</span></div>
                         <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros Instagram">
                             <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
                             <input id="sps-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros Instagram">
@@ -6081,7 +6081,7 @@ function linhaEu(texto) {
                 grava: function (v) { guia.c = v; },
                 erro: 'Me diz só a quantidade de cartões, por exemplo "4". Se não quiser nenhum, toque em "Nenhum por agora".'},
             {id: 'chaveiros', dica: 'Ou digite a quantidade',
-                texto: function () { return 'E o *chaveiro Instagram*? Aproximou do celular, abre o *Instagram* ' + (guia.empresa ? 'da *' + guia.empresa + '*' : 'da sua marca') + ' e a pessoa já segue na hora. Fica no molho de chaves da equipe ou de presente para clientes fiéis, e cada toque vira seguidor. *R$ 30* cada. Quantos você quer?'; },
+                texto: function () { return 'E o *chaveiro Instagram*? Aproximou do celular, abre o *Instagram* ' + (guia.empresa ? 'da *' + guia.empresa + '*' : 'da sua empresa') + ' e a pessoa já segue na hora. Fica no molho de chaves da equipe ou de presente para clientes fiéis, e cada toque vira seguidor. *R$ 30* cada. Quantos você quer?'; },
                 opcoes: function () { return [{t: '1', v: 1}, {t: '2', v: 2}, {t: '5', v: 5}, {t: '10', v: 10}, {t: 'Não preciso', v: 0}]; },
                 le: function (t, o) { if (o) return o.v; if (/\b(n[aã]o|nenhum|dispenso)\b/i.test(t)) return 0; return lerNumero(t); },
                 grava: function (v) { guia.k = v; },
