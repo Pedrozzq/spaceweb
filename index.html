@@ -6116,8 +6116,8 @@ function linhaEu(texto) {
                 grava: function (v) { guia.g = v; },
                 erro: 'Me diz só a quantidade de tags, por exemplo "2". Se não precisar, toque em "Não preciso".'},
             {id: 'crm', dica: 'Sim ou não?',
-                texto: function () { return ETAPAS.filter(function (e) { return e.id === 'crm'; })[0].explica; },
-                opcoes: function () { return [{t: 'Quero o CRM', v: true}, {t: 'Agora não', v: false}]; },
+                texto: function () { return 'Quer incluir o *CRM Saturno*? É o painel que organiza o comercial ' + naEmpresa() + ': cada contato que chega pelo site, pelos cartões ou pelo WhatsApp vira um *lead no funil de vendas*, com histórico, tarefas e aviso no celular. Nenhum cliente esquecido, nenhuma venda no escuro.\n\n*R$ 89,90/mês*: o 1º mês vai junto com o pedido.'; },
+                opcoes: function (semDuvida) { var o = [{t: 'Quero o CRM', v: true}, {t: 'Agora não', v: false}]; if (!semDuvida) o.push({t: 'O que é CRM?', v: '?'}); return o; },
                 le: function (t, o) {
                     if (o) return o.v;
                     if (/o que [eé]|como funciona|\?/i.test(t)) return '?';
