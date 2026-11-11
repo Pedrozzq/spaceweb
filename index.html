@@ -1626,6 +1626,8 @@
         .plm-ov.on .sp-3d-card img { animation-name: spImgCard; }
         @keyframes spImgCard { from { opacity: 0; transform: rotate(-8deg) scale(1.12); } to { opacity: 1; transform: rotate(-8deg); } }
         .sp-thumb-tag img { width: 74%; height: 88%; }
+        .sp-thumb-chav { background: #fff; }
+        .sp-thumb-chav img { width: auto; height: 90%; object-fit: contain; }
         .sp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; text-align: left; }
         .sp-txt b { color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.012em; line-height: 1.2; }
         .sp-txt span { color: #86868b; font-size: 12px; line-height: 1.35; letter-spacing: -.005em; }
@@ -2781,18 +2783,27 @@
                                         <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
-                            <label class="sp-row sp-anim" style="--i:4" for="sp-crm">
+                            <div class="sp-row sp-anim" style="--i:4">
+                                <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc.webp" alt="" width="125" height="250" decoding="async"></div>
+                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
+                                <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
+                                        <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
+                                        <input id="sp-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
+                                        <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
+                                </div>
+                            </div>
+                            <label class="sp-row sp-anim" style="--i:5" for="sp-crm">
                                 <span class="sp-thumb sp-thumb-ic"><i class="ph ph-users-three" aria-hidden="true"></i></span>
                                 <span class="sp-txt"><em class="sp-val">R$ 89,90/mês</em><b>CRM <em class="sp-opc">Opcional</em></b><span>Controle e gestão de clientes e vendas</span></span>
                                 <span class="sp-tog"><input id="sp-crm" data-item="crm" type="checkbox" role="switch" aria-label="Incluir CRM: 1º mês de R$ 89,90 junto com o pedido"><i></i></span>
                             </label>
-                            <a class="sp-oque sp-anim" style="--i:4" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
-                            <div class="sp-total sp-anim" style="--i:5">
+                            <a class="sp-oque sp-anim" style="--i:5" id="sp-oque" href="crm.html">O que é CRM?<i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+                            <div class="sp-total sp-anim" style="--i:6">
                                 <div><span class="sp-rot">Total</span><span class="sp-det" id="sp-det">Site que atrai clientes</span></div>
                                 <div class="sp-valores"><strong id="sp-preco" aria-live="polite">R$ 597,00</strong><small class="sp-parcelas">4x de R$ 149,25 sem juros</small></div>
                             </div>
-                            <button type="button" class="sp-pedir sp-anim" id="sp-pedir" style="--i:6">Fazer meu pedido</button>
-                            <span class="sp-frete sp-frete-neon sp-anim" style="--i:7"><i class="ph ph-truck"></i> Frete grátis. Entrega em 3 a 7 dias úteis, conforme o projeto.</span>
+                            <button type="button" class="sp-pedir sp-anim" id="sp-pedir" style="--i:7">Fazer meu pedido</button>
+                            <span class="sp-frete sp-frete-neon sp-anim" style="--i:8"><i class="ph ph-truck"></i> Frete grátis. Entrega em 3 a 7 dias úteis, conforme o projeto.</span>
                         </div>
                         <a href="#conheca-tecnologia" class="btn-plano-tech">
                             <span class="bp-desk"><svg class="bp-nfc" viewBox="0 0 22 16" width="20" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="1" y="2" width="8" height="12" rx="1.6"/><path d="M13 5.2a4 4 0 0 1 0 5.6M16.2 3a7.2 7.2 0 0 1 0 10"/></svg> Como funciona o NFC <i class="ph ph-caret-right"></i></span>
@@ -3053,6 +3064,15 @@
                             <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
                             <input id="sps-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
                             <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="sp-row">
+                        <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc.webp" alt="" width="125" height="250" loading="lazy" decoding="async"></div>
+                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
+                        <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
+                            <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
+                            <input id="sps-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
+                            <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
                         </div>
                     </div>
                     <label class="sp-row" for="sps-crm">
@@ -3810,31 +3830,33 @@
                 setTimeout(function () { var alvo = document.getElementById('conheca-tecnologia'); if (alvo) alvo.scrollIntoView({behavior: 'smooth', block: 'center'}); }, 360);
             });
 
-            // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 35; cada tag Google R$ 40.
+            // montador de pedido: site = R$ 597 (sem cartão); cada cartão soma R$ 35; cada tag Google R$ 40; cada chaveiro R$ 30.
             // CRM: R$ 89,90/mês. O 1º mês é cobrado junto com o pedido; depois de 1 mês a equipe
             // envia o link da assinatura (Stripe). Mesmo valor da função mercadopago (PRECOS.crm).
-            var BASE = 597, POR_CARTAO = 35, POR_TAG = 40, CRM_1MES = 89.9;
+            var BASE = 597, POR_CARTAO = 35, POR_TAG = 40, POR_CHAVEIRO = 30, CRM_1MES = 89.9;
             var crmIn = document.getElementById('sp-crm'), siteIn = document.getElementById('sp-site');
-            var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g');
+            var cIn = document.getElementById('sp-n'), gIn = document.getElementById('sp-g'), kIn = document.getElementById('sp-k');
             var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
             function val(inp) { var n = parseInt(inp.value, 10), min = +inp.min, max = +inp.max; return isNaN(n) ? min : Math.min(max, Math.max(min, n)); }
             // o site vem marcado; só sai do pedido com site === false
-            function calcula(c, g, crm, site) { return Math.round(((site === false ? 0 : BASE) + c * POR_CARTAO + g * POR_TAG + (crm ? CRM_1MES : 0)) * 100) / 100; }
-            function resumoDe(c, g, crm, site) {
+            function calcula(c, g, crm, site, k) { return Math.round(((site === false ? 0 : BASE) + c * POR_CARTAO + g * POR_TAG + (k || 0) * POR_CHAVEIRO + (crm ? CRM_1MES : 0)) * 100) / 100; }
+            function resumoDe(c, g, crm, site, k) {
                 var p = [];
-                if (site !== false) p.push(c || g || crm ? 'Site' : 'Site que atrai clientes');
+                if (site !== false) p.push(c || g || k || crm ? 'Site' : 'Site que atrai clientes');
                 if (c) p.push(c + (c === 1 ? ' cartão NFC' : ' cartões NFC'));
                 if (g) p.push(g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google'));
+                if (k) p.push(k + (k === 1 ? ' chaveiro NFC' : ' chaveiros NFC'));
                 if (crm) p.push('CRM (1º mês)');
                 return p.length ? p.join(' + ') : 'Escolha ao menos um item';
             }
-            function resumoTxt() { return resumoDe(val(cIn), val(gIn), crmIn.checked, siteIn.checked); }
+            function resumoTxt() { return resumoDe(val(cIn), val(gIn), crmIn.checked, siteIn.checked, val(kIn)); }
             window.saturnoMontador = {calcula: calcula, resumo: resumoDe, brl: brl, val: val};   // o pedido montado pela IA usa as mesmas regras
             var sec = document.getElementById('sps-cfg');
             function espelhaSecao(total) {
                 if (!sec) return;
                 document.getElementById('sps-n').value = val(cIn);
                 document.getElementById('sps-g').value = val(gIn);
+                document.getElementById('sps-k').value = val(kIn);
                 document.getElementById('sps-crm').checked = crmIn.checked;
                 document.getElementById('sps-site').checked = siteIn.checked;
                 document.getElementById('sps-pedir').disabled = !total;
@@ -3847,7 +3869,7 @@
                 });
             }
             function atualizaPreco(pular) {
-                var total = calcula(val(cIn), val(gIn), crmIn.checked, siteIn.checked), preco = document.getElementById('sp-preco');
+                var total = calcula(val(cIn), val(gIn), crmIn.checked, siteIn.checked, val(kIn)), preco = document.getElementById('sp-preco');
                 document.getElementById('sp-pedir').disabled = !total;   // nada escolhido: não há o que pedir
                 preco.textContent = brl(total);
                 preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + brl(total / 4) + ' sem juros';
@@ -3866,7 +3888,7 @@
                     inp.value = val(inp) + (+b.getAttribute('data-passo')); inp.value = val(inp); atualizaPreco(true);
                 });
             });
-            [cIn, gIn].forEach(function (inp) {
+            [cIn, gIn, kIn].forEach(function (inp) {
                 inp.addEventListener('input', function () { if (inp.value !== '') atualizaPreco(true); });
                 inp.addEventListener('blur', function () { inp.value = val(inp); atualizaPreco(); });
             });
@@ -3879,7 +3901,7 @@
                         inp.value = val(inp) + (+b.getAttribute('data-passo')); inp.value = val(inp); atualizaPreco(true);
                     });
                 });
-                [['sps-n', cIn], ['sps-g', gIn]].forEach(function (par) {
+                [['sps-n', cIn], ['sps-g', gIn], ['sps-k', kIn]].forEach(function (par) {
                     var campo = document.getElementById(par[0]);
                     campo.addEventListener('input', function () { if (campo.value !== '') { par[1].value = campo.value; par[1].value = val(par[1]); atualizaPreco(true); } });
                     campo.addEventListener('blur', function () { atualizaPreco(); });
@@ -3888,20 +3910,20 @@
                 document.getElementById('sps-site').addEventListener('change', function () { siteIn.checked = this.checked; atualizaPreco(true); });
                 document.getElementById('sps-pedir').addEventListener('click', function () { document.getElementById('sp-pedir').click(); });
                 sec.querySelector('.sp-oque').addEventListener('click', function () {
-                    try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked, s: siteIn.checked})); } catch (err) {}
+                    try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), k: val(kIn), crm: crmIn.checked, s: siteIn.checked})); } catch (err) {}
                 });
             }
             atualizaPreco();
 
             // "O que é CRM?": guarda o que já foi escolhido; ao voltar da página da CRM, o pedido reabre igual
             document.getElementById('sp-oque').addEventListener('click', function () {
-                try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), crm: crmIn.checked, s: siteIn.checked})); } catch (err) {}
+                try { sessionStorage.setItem('saturno_pedido', JSON.stringify({c: val(cIn), g: val(gIn), k: val(kIn), crm: crmIn.checked, s: siteIn.checked})); } catch (err) {}
             });
             var volta = /[?&](crm|pedido)=1/.exec(location.search);
             if (volta) {
                 try {
                     var salvo = JSON.parse(sessionStorage.getItem('saturno_pedido') || 'null');
-                    if (salvo) { cIn.value = salvo.c; gIn.value = salvo.g; cIn.value = val(cIn); gIn.value = val(gIn); crmIn.checked = !!salvo.crm; siteIn.checked = salvo.s !== false; }
+                    if (salvo) { cIn.value = salvo.c; gIn.value = salvo.g; kIn.value = salvo.k || 0; cIn.value = val(cIn); gIn.value = val(gIn); kIn.value = val(kIn); crmIn.checked = !!salvo.crm; siteIn.checked = salvo.s !== false; }
                 } catch (err) {}
                 if (volta[1] === 'crm') crmIn.checked = true;
                 atualizaPreco();
@@ -3909,12 +3931,12 @@
                 try { history.replaceState(null, '', location.pathname); } catch (err) {}
             }
             document.getElementById('sp-pedir').addEventListener('click', function () {
-                cIn.value = val(cIn); gIn.value = val(gIn);
+                cIn.value = val(cIn); gIn.value = val(gIn); kIn.value = val(kIn);
                 var total = atualizaPreco(), resumo = resumoTxt() + ' (' + brl(total) + ')';
                 if (!total) return;
                 if (window.saturnoEscolherPlano) {
                     fecharPlanos(true);
-                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total, {cartoes: val(cIn), tags: val(gIn), crm: crmIn.checked, site: siteIn.checked}); }, 300);
+                    return setTimeout(function () { window.saturnoEscolherPlano(resumo, null, true, total, {cartoes: val(cIn), tags: val(gIn), chaveiros: val(kIn), crm: crmIn.checked, site: siteIn.checked}); }, 300);
                 }
                 window.open('https://wa.me/5531920067518?text=' + encodeURIComponent('Olá! Vim pelo site e quero fazer o pedido: ' + resumo + '. Pode me passar os detalhes?'), '_blank', 'noopener');
             });
@@ -5106,7 +5128,7 @@
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({nome: n, empresa: emp, email: email.value.trim(), telefone: foneDigitos(),
                         endereco: {cep: cepDigitos(), rua: ent('Rua').value.trim(), numero: ent('Numero').value.trim(), bairro: ent('Bairro').value.trim(), cidade: ent('Cidade').value.trim(), uf: ent('Uf').value.trim().toUpperCase()},
-                        site: itensPedido.site !== false, cartoes: itensPedido.cartoes, tags: itensPedido.tags, crm: itensPedido.crm === true})
+                        site: itensPedido.site !== false, cartoes: itensPedido.cartoes, tags: itensPedido.tags, chaveiros: itensPedido.chaveiros || 0, crm: itensPedido.crm === true})
                 }).then(function (r) { return r.json().then(function (j) { if (!r.ok || !j.url) throw new Error('sem link'); return j; }); })
                 .then(function (j) { return festaAcaba.then(function () { return j; }); })
                 .then(function (j) {

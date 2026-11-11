@@ -1,7 +1,7 @@
 // =====================================================================
 //  SATURNO NFC · pagamento pelo site com o MERCADO PAGO (Checkout Pro)
 //  Supabase Edge Function "mercadopago":
-//   1. POST do site { nome, empresa, email, telefone, endereco, site, cartoes, tags, crm }: calcula o total AQUI
+//   1. POST do site { nome, empresa, email, telefone, endereco, site, cartoes, tags, chaveiros, crm }: calcula o total AQUI
 //      (o preço enviado pelo navegador nunca é usado), registra o lead e devolve
 //      o link do checkout (init_point).
 //   2. POST do obrigado.html { consulta: { pedido, pagamento } }: confere o pagamento na API
@@ -27,7 +27,7 @@ const SITE = "https://www.saturnonfc.com.br";
 const ORIGENS = [SITE, "https://saturnonfc.com.br", "https://proposta.saturnonfc.com.br"];
 // crm: 1º mês do CRM (R$ 89,90/mês), cobrado junto com o pedido; as mensalidades seguintes
 // vão por link de assinatura do Stripe, enviado pela equipe depois de 1 mês.
-const PRECOS = { site: 597, cartao: 35, tag: 40, crm: 89.9 };
+const PRECOS = { site: 597, cartao: 35, tag: 40, chaveiro: 30, crm: 89.9 };
 const MAX_QTD = 200;
 const MAX_POR_HORA = 60;
 
@@ -78,16 +78,17 @@ function quantidade(v: unknown) {
 // Único lugar que define o total cobrado.
 export function montarPedido(b: Any) {
   // site vem marcado por padrão; só sai do pedido quando o cliente desliga (site: false)
-  const cartoes = quantidade(b?.cartoes), tags = quantidade(b?.tags), crm = b?.crm === true, site = b?.site !== false;
+  const cartoes = quantidade(b?.cartoes), tags = quantidade(b?.tags), chaveiros = quantidade(b?.chaveiros ?? 0), crm = b?.crm === true, site = b?.site !== false;
   const itens: { id: string; title: string; quantity: number; unit_price: number; currency_id: string }[] = [];
   const partes: string[] = [];
   if (site) { itens.push({ id: "site", title: "Site personalizado", quantity: 1, unit_price: PRECOS.site, currency_id: "BRL" }); partes.push("Site"); }
   if (cartoes) { itens.push({ id: "cartao-nfc", title: "Cartão NFC", quantity: cartoes, unit_price: PRECOS.cartao, currency_id: "BRL" }); partes.push(`${cartoes} ${cartoes === 1 ? "cartão NFC" : "cartões NFC"}`); }
   if (tags) { itens.push({ id: "tag-google", title: "Tag Avaliação Google", quantity: tags, unit_price: PRECOS.tag, currency_id: "BRL" }); partes.push(`${tags} ${tags === 1 ? "tag" : "tags"} Avaliação Google`); }
+  if (chaveiros) { itens.push({ id: "chaveiro-nfc", title: "Chaveiro NFC", quantity: chaveiros, unit_price: PRECOS.chaveiro, currency_id: "BRL" }); partes.push(`${chaveiros} ${chaveiros === 1 ? "chaveiro NFC" : "chaveiros NFC"}`); }
   if (crm) { itens.push({ id: "crm", title: "CRM Saturno (1º mês)", quantity: 1, unit_price: PRECOS.crm, currency_id: "BRL" }); partes.push("CRM (1º mês)"); }
   if (!itens.length) throw falha("escolha ao menos um item", 400);
   const valor = Math.round(itens.reduce((s, i) => s + i.quantity * i.unit_price, 0) * 100) / 100;
-  return { site, cartoes, tags, crm, itens, valor, pedido: partes.join(" + ") };
+  return { site, cartoes, tags, chaveiros, crm, itens, valor, pedido: partes.join(" + ") };
 }
 
 async function criarCheckout(b: Any) {
@@ -120,7 +121,7 @@ async function criarCheckout(b: Any) {
     }
   } catch (e) { console.error("CRM:", (e as Error).message); }
 
-  const reg = chk(await db.from("mp_pedidos").insert({ nome, empresa, pedido: p.pedido, cartoes: p.cartoes, tags: p.tags, crm: p.crm, valor: p.valor, lead_id: leadId, email, telefone, cep: ent.cep, endereco: ent.linha, cidade: ent.cidade, uf: ent.uf })
+  const reg = chk(await db.from("mp_pedidos").insert({ nome, empresa, pedido: p.pedido, cartoes: p.cartoes, tags: p.tags, chaveiros: p.chaveiros, crm: p.crm, valor: p.valor, lead_id: leadId, email, telefone, cep: ent.cep, endereco: ent.linha, cidade: ent.cidade, uf: ent.uf })
     .select("id").single()) as Any;
 
   const r = await fetch(`${API}/checkout/preferences`, {
@@ -182,7 +183,7 @@ async function consultarPedido(c: Any) {
   if (!ped) throw falha("pedido não encontrado", 404);
   // se o webhook atrasar, a CRM já fica certa aqui. O resultado do aviso não muda o que a pessoa vê.
   try { await aplicarPagamento(pg); } catch (e) { console.error((e as Error).message); }
-  const itens = montarPedido({ cartoes: ped.cartoes, tags: ped.tags, crm: ped.crm }).itens
+  const itens = montarPedido({ cartoes: ped.cartoes, tags: ped.tags, chaveiros: ped.chaveiros ?? 0, crm: ped.crm }).itens
     .map((i) => ({ nome: i.title, quantidade: i.quantity, preco: i.unit_price }));
   return {
     status: pg.status, pagamento_id: String(pg.id), tipo: pg.payment_type_id, parcelas: pg.installments,

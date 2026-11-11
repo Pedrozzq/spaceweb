@@ -36,6 +36,8 @@ alter table public.mp_pedidos add column if not exists cep text;
 alter table public.mp_pedidos add column if not exists endereco text;
 alter table public.mp_pedidos add column if not exists cidade text;
 alter table public.mp_pedidos add column if not exists uf text;
+-- chaveiro NFC (R$ 30 cada), desde 2026-11-11
+alter table public.mp_pedidos add column if not exists chaveiros integer not null default 0 check (chaveiros between 0 and 200);
 
 create index if not exists mp_pedidos_criado_idx on public.mp_pedidos (criado_em desc);
 
