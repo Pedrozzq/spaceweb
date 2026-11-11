@@ -5329,6 +5329,8 @@
         .sai-rot{display:block;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;margin:0;
             transition:max-width .8s cubic-bezier(.2,.8,.2,1),opacity .5s ease .2s,margin .8s cubic-bezier(.2,.8,.2,1)}
         .sai-btn.aberto .sai-rot{max-width:16rem;opacity:1;margin:0 .85rem 0 .65rem}
+        .sai-btn:not(.visivel){opacity:0;transform:translateY(14px) scale(.6);pointer-events:none}
+        .sai-btn.visivel{transition:transform .6s cubic-bezier(.34,1.56,.64,1),opacity .4s ease,box-shadow .25s ease}
         .sai-btn:hover{box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 40px rgba(255,182,72,.55),0 0 26px rgba(163,91,255,.6)}
         @keyframes saiBorda{to{--sai-giro:360deg}}
         @keyframes saiPulsa{
@@ -5506,10 +5508,12 @@
         <span class="sai-rot">Monte seu pedido com a IA<small>Pronto em menos de 1 minuto</small></span>
     </button>
     <script>
-        // botão da IA: começa só com a esfera e, depois de alguns segundos, a descrição abre ao lado
+        // botão da IA: aparece depois de 3 s, só com a esfera; 2 s depois a descrição abre ao lado
         (function () {
             var b = document.getElementById('sai-btn');
-            if (b) setTimeout(function () { b.classList.add('aberto'); }, 3000);
+            if (!b) return;
+            setTimeout(function () { b.classList.add('visivel'); }, 3000);
+            setTimeout(function () { b.classList.add('aberto'); }, 5000);
         })();
     </script>
 
