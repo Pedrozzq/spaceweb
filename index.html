@@ -5501,6 +5501,95 @@
             .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-pedido,.sai-logo,.sai-logo *),.sai-ov *::before,.sai-ov *:not(.sai-pedido)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
             .sai-caixa:focus-within::before{background:linear-gradient(#ffc933,#a35bff)}
         }
+
+        /* ===== visual estilo ChatGPT: grafite, texto limpo, balão cinza só para quem escreve ===== */
+        .sai-ov{--gpt-bg:#212121;--gpt-bal:#303030;--gpt-borda:#424242;--gpt-txt:#ececec;--gpt-sub:#b4b4b4;--gpt-fraco:#8f8f8f;
+            background:var(--gpt-bg);color:var(--gpt-txt);
+            font-family:ui-sans-serif,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+        .sai-ov ::selection{background:rgba(255,255,255,.22)}
+        .sai-ov .sai-aurora,.sai-ov .sai-cadente,.sai-ov .sai-halo{display:none}
+        /* topo */
+        .sai-ov .sai-topo{height:3.5rem;padding:0 .75rem;border-bottom:0}
+        .sai-ov .sai-marca{font-weight:600;font-size:1.06rem;letter-spacing:0;color:var(--gpt-txt);gap:.5rem}
+        .sai-ov .sai-marca .sai-esfera{width:1.5rem;height:1.5rem;box-shadow:none}
+        .sai-ov .sai-ico{border-radius:.6rem;color:var(--gpt-sub)}
+        .sai-ov .sai-ico:hover{background:#2f2f2f;color:#fff}
+        /* tela inicial */
+        .sai-ov .sai-globo{height:4.5rem;margin-bottom:.6rem}
+        .sai-ov .sai-logo{width:auto;height:auto;animation:none}
+        .sai-ov .sai-logo .sai-central{position:static;margin:0;width:3rem;height:3rem;box-shadow:none;animation:none}
+        .sai-ov .sai-hero h2{background:none;color:var(--gpt-txt);-webkit-background-clip:border-box;background-clip:border-box;
+            font-size:clamp(1.55rem,4.2vw,2rem);font-weight:600;letter-spacing:-.015em;animation:saiSobe .5s ease both}
+        .sai-ov .sai-hero-sub{color:var(--gpt-sub)}
+        /* mensagens */
+        .sai-ov .sai-fio{width:min(48rem,100%);gap:1.6rem;padding-top:1rem}
+        .sai-ov .sai-linha{animation:saiSobe .3s ease both}
+        .sai-ov .sai-linha.ia .sai-av{display:none}
+        .sai-ov .sai-linha.seq{margin-top:-1rem}
+        .sai-ov .sai-bal{max-width:min(70%,32rem);padding:.6rem 1.15rem;border-radius:1.5rem;background:var(--gpt-bal);color:var(--gpt-txt);font-size:1rem;line-height:1.55}
+        .sai-ov .sai-txt{padding-top:0;font-size:1rem;line-height:1.75;color:var(--gpt-txt)}
+        .sai-ov .sai-txt strong{font-weight:600;color:#fff}
+        .sai-ov .sai-txt a{color:#fff;text-decoration-color:rgba(255,255,255,.45)}
+        .sai-ov .sai-txt.aviso{color:var(--gpt-sub)}
+        .sai-ov .sai-cursor{width:.62em;height:.62em;margin-left:4px;vertical-align:.05em;border-radius:50%;background:#fff;animation:saiPontoGpt 1s ease-in-out infinite}
+        /* "pensando": bolinha branca pulsando, como no ChatGPT */
+        .sai-ov .sai-pensa .sai-av{display:block;width:.8rem;height:.8rem;margin-top:.45rem;background:#fff;box-shadow:none;animation:saiPontoGpt 1s ease-in-out infinite}
+        .sai-ov .sai-pensa .sai-av::after{display:none}
+        .sai-ov .sai-pensa .sai-txt{font-size:.9rem;font-weight:400;color:var(--gpt-fraco)}
+        /* respostas rápidas: botões neutros com contorno */
+        .sai-ov .sai-chips{gap:.5rem;margin-top:1rem}
+        .sai-ov .sai-chip{min-height:2.5rem;padding:.5rem 1rem;border-radius:999px;border:1px solid var(--gpt-borda);background:transparent;color:var(--gpt-txt);font-size:.9rem;font-weight:400}
+        .sai-ov .sai-chip:hover{background:#2f2f2f;border-color:#555}
+        .sai-ov .sai-chip i{color:var(--gpt-sub)}
+        /* cartão do pedido dentro da conversa */
+        .sai-ov .sai-txt .sai-cfg{border-radius:1.25rem}
+        .sai-ov .sai-desce{background:var(--gpt-bg);border-color:var(--gpt-borda);box-shadow:0 4px 14px rgba(0,0,0,.35)}
+        /* campo de mensagem */
+        .sai-ov .sai-rodape{width:min(48rem,100%)}
+        .sai-ov .sai-caixa{padding:.5rem .5rem .5rem 1.15rem;border-radius:1.75rem;background:var(--gpt-bal);
+            box-shadow:0 0 0 1px rgba(255,255,255,.06),0 4px 24px rgba(0,0,0,.25)}
+        .sai-ov .sai-caixa::before{display:none}
+        .sai-ov .sai-caixa:focus-within{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 4px 24px rgba(0,0,0,.3)}
+        .sai-ov .sai-caixa textarea{font:400 16px/1.5 ui-sans-serif,-apple-system,system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:var(--gpt-txt)}
+        .sai-ov .sai-caixa textarea::placeholder{color:var(--gpt-fraco)}
+        .sai-ov .sai-mic{color:var(--gpt-sub)}
+        .sai-ov .sai-mic:hover{background:#3a3a3a}
+        .sai-ov .sai-env{width:2.25rem;height:2.25rem;background:#fff;color:#000;font-size:1rem}
+        .sai-ov .sai-env:disabled{background:#676767;color:#2f2f2f}
+        .sai-ov .sai-nota{color:var(--gpt-fraco);font-size:.75rem}
+        .sai-ov button:focus-visible,.sai-ov a:focus-visible{outline-color:#fff}
+        /* seletor de empresa e nicho no topo */
+        .sai-perfil-wrap{position:relative;margin-right:auto;min-width:0}
+        .sai-ov .sai-seletor{display:flex;align-items:center;gap:.55rem;min-width:0;max-width:min(26rem,calc(100vw - 7.5rem));margin:0;padding:.35rem .65rem .35rem .4rem;border:0;border-radius:.75rem;
+            background:transparent;color:var(--gpt-txt);font:inherit;font-weight:600;font-size:1.06rem;text-align:left;cursor:pointer;transition:background .2s}
+        .sai-ov .sai-seletor:hover,.sai-ov .sai-seletor[aria-expanded="true"]{background:#2f2f2f}
+        .sai-seletor-txt{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+        .sai-seletor-txt small{font-size:.74rem;font-weight:400;color:var(--gpt-fraco);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .sai-seletor-txt small.ok{color:var(--gpt-sub)}
+        .sai-ov .sai-seletor .ph-caret-down{flex:none;font-size:.95rem;color:var(--gpt-sub);transition:transform .2s}
+        .sai-ov .sai-seletor[aria-expanded="true"] .ph-caret-down{transform:rotate(180deg)}
+        .sai-pop{position:absolute;z-index:5;left:0;top:calc(100% + .4rem);width:min(23rem,calc(100vw - 1.5rem));display:flex;flex-direction:column;gap:.6rem;padding:1rem;
+            border-radius:1rem;border:1px solid rgba(255,255,255,.08);background:#2f2f2f;box-shadow:0 18px 50px rgba(0,0,0,.5);animation:saiSobe .2s ease both}
+        .sai-pop[hidden]{display:none}
+        .sai-pop-tit{margin:0;font-size:.95rem;font-weight:600;color:#fff}
+        .sai-pop-sub{margin:-.3rem 0 .1rem;font-size:.8rem;line-height:1.4;color:var(--gpt-sub)}
+        .sai-pop-campo{display:flex;flex-direction:column;gap:.3rem}
+        .sai-pop-campo span{font-size:.75rem;color:var(--gpt-sub)}
+        .sai-pop-campo input{height:2.6rem;padding:0 .85rem;border-radius:.65rem;border:1px solid #4a4a4a;background:#212121;color:#fff;font:400 16px/1.2 inherit;outline:0}
+        .sai-pop-campo input:focus{border-color:#8f8f8f}
+        .sai-pop-lista{max-height:min(15rem,38vh);overflow-y:auto;margin:0 -.35rem;padding:0 .35rem;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+        .sai-nicho{display:flex;align-items:center;gap:.7rem;width:100%;padding:.55rem .6rem;border:0;border-radius:.6rem;background:transparent;color:var(--gpt-txt);font:inherit;font-size:.9rem;text-align:left;cursor:pointer}
+        .sai-nicho:hover,.sai-nicho.foco{background:#3a3a3a}
+        .sai-nicho i{font-size:1.15rem;color:var(--gpt-sub)}
+        .sai-nicho .ph-check{margin-left:auto;color:#fff;visibility:hidden}
+        .sai-nicho[aria-selected="true"] .ph-check{visibility:visible}
+        .sai-nicho-novo i{color:#fff}
+        .sai-pop-ok{height:2.6rem;border:0;border-radius:999px;background:#fff;color:#000;font:inherit;font-weight:600;font-size:.92rem;cursor:pointer}
+        .sai-pop-ok:hover{background:#e5e5e5}
+        /* listas no texto da IA, como no ChatGPT */
+        .sai-ov .sai-li{display:block;position:relative;padding-left:1.15rem;margin:.3rem 0}
+        .sai-ov .sai-li::before{content:'';position:absolute;left:.3rem;top:.72em;width:.32rem;height:.32rem;border-radius:50%;background:var(--gpt-sub)}
+        @keyframes saiPontoGpt{0%,100%{transform:scale(.75);opacity:.7}50%{transform:scale(1);opacity:1}}
     </style>
 
     <button type="button" class="sai-btn" id="sai-btn" aria-label="Montar meu pedido com o assistente de IA da Saturno NFC">
@@ -5520,7 +5609,21 @@
     <div class="sai-ov" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
         <div class="sai-aurora" aria-hidden="true"></div>
         <header class="sai-topo">
-            <div class="sai-marca"><span class="sai-esfera" aria-hidden="true"></span>Saturno IA</div>
+            <div class="sai-perfil-wrap">
+                <button type="button" class="sai-marca sai-seletor" id="sai-perfil" aria-haspopup="dialog" aria-expanded="false">
+                    <span class="sai-esfera" aria-hidden="true"></span>
+                    <span class="sai-seletor-txt"><span>Saturno IA</span><small id="sai-perfil-sub">Personalize para o seu negócio</small></span>
+                    <i class="ph ph-caret-down" aria-hidden="true"></i>
+                </button>
+                <div class="sai-pop" id="sai-pop" role="dialog" aria-label="Personalizar a IA para o seu negócio" hidden>
+                    <p class="sai-pop-tit">Personalize a IA</p>
+                    <p class="sai-pop-sub">Diga o nome e o nicho da empresa e a IA monta o pedido pensando no seu negócio.</p>
+                    <label class="sai-pop-campo"><span>Nome da empresa</span><input id="sai-p-emp" maxlength="80" autocomplete="organization" placeholder="Ex.: Pizzaria Bella"></label>
+                    <label class="sai-pop-campo"><span>Nicho</span><input id="sai-p-nicho" maxlength="60" autocomplete="off" placeholder="Digite ou escolha abaixo"></label>
+                    <div class="sai-pop-lista" id="sai-p-lista" role="listbox" aria-label="Nichos"></div>
+                    <button type="button" class="sai-pop-ok" id="sai-p-ok">Aplicar</button>
+                </div>
+            </div>
             <button type="button" class="sai-ico sai-nova" id="sai-nova" aria-label="Nova conversa" title="Nova conversa"><i class="ph ph-note-pencil" aria-hidden="true"></i></button>
             <button type="button" class="sai-ico" id="sai-fechar" aria-label="Fechar" title="Fechar"><i class="ph ph-x" aria-hidden="true"></i></button>
         </header>
@@ -5634,21 +5737,35 @@
                 destino.appendChild(n);
                 partes.push({ n: n, s: t });
             }
-            var re = /\*([^*\n]+)\*|((?:https?:\/\/|www\.)[^\s<]+)/g, m, resto = 0;
-            while ((m = re.exec(texto))) {
-                poe(el, texto.slice(resto, m.index));
-                if (m[1]) {
-                    var b = document.createElement('strong'); poe(b, m[1]); el.appendChild(b);
-                    resto = re.lastIndex;
-                } else {
-                    var url = m[2].replace(/[.,;:!?)]+$/, ''), a = document.createElement('a');
-                    a.href = /^https?:/i.test(url) ? url : 'https://' + url;
-                    a.target = '_blank'; a.rel = 'noopener noreferrer';
-                    poe(a, url); el.appendChild(a);
-                    resto = m.index + url.length; re.lastIndex = resto;
+            function linha(destino, t) {
+                var re = /\*([^*\n]+)\*|((?:https?:\/\/|www\.)[^\s<]+)/g, m, resto = 0;
+                while ((m = re.exec(t))) {
+                    poe(destino, t.slice(resto, m.index));
+                    if (m[1]) {
+                        var b = document.createElement('strong'); poe(b, m[1]); destino.appendChild(b);
+                        resto = re.lastIndex;
+                    } else {
+                        var url = m[2].replace(/[.,;:!?)]+$/, ''), a = document.createElement('a');
+                        a.href = /^https?:/i.test(url) ? url : 'https://' + url;
+                        a.target = '_blank'; a.rel = 'noopener noreferrer';
+                        poe(a, url); destino.appendChild(a);
+                        resto = m.index + url.length; re.lastIndex = resto;
+                    }
                 }
+                poe(destino, t.slice(resto));
             }
-            poe(el, texto.slice(resto));
+            // "• item" ou "- item" no começo da linha vira item de lista com recuo
+            var linhas = String(texto || '').split('\n'), item = /^\s*(?:[•·▪]|-(?=\s))\s*/;
+            linhas.forEach(function (t, i) {
+                if (item.test(t)) {
+                    var li = document.createElement('span'); li.className = 'sai-li'; el.appendChild(li);
+                    linha(li, t.replace(item, ''));
+                    return;
+                }
+                linha(el, t);
+                var prox = linhas[i + 1];
+                if (prox !== undefined && !item.test(prox)) poe(el, '\n');
+            });
             return partes;
         }
         function mostraTudo(partes) { partes.forEach(function (p) { p.n.nodeValue = p.s; }); }
@@ -6070,7 +6187,7 @@ function linhaEu(texto) {
         var OBJETIVOS = {prof: 'Passar uma imagem mais profissional', aval: 'Receber mais avaliações no Google', crm: 'Captar e organizar clientes', tudo: 'Um pouco de tudo'};
         var ETAPAS = [
             {id: 'empresa', dica: 'Digite o nome da empresa',
-                texto: function () { return 'Oi! Sou a IA da Saturno e vou montar o seu pedido com você, em menos de 1 minuto. 🚀\n\nPara começar: qual é o *nome da sua empresa*? É ele que vai nos cartões.'; },
+                texto: function () { return 'Qual é o *nome da sua empresa*? É ele que vai nos cartões.'; },
                 opcoes: function () { return [{t: 'Sou profissional autônomo', v: ''}]; },
                 le: function (t, o) { if (o) return o.v; t = t.trim().replace(/\s+/g, ' '); return t.length >= 2 ? t.slice(0, 80) : undefined; },
                 grava: function (v) {
@@ -6237,7 +6354,10 @@ function linhaEu(texto) {
         }
         // o que o cliente contou e o pedido como está no cartão agora: vai junto das perguntas para a IA
         function contextoGuia() {
-            if (!guia || guia.etapa < 0) return '';
+            if (!guia || guia.etapa < 0) {
+                var pf = [perfil.empresa && 'Empresa: ' + perfil.empresa, perfil.nicho && 'Nicho: ' + perfil.nicho].filter(Boolean);
+                return pf.length ? '[Contexto do site] ' + pf.join(' | ') : '';
+            }
             var p = [];
             if (guia.empresa) p.push('Empresa: ' + guia.empresa);
             if (guia.ramo) p.push('Ramo: ' + guia.ramo);
@@ -6256,11 +6376,107 @@ function linhaEu(texto) {
             if (despediu) return;
             caixa.classList.remove('travada'); txt.disabled = false; micBtn.hidden = !reconhecedor(); ajusta();
         }
+        // ---------- seletor do topo: nome da empresa e nicho (no lugar do "modelo" do ChatGPT) ----------
+        var NICHOS = [
+            ['Restaurante', 'ph-fork-knife'], ['Bar e boteco', 'ph-beer-stein'], ['Pizzaria', 'ph-pizza'], ['Hamburgueria', 'ph-hamburger'],
+            ['Cafeteria', 'ph-coffee'], ['Padaria e confeitaria', 'ph-cake'], ['Açaí e sorveteria', 'ph-ice-cream'], ['Marmitaria e delivery', 'ph-bowl-food'],
+            ['Distribuidora de bebidas e chopp', 'ph-beer-bottle'], ['Salão de beleza', 'ph-scissors'], ['Barbearia', 'ph-scissors'], ['Clínica de estética', 'ph-sparkle'],
+            ['Clínica médica', 'ph-first-aid'], ['Odontologia', 'ph-tooth'], ['Fisioterapia', 'ph-person-simple-walk'], ['Psicologia', 'ph-brain'],
+            ['Nutrição', 'ph-carrot'], ['Academia e personal trainer', 'ph-barbell'], ['Pet shop e veterinária', 'ph-paw-print'], ['Loja de roupas', 'ph-t-shirt'],
+            ['Calçados', 'ph-sneaker'], ['Ótica', 'ph-eyeglasses'], ['Joalheria e semijoias', 'ph-diamond'], ['Perfumaria e cosméticos', 'ph-drop'],
+            ['Supermercado e mercearia', 'ph-shopping-cart'], ['Material de construção', 'ph-hammer'], ['Móveis e decoração', 'ph-armchair'], ['Eletrônicos e celulares', 'ph-device-mobile'],
+            ['Imobiliária', 'ph-buildings'], ['Corretor de imóveis', 'ph-house-line'], ['Advocacia', 'ph-scales'], ['Contabilidade', 'ph-calculator'],
+            ['Agência de marketing', 'ph-megaphone'], ['Arquitetura e engenharia', 'ph-compass-tool'], ['Oficina mecânica', 'ph-wrench'], ['Autoescola', 'ph-steering-wheel'],
+            ['Escola e cursos', 'ph-graduation-cap'], ['Fotografia e eventos', 'ph-camera'], ['Hotel e pousada', 'ph-bed'], ['Transporte e logística', 'ph-truck'],
+            ['Limpeza e serviços gerais', 'ph-broom'], ['Profissional autônomo', 'ph-user']
+        ];
+        var CHAVE_PERFIL = 'saturno_ia_perfil', perfil = { empresa: '', nicho: '' };
+        try { perfil = Object.assign(perfil, JSON.parse(localStorage.getItem(CHAVE_PERFIL) || '{}')); } catch (e) {}
+        var pBtn = $('sai-perfil'), pPop = $('sai-pop'), pEmp = $('sai-p-emp'), pNicho = $('sai-p-nicho'), pLista = $('sai-p-lista');
+        function semAcento(t) { return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); }
+        function rotuloPerfil() {
+            var sub = $('sai-perfil-sub'), partes = [perfil.empresa, perfil.nicho].filter(Boolean);
+            sub.textContent = partes.length ? partes.join(' · ') : 'Personalize para o seu negócio';
+            sub.classList.toggle('ok', partes.length > 0);
+        }
+        function listaNichos() {
+            var busca = semAcento(pNicho.value), atual = semAcento(perfil.nicho), achou = false, qtd = 0;
+            pLista.textContent = '';
+            NICHOS.forEach(function (n) {
+                if (busca && semAcento(n[0]).indexOf(busca) < 0) return;
+                if (semAcento(n[0]) === busca) achou = true;
+                qtd++;
+                pLista.appendChild(itemNicho(n[0], n[1], semAcento(n[0]) === (busca || atual)));
+            });
+            // nicho digitado que não está na lista também vale
+            if (busca && !achou && !qtd) pLista.insertBefore(itemNicho(pNicho.value.trim(), 'ph-plus', false, true), pLista.firstChild);
+        }
+        function itemNicho(nome, ic, marcado, novo) {
+            var b = document.createElement('button');
+            b.type = 'button'; b.className = 'sai-nicho' + (novo ? ' sai-nicho-novo' : '');
+            b.setAttribute('role', 'option'); b.setAttribute('aria-selected', marcado ? 'true' : 'false');
+            b.innerHTML = '<i class="ph ' + ic + '" aria-hidden="true"></i><span></span><i class="ph ph-check" aria-hidden="true"></i>';
+            b.querySelector('span').textContent = novo ? 'Usar "' + nome + '"' : nome;
+            b.addEventListener('click', function () {
+                pNicho.value = nome;
+                pLista.querySelectorAll('.sai-nicho').forEach(function (x) { x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+                pEmp.value.trim() ? $('sai-p-ok').focus() : pEmp.focus();
+            });
+            return b;
+        }
+        function abrePerfil() {
+            pEmp.value = perfil.empresa || (guia && guia.empresa) || '';
+            pNicho.value = perfil.nicho || (guia && guia.ramo) || '';
+            listaNichos();
+            pPop.hidden = false; pBtn.setAttribute('aria-expanded', 'true');
+            setTimeout(function () { (pEmp.value ? pNicho : pEmp).focus(); }, 30);
+        }
+        function fechaPerfil() { pPop.hidden = true; pBtn.setAttribute('aria-expanded', 'false'); }
+        function idxEtapa(id) { for (var i = 0; i < ETAPAS.length; i++) if (ETAPAS[i].id === id) return i; return -1; }
+        // leva empresa e nicho para o roteiro: quem preencheu aqui não precisa responder de novo
+        function aplicaPerfilNoGuia(mostrar) {
+            if (!guia || guia.fim) return;
+            if (perfil.empresa) {
+                guia.empresa = perfil.empresa;
+                if (!perfil.nicho && !guia.ramo) { var k = detectaRamo(perfil.empresa); if (k) { guia.ramoKey = k; guia.ramo = RAMOS[k].nome; guia.ramoAuto = true; } }
+            }
+            if (perfil.nicho) { guia.ramo = perfil.nicho; guia.ramoKey = detectaRamo(perfil.nicho); guia.ramoAuto = false; }
+            var id = guia.etapa >= 0 ? ETAPAS[guia.etapa].id : '';
+            if (id !== 'empresa' && id !== 'ramo' && guia.etapa >= 0) return;   // já passou dessas perguntas: só atualiza os dados
+            if (!perfil.empresa && !perfil.nicho) return;
+            if (guia.chips) { guia.chips.remove(); guia.chips = null; }
+            if (mostrar) {
+                var t = [perfil.empresa || 'Profissional autônomo', perfil.nicho].filter(Boolean).join(' · ');
+                linhaEu(t); historico.push({ role: 'user', content: t }); vaiProFim(true);
+            }
+            guia.etapa = idxEtapa(perfil.empresa || guia.ramo ? 'ramo' : 'empresa');
+            avanca();
+        }
+        pBtn.addEventListener('click', function (e) { e.stopPropagation(); pPop.hidden ? abrePerfil() : fechaPerfil(); });
+        pPop.addEventListener('click', function (e) { e.stopPropagation(); });
+        document.addEventListener('click', function () { if (!pPop.hidden) fechaPerfil(); });
+        pNicho.addEventListener('input', listaNichos);
+        [pEmp, pNicho].forEach(function (inp) {
+            inp.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') { e.preventDefault(); $('sai-p-ok').click(); }
+                if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); fechaPerfil(); pBtn.focus(); }
+            });
+        });
+        $('sai-p-ok').addEventListener('click', function () {
+            perfil = { empresa: pEmp.value.trim().replace(/\s+/g, ' ').slice(0, 80), nicho: pNicho.value.trim().replace(/\s+/g, ' ').slice(0, 60) };
+            try { localStorage.setItem(CHAVE_PERFIL, JSON.stringify(perfil)); } catch (e) {}
+            rotuloPerfil(); fechaPerfil();
+            if (!guia && !sessao) iniciaGuia(); else aplicaPerfilNoGuia(true);
+            if (!toque) txt.focus();
+        });
+        rotuloPerfil();
+
         function iniciaGuia() {
             guia = { etapa: -1, empresa: '', ramo: '', ramoKey: '', ramoAuto: false, obj: '', c: 0, g: 0, k: 0, crm: false, fim: false, chips: null };
             liberaCampo();
             entraConversa(false);
-            avanca();
+            if (perfil.empresa || perfil.nicho) aplicaPerfilNoGuia(false);
+            else avanca();
         }
 
         // ---------- abrir, fechar e nova conversa ----------
