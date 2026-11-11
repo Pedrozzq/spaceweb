@@ -1670,7 +1670,8 @@
             .plm-ceu { height: 88px; }
             .plm-sistema { top: 0; transform: scale(.68); transform-origin: 50% 0; }
             .plm-horizonte { top: 78px; }
-            .sp-txt b, .sp-txt span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            /* sem "...": título e descrição quebram linha se não couberem */
+            .sp-txt b, .sp-txt span { white-space: normal; overflow: visible; text-overflow: clip; }
             .sp-qtd button { width: 28px; height: 28px; font-size: 12px; }
             .sp-qtd input { width: 26px; }
             .sp-opc { margin-left: 2px; padding: 1px 6px; font-size: 9.5px; }
@@ -5319,6 +5320,21 @@
             font:700 .82rem/1 "Plus Jakarta Sans",sans-serif;letter-spacing:.01em;cursor:pointer;
             box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 24px rgba(138,43,226,.28);transition:transform .25s ease,box-shadow .25s ease,opacity .3s}
         .sai-btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 30px rgba(138,43,226,.45)}
+        /* versão chamativa: só a esfera, com borda dourada/roxa girando, brilho pulsando e o texto abrindo depois */
+        .sai-btn{gap:0;padding:.38rem;border:1.5px solid transparent;
+            background:linear-gradient(rgba(12,12,20,.9),rgba(12,12,20,.9)) padding-box,
+                conic-gradient(from var(--sai-giro),#ffb648,#a35bff,#ffe9a8,#7b3cff,#ffb648) border-box;
+            animation:saiBorda 4s linear infinite,saiPulsa 2.4s ease-in-out infinite}
+        .sai-btn .sai-esfera{width:2.9rem;height:2.9rem;animation:saiEsferaPulsa 2.4s ease-in-out infinite}
+        .sai-rot{display:block;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;margin:0;
+            transition:max-width .8s cubic-bezier(.2,.8,.2,1),opacity .5s ease .2s,margin .8s cubic-bezier(.2,.8,.2,1)}
+        .sai-btn.aberto .sai-rot{max-width:16rem;opacity:1;margin:0 .85rem 0 .65rem}
+        .sai-btn:hover{box-shadow:0 14px 36px rgba(0,0,0,.6),0 0 40px rgba(255,182,72,.55),0 0 26px rgba(163,91,255,.6)}
+        @keyframes saiBorda{to{--sai-giro:360deg}}
+        @keyframes saiPulsa{
+            0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 18px rgba(255,182,72,.35),0 0 26px rgba(163,91,255,.35),0 0 0 0 rgba(163,91,255,.45)}
+            50%{box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 30px rgba(255,182,72,.6),0 0 42px rgba(163,91,255,.55),0 0 0 10px rgba(163,91,255,0)}}
+        @keyframes saiEsferaPulsa{50%{transform:scale(1.07);filter:brightness(1.15)}}
         .sai-btn small{display:block;font-weight:600;font-size:.66rem;color:rgba(255,255,255,.6);margin-top:.24rem}
         @media (max-width:767px){.sai-btn{left:1rem;bottom:1.5rem}body.tour-on .sai-btn{opacity:0;pointer-events:none}}
         html:has(body.sai-aberto){overflow:hidden;overscroll-behavior:none}
@@ -5487,8 +5503,15 @@
 
     <button type="button" class="sai-btn" id="sai-btn" aria-label="Montar meu pedido com o assistente de IA da Saturno NFC">
         <span class="sai-esfera" aria-hidden="true"></span>
-        <span>Monte seu pedido com a IA<small>Pronto em menos de 1 minuto</small></span>
+        <span class="sai-rot">Monte seu pedido com a IA<small>Pronto em menos de 1 minuto</small></span>
     </button>
+    <script>
+        // botão da IA: começa só com a esfera e, depois de alguns segundos, a descrição abre ao lado
+        (function () {
+            var b = document.getElementById('sai-btn');
+            if (b) setTimeout(function () { b.classList.add('aberto'); }, 3000);
+        })();
+    </script>
 
     <div class="sai-ov" id="sai-ov" role="dialog" aria-modal="true" aria-label="Assistente de IA da Saturno NFC" aria-hidden="true">
         <div class="sai-aurora" aria-hidden="true"></div>
