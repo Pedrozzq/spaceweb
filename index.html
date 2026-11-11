@@ -1626,8 +1626,8 @@
         .plm-ov.on .sp-3d-card img { animation-name: spImgCard; }
         @keyframes spImgCard { from { opacity: 0; transform: rotate(-8deg) scale(1.12); } to { opacity: 1; transform: rotate(-8deg); } }
         .sp-thumb-tag img { width: 74%; height: 88%; }
-        .sp-thumb-chav { background: #fff; }
-        .sp-thumb-chav img { width: auto; height: 90%; object-fit: contain; }
+        .sp-thumb.sp-thumb-chav { background: radial-gradient(circle at 50% 60%, rgba(255,255,255,.10), rgba(255,255,255,0) 70%); overflow: visible; }
+        .sp-thumb.sp-thumb-chav img { width: auto; height: 50px; max-width: none; object-fit: contain; transform: rotate(-10deg); filter: drop-shadow(0 6px 10px rgba(0,0,0,.55)); }
         .sp-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; text-align: left; }
         .sp-txt b { color: #f5f5f7; font-size: 15px; font-weight: 600; letter-spacing: -.012em; line-height: 1.2; }
         .sp-txt span { color: #86868b; font-size: 12px; line-height: 1.35; letter-spacing: -.005em; }
@@ -1691,6 +1691,7 @@
             .sp-thumb { width: 36px; height: 36px; }
             .sp-thumb.sp-3d img { height: 40px; }
             .sp-thumb.sp-3d-card img { width: 42px; }
+            .sp-thumb.sp-thumb-chav img { height: 42px; }
             .sp-txt b { font-size: 14px; }
             .sp-qtd button { width: 26px; height: 26px; }
             .sp-qtd input { width: 22px; }
@@ -2775,21 +2776,21 @@
                                 </div>
                             </div>
                             <div class="sp-row sp-anim" style="--i:3">
+                                <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc-sem-fundo.webp" alt="" width="251" height="456" decoding="async"></div>
+                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
+                                <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
+                                        <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
+                                        <input id="sp-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
+                                        <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="sp-row sp-anim" style="--i:4">
                                 <div class="sp-thumb sp-thumb-tag"><img src="img/tapreview-card.webp" alt="" decoding="async"></div>
                                 <div class="sp-txt"><em class="sp-val">R$ 40 cada</em><b>Tag Google <em class="sp-opc">Opcional</em></b><span>Avaliação em um toque</span></div>
                                 <div class="sp-qtd" role="group" aria-label="Quantidade de tags Avaliação Google">
                                         <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
                                         <input id="sp-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
                                         <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
-                                </div>
-                            </div>
-                            <div class="sp-row sp-anim" style="--i:4">
-                                <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc.webp" alt="" width="125" height="250" decoding="async"></div>
-                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
-                                <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
-                                        <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
-                                        <input id="sp-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
-                                        <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
                             <label class="sp-row sp-anim" style="--i:5" for="sp-crm">
@@ -3058,21 +3059,21 @@
                         </div>
                     </div>
                     <div class="sp-row">
+                        <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc-sem-fundo.webp" alt="" width="251" height="456" loading="lazy" decoding="async"></div>
+                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
+                        <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
+                            <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
+                            <input id="sps-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
+                            <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="sp-row">
                         <div class="sp-thumb sp-thumb-tag"><img src="img/tapreview-card.webp" alt="" loading="lazy" decoding="async"></div>
                         <div class="sp-txt"><em class="sp-val">R$ 40 cada</em><b>Tag Google <em class="sp-opc">Opcional</em></b><span>Avaliação em um toque</span></div>
                         <div class="sp-qtd" role="group" aria-label="Quantidade de tags Avaliação Google">
                             <button type="button" data-passo="-1" data-alvo="sp-g" aria-label="Remover uma tag"><i class="ph ph-minus"></i></button>
                             <input id="sps-g" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de tags Avaliação Google">
                             <button type="button" data-passo="1" data-alvo="sp-g" aria-label="Adicionar uma tag"><i class="ph ph-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="sp-row">
-                        <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc.webp" alt="" width="125" height="250" loading="lazy" decoding="async"></div>
-                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
-                        <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
-                            <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
-                            <input id="sps-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
-                            <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
                         </div>
                     </div>
                     <label class="sp-row" for="sps-crm">
