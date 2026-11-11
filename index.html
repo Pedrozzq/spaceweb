@@ -1989,6 +1989,14 @@
         #btn-escolher-plano .btn-subtext { font-size: clamp(12px, 3.3vw, 14px); color: #ffe08a; opacity: 1; margin-top: 3px; white-space: normal; overflow: visible; }
         #btn-escolher-plano .icon-wrapper { width: 44px; height: 44px; background: linear-gradient(145deg, #ffd84d, #ff9d1e); }
         #btn-escolher-plano .icon-wrapper i { color: #2a1a00; font-size: 24px; }
+        /* Mobile: título e descrição em 1 linha só (fonte ajustada por JS para caber) */
+        @media (max-width: 639px) {
+            #linktree-buttons #btn-escolher-plano { padding: 16px 12px; }
+            #btn-escolher-plano .icon-wrapper { width: 38px; height: 38px; }
+            #btn-escolher-plano .icon-wrapper i { font-size: 21px; }
+            #btn-escolher-plano .main-btn-text,
+            #btn-escolher-plano .btn-subtext { white-space: nowrap; overflow: hidden; text-overflow: clip; }
+        }
         #btn-escolher-plano #escolher-plano-caret { color: #ffd84d; font-size: 20px; flex: none; }
         @keyframes destaquePulsa {
             0%, 100% { box-shadow: 0 0 0 1px rgba(255, 196, 0, .25), 0 10px 34px -8px rgba(255, 170, 0, .55); }
@@ -6325,5 +6333,32 @@ function linhaEu(texto) {
 <style>#gestao-saturno{scroll-margin-top:28px}</style>
 <style>.cena-espalhada{position:relative;margin:2rem 0 3rem}.tap-scene,.tap-scene *{overflow-anchor:none}.cena-olho{text-align:center;font-weight:700;text-transform:uppercase;letter-spacing:.4em;font-size:9px;color:#ff4d5e;margin:0 0 -.5rem;position:relative;z-index:3;text-shadow:0 1px 6px rgba(0,0,0,.9)}.plans-section .cena-espalhada .tap-scene{margin:0 -1rem}</style>
 <style>.sp-txt span.sp-beneficio{white-space:normal;overflow:visible;text-overflow:clip}</style>
+<script>
+/* Botão "Crie seu plano": no mobile, reduz a fonte do título e da descrição até caberem em 1 linha */
+(function () {
+    var btn = document.getElementById('btn-escolher-plano');
+    if (!btn) return;
+    var els = [btn.querySelector('.main-btn-text'), btn.querySelector('.btn-subtext')].filter(Boolean);
+    var mq = window.matchMedia('(max-width: 639px)');
+    function fit() {
+        els.forEach(function (el) {
+            el.style.fontSize = '';
+            if (!mq.matches || !el.clientWidth) return;
+            var size = parseFloat(getComputedStyle(el).fontSize);
+            while (el.scrollWidth > el.clientWidth && size > 8) {
+                size -= 0.25;
+                el.style.fontSize = size + 'px';
+            }
+        });
+    }
+    var t;
+    function schedule() { clearTimeout(t); t = setTimeout(fit, 60); }
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(btn);
+    fit();
+})();
+</script>
 </body>
 </html>

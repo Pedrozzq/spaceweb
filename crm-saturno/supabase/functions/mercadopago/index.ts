@@ -23,7 +23,8 @@ import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 const env = (k: string) => Deno.env.get(k) ?? "";
 const API = "https://api.mercadopago.com";
 const SITE = "https://www.saturnonfc.com.br";
-const ORIGENS = [SITE, "https://saturnonfc.com.br"];
+// proposta.saturnonfc.com.br: propostas comerciais com "Monte seu plano" (repositório propostas)
+const ORIGENS = [SITE, "https://saturnonfc.com.br", "https://proposta.saturnonfc.com.br"];
 // crm: 1º mês do CRM (R$ 89,90/mês), cobrado junto com o pedido; as mensalidades seguintes
 // vão por link de assinatura do Stripe, enviado pela equipe depois de 1 mês.
 const PRECOS = { site: 597, cartao: 35, tag: 40, crm: 89.9 };
