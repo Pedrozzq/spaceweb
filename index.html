@@ -3200,7 +3200,7 @@
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Quanto custa?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
-                            <p>Você monta o seu pedido. O site excepcional custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, e cada Tag Avaliação Google custa R$ 40. O CRM é opcional, por R$ 89,90/mês: o 1º mês vai junto com o pedido e, depois, a assinatura segue mensal.</p>
+                            <p>Você monta o seu pedido. O site excepcional custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, cada chaveiro NFC custa R$ 30 e cada Tag Avaliação Google custa R$ 40. O CRM é opcional, por R$ 89,90/mês: o 1º mês vai junto com o pedido e, depois, a assinatura segue mensal.</p>
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Como funciona a Tag Avaliação Google?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
@@ -5655,12 +5655,12 @@ function linhaEu(texto) {
             var M = window.saturnoMontador, itens = M && document.getElementById('sps-cfg') ? lerItens(pedido) : null;
             if (itens) {   // o total sai da mesma regra do Monte Seu Plano, não do texto do agente
                 r.pedido.itens = itens;
-                r.pedido.valor = M.calcula(itens.c, itens.g, itens.crm);
-                r.pedido.pedido = M.resumo(itens.c, itens.g, itens.crm) + ' (' + M.brl(r.pedido.valor) + ')';
+                r.pedido.valor = M.calcula(itens.c, itens.g, itens.crm, true, itens.k);
+                r.pedido.pedido = M.resumo(itens.c, itens.g, itens.crm, true, itens.k) + ' (' + M.brl(r.pedido.valor) + ')';
             }
             return r;
         }
-        // "Site + 4 cartões NFC + 1 tag + CRM" vira quantidades. Outro tipo de pedido volta null e segue pelo botão do WhatsApp.
+        // "Site + 4 cartões NFC + 2 chaveiros + 1 tag + CRM" vira quantidades. Outro tipo de pedido volta null e segue pelo botão do WhatsApp.
         function lerItens(txt) {
             var t = String(txt || '').replace(/\bsem\s+\S+(\s+\S+)?/gi, ' ');
             if (!/\bsite\b/i.test(t) || /espelho|campanha|card[aá]pio/i.test(t)) return null;
@@ -5670,7 +5670,7 @@ function linhaEu(texto) {
                 if (m) return /^\d/.test(m[1]) ? Math.min(200, parseInt(m[1], 10)) : NUM[m[1].toLowerCase()];
                 return new RegExp(item, 'i').test(t) ? 1 : 0;
             }
-            return {c: qtd('cart'), g: qtd('tags?\\b'), crm: /\bcrm\b/i.test(t)};
+            return {c: qtd('cart'), g: qtd('tags?\\b'), k: qtd('chaveir'), crm: /\bcrm\b/i.test(t)};
         }
         function registraPedido(p) {
             var chave = [p.nome, p.empresa, p.pedido, p.valor].join('|');
@@ -5688,13 +5688,14 @@ function linhaEu(texto) {
             c.removeAttribute('id'); c.classList.add('sai-cfg');
             c.querySelectorAll('[id]').forEach(function (n) { n.removeAttribute('id'); });
             c.querySelectorAll('label[for]').forEach(function (n) { n.removeAttribute('for'); });
-            var campos = c.querySelectorAll('.sp-qtd input'), cI = campos[0], gI = campos[1], crm = c.querySelector('[data-item="crm"]'), site = c.querySelector('[data-item="site"]');
+            var campo = function (alvo) { return c.querySelector('[data-alvo="' + alvo + '"]').parentNode.querySelector('input'); };
+            var cI = campo('sp-n'), gI = campo('sp-g'), kI = campo('sp-k'), crm = c.querySelector('[data-item="crm"]'), site = c.querySelector('[data-item="site"]');
             var pedir = c.querySelector('.sp-pedir');
             var det = c.querySelector('.sp-det'), preco = c.querySelector('.sp-total strong');
-            cI.value = p.itens.c; gI.value = p.itens.g; crm.checked = !!p.itens.crm; site.checked = p.itens.site !== false;
+            cI.value = p.itens.c; gI.value = p.itens.g; kI.value = p.itens.k || 0; crm.checked = !!p.itens.crm; site.checked = p.itens.site !== false;
             function pinta() {
-                var nc = M.val(cI), ng = M.val(gI), total = M.calcula(nc, ng, crm.checked, site.checked);
-                det.textContent = M.resumo(nc, ng, crm.checked, site.checked);
+                var nc = M.val(cI), ng = M.val(gI), nk = M.val(kI), total = M.calcula(nc, ng, crm.checked, site.checked, nk);
+                det.textContent = M.resumo(nc, ng, crm.checked, site.checked, nk);
                 preco.textContent = M.brl(total);
                 preco.parentNode.querySelector('.sp-parcelas').textContent = '4x de ' + M.brl(total / 4) + ' sem juros';
                 pedir.disabled = !total;
@@ -5709,7 +5710,7 @@ function linhaEu(texto) {
                     inp.value = M.val(inp) + (+b.getAttribute('data-passo')); inp.value = M.val(inp); pinta();
                 });
             });
-            [cI, gI].forEach(function (inp) {
+            [cI, gI, kI].forEach(function (inp) {
                 inp.addEventListener('input', function () { if (inp.value !== '') pinta(); });
                 inp.addEventListener('blur', function () { inp.value = M.val(inp); pinta(); });
             });
@@ -5718,10 +5719,10 @@ function linhaEu(texto) {
             var oque = c.querySelector('.sp-oque');
             if (oque) { oque.target = '_blank'; oque.rel = 'noopener'; }
             pedir.addEventListener('click', function () {
-                cI.value = M.val(cI); gI.value = M.val(gI);
-                var nc = +cI.value, ng = +gI.value, total = M.calcula(nc, ng, crm.checked, site.checked);
+                cI.value = M.val(cI); gI.value = M.val(gI); kI.value = M.val(kI);
+                var nc = +cI.value, ng = +gI.value, nk = +kI.value, total = M.calcula(nc, ng, crm.checked, site.checked, nk);
                 if (!total) return;
-                window.saturnoEscolherPlano(M.resumo(nc, ng, crm.checked, site.checked) + ' (' + M.brl(total) + ')', null, true, total, {cartoes: nc, tags: ng, crm: crm.checked, site: site.checked}, {nome: p.nome, empresa: p.empresa});
+                window.saturnoEscolherPlano(M.resumo(nc, ng, crm.checked, site.checked, nk) + ' (' + M.brl(total) + ')', null, true, total, {cartoes: nc, tags: ng, chaveiros: nk, crm: crm.checked, site: site.checked}, {nome: p.nome, empresa: p.empresa});
                 var campoEmp = document.getElementById('orbEmpresa');
                 if (p.empresa && campoEmp) campoEmp.value = p.empresa;
             });
@@ -6077,6 +6078,12 @@ function linhaEu(texto) {
                 le: function (t, o) { return o ? o.v : lerNumero(t); },
                 grava: function (v) { guia.c = v; },
                 erro: 'Me diz só a quantidade de cartões, por exemplo "4". Se não quiser nenhum, toque em "Nenhum por agora".'},
+            {id: 'chaveiros', dica: 'Ou digite a quantidade',
+                texto: function () { return 'E o *chaveiro NFC*? Fica sempre à mão, no molho de chaves ' + (guia.c ? 'de quem não quer carregar cartão' : 'da equipe') + ' ou de presente para clientes fiéis. Aproximou do celular, o site abre na hora. *R$ 30* cada. Quantos você quer?'; },
+                opcoes: function () { return [{t: '1', v: 1}, {t: '2', v: 2}, {t: '5', v: 5}, {t: '10', v: 10}, {t: 'Não preciso', v: 0}]; },
+                le: function (t, o) { if (o) return o.v; if (/\b(n[aã]o|nenhum|dispenso)\b/i.test(t)) return 0; return lerNumero(t); },
+                grava: function (v) { guia.k = v; },
+                erro: 'Me diz só a quantidade de chaveiros, por exemplo "2". Se não quiser nenhum, toque em "Não preciso".'},
             {id: 'tags', dica: 'Ou digite a quantidade',
                 se: function () { return guia.obj === 'aval' || guia.obj === 'tudo' || ['restaurante', 'loja', 'saude'].indexOf(guia.ramoKey) >= 0 || /hotel|pousada/i.test(guia.ramo); },
                 texto: function () { return 'Para chover avaliação no Google: em quantos *balcões, mesas ou caixas* você quer a *tag de avaliação*? O cliente aproxima o celular e já cai na tela de avaliar. *R$ 40* cada.'; },
@@ -6086,7 +6093,7 @@ function linhaEu(texto) {
                 erro: 'Me diz só a quantidade de tags, por exemplo "2". Se não precisar, toque em "Não preciso".'},
             {id: 'crm', dica: 'Sim ou não?',
                 se: function () { return guia.obj === 'crm' || guia.obj === 'tudo'; },
-                texto: function () { return 'Quer incluir o *CRM*? Ele guarda cada contato que chega pelo site e pelos cartões e organiza suas vendas num só lugar. *R$ 89,90/mês*: o 1º mês vai junto com o pedido.'; },
+                texto: function () { return 'Quer incluir o *CRM Saturno*? É o painel que organiza o comercial ' + naEmpresa() + ': cada contato que chega pelo site, pelos cartões ou pelo WhatsApp vira um *lead no funil de vendas*, com histórico, tarefas e aviso no celular. Nenhum cliente esquecido, nenhuma venda no escuro.\n\n*R$ 89,90/mês*: o 1º mês vai junto com o pedido.'; },
                 opcoes: function (semDuvida) { var o = [{t: 'Quero o CRM', v: true}, {t: 'Agora não', v: false}]; if (!semDuvida) o.push({t: 'O que é CRM?', v: '?'}); return o; },
                 le: function (t, o) {
                     if (o) return o.v;
@@ -6095,7 +6102,17 @@ function linhaEu(texto) {
                     if (/\b(sim|quero|pode|claro|bora|inclui)\b/i.test(t)) return true;
                     return undefined;
                 },
-                explica: 'O CRM é o seu painel de clientes: cada pessoa que toca no cartão ou chama pelo site vira um contato organizado, com histórico e etapa da venda. Assim nenhum cliente fica esquecido e você sabe exatamente quem está perto de fechar.\n\nCusta R$ 89,90/mês, e o 1º mês vai junto com o pedido. Quer incluir?',
+                explica: 'O *CRM Saturno* junta leads, conversas do WhatsApp, pedidos e mensalidades em um só painel. Você abre e já sabe quem precisa de resposta, o que está para vencer e quanto está entrando.\n\n' +
+                    '• *Funil de vendas visual*: cada negociação por etapa, em tabela ou em colunas de arrastar e soltar, com o valor em jogo em cada etapa.\n' +
+                    '• *WhatsApp dentro do CRM*: converse sem sair do painel. Contato novo vira lead sozinho, sem digitar nada.\n' +
+                    '• *Ficha completa do cliente*: dados, notas, tarefas, pedidos e o que ele já comprou, tudo no mesmo lugar.\n' +
+                    '• *Tarefas e avisos no celular*: lembrete de retorno no dia certo e aviso de lead novo, pedido e mensagem.\n' +
+                    '• *Pedidos e estoque*: pedidos do site e do WhatsApp entram sozinhos, com pagamento, rastreio e etiqueta de envio.\n' +
+                    '• *Mensalidades*: receita recorrente, vencimentos e atrasos em uma tela.\n' +
+                    '• *Relatórios*: conversão, faturamento, ticket médio, origem dos leads, motivos de perda e margem de lucro de cada produto.\n' +
+                    '• *Mensagens prontas*: proposta, retorno, envio e cobrança direto no WhatsApp do cliente.\n\n' +
+                    'Cada pessoa da equipe tem o próprio login e o histórico fica com a empresa, não com quem saiu. Funciona no navegador, no computador ou no celular, sem instalar nada, e importa suas planilhas.\n\n' +
+                    'Custa *R$ 89,90/mês*, e o 1º mês vai junto com o pedido. Quer incluir?',
                 grava: function (v) { guia.crm = v; },
                 erro: 'Quer incluir o CRM no pedido? Toque em "Quero o CRM" ou "Agora não".'}
         ];
@@ -6156,8 +6173,8 @@ function linhaEu(texto) {
             var texto = 'Pronto! Montei o pedido ideal para ' + (g.empresa ? 'a *' + g.empresa + '*' : 'você') + '. Ajuste o que quiser e toque em *Fazer meu pedido*.';
             var pedido = null;
             if (M) {
-                var total = M.calcula(g.c, g.g, g.crm);
-                pedido = { nome: '', empresa: g.empresa, pedido: M.resumo(g.c, g.g, g.crm) + ' (' + M.brl(total) + ')', valor: total, itens: { c: g.c, g: g.g, crm: g.crm } };
+                var total = M.calcula(g.c, g.g, g.crm, true, g.k);
+                pedido = { nome: '', empresa: g.empresa, pedido: M.resumo(g.c, g.g, g.crm, true, g.k) + ' (' + M.brl(total) + ')', valor: total, itens: { c: g.c, g: g.g, k: g.k, crm: g.crm } };
             }
             var opcoes = [
                 { t: 'Tirar uma dúvida', ic: 'ph-chat-circle-dots', acao: function () { liberaCampo(); txt.placeholder = 'Pergunte o que quiser sobre o pedido'; txt.focus(); } },
@@ -6174,8 +6191,9 @@ function linhaEu(texto) {
             if (guia.obj) p.push('Objetivo: ' + OBJETIVOS[guia.obj]);
             var M = window.saturnoMontador, cards = fio.querySelectorAll('.sai-cfg'), cfg = cards[cards.length - 1];
             if (guia.fim && M && cfg) {
-                var ins = cfg.querySelectorAll('.sp-qtd input'), nc = M.val(ins[0]), ng = M.val(ins[1]), crm = cfg.querySelector('[data-item="crm"]').checked, st = cfg.querySelector('[data-item="site"]').checked;
-                p.push('Pedido montado no site: ' + M.resumo(nc, ng, crm, st) + ' (' + M.brl(M.calcula(nc, ng, crm, st)) + ')');
+                var qtdDe = function (alvo) { return M.val(cfg.querySelector('[data-alvo="' + alvo + '"]').parentNode.querySelector('input')); };
+                var nc = qtdDe('sp-n'), ng = qtdDe('sp-g'), nk = qtdDe('sp-k'), crm = cfg.querySelector('[data-item="crm"]').checked, st = cfg.querySelector('[data-item="site"]').checked;
+                p.push('Pedido montado no site: ' + M.resumo(nc, ng, crm, st, nk) + ' (' + M.brl(M.calcula(nc, ng, crm, st, nk)) + ')');
             }
             return p.length ? '[Contexto do site] ' + p.join(' | ') : '';
         }
@@ -6185,7 +6203,7 @@ function linhaEu(texto) {
             caixa.classList.remove('travada'); txt.disabled = false; micBtn.hidden = !reconhecedor(); ajusta();
         }
         function iniciaGuia() {
-            guia = { etapa: -1, empresa: '', ramo: '', ramoKey: '', ramoAuto: false, obj: '', c: 0, g: 0, crm: false, fim: false, chips: null };
+            guia = { etapa: -1, empresa: '', ramo: '', ramoKey: '', ramoAuto: false, obj: '', c: 0, g: 0, k: 0, crm: false, fim: false, chips: null };
             liberaCampo();
             entraConversa(false);
             avanca();
