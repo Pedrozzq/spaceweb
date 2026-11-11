@@ -84,7 +84,7 @@ export function montarPedido(b: Any) {
   if (site) { itens.push({ id: "site", title: "Site personalizado", quantity: 1, unit_price: PRECOS.site, currency_id: "BRL" }); partes.push("Site"); }
   if (cartoes) { itens.push({ id: "cartao-nfc", title: "Cartão NFC", quantity: cartoes, unit_price: PRECOS.cartao, currency_id: "BRL" }); partes.push(`${cartoes} ${cartoes === 1 ? "cartão NFC" : "cartões NFC"}`); }
   if (tags) { itens.push({ id: "tag-google", title: "Tag Avaliação Google", quantity: tags, unit_price: PRECOS.tag, currency_id: "BRL" }); partes.push(`${tags} ${tags === 1 ? "tag" : "tags"} Avaliação Google`); }
-  if (chaveiros) { itens.push({ id: "chaveiro-nfc", title: "Chaveiro NFC", quantity: chaveiros, unit_price: PRECOS.chaveiro, currency_id: "BRL" }); partes.push(`${chaveiros} ${chaveiros === 1 ? "chaveiro NFC" : "chaveiros NFC"}`); }
+  if (chaveiros) { itens.push({ id: "chaveiro-nfc", title: "Chaveiro Instagram", quantity: chaveiros, unit_price: PRECOS.chaveiro, currency_id: "BRL" }); partes.push(`${chaveiros} ${chaveiros === 1 ? "chaveiro Instagram" : "chaveiros Instagram"}`); }
   if (crm) { itens.push({ id: "crm", title: "CRM Saturno (1º mês)", quantity: 1, unit_price: PRECOS.crm, currency_id: "BRL" }); partes.push("CRM (1º mês)"); }
   if (!itens.length) throw falha("escolha ao menos um item", 400);
   const valor = Math.round(itens.reduce((s, i) => s + i.quantity * i.unit_price, 0) * 100) / 100;

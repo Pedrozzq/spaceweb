@@ -2777,10 +2777,10 @@
                             </div>
                             <div class="sp-row sp-anim" style="--i:3">
                                 <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc-sem-fundo.webp" alt="" width="251" height="456" decoding="async"></div>
-                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
-                                <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
+                                <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro Instagram <em class="sp-opc">Opcional</em></b><span>Aproximou, abre o Instagram da sua marca.</span></div>
+                                <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros Instagram">
                                         <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
-                                        <input id="sp-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
+                                        <input id="sp-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros Instagram">
                                         <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
                                 </div>
                             </div>
@@ -3060,10 +3060,10 @@
                     </div>
                     <div class="sp-row">
                         <div class="sp-thumb sp-thumb-chav"><img src="chaveiro-nfc-sem-fundo.webp" alt="" width="251" height="456" loading="lazy" decoding="async"></div>
-                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro NFC <em class="sp-opc">Opcional</em></b><span>Seu site no chaveiro, sempre à mão.</span></div>
-                        <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros NFC">
+                        <div class="sp-txt"><em class="sp-val">R$ 30 cada</em><b>Chaveiro Instagram <em class="sp-opc">Opcional</em></b><span>Aproximou, abre o Instagram da sua marca.</span></div>
+                        <div class="sp-qtd" role="group" aria-label="Quantidade de chaveiros Instagram">
                             <button type="button" data-passo="-1" data-alvo="sp-k" aria-label="Remover um chaveiro"><i class="ph ph-minus"></i></button>
-                            <input id="sps-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros NFC">
+                            <input id="sps-k" type="number" inputmode="numeric" min="0" max="200" value="0" aria-label="Quantidade de chaveiros Instagram">
                             <button type="button" data-passo="1" data-alvo="sp-k" aria-label="Adicionar um chaveiro"><i class="ph ph-plus"></i></button>
                         </div>
                     </div>
@@ -3200,7 +3200,7 @@
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Quanto custa?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
-                            <p>Você monta o seu pedido. O site excepcional custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, cada chaveiro NFC custa R$ 30 e cada Tag Avaliação Google custa R$ 40. O CRM é opcional, por R$ 89,90/mês: o 1º mês vai junto com o pedido e, depois, a assinatura segue mensal.</p>
+                            <p>Você monta o seu pedido. O site excepcional custa R$ 597, com domínio próprio (.com.br) e sem cartão incluído. Cada cartão NFC custa R$ 35, cada chaveiro Instagram custa R$ 30 e cada Tag Avaliação Google custa R$ 40. O CRM é opcional, por R$ 89,90/mês: o 1º mês vai junto com o pedido e, depois, a assinatura segue mensal.</p>
                         </details>
                         <details class="faq-item" name="faq">
                             <summary>Como funciona a Tag Avaliação Google?<i class="ph ph-caret-down" aria-hidden="true"></i></summary>
@@ -3846,7 +3846,7 @@
                 if (site !== false) p.push(c || g || k || crm ? 'Site' : 'Site que atrai clientes');
                 if (c) p.push(c + (c === 1 ? ' cartão NFC' : ' cartões NFC'));
                 if (g) p.push(g + (g === 1 ? ' tag Avaliação Google' : ' tags Avaliação Google'));
-                if (k) p.push(k + (k === 1 ? ' chaveiro NFC' : ' chaveiros NFC'));
+                if (k) p.push(k + (k === 1 ? ' chaveiro Instagram' : ' chaveiros Instagram'));
                 if (crm) p.push('CRM (1º mês)');
                 return p.length ? p.join(' + ') : 'Escolha ao menos um item';
             }
@@ -5847,6 +5847,7 @@ function linhaEu(texto) {
                     if (m.private || !m.content) return;
                     if (m.message_type === 1) {
                         if (espera) { espera.recebeuEm = Date.now(); tiraPensando(); }
+                        if (!restaurando && guia && guia.retoma) guia.respondida = true;
                         var lida = extraiPedido(String(m.content));
                         linhaIa(lida.texto, !restaurando, false, lida.pedido);
                         if (lida.pedido) registraPedido(lida.pedido);
@@ -5874,6 +5875,7 @@ function linhaEu(texto) {
                         }
                     }
                 }
+                if (!espera && guia && guia.retoma && (guia.respondida || Date.now() - guia.retoma > SEM_RESPOSTA)) retomaGuia();
                 if (!espera) despedida(carregado && aberto && ultimoId > 0);
                 agendaBusca(espera ? 1500 : 6000);
             });
@@ -6079,7 +6081,7 @@ function linhaEu(texto) {
                 grava: function (v) { guia.c = v; },
                 erro: 'Me diz só a quantidade de cartões, por exemplo "4". Se não quiser nenhum, toque em "Nenhum por agora".'},
             {id: 'chaveiros', dica: 'Ou digite a quantidade',
-                texto: function () { return 'E o *chaveiro NFC*? Fica sempre à mão, no molho de chaves ' + (guia.c ? 'de quem não quer carregar cartão' : 'da equipe') + ' ou de presente para clientes fiéis. Aproximou do celular, o site abre na hora. *R$ 30* cada. Quantos você quer?'; },
+                texto: function () { return 'E o *chaveiro Instagram*? Aproximou do celular, abre o *Instagram* ' + (guia.empresa ? 'da *' + guia.empresa + '*' : 'da sua marca') + ' e a pessoa já segue na hora. Fica no molho de chaves da equipe ou de presente para clientes fiéis, e cada toque vira seguidor. *R$ 30* cada. Quantos você quer?'; },
                 opcoes: function () { return [{t: '1', v: 1}, {t: '2', v: 2}, {t: '5', v: 5}, {t: '10', v: 10}, {t: 'Não preciso', v: 0}]; },
                 le: function (t, o) { if (o) return o.v; if (/\b(n[aã]o|nenhum|dispenso)\b/i.test(t)) return 0; return lerNumero(t); },
                 grava: function (v) { guia.k = v; },
@@ -6152,6 +6154,7 @@ function linhaEu(texto) {
             if (!guia || guia.fim || guia.etapa < 0) return false;
             var e = ETAPAS[guia.etapa], v = e.le(t, o);
             terminaDigitacao();
+            guia.retoma = 0; guia.respondida = false;
             if (guia.chips) { guia.chips.remove(); guia.chips = null; }
             linhaEu(t); historico.push({ role: 'user', content: t }); vaiProFim(true);
             if (v === undefined) return pergunta(e.erro, e.opcoes()), true;
@@ -6159,10 +6162,35 @@ function linhaEu(texto) {
             e.grava(v); avanca();
             return true;
         }
+        // pergunta ou comentário que não responde a etapa atual
+        function ehPergunta(t) {
+            t = t.trim();
+            return /\?\s*$/.test(t) || /^(quanto|quantos|quantas|como|qual|quais|o que|oq|onde|quando|por ?qu[eê]|pq|tem como|voc[eê]s|vcs|posso|pode|d[aá] pra|d[aá] para|funciona|precisa|demora|aceita|serve|e se|[eé] poss[ií]vel|existe|me explica|explica|n[aã]o entendi)\b/i.test(t);
+        }
         function guiaOuve(t) {
             if (!guia || guia.fim || guia.etapa < 0) return false;
-            if (/\?\s*$/.test(t.trim()) && ETAPAS[guia.etapa].id !== 'crm') return false;   // dúvida no meio do caminho: a IA responde
+            var e = ETAPAS[guia.etapa];
+            if (e.id === 'crm' && /o que [eé]|como funciona|^\s*crm\s*\??\s*$/i.test(t)) return responde(t);   // a explicação do CRM já está no roteiro
+            // dúvida no meio do caminho (ou texto longo que não responde a etapa): a IA responde e o roteiro continua depois
+            if (ehPergunta(t) || (e.le(t) === undefined && t.trim().split(/\s+/).length >= 3)) {
+                if (guia.chips) { guia.chips.remove(); guia.chips = null; }
+                guia.retoma = Date.now(); guia.respondida = false;
+                return false;
+            }
             return responde(t);
+        }
+        // depois que a IA responde a dúvida, repete a etapa em que o cliente parou
+        var RETOMA = {
+            empresa: function () { return 'Agora, vamos continuar o seu pedido: qual é o *nome da sua empresa*?'; },
+            obj: function () { return 'Agora, vamos continuar o seu pedido: o que você mais quer conquistar ' + naEmpresa() + ' agora?'; }
+        };
+        function retomaGuia() {
+            var g = guia;
+            g.retoma = 0; g.respondida = false;
+            if (g.fim || g.etapa < 0 || esgotou()) return;
+            var e = ETAPAS[g.etapa];
+            txt.placeholder = e.dica || DICA;
+            fala(RETOMA[e.id] ? RETOMA[e.id]() : 'Agora, vamos continuar o seu pedido. 👇\n\n' + e.texto(), e.opcoes());
         }
         function finaliza() {
             var M = window.saturnoMontador;
@@ -6184,7 +6212,7 @@ function linhaEu(texto) {
         }
         // o que o cliente contou e o pedido como está no cartão agora: vai junto das perguntas para a IA
         function contextoGuia() {
-            if (!guia || guia.etapa < 1) return '';
+            if (!guia || guia.etapa < 0) return '';
             var p = [];
             if (guia.empresa) p.push('Empresa: ' + guia.empresa);
             if (guia.ramo) p.push('Ramo: ' + guia.ramo);
@@ -6195,6 +6223,7 @@ function linhaEu(texto) {
                 var nc = qtdDe('sp-n'), ng = qtdDe('sp-g'), nk = qtdDe('sp-k'), crm = cfg.querySelector('[data-item="crm"]').checked, st = cfg.querySelector('[data-item="site"]').checked;
                 p.push('Pedido montado no site: ' + M.resumo(nc, ng, crm, st, nk) + ' (' + M.brl(M.calcula(nc, ng, crm, st, nk)) + ')');
             }
+            if (!guia.fim) p.push('Roteiro em andamento: o cliente tirou uma dúvida no meio da montagem do pedido. Responda só a dúvida, de forma curta e clara, sem montar nem fechar o pedido e sem a linha #PEDIDO#. O site retoma o roteiro sozinho depois da sua resposta');
             return p.length ? '[Contexto do site] ' + p.join(' | ') : '';
         }
         function semContexto(t) { return t.replace(/\s*\[Contexto do site\][\s\S]*$/, ''); }
