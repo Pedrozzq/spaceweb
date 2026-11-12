@@ -5498,7 +5498,7 @@
         @keyframes saiPedidoBrilho{0%,45%{left:-45%}70%,100%{left:115%}}
         @keyframes saiCursor{from{opacity:1}to{opacity:0}}
         @media (prefers-reduced-motion:reduce){
-            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-pedido,.sai-logo,.sai-logo *),.sai-ov *::before,.sai-ov *:not(.sai-pedido)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
+            .sai-ov,.sai-ov *:not(.sai-cadente,h2,.sai-cursor,.sai-mic,.sai-pedido,.sai-logo,.sai-logo *,.sai-seletor,.sai-dica),.sai-ov *::before,.sai-ov *:not(.sai-pedido)::after,.sai-btn .sai-esfera::after{animation:none!important;transition:none!important}
             .sai-caixa:focus-within::before{background:linear-gradient(#ffc933,#a35bff)}
         }
 
@@ -5573,6 +5573,25 @@
         .sai-ov .sai-seletor .ph-caret-down{flex:none;font-size:.8rem;transition:transform .2s}
         .sai-ov .sai-seletor[aria-expanded="true"] .ph-caret-down{transform:rotate(180deg)}
         .sai-ov .sai-caixa.travada .sai-seletor{pointer-events:none}
+        /* Personalizar IA: borda roxa e dourada girando, com texto e brilho alternando entre as duas cores */
+        .sai-ov .sai-seletor,.sai-ov .sai-seletor.ok{border:1.5px solid transparent;font-weight:600;
+            background:linear-gradient(#2b2433,#2b2433) padding-box,conic-gradient(from var(--sai-giro),#a35bff,#ffb648,#7b3cff,#ffe9a8,#a35bff) border-box;
+            animation:saiBorda 3s linear infinite,saiSeletorCor 3s ease-in-out infinite}
+        .sai-ov .sai-seletor:hover,.sai-ov .sai-seletor[aria-expanded="true"]{background:linear-gradient(#3a2f47,#3a2f47) padding-box,conic-gradient(from var(--sai-giro),#a35bff,#ffb648,#7b3cff,#ffe9a8,#a35bff) border-box}
+        @keyframes saiSeletorCor{0%,100%{color:#ffd778;box-shadow:0 0 12px rgba(255,182,72,.35)}50%{color:#d2b4ff;box-shadow:0 0 16px rgba(163,91,255,.5)}}
+        @keyframes saiSeletorChama{0%,100%{scale:1}50%{scale:1.05}}
+        /* balão de instrução apontando para o botão Personalizar IA */
+        .sai-dica{position:absolute;z-index:4;left:-.1rem;bottom:calc(100% + .8rem);width:min(17rem,calc(100vw - 2.5rem));display:flex;align-items:flex-start;gap:.4rem;
+            padding:.7rem .55rem .7rem .85rem;border-radius:.9rem;background:#fff;color:#0d0d0d;font-size:.84rem;line-height:1.4;
+            box-shadow:0 12px 32px rgba(0,0,0,.45);animation:saiDicaEntra .45s cubic-bezier(.34,1.56,.64,1) both,saiDicaFlutua 2.6s ease-in-out .5s infinite}
+        .sai-dica[hidden]{display:none}
+        .sai-dica b{display:block;margin-bottom:.15rem;font-weight:700;font-size:.88rem}
+        .sai-dica::after{content:'';position:absolute;left:1.35rem;bottom:-.45rem;width:.9rem;height:.9rem;background:#fff;transform:rotate(45deg);border-radius:0 0 .2rem 0}
+        .sai-dica button{flex:none;display:grid;place-items:center;width:1.6rem;height:1.6rem;margin:-.25rem 0 0;border:0;border-radius:50%;background:transparent;color:#5d5d5d;cursor:pointer}
+        .sai-dica button:hover{background:#ececec;color:#000}
+        .sai-ov .sai-seletor.chama{animation:saiBorda 2s linear infinite,saiSeletorCor 2s ease-in-out infinite,saiSeletorChama 2s ease-in-out infinite}
+        @keyframes saiDicaEntra{from{opacity:0;transform:translateY(8px) scale(.94)}to{opacity:1;transform:none}}
+        @keyframes saiDicaFlutua{0%,100%{translate:0 0}50%{translate:0 -4px}}
         .sai-pop{position:absolute;z-index:5;left:-.1rem;bottom:calc(100% + .7rem);width:min(23rem,calc(100vw - 1.5rem));display:flex;flex-direction:column;gap:.6rem;padding:1rem;
             border-radius:1rem;border:1px solid rgba(255,255,255,.08);background:#2f2f2f;box-shadow:0 18px 50px rgba(0,0,0,.5);animation:saiSobe .2s ease both}
         .sai-pop[hidden]{display:none}
@@ -5634,13 +5653,17 @@
             <div class="sai-caixa" id="sai-caixa">
                 <textarea id="sai-texto" rows="1" maxlength="1000" enterkeyhint="send" placeholder="Pergunte o que quiser" aria-label="Mensagem"></textarea>
                 <div class="sai-perfil-wrap">
+                    <div class="sai-dica" id="sai-dica" role="note" hidden>
+                        <span><b>Comece por aqui 👇</b>Toque para dizer o nome e o nicho da sua empresa. A IA monta o pedido certo para o seu negócio.</span>
+                        <button type="button" id="sai-dica-x" aria-label="Fechar dica"><i class="ph ph-x" aria-hidden="true"></i></button>
+                    </div>
                     <button type="button" class="sai-seletor" id="sai-perfil" aria-haspopup="dialog" aria-expanded="false" title="Personalize a IA para o seu negócio">
                         <i class="ph ph-storefront" aria-hidden="true"></i><span id="sai-perfil-sub">Personalizar IA</span><i class="ph ph-caret-down" aria-hidden="true"></i>
                     </button>
                     <div class="sai-pop" id="sai-pop" role="dialog" aria-label="Personalizar a IA para o seu negócio" hidden>
                         <p class="sai-pop-tit">Personalize a IA</p>
                         <p class="sai-pop-sub">Diga o nome e o nicho da empresa e a IA monta o pedido pensando no seu negócio.</p>
-                        <label class="sai-pop-campo"><span>Nome da empresa</span><input id="sai-p-emp" maxlength="80" autocomplete="organization" placeholder="Ex.: Pizzaria Bella"></label>
+                        <label class="sai-pop-campo"><span>Nome da empresa</span><input id="sai-p-emp" maxlength="80" autocomplete="organization" placeholder="Ex.: Pizzaria Forno de Minas"></label>
                         <label class="sai-pop-campo"><span>Nicho</span><input id="sai-p-nicho" maxlength="60" autocomplete="off" placeholder="Digite ou escolha abaixo"></label>
                         <div class="sai-pop-lista" id="sai-p-lista" role="listbox" aria-label="Nichos"></div>
                         <button type="button" class="sai-pop-ok" id="sai-p-ok">Aplicar</button>
@@ -5775,6 +5798,7 @@
         function mostraTudo(partes) { partes.forEach(function (p) { p.n.nodeValue = p.s; }); }
 
 function linhaEu(texto) {
+            var d = document.getElementById('sai-dica'); if (d && !d.hidden) { d.hidden = true; document.getElementById('sai-perfil').classList.remove('chama'); }
             var l = document.createElement('div'); l.className = 'sai-linha eu';
             var b = document.createElement('div'); b.className = 'sai-bal'; b.textContent = texto;
             l.appendChild(b); fio.appendChild(l);
@@ -6159,28 +6183,60 @@ function linhaEu(texto) {
         var RAMOS = {
             restaurante: {nome: 'Restaurante ou bar', frase: 'vi que vocês são do ramo de alimentação 🍽️',
                 re: /restaurante|pizzari|lanchonete|hamburg|burger|\bbar\b|boteco|\bcaf[eé]|cafeteria|padaria|panific|confeitaria|doceria|sorveteria|a[cç]a[ií]|bistr[oô]|churrascaria|sushi|temaki|japon[eê]s|cozinha|espetinho|pastel|marmit|delivery|cervejaria|chopp?eria|\bpub\b|gastro|food/i,
-                ajuda: 'Para restaurantes e bares, a Saturno ajuda assim:\n• *Avaliações no Google*: a tag na mesa ou no caixa leva o cliente direto para avaliar. Mais estrelas, mais gente te escolhe quando busca "onde comer".\n• *Site com cardápio e WhatsApp*: o cliente vê os pratos, o endereço e já chama para pedir.\n• *Cartão por aproximação*: a equipe passa o contato e o Instagram num toque, e o cliente volta.'},
+                ajuda: 'Para restaurantes e bares, a Saturno ajuda assim:\n• *Site com cardápio e WhatsApp*: o cliente vê os pratos, o endereço e já chama para pedir.\n• *Cartão por aproximação*: o cliente está à mesa, aproxima o celular do cartão e abre o cardápio. Conhece pratos, porções, bebidas e adicionais enquanto decide o pedido.\n• *Tag Google*: na mesa ou no caixa, leva o cliente direto para avaliar. Mais avaliações, mais confiança para quem busca "onde comer".'},
             saude: {nome: 'Saúde ou estética', frase: 'vi que vocês são da área de saúde e beleza 💆',
                 re: /cl[ií]nica|consult[oó]rio|odonto|dent[ai]|m[eé]dic|sa[uú]de|fisio|psic|nutri|est[eé]tica|sal[aã]o|barbearia|beleza|\bspa\b|manicure|\bunhas?\b|cabel|sobrancelha|depila|massag|pilates|academia|fitness|crossfit|yoga|veterin|laborat|terapi|derma|harmoniza|podolog|fonoaud/i,
-                ajuda: 'Para saúde, beleza e estética, a Saturno ajuda assim:\n• *Agenda cheia*: o site mostra seus serviços e leva direto para marcar pelo WhatsApp.\n• *Confiança*: a tag na recepção multiplica as avaliações no Google, que é onde o cliente decide onde ir.\n• *Cartão por aproximação*: cada profissional passa contato e Instagram num toque, e as indicações crescem.'},
+                ajuda: 'Para saúde, beleza e estética, a Saturno ajuda assim:\n• *Site com agenda*: mostra seus serviços e leva direto para marcar pelo WhatsApp.\n• *Cartão por aproximação*: cada profissional passa contato e Instagram num toque, e as indicações crescem.\n• *Tag Google*: na recepção, multiplica as avaliações no Google, que é onde o cliente decide onde ir.'},
             imobiliaria: {nome: 'Imobiliária ou corretor', frase: 'vi que vocês são do mercado imobiliário 🏡',
                 re: /imobili|im[oó]ve(l|is)|corretor(?!a de seguro)|realty|empreendimento|incorporadora|loteamento|condom[ií]nio/i,
-                ajuda: 'Para imobiliárias e corretores, a Saturno ajuda assim:\n• *Cartão por aproximação*: o cliente aproxima o celular e salva seu contato e seus imóveis na hora, sem cartão de papel perdido.\n• *Site com seus imóveis*: um link profissional para mandar no WhatsApp e nos anúncios.\n• *CRM*: cada interessado vira um contato organizado, e você sabe quem está pronto para fechar.'},
+                ajuda: 'Para imobiliárias e corretores, a Saturno ajuda assim:\n• *Site com seus imóveis*: um link profissional para mandar no WhatsApp e nos anúncios.\n• *Cartão por aproximação*: o cliente aproxima o celular e salva seu contato e seus imóveis na hora, sem cartão de papel perdido.\n• *Tag Google*: cada cliente atendido pode avaliar na hora, e quem pesquisa já encontra boas referências.'},
             loja: {nome: 'Loja ou varejo', frase: 'vi que vocês são do varejo 🛍️',
                 re: /\bloja|boutique|\bmoda\b|roupa|cal[cç]ado|[oó]tica|joalheri|semijoia|perfumaria|cosm[eé]tic|presente|papelaria|livraria|eletr[oô]nic|celulares|inform[aá]tica|m[oó]veis|decora[cç]|materia(l|is) de constru|supermercado|mercadinho|empor|varejo|\bstore\b|\bshop\b|magazine|atacad|distribuidora|pet ?shop|farm[aá]cia|drogaria|conveni[eê]ncia/i,
-                ajuda: 'Para lojas, a Saturno ajuda assim:\n• *Site vitrine*: seus produtos e o WhatsApp a um toque, vendendo até com a loja fechada.\n• *Avaliações no Google*: a tag no caixa transforma cada venda em estrela, e a loja aparece primeiro nas buscas da região.\n• *Cartão por aproximação*: o vendedor passa o contato num toque e o cliente volta para comprar de novo.'},
+                ajuda: 'Para lojas, a Saturno ajuda assim:\n• *Site vitrine*: seus produtos e o WhatsApp a um toque, vendendo até com a loja fechada.\n• *Cartão por aproximação*: o vendedor passa o contato num toque e o cliente volta para comprar de novo.\n• *Tag Google*: no caixa, o cliente avalia a loja na hora, e quem pesquisa encontra opiniões reais.'},
             servicos: {nome: 'Serviços ou consultoria', frase: 'vi que vocês são uma empresa de serviços 💼',
                 re: /advoga|advocacia|jur[ií]dic|contab|consultor|ag[eê]ncia|marketing|engenharia|arquitet|seguro|financ|cr[eé]dito|escola|curso|educa|idioma|oficina|mec[aâ]nic|auto ?center|el[eé]tric|encanad|reforma|constru|limpeza|dedetiz|transport|log[ií]stic|eventos|fotogra|buffet|gr[aá]fica|tecnologia|software|\bti\b|servi[cç]o|solu[cç]|assessoria|coach|mentor|digital/i,
-                ajuda: 'Para empresas de serviço, a Saturno ajuda assim:\n• *Primeira impressão*: o cartão por aproximação abre seu site na hora e mostra que sua empresa é moderna e confiável.\n• *Site profissional*: seus serviços, resultados e contato reunidos para o cliente decidir rápido.\n• *CRM*: nenhum orçamento esquecido, com cada contato acompanhado até virar contrato.'}
+                ajuda: 'Para empresas de serviço, a Saturno ajuda assim:\n• *Site profissional*: seus serviços, resultados e contato reunidos para o cliente decidir rápido.\n• *Cartão por aproximação*: abre seu site na hora e mostra que sua empresa é moderna e confiável.\n• *Tag Google*: cada cliente atendido pode avaliar na hora, e quem pesquisa já chega confiando em você.'}
         };
         function detectaRamo(t) { for (var k in RAMOS) if (RAMOS[k].re.test(t || '')) return k; return ''; }
+        // ---------- skills por nicho (pasta skills/skills-saturno-nfc): situações de venda e pergunta de diagnóstico ----------
+        var SKILLS = null, skillsPromessa = null;
+        function carregaSkills() {
+            if (!skillsPromessa) skillsPromessa = fetch('skills/skills-saturno-nfc/catalogo.json')
+                .then(function (r) { return r.ok ? r.json() : []; })
+                .then(function (j) { SKILLS = Array.isArray(j) ? j : []; return SKILLS; })
+                .catch(function () { SKILLS = []; return SKILLS; });
+            return skillsPromessa;
+        }
+        // grupos das opções rápidas de ramo -> skill mais próxima
+        var GRUPO_SKILL = { restaurante: 'Restaurante', saude: 'Clínica de estética', loja: 'Loja de roupas', servicos: 'Profissional autônomo', imobiliaria: 'Imobiliária' };
+        function skillDo(ramo, ramoKey) {
+            if (!SKILLS || !SKILLS.length) return null;
+            var r = semAcento(ramo), achada = null;
+            function porNome(n) { n = semAcento(n); for (var i = 0; i < SKILLS.length; i++) if (semAcento(SKILLS[i].nicho) === n) return SKILLS[i]; return null; }
+            if (r) {
+                achada = porNome(r);
+                // "pizzaria artesanal" -> Pizzaria; "salão" -> Salão de beleza
+                if (!achada) SKILLS.some(function (sk) {
+                    var n = semAcento(sk.nicho), chave = n.split(/\s+e\s+|\s+/)[0];
+                    if (n.indexOf(r) >= 0 || (chave.length >= 4 && r.indexOf(chave) >= 0)) { achada = sk; return true; }
+                    return false;
+                });
+            }
+            return achada || porNome(GRUPO_SKILL[ramoKey] || '') || porNome('Profissional autônomo');
+        }
+        function resumoSkill(sk) {
+            return sk ? 'Skill do nicho: ' + sk.skill + ' (' + sk.nicho + '). Situações de venda para adaptar: ' + sk.situacoes.join(' / ') + ' Pergunta de diagnóstico: ' + sk.pergunta : '';
+        }
         // mensagem de benefícios do ramo, logo antes da pergunta do objetivo
         function beneficios() {
             var r = RAMOS[guia.ramoKey], ini;
             if (guia.ramoAuto && r) ini = 'Prazer, *' + guia.empresa + '*! Pelo nome, ' + r.frase + '\n\n';
             else ini = 'Ótimo! ';
-            var corpo = r ? r.ajuda : 'Para *' + guia.ramo.toLowerCase() + '*, a Saturno ajuda assim:\n• *Site profissional*: tudo sobre o seu negócio e o WhatsApp a um toque, trazendo clientes 24 horas por dia.\n• *Cartão por aproximação*: o cliente aproxima o celular e já tem seu contato e seu site, sem cartão de papel perdido.\n• *Avaliações no Google*: mais estrelas, mais gente confiando em você antes mesmo de chamar.';
-            return ini + corpo + '\n\nResultado: mais gente te encontra, confia e compra. É assim que ' + (guia.empresa ? 'a *' + guia.empresa + '*' : 'o seu negócio') + ' prospera. 🚀';
+            var corpo = r ? r.ajuda : 'Para *' + guia.ramo.toLowerCase() + '*, a Saturno ajuda assim:\n• *Site profissional*: tudo sobre o seu negócio e o WhatsApp a um toque, trazendo clientes 24 horas por dia.\n• *Cartão por aproximação*: o cliente aproxima o celular e já tem seu contato e seu site, sem cartão de papel perdido.\n• *Tag Google*: o cliente aproxima o celular e avalia na hora. Mais estrelas, mais gente confiando em você antes mesmo de chamar.';
+            var sk = skillDo(guia.ramo, guia.ramoKey);
+            guia.skill = sk;
+            var situ = sk && sk.situacoes && sk.situacoes.length ? '\n\n*Imagine esta situação:* ' + sk.situacoes[Math.floor(Math.random() * sk.situacoes.length)] : '';
+            return ini + corpo + situ + '\n\nResultado: você apresenta o que oferece enquanto a pessoa está interessada e facilita o próximo passo da compra. 🚀';
         }
         function corrigeRamo() {
             linhaEu('Meu ramo é outro'); vaiProFim(true);
@@ -6369,11 +6425,13 @@ function linhaEu(texto) {
         function contextoGuia() {
             if (!guia || guia.etapa < 0) {
                 var pf = [perfil.empresa && 'Empresa: ' + perfil.empresa, perfil.nicho && 'Nicho: ' + perfil.nicho].filter(Boolean);
+                if (perfil.nicho) pf.push(resumoSkill(skillDo(perfil.nicho, detectaRamo(perfil.nicho))));
                 return pf.length ? '[Contexto do site] ' + pf.join(' | ') : '';
             }
             var p = [];
             if (guia.empresa) p.push('Empresa: ' + guia.empresa);
             if (guia.ramo) p.push('Ramo: ' + guia.ramo);
+            if (guia.ramo) p.push(resumoSkill(guia.skill || skillDo(guia.ramo, guia.ramoKey)));
             if (guia.obj) p.push('Objetivo: ' + OBJETIVOS[guia.obj]);
             var M = window.saturnoMontador, cards = fio.querySelectorAll('.sai-cfg'), cfg = cards[cards.length - 1];
             if (guia.fim && M && cfg) {
@@ -6437,7 +6495,18 @@ function linhaEu(texto) {
             });
             return b;
         }
+        var dica = $('sai-dica');
+        function escondeDica() { dica.hidden = true; pBtn.classList.remove('chama'); }
+        function mostraDica() {
+            if (perfil.empresa || perfil.nicho || sessao || fio.querySelector('.sai-linha.eu')) return;
+            setTimeout(function () {
+                if (!aberto || perfil.empresa || perfil.nicho || fio.querySelector('.sai-linha.eu')) return;
+                dica.hidden = false; pBtn.classList.add('chama');
+            }, 700);
+        }
+        $('sai-dica-x').addEventListener('click', function (e) { e.stopPropagation(); escondeDica(); });
         function abrePerfil() {
+            escondeDica();
             pEmp.value = perfil.empresa || (guia && guia.empresa) || '';
             pNicho.value = perfil.nicho || (guia && guia.ramo) || '';
             listaNichos();
@@ -6525,11 +6594,13 @@ function linhaEu(texto) {
         });
 
         function abre() {
+            carregaSkills();
             travaPagina();
             aberto = true; ov.classList.add('on'); ov.setAttribute('aria-hidden', 'false'); document.body.classList.add('sai-aberto');
             ajustaTela();
             if (sessao) { if (!carregado) entraConversa(false); buscaMsgs(); }
             else if (!guia) iniciaGuia();   // sem conversa guardada: a IA começa montando o pedido
+            mostraDica();
             if (!toque) setTimeout(function () { txt.focus(); }, 120);
         }
         function fecha() {
@@ -6546,6 +6617,7 @@ function linhaEu(texto) {
             ov.classList.remove('conversa');
             txt.value = ''; ajusta();
             despediu = false; guia = null; iniciaGuia();
+            mostraDica();
             if (!toque) txt.focus();
         }
         if (esgotou()) travaCampo();

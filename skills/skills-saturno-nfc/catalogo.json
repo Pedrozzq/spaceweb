@@ -1,0 +1,548 @@
+[
+  {
+    "nicho": "Restaurante",
+    "skill": "saturno-nfc-restaurante",
+    "arquivo": "saturno-nfc-restaurante/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é atendimento no salão, reservas ou delivery?",
+    "situacoes": [
+      "Durante uma reunião com empresas da região, o dono apresenta o cartão; o responsável abre fotos do espaço e cardápio e solicita orçamento para almoço da equipe.",
+      "Na mesa, o garçom apresenta o cartão; os clientes abrem o cardápio e conhecem entradas, pratos e sobremesas antes de pedir.",
+      "Em um evento, o representante apresenta a página para organizadores consultarem opções de refeições e reservarem uma data."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante uma reunião com empresas da região, o dono apresenta o cartão; o responsável abre fotos do espaço e cardápio e solicita orçamento para almoço da equipe. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é atendimento no salão, reservas ou delivery?"
+  },
+  {
+    "nicho": "Bar e boteco",
+    "skill": "saturno-nfc-bar-e-boteco",
+    "arquivo": "saturno-nfc-bar-e-boteco/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "O maior movimento vem de happy hour, jogos ou música ao vivo?",
+    "situacoes": [
+      "Na mesa do bar, o atendente apresenta o cartão; o grupo abre o cardápio com porções e bebidas e escolhe o pedido.",
+      "Em um encontro com empresas próximas, o dono apresenta o espaço pelo NFC e oferece orçamento para confraternizações.",
+      "Um grupo chega para ver um jogo; o cartão abre as opções de petiscos para compartilhar e o grupo decide o que pedir."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na mesa do bar, o atendente apresenta o cartão; o grupo abre o cardápio com porções e bebidas e escolhe o pedido. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. O maior movimento vem de happy hour, jogos ou música ao vivo?"
+  },
+  {
+    "nicho": "Pizzaria",
+    "skill": "saturno-nfc-pizzaria",
+    "arquivo": "saturno-nfc-pizzaria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você quer mais pedidos de entrega ou mais mesas ocupadas?",
+    "situacoes": [
+      "Na mesa, o cartão abre o cardápio com sabores, tamanhos e adicionais; a família compara as opções e faz o pedido.",
+      "Em uma visita a um escritório, o representante apresenta pelo NFC as opções para reuniões e solicita os dados para orçamento.",
+      "Em uma feira de bairro, o dono mostra a página com pizzas e contato e convida interessados a consultar entrega e fazer um pedido."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na mesa, o cartão abre o cardápio com sabores, tamanhos e adicionais; a família compara as opções e faz o pedido. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você quer mais pedidos de entrega ou mais mesas ocupadas?"
+  },
+  {
+    "nicho": "Hamburgueria",
+    "skill": "saturno-nfc-hamburgueria",
+    "arquivo": "saturno-nfc-hamburgueria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é consumo no local, retirada ou entrega?",
+    "situacoes": [
+      "No balcão, o cartão abre fotos dos lanches, combos e adicionais; o cliente escolhe o que pedir.",
+      "Em uma apresentação a empresas próximas, o representante mostra opções para almoço da equipe e encaminha uma cotação.",
+      "Na mesa, o grupo abre o cardápio pelo NFC e conhece acompanhamentos e sobremesas que pode acrescentar ao pedido."
+    ],
+    "resposta_exemplo": "Imagine esta situação: No balcão, o cartão abre fotos dos lanches, combos e adicionais; o cliente escolhe o que pedir. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é consumo no local, retirada ou entrega?"
+  },
+  {
+    "nicho": "Cafeteria",
+    "skill": "saturno-nfc-cafeteria",
+    "arquivo": "saturno-nfc-cafeteria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você quer priorizar visitas à loja ou encomendas para empresas?",
+    "situacoes": [
+      "Na mesa, o cartão abre bebidas e acompanhamentos; o cliente conhece opções e monta seu pedido.",
+      "Em uma reunião com um escritório, a cafeteria apresenta kits para reuniões e abre o contato para orçamento.",
+      "Durante um encontro com organizadores de eventos, o representante mostra opções de coffee break e consulta a demanda."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na mesa, o cartão abre bebidas e acompanhamentos; o cliente conhece opções e monta seu pedido. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você quer priorizar visitas à loja ou encomendas para empresas?"
+  },
+  {
+    "nicho": "Padaria e confeitaria",
+    "skill": "saturno-nfc-padaria-e-confeitaria",
+    "arquivo": "saturno-nfc-padaria-e-confeitaria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é balcão, bolos por encomenda ou fornecimento para empresas?",
+    "situacoes": [
+      "No balcão, o cartão abre fotos de bolos e opções de recheio; a pessoa consulta uma encomenda para a festa.",
+      "Em visita a uma empresa, o representante apresenta kits de café da manhã e solicita informações para orçamento.",
+      "Durante uma feira de festas, a confeiteira mostra pelo NFC o portfólio e conversa sobre o bolo do evento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: No balcão, o cartão abre fotos de bolos e opções de recheio; a pessoa consulta uma encomenda para a festa. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é balcão, bolos por encomenda ou fornecimento para empresas?"
+  },
+  {
+    "nicho": "Açaí e sorveteria",
+    "skill": "saturno-nfc-acai-e-sorveteria",
+    "arquivo": "saturno-nfc-acai-e-sorveteria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende mais na loja ou por delivery?",
+    "situacoes": [
+      "Na mesa ou no balcão, o cartão abre tamanhos, sabores e complementos; a pessoa monta seu pedido.",
+      "Em uma conversa com organizadores de festas, o dono apresenta opções de atendimento para eventos e faz uma cotação.",
+      "Em visita a uma empresa próxima, o representante mostra opções para uma ação com a equipe e consulta quantidades."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na mesa ou no balcão, o cartão abre tamanhos, sabores e complementos; a pessoa monta seu pedido. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende mais na loja ou por delivery?"
+  },
+  {
+    "nicho": "Marmitaria e delivery",
+    "skill": "saturno-nfc-marmitaria-e-delivery",
+    "arquivo": "saturno-nfc-marmitaria-e-delivery/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você vende refeições avulsas, planos semanais ou atende empresas?",
+    "situacoes": [
+      "Em visita a um escritório, o cartão abre o cardápio e o atendimento para cotar refeições da equipe.",
+      "No balcão, o cliente aproxima o celular, consulta os pratos do dia e escolhe seu almoço.",
+      "Em uma reunião com uma empresa, a marmitaria apresenta opções de fornecimento e discute volume e entrega."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em visita a um escritório, o cartão abre o cardápio e o atendimento para cotar refeições da equipe. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você vende refeições avulsas, planos semanais ou atende empresas?"
+  },
+  {
+    "nicho": "Distribuidora de bebidas e chopp",
+    "skill": "saturno-nfc-distribuidora-de-bebidas-e-chopp",
+    "arquivo": "saturno-nfc-distribuidora-de-bebidas-e-chopp/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é entrega residencial, festas ou fornecimento para bares?",
+    "situacoes": [
+      "Em reunião com um organizador de eventos, o cartão abre as opções de bebidas, chopp e equipamentos para uma cotação.",
+      "Em visita a um bar, o vendedor mostra as linhas disponíveis e negocia um pedido de fornecimento.",
+      "No balcão, o cliente acessa o catálogo pelo NFC e consulta bebidas e quantidades para a festa."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em reunião com um organizador de eventos, o cartão abre as opções de bebidas, chopp e equipamentos para uma cotação. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é entrega residencial, festas ou fornecimento para bares?"
+  },
+  {
+    "nicho": "Salão de beleza",
+    "skill": "saturno-nfc-salao-de-beleza",
+    "arquivo": "saturno-nfc-salao-de-beleza/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual serviço você quer divulgar mais no salão?",
+    "situacoes": [
+      "Em uma feira de noivas, a profissional apresenta pelo NFC o portfólio de penteados e conversa sobre um pacote para o casamento.",
+      "Durante uma conversa em um evento local, o cartão abre serviços e trabalhos do salão e a interessada solicita um horário.",
+      "Na recepção, uma visitante acessa o catálogo de serviços e escolhe qual atendimento deseja consultar."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma feira de noivas, a profissional apresenta pelo NFC o portfólio de penteados e conversa sobre um pacote para o casamento. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual serviço você quer divulgar mais no salão?"
+  },
+  {
+    "nicho": "Barbearia",
+    "skill": "saturno-nfc-barbearia",
+    "arquivo": "saturno-nfc-barbearia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você quer aumentar retorno dos clientes ou atrair novos horários?",
+    "situacoes": [
+      "Em um evento de bairro, o barbeiro mostra cortes e serviços pelo cartão e convida a pessoa a consultar um horário.",
+      "Um visitante chega sem conhecer os serviços; o cartão abre as opções de corte e barba e ajuda a escolher o atendimento.",
+      "Em reunião com uma empresa próxima, o dono apresenta uma proposta de atendimento para colaboradores e consulta o interesse."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em um evento de bairro, o barbeiro mostra cortes e serviços pelo cartão e convida a pessoa a consultar um horário. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você quer aumentar retorno dos clientes ou atrair novos horários?"
+  },
+  {
+    "nicho": "Clínica de estética",
+    "skill": "saturno-nfc-clinica-de-estetica",
+    "arquivo": "saturno-nfc-clinica-de-estetica/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual procedimento ou serviço você deseja apresentar primeiro?",
+    "situacoes": [
+      "Em um evento de beleza, o cartão abre a apresentação dos serviços e o contato para solicitar uma avaliação.",
+      "Na recepção, uma visitante conhece pelo NFC os procedimentos oferecidos e conversa com a equipe sobre a avaliação adequada.",
+      "Em uma reunião com um estabelecimento parceiro, a profissional apresenta a clínica e seus canais de atendimento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em um evento de beleza, o cartão abre a apresentação dos serviços e o contato para solicitar uma avaliação. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual procedimento ou serviço você deseja apresentar primeiro?"
+  },
+  {
+    "nicho": "Clínica médica",
+    "skill": "saturno-nfc-clinica-medica",
+    "arquivo": "saturno-nfc-clinica-medica/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual especialidade e qual canal de marcação a clínica utiliza?",
+    "situacoes": [
+      "Em uma apresentação institucional a uma empresa, o cartão abre especialidades e contato para discutir serviços disponíveis.",
+      "Um visitante na recepção conhece as especialidades pelo NFC e consulta horários de atendimento.",
+      "Em um encontro profissional, o representante mostra a estrutura e localização da clínica e facilita o contato de interessados."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma apresentação institucional a uma empresa, o cartão abre especialidades e contato para discutir serviços disponíveis. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual especialidade e qual canal de marcação a clínica utiliza?"
+  },
+  {
+    "nicho": "Odontologia",
+    "skill": "saturno-nfc-odontologia",
+    "arquivo": "saturno-nfc-odontologia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual serviço odontológico você deseja apresentar e como recebe agendamentos?",
+    "situacoes": [
+      "Em uma apresentação profissional, o dentista mostra pelo NFC informações do consultório e o contato para uma avaliação.",
+      "Uma pessoa chega buscando atendimento; o cartão abre especialidades e o canal para consultar disponibilidade.",
+      "Em reunião com uma empresa, a equipe apresenta o consultório e conversa sobre possibilidades de atendimento, sujeitas ao escopo disponível."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma apresentação profissional, o dentista mostra pelo NFC informações do consultório e o contato para uma avaliação. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual serviço odontológico você deseja apresentar e como recebe agendamentos?"
+  },
+  {
+    "nicho": "Fisioterapia",
+    "skill": "saturno-nfc-fisioterapia",
+    "arquivo": "saturno-nfc-fisioterapia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende em clínica, em domicílio ou nos dois formatos?",
+    "situacoes": [
+      "Em reunião com uma academia, o fisioterapeuta apresenta pelo cartão suas áreas de atuação e conversa sobre encaminhamentos profissionais adequados.",
+      "Durante um evento esportivo, uma pessoa interessada acessa informações do atendimento e solicita avaliação.",
+      "Um visitante chega à clínica; o cartão abre modalidades e contato para consultar disponibilidade."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em reunião com uma academia, o fisioterapeuta apresenta pelo cartão suas áreas de atuação e conversa sobre encaminhamentos profissionais adequados. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende em clínica, em domicílio ou nos dois formatos?"
+  },
+  {
+    "nicho": "Psicologia",
+    "skill": "saturno-nfc-psicologia",
+    "arquivo": "saturno-nfc-psicologia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu atendimento é presencial, on-line ou ambos?",
+    "situacoes": [
+      "Em um encontro profissional, a psicóloga apresenta pelo cartão abordagem e modalidades para quem deseja conhecer seu trabalho.",
+      "Após uma palestra informativa, uma pessoa interessada acessa a página e decide se deseja solicitar atendimento.",
+      "Em reunião institucional, a profissional apresenta sua atuação e abre o contato para conversar sobre um serviço compatível com sua prática."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em um encontro profissional, a psicóloga apresenta pelo cartão abordagem e modalidades para quem deseja conhecer seu trabalho. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu atendimento é presencial, on-line ou ambos?"
+  },
+  {
+    "nicho": "Nutrição",
+    "skill": "saturno-nfc-nutricao",
+    "arquivo": "saturno-nfc-nutricao/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você quer apresentar atendimento individual, esportivo ou outro foco?",
+    "situacoes": [
+      "Após uma palestra, o nutricionista apresenta o cartão para interessados conhecerem modalidades e solicitarem consulta.",
+      "Em reunião com uma academia, o profissional mostra sua atuação e conversa sobre uma possível parceria.",
+      "Durante uma apresentação em empresa, o cartão abre serviços e contato para consultar uma proposta de atendimento ou palestra."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Após uma palestra, o nutricionista apresenta o cartão para interessados conhecerem modalidades e solicitarem consulta. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você quer apresentar atendimento individual, esportivo ou outro foco?"
+  },
+  {
+    "nicho": "Academia e personal trainer",
+    "skill": "saturno-nfc-academia-e-personal-trainer",
+    "arquivo": "saturno-nfc-academia-e-personal-trainer/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você representa uma academia ou trabalha como personal trainer?",
+    "situacoes": [
+      "Durante uma visita à academia, o cartão abre modalidades e horários e a pessoa consulta uma aula experimental.",
+      "Em um evento esportivo, o personal mostra pelo NFC sua forma de trabalho e conversa sobre uma avaliação inicial.",
+      "Em reunião com uma empresa, a equipe apresenta opções de atividades para colaboradores e solicita informações para proposta."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante uma visita à academia, o cartão abre modalidades e horários e a pessoa consulta uma aula experimental. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você representa uma academia ou trabalha como personal trainer?"
+  },
+  {
+    "nicho": "Pet shop e veterinária",
+    "skill": "saturno-nfc-pet-shop-e-veterinaria",
+    "arquivo": "saturno-nfc-pet-shop-e-veterinaria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é loja, banho e tosa ou atendimento veterinário?",
+    "situacoes": [
+      "Na loja, o cartão abre serviços de banho e tosa e o tutor consulta um horário antes de decidir.",
+      "Em uma feira pet, a equipe apresenta a página com produtos e atendimento para interessados consultarem compras e serviços.",
+      "No balcão, um tutor abre o catálogo pelo NFC e conhece acessórios que pode incluir na compra."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na loja, o cartão abre serviços de banho e tosa e o tutor consulta um horário antes de decidir. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é loja, banho e tosa ou atendimento veterinário?"
+  },
+  {
+    "nicho": "Loja de roupas",
+    "skill": "saturno-nfc-loja-de-roupas",
+    "arquivo": "saturno-nfc-loja-de-roupas/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual público e qual linha de roupas você atende?",
+    "situacoes": [
+      "Durante o atendimento, a vendedora abre pelo cartão combinações de peças e ajuda a cliente a montar um look completo.",
+      "Em uma feira de moda, o cartão apresenta a coleção e o WhatsApp para consultar tamanhos e fazer um pedido.",
+      "Em reunião com uma empresa, a loja apresenta opções de roupas ou uniformes, quando disponíveis, para cotação."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante o atendimento, a vendedora abre pelo cartão combinações de peças e ajuda a cliente a montar um look completo. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual público e qual linha de roupas você atende?"
+  },
+  {
+    "nicho": "Calçados",
+    "skill": "saturno-nfc-calcados",
+    "arquivo": "saturno-nfc-calcados/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você vende calçados casuais, esportivos ou outra linha?",
+    "situacoes": [
+      "Na loja, o cartão abre modelos e combinações; o vendedor apresenta opções adequadas ao uso que o cliente procura.",
+      "Em uma feira comercial, a equipe mostra a coleção pelo NFC e recebe consultas de compra.",
+      "Em uma visita a uma empresa, o representante apresenta linhas apropriadas ao trabalho, se disponíveis, e conversa sobre uma cotação."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na loja, o cartão abre modelos e combinações; o vendedor apresenta opções adequadas ao uso que o cliente procura. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você vende calçados casuais, esportivos ou outra linha?"
+  },
+  {
+    "nicho": "Ótica",
+    "skill": "saturno-nfc-otica",
+    "arquivo": "saturno-nfc-otica/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é armação, lentes ou atendimento completo?",
+    "situacoes": [
+      "Durante o atendimento, o cartão abre a coleção de armações e ajuda o cliente a comparar modelos com a equipe.",
+      "Em um evento comercial, a ótica apresenta produtos e localização pelo NFC e convida interessados a visitar a loja.",
+      "Em uma reunião com empresa, o representante apresenta a ótica e consulta o interesse em uma proposta comercial aplicável."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante o atendimento, o cartão abre a coleção de armações e ajuda o cliente a comparar modelos com a equipe. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é armação, lentes ou atendimento completo?"
+  },
+  {
+    "nicho": "Joalheria e semijoias",
+    "skill": "saturno-nfc-joalheria-e-semijoias",
+    "arquivo": "saturno-nfc-joalheria-e-semijoias/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você vende joias, semijoias ou peças personalizadas?",
+    "situacoes": [
+      "Em uma reunião ou networking, a vendedora apresenta o cartão; a pessoa abre a coleção e consulta uma peça para presente.",
+      "Na loja, o cartão mostra opções que combinam entre si e ajuda o cliente a escolher um conjunto.",
+      "Em uma feira, a profissional abre o portfólio de peças personalizadas e conversa sobre um orçamento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma reunião ou networking, a vendedora apresenta o cartão; a pessoa abre a coleção e consulta uma peça para presente. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você vende joias, semijoias ou peças personalizadas?"
+  },
+  {
+    "nicho": "Perfumaria e cosméticos",
+    "skill": "saturno-nfc-perfumaria-e-cosmeticos",
+    "arquivo": "saturno-nfc-perfumaria-e-cosmeticos/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você vende mais perfumes, maquiagem ou cuidados pessoais?",
+    "situacoes": [
+      "Durante uma demonstração, o cartão abre os produtos apresentados e a pessoa consulta valores e disponibilidade para comprar.",
+      "Em um evento de networking, a consultora mostra opções de kits e conversa sobre presentes corporativos.",
+      "No balcão, o cliente abre a linha de produtos e conhece itens complementares para sua compra."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante uma demonstração, o cartão abre os produtos apresentados e a pessoa consulta valores e disponibilidade para comprar. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você vende mais perfumes, maquiagem ou cuidados pessoais?"
+  },
+  {
+    "nicho": "Supermercado e mercearia",
+    "skill": "saturno-nfc-supermercado-e-mercearia",
+    "arquivo": "saturno-nfc-supermercado-e-mercearia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você quer divulgar ofertas, atender pelo WhatsApp ou ampliar entregas?",
+    "situacoes": [
+      "Na entrada ou no balcão, o cartão abre uma página de ofertas atualizadas e o cliente escolhe itens para comprar.",
+      "Em visita a um escritório próximo, o representante apresenta opções de abastecimento para copa e solicita uma lista para cotação.",
+      "Durante uma reunião com um pequeno restaurante, o mercado mostra suas linhas de fornecimento e consulta um primeiro pedido."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na entrada ou no balcão, o cartão abre uma página de ofertas atualizadas e o cliente escolhe itens para comprar. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você quer divulgar ofertas, atender pelo WhatsApp ou ampliar entregas?"
+  },
+  {
+    "nicho": "Material de construção",
+    "skill": "saturno-nfc-material-de-construcao",
+    "arquivo": "saturno-nfc-material-de-construcao/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende mais consumidor final, pedreiros ou construtoras?",
+    "situacoes": [
+      "Durante visita a uma obra, o vendedor apresenta o cartão; o responsável abre linhas de materiais e envia uma lista para cotação.",
+      "No balcão, o cliente acessa opções de acabamento e compara produtos antes de fechar a compra.",
+      "Em reunião com uma construtora, o representante abre a apresentação da loja e conversa sobre um fornecimento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante visita a uma obra, o vendedor apresenta o cartão; o responsável abre linhas de materiais e envia uma lista para cotação. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende mais consumidor final, pedreiros ou construtoras?"
+  },
+  {
+    "nicho": "Móveis e decoração",
+    "skill": "saturno-nfc-moveis-e-decoracao",
+    "arquivo": "saturno-nfc-moveis-e-decoracao/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você trabalha com peças prontas, planejados ou decoração?",
+    "situacoes": [
+      "No showroom, o cartão abre ambientes e combinações e ajuda o cliente a selecionar peças para um orçamento.",
+      "Em reunião com um arquiteto, a loja apresenta sua coleção pelo NFC e conversa sobre produtos para um projeto.",
+      "Em uma feira de decoração, o visitante abre o portfólio e solicita uma proposta para seu ambiente."
+    ],
+    "resposta_exemplo": "Imagine esta situação: No showroom, o cartão abre ambientes e combinações e ajuda o cliente a selecionar peças para um orçamento. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você trabalha com peças prontas, planejados ou decoração?"
+  },
+  {
+    "nicho": "Eletrônicos e celulares",
+    "skill": "saturno-nfc-eletronicos-e-celulares",
+    "arquivo": "saturno-nfc-eletronicos-e-celulares/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é venda de aparelhos, acessórios ou assistência?",
+    "situacoes": [
+      "No balcão, o cartão abre modelos e acessórios e ajuda o vendedor a apresentar uma compra completa.",
+      "Em visita a uma empresa, o representante mostra opções de equipamentos e recebe uma demanda para cotação.",
+      "Em um evento comercial, a equipe apresenta produtos e serviços pelo NFC e direciona interessados ao atendimento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: No balcão, o cartão abre modelos e acessórios e ajuda o vendedor a apresentar uma compra completa. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é venda de aparelhos, acessórios ou assistência?"
+  },
+  {
+    "nicho": "Imobiliária",
+    "skill": "saturno-nfc-imobiliaria",
+    "arquivo": "saturno-nfc-imobiliaria/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é venda, locação ou ambos?",
+    "situacoes": [
+      "Durante uma reunião com compradores, o cartão abre os imóveis selecionados para comparar opções e solicitar uma visita.",
+      "Em um evento empresarial, a equipe apresenta imóveis comerciais e conversa sobre a necessidade de espaço do interessado.",
+      "Durante um plantão, o visitante abre a página do empreendimento e solicita detalhes para avançar na negociação."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante uma reunião com compradores, o cartão abre os imóveis selecionados para comparar opções e solicitar uma visita. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é venda, locação ou ambos?"
+  },
+  {
+    "nicho": "Corretor de imóveis",
+    "skill": "saturno-nfc-corretor-de-imoveis",
+    "arquivo": "saturno-nfc-corretor-de-imoveis/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você trabalha com imóveis residenciais, comerciais ou lançamentos?",
+    "situacoes": [
+      "Em um networking, o corretor apresenta o cartão; a pessoa conhece sua atuação e informa o tipo de imóvel que procura.",
+      "Durante uma reunião, o interessado acessa a seleção de imóveis e escolhe quais deseja visitar.",
+      "Em um plantão de vendas, o corretor abre a apresentação do imóvel e conduz uma conversa sobre condições e próximos passos."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em um networking, o corretor apresenta o cartão; a pessoa conhece sua atuação e informa o tipo de imóvel que procura. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você trabalha com imóveis residenciais, comerciais ou lançamentos?"
+  },
+  {
+    "nicho": "Advocacia",
+    "skill": "saturno-nfc-advocacia",
+    "arquivo": "saturno-nfc-advocacia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual área de atuação e qual canal de contato o escritório utiliza?",
+    "situacoes": [
+      "Em um encontro empresarial, o advogado apresenta pelo cartão suas áreas de atuação e o contato institucional.",
+      "Durante uma reunião com uma empresa interessada, o cartão abre a apresentação do escritório e apoia a discussão de escopo de uma proposta.",
+      "Após uma palestra informativa, participantes que desejam conhecer o escritório acessam sua página e canais de atendimento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em um encontro empresarial, o advogado apresenta pelo cartão suas áreas de atuação e o contato institucional. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual área de atuação e qual canal de contato o escritório utiliza?"
+  },
+  {
+    "nicho": "Contabilidade",
+    "skill": "saturno-nfc-contabilidade",
+    "arquivo": "saturno-nfc-contabilidade/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende MEIs, pequenas empresas ou outro perfil?",
+    "situacoes": [
+      "Em uma reunião de empresários, o contador apresenta serviços pelo NFC e conversa com quem procura apoio contábil.",
+      "Durante visita a uma empresa, o cartão abre a apresentação do escritório e apoia o levantamento de necessidades para proposta.",
+      "Em uma feira de empreendedorismo, um novo empresário conhece os serviços e solicita uma conversa sobre contratação."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma reunião de empresários, o contador apresenta serviços pelo NFC e conversa com quem procura apoio contábil. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende MEIs, pequenas empresas ou outro perfil?"
+  },
+  {
+    "nicho": "Agência de marketing",
+    "skill": "saturno-nfc-agencia-de-marketing",
+    "arquivo": "saturno-nfc-agencia-de-marketing/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual serviço você quer priorizar na agência?",
+    "situacoes": [
+      "Em uma reunião comercial, o cartão abre o portfólio e a agência mostra trabalhos relevantes à necessidade do cliente.",
+      "Em networking, um empresário conhece os serviços pelo NFC e combina uma conversa sobre sua demanda.",
+      "Em visita a um comércio, a agência apresenta exemplos de trabalho e propõe um briefing para orçamento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma reunião comercial, o cartão abre o portfólio e a agência mostra trabalhos relevantes à necessidade do cliente. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual serviço você quer priorizar na agência?"
+  },
+  {
+    "nicho": "Arquitetura e engenharia",
+    "skill": "saturno-nfc-arquitetura-e-engenharia",
+    "arquivo": "saturno-nfc-arquitetura-e-engenharia/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é projeto, reforma, obra ou consultoria?",
+    "situacoes": [
+      "Em reunião com uma família que vai construir, o cartão abre projetos e ajuda a discutir o escopo da contratação.",
+      "Em uma feira de construção, o profissional apresenta o portfólio pelo NFC e recebe pedidos de conversa sobre projetos.",
+      "Durante reunião com uma empresa, o cartão abre obras e serviços relevantes para apoiar uma proposta técnica e comercial."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em reunião com uma família que vai construir, o cartão abre projetos e ajuda a discutir o escopo da contratação. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é projeto, reforma, obra ou consultoria?"
+  },
+  {
+    "nicho": "Oficina mecânica",
+    "skill": "saturno-nfc-oficina-mecanica",
+    "arquivo": "saturno-nfc-oficina-mecanica/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Quais serviços e tipos de veículo a oficina atende?",
+    "situacoes": [
+      "Na recepção da oficina, o cartão abre os serviços e o motorista solicita avaliação para um orçamento.",
+      "Em reunião com uma empresa que possui frota, o dono mostra a estrutura e conversa sobre uma proposta de manutenção.",
+      "Em um evento automotivo, a equipe apresenta a oficina pelo NFC e consulta o interesse em serviços específicos."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Na recepção da oficina, o cartão abre os serviços e o motorista solicita avaliação para um orçamento. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Quais serviços e tipos de veículo a oficina atende?"
+  },
+  {
+    "nicho": "Autoescola",
+    "skill": "saturno-nfc-autoescola",
+    "arquivo": "saturno-nfc-autoescola/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é primeira habilitação, adição de categoria ou outro serviço?",
+    "situacoes": [
+      "Durante uma ação presencial, o cartão abre os serviços e o interessado solicita informações para matrícula.",
+      "Na recepção, a pessoa compara as modalidades disponíveis e conversa com a equipe sobre a contratação.",
+      "Em reunião com uma empresa, o representante apresenta serviços aplicáveis e consulta a demanda de colaboradores."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Durante uma ação presencial, o cartão abre os serviços e o interessado solicita informações para matrícula. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é primeira habilitação, adição de categoria ou outro serviço?"
+  },
+  {
+    "nicho": "Escola e cursos",
+    "skill": "saturno-nfc-escola-e-cursos",
+    "arquivo": "saturno-nfc-escola-e-cursos/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual curso, faixa etária e modalidade você atende?",
+    "situacoes": [
+      "Em uma feira de profissões, o cartão abre cursos e o interessado consulta turmas para se matricular.",
+      "Durante uma visita à escola, responsáveis acessam a proposta de ensino e combinam os próximos passos da matrícula.",
+      "Em reunião com uma empresa, a escola apresenta capacitações e solicita informações para uma proposta de turma."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma feira de profissões, o cartão abre cursos e o interessado consulta turmas para se matricular. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual curso, faixa etária e modalidade você atende?"
+  },
+  {
+    "nicho": "Fotografia e eventos",
+    "skill": "saturno-nfc-fotografia-e-eventos",
+    "arquivo": "saturno-nfc-fotografia-e-eventos/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende casamentos, festas, eventos corporativos ou outro nicho?",
+    "situacoes": [
+      "Em uma feira de noivas, o cartão abre o portfólio e o casal consulta a data e solicita orçamento.",
+      "Em reunião com uma empresa, o fotógrafo apresenta trabalhos corporativos e conversa sobre uma cobertura.",
+      "Durante um evento de networking, o profissional mostra seus trabalhos e consulta quem precisa de fotos ou produção para um evento."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma feira de noivas, o cartão abre o portfólio e o casal consulta a data e solicita orçamento. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende casamentos, festas, eventos corporativos ou outro nicho?"
+  },
+  {
+    "nicho": "Hotel e pousada",
+    "skill": "saturno-nfc-hotel-e-pousada",
+    "arquivo": "saturno-nfc-hotel-e-pousada/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Seu foco é turismo, viagens a trabalho ou eventos?",
+    "situacoes": [
+      "Em uma feira de turismo, o cartão abre acomodações e o visitante consulta datas para reservar.",
+      "Em reunião com uma empresa, o hotel apresenta estrutura e contato para cotar hospedagem de equipes.",
+      "Na recepção, uma pessoa que procura hospedagem acessa fotos e tipos de acomodação e consulta disponibilidade."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma feira de turismo, o cartão abre acomodações e o visitante consulta datas para reservar. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Seu foco é turismo, viagens a trabalho ou eventos?"
+  },
+  {
+    "nicho": "Transporte e logística",
+    "skill": "saturno-nfc-transporte-e-logistica",
+    "arquivo": "saturno-nfc-transporte-e-logistica/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende passageiros, cargas ou entregas locais?",
+    "situacoes": [
+      "Em uma reunião comercial, o cartão abre serviços e cobertura e o cliente solicita cotação para sua operação.",
+      "Em um encontro com organizadores de eventos, o representante apresenta opções de transporte e consulta rotas e datas.",
+      "Durante visita a um comércio, a empresa mostra pelo NFC suas modalidades de entrega e conversa sobre um primeiro contrato."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma reunião comercial, o cartão abre serviços e cobertura e o cliente solicita cotação para sua operação. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende passageiros, cargas ou entregas locais?"
+  },
+  {
+    "nicho": "Limpeza e serviços gerais",
+    "skill": "saturno-nfc-limpeza-e-servicos-gerais",
+    "arquivo": "saturno-nfc-limpeza-e-servicos-gerais/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Você atende residências, empresas ou limpeza pós-obra?",
+    "situacoes": [
+      "Em reunião com um síndico, o cartão abre serviços e apresentação da equipe para discutir uma proposta ao condomínio.",
+      "Durante visita a uma empresa, o representante apresenta escopo e atendimento e combina uma avaliação para orçamento.",
+      "Em um networking, uma pessoa acessa os serviços pelo cartão e solicita cotação para limpeza de sua casa ou obra."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em reunião com um síndico, o cartão abre serviços e apresentação da equipe para discutir uma proposta ao condomínio. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Você atende residências, empresas ou limpeza pós-obra?"
+  },
+  {
+    "nicho": "Profissional autônomo",
+    "skill": "saturno-nfc-profissional-autonomo",
+    "arquivo": "saturno-nfc-profissional-autonomo/SKILL.md",
+    "objetivo": "apresentar o negócio a potenciais clientes e facilitar pedidos, orçamentos ou contratação durante a abordagem comercial",
+    "pergunta": "Qual serviço você presta, para quem e em qual região?",
+    "situacoes": [
+      "Em uma reunião de networking, o profissional apresenta o cartão; a pessoa abre o portfólio e conversa sobre um serviço que precisa.",
+      "Durante visita a um possível cliente, o cartão abre trabalhos semelhantes e apoia a elaboração de um orçamento.",
+      "Em uma feira do setor, interessados acessam serviços e região atendida e solicitam uma proposta."
+    ],
+    "resposta_exemplo": "Imagine esta situação: Em uma reunião de networking, o profissional apresenta o cartão; a pessoa abre o portfólio e conversa sobre um serviço que precisa. Em vez de depender de a pessoa procurar seu negócio depois, você apresenta o que oferece enquanto ela está interessada e facilita o próximo passo da compra. Qual serviço você presta, para quem e em qual região?"
+  }
+]
