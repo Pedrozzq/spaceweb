@@ -22,6 +22,13 @@
 //    https://SEU-PROJETO.supabase.co/functions/v1/chatwoot?token=CHATWOOT_WEBHOOK_TOKEN
 //    eventos: Mensagem criada, Conversa atualizada
 //  "Verify JWT" desligado (o webhook do Chatwoot não manda login; a CRM é conferida aqui dentro).
+//
+//  4. Número do WhatsApp pela EVOLUTION API (QR Code dentro da CRM, igual à Zoo).
+//     A Evolution alimenta a MESMA caixa do Chatwoot (no lugar da uazapi): o fluxo do n8n
+//     não muda nada, continua recebendo e respondendo pelo Chatwoot.
+//     EVOLUTION_API_KEY      AUTHENTICATION_API_KEY do serviço evolution-api (EasyPanel)
+//     WHATSAPP_ADMIN_EMAILS  e-mails que podem conectar/desconectar (separados por vírgula)
+//     Opcional: EVOLUTION_URL (padrão: Evolution do EasyPanel), EVOLUTION_INSTANCE (padrão "saturno")
 // =====================================================================
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
@@ -32,6 +39,10 @@ const CW_INBOX = env("CHATWOOT_INBOX_ID");
 const CW_TOKEN = env("CHATWOOT_TOKEN");
 const HOOK_TOKEN = env("CHATWOOT_WEBHOOK_TOKEN");
 const ETIQUETA = env("CHATWOOT_ETIQUETA_HUMANO") || "humano";
+const EVO_URL = (env("EVOLUTION_URL") || "https://zoo-evolution-api.fycoqq.easypanel.host").replace(/\/+$/, "");
+const EVO_KEY = env("EVOLUTION_API_KEY");
+const INSTANCIA = env("EVOLUTION_INSTANCE") || "saturno";
+const ADMINS = env("WHATSAPP_ADMIN_EMAILS").toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
 
 const db = createClient(env("SUPABASE_URL"), env("SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
 
@@ -227,20 +238,43 @@ async function crm(req: Request, raw: string) {
   const { data: { user } } = await db.auth.getUser(jwt);
   if (!user) return json({ error: "faça login no CRM" }, 401);
   const b = JSON.parse(raw || "{}");
+  const admin = ADMINS.includes((user.email ?? "").toLowerCase());
 
   if (b.acao === "status") {
     let conectado = false, erro: string | null = null;
     try { await cw(`/inboxes`); conectado = true; } catch (e) { erro = (e as Error).message; }
-    return json({ chatwoot: true, url: !!CW_URL, conta: !!CW_ACC, caixa: !!CW_INBOX, token: !!CW_TOKEN, webhook_token: !!HOOK_TOKEN, conectado, erro, etiqueta: ETIQUETA });
+    return json({ chatwoot: true, url: !!CW_URL, conta: !!CW_ACC, caixa: !!CW_INBOX, token: !!CW_TOKEN, webhook_token: !!HOOK_TOKEN, conectado, erro, etiqueta: ETIQUETA,
+      estado: await estadoConexao(), admin, instancia: INSTANCIA });
+  }
+
+  if (b.acao === "conectar" || b.acao === "desconectar") {
+    if (!admin) return json({ error: "só o administrador pode mexer na conexão (WHATSAPP_ADMIN_EMAILS)" }, 403);
+    if (!EVO_KEY) return json({ error: "WhatsApp não configurado: defina o secret EVOLUTION_API_KEY" }, 400);
+    if (b.acao === "conectar") return json(await conectar(!!b.inicio));
+    const r = await evo("DELETE", `/instance/logout/${INSTANCIA}`);
+    return r.ok ? json({ ok: true }) : json({ error: `Evolution não desconectou (erro ${r.status})` }, 400);
   }
 
   if (b.acao === "bot") {
     const { data: c } = await db.from("wa_conversas").select("*").eq("id", b.conversa_id).single();
     if (!c) return json({ error: "conversa não encontrada" }, 404);
-    if (c.chatwoot_conversa_id) await etiquetaHumano(c.chatwoot_conversa_id, !!b.pausado);
-    await db.from("wa_conversas").update({ bot_pausado: !!b.pausado }).eq("id", c.id);
-    if (b.pausado && !c.bot_pausado) await leadParaHumano(c.lead_id);
-    return json({ ok: true });
+    const pausar = !!b.pausado;
+    // a etiqueta no Chatwoot é o que o n8n confere: se ela não mudar lá, não adianta mudar só na CRM
+    if (c.chatwoot_conversa_id) {
+      await etiquetaHumano(c.chatwoot_conversa_id, pausar);
+      const quem = user.email ?? "equipe";
+      await cw(`/conversations/${c.chatwoot_conversa_id}/messages`, { method: "POST", body: JSON.stringify({
+        content: pausar ? `🧑 Atendimento assumido pela CRM (${quem}): agente IA pausado nesta conversa.` : `🤖 Conversa devolvida para a IA pela CRM (${quem}): o agente volta a responder na próxima mensagem do cliente.`,
+        message_type: "outgoing", private: true }) }).catch((e) => console.warn("nota:", e.message));
+    }
+    await db.from("wa_conversas").update({ bot_pausado: pausar }).eq("id", c.id);
+    if (pausar && !c.bot_pausado) await leadParaHumano(c.lead_id);
+    if (!pausar && c.bot_pausado && c.lead_id) {
+      // volta o lead para "Em atendimento IA" (só se estava em "Atendimento humano")
+      const { data } = await db.from("leads").update({ etapa: "ia" }).eq("id", c.lead_id).eq("etapa", "humano").select("id");
+      if (data?.length) await db.from("lead_atividades").insert({ lead_id: c.lead_id, tipo: "agente", texto: "Conversa devolvida para o agente IA pela CRM" });
+    }
+    return json({ ok: true, chatwoot: !!c.chatwoot_conversa_id });
   }
 
   if (b.acao !== "enviar") return json({ error: "ação desconhecida" }, 400);
@@ -295,4 +329,70 @@ async function abrirConversaChatwoot(telefone: string, nome: string | null, c: A
   }
   await db.from("wa_conversas").update({ chatwoot_conversa_id: id, chatwoot_contato_id: contato.id }).eq("id", c.id);
   return id;
+}
+
+// ------------------------------------------------------------------ 4. número pela Evolution API (QR Code)
+async function evo(metodo: string, caminho: string, corpo?: unknown, ms = 15000) {
+  const r = await fetch(`${EVO_URL}${caminho}`, {
+    method: metodo,
+    headers: { apikey: EVO_KEY, "Content-Type": "application/json" },
+    body: corpo === undefined ? undefined : JSON.stringify(corpo),
+    signal: AbortSignal.timeout(ms),
+  });
+  const dados = await r.json().catch(() => ({}));
+  return { ok: r.ok, status: r.status, dados };
+}
+
+async function estadoConexao(): Promise<string> {
+  if (!EVO_KEY) return "nao_configurado";
+  try {
+    const r = await evo("GET", `/instance/connectionState/${INSTANCIA}`, undefined, 8000);
+    if (r.status === 404) return "sem_instancia";
+    if (!r.ok) return "indisponivel";
+    return r.dados?.instance?.state ?? "indisponivel"; // open | connecting | close
+  } catch {
+    return "indisponivel";
+  }
+}
+
+// inicio = primeira chamada ao abrir a tela: cria a instância e liga ela à caixa do Chatwoot.
+// As chamadas seguintes (a cada 5 s) só renovam o QR Code.
+async function conectar(inicio: boolean) {
+  let aviso: string | null = null;
+  if ((await estadoConexao()) === "sem_instancia") {
+    const c = await evo("POST", "/instance/create", {
+      instanceName: INSTANCIA, integration: "WHATSAPP-BAILEYS", qrcode: false, groupsIgnore: true,
+    }, 30000);
+    if (!c.ok) throw new Error(`Evolution não criou a instância (erro ${c.status})`);
+    inicio = true;
+  }
+  if (inicio) aviso = await ligarAoChatwoot();
+  const r = await evo("GET", `/instance/connect/${INSTANCIA}`, undefined, 30000);
+  if (!r.ok) throw new Error(`Evolution não gerou o QR Code (erro ${r.status})`);
+  return { estado: r.dados?.instance?.state ?? "connecting", qr: r.dados?.base64 ?? null, aviso };
+}
+
+// Integração nativa Evolution → Chatwoot, na caixa que já existe (a mesma que o n8n e a CRM usam)
+async function ligarAoChatwoot(): Promise<string | null> {
+  if (!CW_URL || !CW_ACC || !CW_TOKEN || !CW_INBOX) throw new Error("Defina CHATWOOT_URL, CHATWOOT_ACCOUNT_ID, CHATWOOT_TOKEN e CHATWOOT_INBOX_ID antes de conectar");
+  const caixa = await cw(`/inboxes/${CW_INBOX}`);
+  const s = await evo("POST", `/chatwoot/set/${INSTANCIA}`, {
+    enabled: true, url: CW_URL, accountId: String(CW_ACC), token: CW_TOKEN,
+    nameInbox: caixa.name,          // a Evolution acha a caixa pelo nome
+    autoCreate: false,              // não cria caixa nova
+    signMsg: false, reopenConversation: true, conversationPending: false,
+    mergeBrazilContacts: true, importContacts: false, importMessages: false, daysLimitImportMessages: 0,
+    ignoreJids: ["@g.us", "@broadcast", "@newsletter"],
+  }, 30000);
+  if (!s.ok) throw new Error(`Evolution não aceitou o Chatwoot (erro ${s.status}): ${JSON.stringify(s.dados?.response?.message ?? s.dados?.message ?? "")}`);
+
+  // o que o agente/equipe responde no Chatwoot sai pela Evolution
+  const hook = `${EVO_URL}/chatwoot/webhook/${encodeURIComponent(INSTANCIA)}`;
+  if (caixa.webhook_url === hook) return null;
+  try {
+    await cw(`/inboxes/${CW_INBOX}`, { method: "PATCH", body: JSON.stringify({ channel: { webhook_url: hook } }) });
+    return null;
+  } catch (e) {
+    return `Troque à mão no Chatwoot (Caixa "${caixa.name}" › Configurações › URL do Webhook) para ${hook} — ${(e as Error).message}`;
+  }
 }

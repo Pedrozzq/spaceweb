@@ -29,6 +29,7 @@ async function viewWhatsapp() {
   const tel = new URLSearchParams(location.hash.split('?')[1] || '').get('tel');
   $('#view').innerHTML = header('WhatsApp', VIA_CHATWOOT ? 'Conversas do WhatsApp da Saturno (via Chatwoot), junto com os leads e clientes' : 'Converse com leads e clientes pelo WhatsApp Business sem sair do CRM',
     `<button class="btn" id="waCfg">Conexão</button><button class="btn pri" id="waNova">+ Nova conversa</button>`) + `
+    <div id="waAviso"></div>
     <div id="wa">
       <div class="wa-list"><div class="search">${ICON_SEARCH}<input class="in" id="waQ" placeholder="Buscar nome ou telefone" value="${esc(WA.q)}"></div><div class="wa-convs" id="waConvs"></div></div>
       <div class="wa-chat" id="waChat"><div class="empty" style="margin:auto">Selecione uma conversa</div></div>
@@ -36,6 +37,7 @@ async function viewWhatsapp() {
   $('#waQ').oninput = e => { WA.q = e.target.value; renderWaConvs(); };
   $('#waNova').onclick = novaConversa;
   $('#waCfg').onclick = conexaoWhatsapp;
+  if (VIA_CHATWOOT && !DEMO) avisoWhatsapp();
   WA.convs = await API.waConversas();
   renderWaConvs();
   if (tel) {
@@ -111,7 +113,7 @@ function renderWaChat() {
   $('#waNovoLead')?.addEventListener('click', () => formLead({nome: c.nome || '', telefone: c.telefone, origem: 'whatsapp'}));
   $('#waBotBtn')?.addEventListener('click', async e => {
     const pausar = e.currentTarget.dataset.p === '1'; e.currentTarget.disabled = true;
-    try { await API.waBot(c.id, pausar); c.bot_pausado = pausar; toast(pausar ? 'Etiqueta humano colocada: o agente IA parou nesta conversa' : 'Etiqueta humano retirada: o agente IA voltou a responder'); renderWaChat(); renderWaConvs(); }
+    try { await API.waBot(c.id, pausar); c.bot_pausado = pausar; toast(pausar ? 'Etiqueta humano colocada: o agente IA parou nesta conversa' : 'Devolvida para a IA: o agente responde na próxima mensagem do cliente'); renderWaChat(); renderWaConvs(); }
     catch (er) { toast(er.message, true); e.currentTarget.disabled = false; } });
   if (aberta) {
     const ta = $('#waTxt');
@@ -433,6 +435,66 @@ supabase secrets set WHATSAPP_TOKEN=... WHATSAPP_PHONE_NUMBER_ID=... \\
 }
 
 // Passo a passo para ligar o WhatsApp do Chatwoot à CRM
+// Aviso para a equipe quando o número (Evolution) não está conectado
+async function avisoWhatsapp() {
+  const st = await API.waStatus().catch(() => null);
+  const el = $('#waAviso'); if (!el || !st || !st.estado || st.estado === 'nao_configurado') return;
+  el.innerHTML = st.estado === 'open' ? '' : `<div class="note" style="margin-bottom:12px"><b>WhatsApp desconectado:</b> as mensagens não estão entrando nem saindo e o agente IA não responde. ${st.admin ? 'Abra <b>Conexão</b> e leia o QR Code.' : 'Avise o administrador da CRM.'}</div>`;
+}
+
+// QR Code do número (Evolution API), igual à CRM da Zoo
+function painelNumero(ov, st) {
+  const el = ov.querySelector('#waCx'); if (!el) return;
+  const aberto = () => document.body.contains(ov);
+  let tentativas = 0, qrAtual = '', inicio = true;
+  if (st.estado === 'nao_configurado') { el.innerHTML = '<div class="note">Falta o secret <code>EVOLUTION_API_KEY</code> na função <code>chatwoot</code> do Supabase.</div>'; return; }
+  const refazer = (texto, rotulo) => {
+    qrAtual = '';
+    el.innerHTML = `<p class="small mut" style="margin-bottom:12px">${esc(texto)}</p>${st.admin ? `<button class="btn pri" id="waCxDe">${esc(rotulo)}</button>` : ''}`;
+    el.querySelector('#waCxDe')?.addEventListener('click', () => { tentativas = 0; inicio = true; el.innerHTML = '<div class="empty">Gerando o QR Code…</div>'; passo(); });
+  };
+  const conectado = () => {
+    qrAtual = '';
+    el.innerHTML = `<div style="margin-bottom:12px"><span class="ok-dot on"></span><b>Número conectado</b> (instância ${esc(st.instancia || '')}). Mensagens entram no Chatwoot, na CRM e no agente IA.</div>
+      ${st.admin ? '<button class="btn" id="waCxSair">Desconectar número</button>' : ''}`;
+    const b = el.querySelector('#waCxSair');
+    if (b) b.onclick = async () => {
+      if (!b.dataset.conf) { b.dataset.conf = 1; b.textContent = 'Confirmar: desconectar para toda a equipe'; return; }
+      b.disabled = true;
+      try { await API.waFn({acao: 'desconectar'}); toast('Número desconectado'); avisoWhatsapp(); refazer('Número desconectado.', 'Conectar novamente'); }
+      catch (e) { b.disabled = false; toast(e.message, true); }
+    };
+    avisoWhatsapp();
+  };
+  async function passo() {
+    if (!aberto()) return;
+    try {
+      const s = await API.waStatus();
+      if (!aberto()) return;
+      if (s.estado === 'indisponivel') return refazer('O servidor do WhatsApp (Evolution) não respondeu. Confira se o serviço evolution-api está ligado no EasyPanel.', 'Tentar de novo');
+      if (s.estado === 'open') return conectado();
+      if (!st.admin) return refazer('Número desconectado. Só o administrador pode ler o QR Code.', '');
+      if (++tentativas > 40) return refazer('O QR Code expirou.', 'Gerar novo QR Code');
+      const r = await API.waFn({acao: 'conectar', inicio});
+      inicio = false;
+      if (!aberto()) return;
+      if (r.aviso) toast(r.aviso, true);
+      if (r.estado === 'open') return conectado();
+      const qr = String(r.qr || '').startsWith('data:image/') ? r.qr : '';
+      if (!qr) el.innerHTML = '<div class="empty">Gerando o QR Code…</div>';
+      else if (qr !== qrAtual) el.innerHTML = `<div style="text-align:center"><img src="${esc(qr)}" alt="QR Code do WhatsApp" style="width:260px;max-width:100%;background:#fff;padding:10px;border-radius:12px"></div>
+        <div class="step" style="margin-top:14px"><i>1</i><div>No celular da Saturno, abra o <b>WhatsApp</b>.</div></div>
+        <div class="step"><i>2</i><div>Toque em <b>Dispositivos conectados</b> › <b>Conectar um dispositivo</b>.</div></div>
+        <div class="step"><i>3</i><div>Aponte a câmera para este código. O celular continua funcionando normalmente.</div></div>`;
+      qrAtual = qr;
+      setTimeout(passo, 5000);
+    } catch (e) { if (aberto()) refazer(e.message, 'Tentar de novo'); }
+  }
+  if (st.estado === 'open') conectado();
+  else if (st.estado === 'indisponivel') refazer('O servidor do WhatsApp (Evolution) não respondeu.', 'Tentar de novo');
+  else refazer(st.estado === 'sem_instancia' ? 'O número ainda não foi conectado por aqui.' : 'Número desconectado.', 'Conectar (gerar QR Code)');
+}
+
 async function conexaoChatwoot() {
   const st = await API.waStatus().catch(e => ({erro: e.message}));
   const base = DEMO ? 'https://SEU-PROJETO.supabase.co' : CFG.SUPABASE_URL;
@@ -441,6 +503,8 @@ async function conexaoChatwoot() {
   const cwBase = (CFG.CHATWOOT_URL || '').replace(/\/+$/, ''), acc = CFG.CHATWOOT_ACCOUNT_ID || 1;
   const ov = modal(`<div class="dh"><h2>WhatsApp pelo Chatwoot</h2><button class="x" data-close>${ICON_X}</button></div>
     <div class="db">
+      ${st.estado ? `<h3 style="margin:0 0 10px">Número do WhatsApp</h3><div class="card" id="waCx" style="margin-bottom:18px"><div class="empty">Verificando…</div></div>
+      <h3 style="margin:0 0 10px">Chatwoot</h3>` : ''}
       ${st.erro && !st.chatwoot ? `<div class="note">${esc(st.erro)}</div>` : `<div class="card" style="margin-bottom:18px">
         ${item(st.url && st.conta, 'CHATWOOT_URL e CHATWOOT_ACCOUNT_ID')}${item(st.caixa, 'CHATWOOT_INBOX_ID (caixa do WhatsApp)')}
         ${item(st.token, 'CHATWOOT_TOKEN (token de acesso do Chatwoot)')}${item(st.webhook_token, 'CHATWOOT_WEBHOOK_TOKEN (senha do webhook)')}
@@ -455,6 +519,7 @@ async function conexaoChatwoot() {
       <p class="small mut">O agente IA do n8n continua respondendo pelo Chatwoot normalmente. Quando alguém da equipe responde por aqui, a conversa ganha a etiqueta <b>${esc(st.etiqueta || 'humano')}</b> e o agente para.</p>
     </div>`, true);
   ov.querySelector('#cpHook').onclick = () => copiar(hook, 'URL copiada: troque o final pela sua senha');
+  if (st.estado) painelNumero(ov, st);
 }
 
 

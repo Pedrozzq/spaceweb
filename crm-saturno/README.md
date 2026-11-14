@@ -187,3 +187,15 @@ O iPhone só notifica a CRM **instalada pelo Safari** (iOS 16.4 ou mais novo). A
 No menu **Notificações** dá para escolher os tipos, mandar um teste ou desligar. No Android e no computador funciona direto pelo navegador.
 
 **Não chegou?** Ajustes > Notificações > Saturno CRM ligado; Foco/Não Perturbe desligado; Supabase > Edge Functions > push > Logs mostra cada envio.
+
+## WhatsApp pela Evolution API (QR Code na CRM, igual à Zoo)
+
+O número entra no Chatwoot pela **Evolution API** (mesmo servidor da Zoo, instância `saturno`), na mesma caixa "Whatsapp" que a uazapi usava. O fluxo do n8n (agente Rafael) **não muda**: continua recebendo e respondendo pelo Chatwoot.
+
+1. **Supabase › Edge Functions › Secrets**: `EVOLUTION_API_KEY` (a `AUTHENTICATION_API_KEY` do serviço evolution-api no EasyPanel) e `WHATSAPP_ADMIN_EMAILS` (e-mails que podem conectar/desconectar).
+2. Publique a função: `npx supabase functions deploy chatwoot --no-verify-jwt --use-api --remote=lrthxbchqafcjbvjwcne --yes`
+3. Na CRM, com e-mail de administrador: **WhatsApp › Conexão › Conectar (gerar QR Code)** e leia com o celular da Saturno. A função liga a instância à caixa do Chatwoot e troca a URL do webhook da caixa para `https://zoo-evolution-api.fycoqq.easypanel.host/chatwoot/webhook/saturno` (se o token do Chatwoot não for de administrador, a CRM avisa para trocar à mão).
+
+**Devolver para a IA:** o botão **🤖 Devolver para a IA** tira a etiqueta `humano` da conversa no Chatwoot (é o que o n8n confere), deixa uma nota privada na conversa e volta o lead para "Em atendimento IA". O agente responde na próxima mensagem do cliente. **Assumir (humano)** ou responder pela CRM coloca a etiqueta de volta.
+
+Voltar para a uazapi: na caixa do Chatwoot, recoloque a URL de webhook antiga da uazapi.
